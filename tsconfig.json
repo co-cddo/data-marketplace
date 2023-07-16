@@ -1,17 +1,9 @@
 {
   "extends": "@tsconfig/node18/tsconfig.json",
   "compilerOptions": {
-    "lib": [
-      "ESNext"
-    ],
+    "lib": ["ESNext"],
     "outDir": "build"
   },
-  "include": [
-    "src",
-    "package.json"
-  ],
-  "exclude": [
-    "node_modules",
-    "**/*.test.ts"
-  ],
+  "include": ["src", "package.json"],
+  "exclude": ["node_modules", "**/*.test.ts", "build"]
 }
