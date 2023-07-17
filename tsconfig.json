@@ -4,6 +4,6 @@
     "lib": ["ESNext"],
     "outDir": "build"
   },
-  "include": ["src", "package.json"],
+  "include": ["src", "package.json", "src/routes/homeRoute.ts"],
   "exclude": ["node_modules", "**/*.test.ts", "build"]
 }
