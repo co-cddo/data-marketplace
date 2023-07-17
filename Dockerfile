@@ -1,15 +1,12 @@
 # Base stage
-FROM node:18-alpine as base
+FROM node:18-alipne as base
 
-WORKDIR /docker-src
+WORKDIR /usr/src/app
 
-COPY . .
+COPY package.json ./
 
-# Install dependencies
 RUN npm install
 
-ENV NODE_ENV=development
-
-# RUN npm run build
+COPY . .
 
 CMD ["npm", "run", "start:dev"]
