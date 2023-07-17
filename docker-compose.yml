@@ -1,14 +1,16 @@
 version: "3.8"
 services:
-  dev:
+  express:
     build:
-      context: ./
+      context: .
       dockerfile: Dockerfile
+    container_name: expressjs
     volumes:
-      - .:/docker-src
-    command: npm run start:dev
+      - .:/usr/src/app
+      - node_modules:/usr/src/app/node_modules
     ports:
       - "3000:3000"
     environment:
       NODE_ENV: development
-      DEBUG: nodejs-docker-express:*
+volumes:
+  node_modules:
