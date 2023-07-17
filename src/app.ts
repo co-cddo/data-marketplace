@@ -1,11 +1,10 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import Helmet from "helmet";
+import homeRoute from "./routes/homeRoute";
 
-const app = express();
+export const app = express();
 app.use(Helmet());
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("TS auto changes through docker");
-});
+app.use("/", homeRoute);
 
 export default app;
