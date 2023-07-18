@@ -3,7 +3,8 @@
   "compilerOptions": {
     "lib": ["ESNext"],
     "outDir": "build",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "typeRoots": ["./node_modules/@types"]
   },
   "include": ["src", "package.json", "src/routes/homeRoute.ts"],
   "exclude": ["node_modules", "**/*.test.ts", "build"]
