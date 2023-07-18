@@ -4,13 +4,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    command: npm run start:dev
     container_name: expressjs
     volumes:
       - .:/usr/src/app
-      - node_modules:/usr/src/app/node_modules
+      - /usr/src/app/node_modules
     ports:
       - "3000:3000"
     environment:
       NODE_ENV: development
-volumes:
-  node_modules:
