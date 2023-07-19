@@ -2,6 +2,7 @@ import express from "express";
 import nunjucks from "nunjucks";
 import helmet from "helmet";
 import homeRoute from "./routes/homeRoute";
+var path = require('path');
 
 export const app = express();
 // Set up security headers with Helmet
@@ -15,9 +16,11 @@ app.use(
     },
   }),
 );
-
 // Set static folder middleware
+app.use('/assets', express.static(path.join(__dirname, '../node_modules/govuk-frontend/govuk/assets')));
 app.use(express.static("public"));
+
+
 
 // Configure Nunjucks
 nunjucks.configure(["node_modules/govuk-frontend/", "src/views"], {
