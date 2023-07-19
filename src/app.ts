@@ -1,11 +1,21 @@
 import express from "express";
 import path from "path";
 import nunjucks from "nunjucks";
-import Helmet from "helmet";
+import helmet from "helmet";
 import homeRoute from "./routes/homeRoute";
 
 export const app = express();
-app.use(Helmet());
+// Set up security headers with Helmet
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        "script-src": ["'self'", "'unsafe-inline'", "http://localhost:3000"],
+        "style-src": ["'self'", "'unsafe-inline'"],
+      },
+    },
+  }),
+);
 
 // Set static folder middleware
 app.use(express.static(path.join(__dirname, "views")));
@@ -18,10 +28,13 @@ app.use(
   ),
 );
 
+app.use(express.static("public"));
+
 // Configure Nunjucks
-nunjucks.configure(["node_modules/govuk-frontend/", "views"], {
+nunjucks.configure(["node_modules/govuk-frontend/", "src/views"], {
   autoescape: true, // prevents cross-site scripting attacks (XSS)
   express: app,
+  watch: true,
 });
 
 // Set Nunjucks as the Express view engine
