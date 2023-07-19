@@ -18,16 +18,6 @@ app.use(
 );
 
 // Set static folder middleware
-app.use(express.static(path.join(__dirname, "views")));
-app.use(express.static(path.join(__dirname, "public")));
-// Serve the assets from the GOV.UK Frontend assets folder - recommended on the GOV UK docs
-app.use(
-  "/assets",
-  express.static(
-    path.join(__dirname, "/node_modules/govuk-frontend/govuk/assets"),
-  ),
-);
-
 app.use(express.static("public"));
 
 // Configure Nunjucks
