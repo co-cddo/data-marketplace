@@ -1,5 +1,4 @@
 import express from "express";
-import path from "path";
 import nunjucks from "nunjucks";
 import helmet from "helmet";
 import homeRoute from "./routes/homeRoute";
