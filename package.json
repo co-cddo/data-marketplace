@@ -5,19 +5,23 @@
   "main": "index.js",
   "scripts": {
     "clean": "rimraf ./build",
-    "start:dev": "ts-node-dev ./src/server.ts",
+    "start:dev": "concurrently \"ts-node-dev ./src/server.ts\" \"npm run scss\"",
     "start": "node ./build/server.js",
     "test": "cross-env NODE_ENV=test jest",
-    "build": "npm-run-all lint format clean && tsc",
+    "build": "npm-run-all lint format clean && tsc && mkdir build/views && cp -r src/views/* build/views/",
     "lint": "eslint src",
     "format": "npx prettier --write src",
-    "format:check": "npx prettier --check src"
+    "format:check": "npx prettier --check src",
+    "scss": "sass --watch src/stylesheets/application.scss public/stycssles/style.css"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.2",
-    "helmet": "^7.0.0"
+    "govuk-frontend": "^4.7.0",
+    "helmet": "^7.0.0",
+    "nunjucks": "^3.2.4",
+    "sass": "^1.63.6"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.22.9",
@@ -27,10 +31,12 @@
     "@types/helmet": "^4.0.0",
     "@types/jest": "^29.5.3",
     "@types/node": "^20.4.2",
+    "@types/nunjucks": "^3.2.3",
     "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "babel-jest": "^29.6.1",
+    "concurrently": "^8.2.0",
     "cross-env": "^7.0.3",
     "eslint": "^8.45.0",
     "eslint-config-prettier": "^8.8.0",
