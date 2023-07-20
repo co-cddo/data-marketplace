@@ -1,0 +1,18 @@
+{% extends "govuk/template.njk" %}
+
+{% block head %}
+    <link href="{{ assetPath}}/stycssles/style.css" rel="stylesheet" />
+{% endblock %}
+
+{% block bodyStart %}
+    <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+{% endblock %}
+
+{% block bodyEnd %}
+    <script src="{{ assetPath }}/javascripts/all.js"></script>
+    <script>window.GOVUKFrontend.initAll()</script>
+{% endblock %}
+
+{% block footer %}
+  {% include "../partials/footer.njk" %}
+{% endblock%}
