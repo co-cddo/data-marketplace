@@ -1,0 +1,22 @@
+{% from "govuk/components/footer/macro.njk" import govukFooter %}
+
+{% block footer %}
+{{ govukFooter({
+    meta: {
+      items: [
+        {
+          href: "#",
+          text: "Accessibility"
+        },
+        {
+          href: "#",
+          text: "Cookies"
+        },
+        {
+          href: "#",
+          text: "Privacy"
+        }
+      ]
+    }
+  }) }}
+{% endblock %}
