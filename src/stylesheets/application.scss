@@ -4,6 +4,7 @@
 
 .x-govuk-masthead--large {
   color: #fff;
+  background-color: #1d70b8;
 
   @media (max-width: 800px) {
     padding-bottom: 10px;
@@ -15,7 +16,7 @@
   }
   .x-govuk-masthead__description {
     position: relative;
-    bottom: 2rem; 
+    bottom: 2rem;
     color: #fff;
 
     @media (max-width: 800px) {

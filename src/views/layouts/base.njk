@@ -1,0 +1,31 @@
+{% from "govuk/components/header/macro.njk" import govukHeader %}
+{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+
+{% extends "govuk/template.njk" %}
+
+{% block head %}
+    <link href="/govuk-frontend/all.css" rel="stylesheet">
+    <link href="{{ assetPath }}/stycssles/style.css" rel="stylesheet" />
+{% endblock %}
+
+{% block header %}
+  {% include "../partials/navigation.njk" %}
+  <div class="govuk-width-container">
+    {% include "../partials/phaseBanner.njk"%}
+  </div>
+{% endblock %}
+
+{% block bodyStart %}
+  <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+{% endblock %}
+
+{% block bodyEnd %}
+  {{ super() }}  
+  <script src="/public/javascripts/jquery-3.6.3.min.js"></script>
+    <script src="{{ assetPath }}/javascripts/all.js"></script>
+    <script>window.GOVUKFrontend.initAll()</script>
+{% endblock %}
+
+{% block footer %}
+  {% include "../partials/footer.njk" %}
+{% endblock%}

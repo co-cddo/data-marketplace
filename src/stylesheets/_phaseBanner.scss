@@ -1,0 +1,31 @@
+.govuk-phase-banner {
+  border-bottom: 1px solid govuk-colour("mid-grey");
+
+  &__content {
+    color: govuk-colour("black");
+
+    &__tag {
+      background-color: $govuk-brand-colour;
+      color: govuk-colour("white");
+    }
+  }
+}
+
+.inverse-banner .govuk-phase-banner {
+  background-color: $govuk-brand-colour;
+  border-bottom: 1px solid govuk-colour("mid-grey");
+
+  &__content {
+    color: govuk-colour("white");
+
+    &__tag {
+      background-color: govuk-colour("white");
+      color: $govuk-brand-colour;
+    }
+  }
+
+  a.govuk-link {
+    text-decoration: none;
+    color: #fff !important;
+  }
+}
