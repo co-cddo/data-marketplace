@@ -1,31 +1,37 @@
 .govuk-phase-banner {
   border-bottom: 1px solid govuk-colour("mid-grey");
 
-  &__content {
+  .govuk-link {
     color: govuk-colour("black");
-
-    &__tag {
-      background-color: $govuk-brand-colour;
-      color: govuk-colour("white");
+    &:hover {
+      text-decoration: underline; // This will underline the link when hovered over
+      text-decoration-thickness: 2px; // This will make the underline slightly thicker when hovered over
     }
   }
 }
 
-.inverse-banner .govuk-phase-banner {
-  background-color: $govuk-brand-colour;
-  border-bottom: 1px solid govuk-colour("mid-grey");
+.inverse-banner {
+  color: #fff;
 
-  &__content {
-    color: govuk-colour("white");
+  .govuk-phase-banner {
+    background-color: $govuk-brand-colour;
+    border-bottom: 1px solid govuk-colour("mid-grey");
 
-    &__tag {
-      background-color: govuk-colour("white");
-      color: $govuk-brand-colour;
+    &__content {
+      color: #fff;
+
+      &__tag {
+        background-color: govuk-colour("white");
+        color: $govuk-brand-colour;
+      }
     }
   }
 
-  a.govuk-link {
-    text-decoration: none;
-    color: #fff !important;
+  .govuk-link {
+    color: govuk-colour("white");
+    &:hover {
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+    }
   }
 }

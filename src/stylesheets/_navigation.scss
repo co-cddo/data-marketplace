@@ -66,6 +66,10 @@
   @include govuk-media-query($from: tablet) {
     display: inline;
   }
+  &:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+  }
 }
 
 .app-navigation__button {
