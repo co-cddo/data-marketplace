@@ -1,1 +1,26 @@
 @import "../../node_modules/govuk-frontend/govuk/all";
+@import "_navigation";
+@import "_phaseBanner";
+
+.x-govuk-masthead--large  {
+    color: #fff;
+
+    @media (max-width: 800px) {
+        padding-bottom: 10px;
+    }
+
+    .x-govuk-masthead__title{
+        color: #fff;
+        margin-bottom: 2rem;
+       
+    }
+    .x-govuk-masthead__description{
+        position: relative;
+        bottom: 2rem;   // Check this line tomorrow, could be the prolttttttttttttt
+        color: #fff;
+
+        @media (max-width: 800px) {
+            bottom: 1rem;
+        }
+    }
+}
