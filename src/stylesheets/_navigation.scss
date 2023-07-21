@@ -7,7 +7,7 @@
   margin: 0;
   padding: 0;
   list-style: none;
- 
+
   @include govuk-media-query($from: tablet) {
     position: relative;
     left: govuk-spacing(-3);
