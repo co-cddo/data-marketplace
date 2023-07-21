@@ -1,7 +1,7 @@
 {% from "govuk/components/header/macro.njk" import govukHeader %}
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
 
-{% extends "govuk/template.njk" %}
+{% extends "./layouts/main.njk" %}
 
 {% block head %}
     <link href="/govuk-frontend/all.css" rel="stylesheet">
@@ -19,10 +19,6 @@
 {% block bodyStart %}
     <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
 {% endblock %}
-
-{% block footer %}
-  {% include "./partials/footer.njk" %}
-{% endblock%}
 
 {% block bodyEnd %}
   {{ super() }}  
