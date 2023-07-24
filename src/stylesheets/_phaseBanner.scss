@@ -23,6 +23,7 @@
     vertical-align: middle;
   }
 }
+
 .govuk-phase-banner--inverse {
   background: $govuk-brand-colour;
   border-bottom: 1px solid govuk-colour("light-blue");
@@ -36,9 +37,17 @@
   .govuk-phase-banner__text,
   .govuk-link {
     color: govuk-colour("white");
-
+  
+    
     &:focus {
       color: govuk-colour("black");
+    }
+  }
+  .govuk-link{
+    &:hover {
+      text-decoration: underline;
+      text-decoration-thickness: 3px;
+      text-underline-offset: 0.2em;
     }
   }
 }
