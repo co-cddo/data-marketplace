@@ -1,4 +1,3 @@
-
 @include govuk-exports("govuk/component/phase-banner") {
   .govuk-phase-banner {
     padding-top: govuk-spacing(2);
@@ -24,11 +23,10 @@
     vertical-align: middle;
   }
 }
-
 .govuk-phase-banner--inverse {
   background: $govuk-brand-colour;
-  border-bottom: 1px solid  govuk-colour("light-blue");;
-  
+  border-bottom: 1px solid govuk-colour("light-blue");
+
   .govuk-phase-banner__content__tag {
     background: govuk-colour("white");
     color: $govuk-brand-colour;

@@ -10,7 +10,6 @@
     padding-bottom: 40px;
   }
 }
-
 .govuk-masthead__title {
   font-family: "GDS Transport", arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -45,7 +44,6 @@
     padding-top: 30px;
   }
 }
-
 .govuk-masthead__description {
   font-family: "GDS Transport", arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -116,7 +114,6 @@
     font-family: sans-serif;
   }
 }
-
 @media print {
   .govuk-masthead--large .govuk-masthead__title {
     font-size: 32pt;
@@ -150,7 +147,6 @@
     line-height: 1.15;
   }
 }
-
 @media print {
   .govuk-masthead--large .govuk-masthead__title {
     font-family: sans-serif;
@@ -169,7 +165,6 @@
     line-height: 1.15;
   }
 }
-
 .govuk-masthead__description {
   font-family: "GDS Transport", arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -179,10 +174,8 @@
   font-size: 1rem;
   line-height: 1.25;
   color: inherit;
-  margin:0;
+  margin: 0;
   margin-bottom: 0;
-
-
 }
 @media print {
   .govuk-masthead__description {
