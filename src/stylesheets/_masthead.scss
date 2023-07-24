@@ -1,0 +1,22 @@
+.masthead {
+  color: #fff;
+  background-color: #1d70b8;
+
+  @media (max-width: 800px) {
+    padding-bottom: 10px;
+  }
+
+  .masthead__title {
+    color: #fff;
+    margin-bottom: 2rem;
+  }
+  .masthead__description {
+    position: relative;
+    bottom: 2rem;
+    color: #fff;
+
+    @media (max-width: 800px) {
+      bottom: 1rem;
+    }
+  }
+}
