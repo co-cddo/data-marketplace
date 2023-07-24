@@ -6,14 +6,20 @@
 {% endblock %}
 
 {% block header %}
-  {% include "../partials/navigation.njk" %}
-  <div class="govuk-width-container">
-    {% include "../partials/phaseBanner.njk"%}
-  </div>
-{% endblock %}
-
-{% block bodyStart %}
-  <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+    {{ govukHeader({
+        homepageUrl: "/",
+        serviceName: serviceName,
+        serviceUrl: "/",
+        containerClasses: "govuk-width-container"
+    }) }}
+    <div class="govuk-width-container">
+        {{ govukPhaseBanner({
+            tag: {
+            text: "alpha"
+            },
+            html: 'This is a new service – your <a class="govuk-link" href="#">feedback</a> will help us to improve it.'
+        }) }}
+    </div>
 {% endblock %}
 
 {% block bodyEnd %}
