@@ -1,6 +1,7 @@
 {% extends "layouts/base.njk" %}
 
 {% block header %}
+    {% include "./partials/cookieBanner.njk" %}
 {{ govukHeader({
   homepageUrl: "/",
   serviceName: "Data Marketplace",
@@ -49,6 +50,7 @@
     </div>
   </div>
 {% endblock %}
+
 
 {% block content %}
 <div class="govuk-grid-row">
