@@ -1,0 +1,92 @@
+{% extends "layouts/base.njk" %}
+
+{% block header %}
+{{ govukHeader({
+  homepageUrl: "/",
+  serviceName: "Data Marketplace",
+  serviceUrl: "/",
+  containerClasses: "govuk-width-container"
+}) }}
+  <div class="x-govuk-masthead x-govuk-masthead--large">
+    <nav id="app-navigation" class="app-navigation js-app-navigation govuk-clearfix" role="navigation" aria-labelledby="app-navigation-heading">
+      <h2 class="govuk-visually-hidden" id="app-navigation-heading">Menu</h2>
+      <ul class="app-navigation__list app-width-container">
+          <li class="app-navigation__list-item ">
+            <a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline app-navigation__link js-app-navigation__link" href="#">
+              Home
+            </a>
+          </li>
+
+          <li class="app-navigation__list-item app-navigation__list-item--right">
+            <a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline app-navigation__link js-app-navigation__link" href="#">
+              Sign in
+            </a>
+          </li>
+      </ul>
+    </nav>
+    <div class="govuk-width-container">
+
+      <div class="govuk-phase-banner govuk-phase-banner--inverse">
+        <p class="govuk-phase-banner__content">
+          <strong class="govuk-tag govuk-phase-banner__content__tag govuk-tag--inverse">
+            Beta
+          </strong>
+          <span class="govuk-phase-banner__text">
+            This is a new service – your <a class="govuk-link" href="#" style="color: white;">feedback</a> will help us to improve it.
+          </span>
+        </p>
+      </div>
+  <h1 class="x-govuk-masthead__title">
+    Data Marketplace
+  </h1>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds-from-desktop">
+            <p class="x-govuk-masthead__description govuk-!-margin-bottom-3">
+              A place for people who work in government  organisations, agencies and public bodies to share data.
+            </p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-one-third-from-desktop govuk-!-margin-bottom-8">
+    <h2 class="govuk-heading-l govuk-!-font-weight-bold">Find data assets</h2>
+    <p class="govuk-body">Find data assets from  government organisations. Personal and special category data is available.</p>
+    <a href="#" class="govuk-button" data-module="govuk-button">
+      Find data assets
+    </a>
+  </div>
+  <div class="govuk-grid-column-one-third-from-desktop govuk-!-margin-bottom-8">
+    <h2 class="govuk-heading-l">Manage data shares</h2>
+    <p class="govuk-body">Set up and manage your data shares so you can share your data assets with other government organisations.</p>
+    <a href="#" class="govuk-button" data-module="govuk-button">
+      Manage data shares
+    </a>
+  </div>
+  <div class="govuk-grid-column-one-third-from-desktop govuk-!-margin-bottom-8">
+    <h2 class="govuk-heading-l">Publish data descriptions</h2>
+    <p class="govuk-body">Publish a description of your data assets so they can be found by other government organisations.</p>
+    <a href="#" class="govuk-button" data-module="govuk-button">
+      Publish data descriptions
+    </a>
+  </div>
+  <div class="govuk-grid-column-full">
+    <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
+  </div>
+  <div class="govuk-grid-column-one-half-from-desktop">
+    <h2 id="community" class="govuk-heading-m">Knowledge Hub</h2>
+    <p class="govuk-body">
+      <a class="govuk-link" href="#">Find policies and standards</a> relevant to your data and learn from the experience of others who work with data across government.
+    </p>
+  </div>
+  <div class="govuk-grid-column-one-half-from-desktop">
+    <h2 id="support" class="govuk-heading-m">Contact Data Marketplace Team</h2>
+    <p class="govuk-body">
+      <a class="govuk-link" href="#">Contact the team</a> if you have a question, suggestion or idea. We’d love to hear from you.
+    </p>
+  </div>
+</div>
+{% endblock %}

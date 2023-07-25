@@ -1,0 +1,33 @@
+{% extends "govuk/template.njk" %}
+
+{% block head %}
+    <link href="/govuk-frontend/all.css" rel="stylesheet">
+    <link href="{{ assetPath }}/stycssles/style.css" rel="stylesheet" />
+{% endblock %}
+
+{% block header %}
+    {{ govukHeader({
+        homepageUrl: "/",
+        serviceName: serviceName,
+        serviceUrl: "/",
+        containerClasses: "govuk-width-container"
+    }) }}
+    <div class="govuk-width-container">
+        {{ govukPhaseBanner({
+            tag: {
+            text: "alpha"
+            },
+            html: 'This is a new service – your <a class="govuk-link" href="#">feedback</a> will help us to improve it.'
+        }) }}
+    </div>
+{% endblock %}
+
+{% block bodyEnd %}
+  {{ super() }}  
+    <script src="{{ assetPath }}/javascripts/all.js"></script>
+    <script>window.GOVUKFrontend.initAll()</script>
+{% endblock %}
+
+{% block footer %}
+  {% include "../partials/footer.njk" %}
+{% endblock%}
