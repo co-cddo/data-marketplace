@@ -8,10 +8,11 @@
     "start:dev": "concurrently \"ts-node-dev ./src/server.ts\" \"npm run scss\"",
     "start": "node ./build/server.js",
     "test": "cross-env NODE_ENV=test jest",
-    "build": "npm-run-all lint format clean && tsc && shx mkdir -p build/views && copyfiles -u 1 src/views/**/* build/views/",
+    "build": "npm-run-all lint format clean scss:build && tsc && shx mkdir -p build/views && copyfiles -VEau src/views/** build/views",
     "lint": "eslint src",
     "format": "npx prettier --write src",
     "format:check": "npx prettier --check src",
+    "scss:build": "sass src/stylesheets/application.scss public/stycssles/style.css",
     "scss": "sass --watch src/stylesheets/application.scss public/stycssles/style.css"
   },
   "author": "",

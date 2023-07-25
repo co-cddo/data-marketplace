@@ -27,10 +27,11 @@ app.use(
 app.use(express.static("public"));
 
 // Configure Nunjucks
+const isTesting = process.env.NODE_ENV === "test";
 nunjucks.configure(["node_modules/govuk-frontend/", "src/views"], {
   autoescape: true, // prevents cross-site scripting attacks (XSS)
   express: app,
-  watch: true,
+  watch: !isTesting,
 });
 
 // Set Nunjucks as the Express view engine
