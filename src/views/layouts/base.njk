@@ -1,0 +1,49 @@
+{% extends "govuk/template.njk" %}
+
+{% block head %}
+    <link href="/govuk-frontend/all.css" rel="stylesheet">
+    <link href="{{ assetPath }}/stycssles/style.css" rel="stylesheet" />
+{% endblock %}
+
+{% block header %}
+
+{{ govukHeader({
+  homepageUrl: "/",
+  serviceName: "Data Marketplace",
+  serviceUrl: "/",
+  containerClasses: "govuk-width-container"
+}) }}
+
+    {% if home %}
+      <div class="x-govuk-masthead x-govuk-masthead--large">
+      {% include "partials/navigation.njk" %}
+      <div class="govuk-width-container">
+        {% include "partials/phaseBannerInverse.njk" %}
+        <h1 class="x-govuk-masthead__title">
+          Data Marketplace
+        </h1>
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-two-thirds-from-desktop">
+              <p class="x-govuk-masthead__description govuk-!-margin-bottom-3">
+                A place for people who work in government  organisations, agencies and public bodies to share data.
+              </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% else %}
+     <div class="govuk-width-container">
+        {% include "partials/phaseBanner.njk" %}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block bodyEnd %}
+  {{ super() }}  
+    <script src="{{ assetPath }}/javascripts/all.js"></script>
+    <script>window.GOVUKFrontend.initAll()</script>
+{% endblock %}
+
+{% block footer %}
+  {% include "../partials/footer.njk" %}
+{% endblock%}

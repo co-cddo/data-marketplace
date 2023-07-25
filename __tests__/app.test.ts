@@ -7,3 +7,10 @@ describe("GET /", () => {
     expect(response.status).toBe(200);
   });
 });
+
+describe("GET /page", () => {
+  it('should respond as expected"', async () => {
+    const response = await request(app).get("/page");
+    expect(response.status).toBe(200);
+  });
+});

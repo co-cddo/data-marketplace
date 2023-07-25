@@ -1,0 +1,51 @@
+@include govuk-exports("govuk/component/phase-banner") {
+  .govuk-phase-banner {
+    padding-top: govuk-spacing(2);
+    padding-bottom: govuk-spacing(2);
+    border-bottom: 1px solid $govuk-border-colour;
+  }
+
+  .govuk-phase-banner__content {
+    @include govuk-font($size: 16);
+    @include govuk-text-colour;
+
+    display: table;
+    margin: 0;
+  }
+
+  .govuk-phase-banner__content__tag {
+    margin-right: govuk-spacing(2);
+  }
+
+  .govuk-phase-banner__text {
+    display: table-cell;
+    vertical-align: middle;
+  }
+}
+
+.govuk-phase-banner--inverse {
+  background: $govuk-brand-colour;
+  border-bottom: 1px solid govuk-colour("light-blue");
+
+  .govuk-phase-banner__content__tag {
+    background: govuk-colour("white");
+    color: $govuk-brand-colour;
+  }
+
+  .govuk-phase-banner__content__app-name,
+  .govuk-phase-banner__text,
+  .govuk-link {
+    color: govuk-colour("white");
+
+    &:focus {
+      color: govuk-colour("black");
+    }
+  }
+  .govuk-link {
+    &:hover {
+      text-decoration: underline;
+      text-decoration-thickness: 3px;
+      text-underline-offset: 0.2em;
+    }
+  }
+}

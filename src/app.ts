@@ -2,6 +2,7 @@ import express from "express";
 import nunjucks from "nunjucks";
 import helmet from "helmet";
 import homeRoute from "./routes/homeRoute";
+import altRoute from "./routes/altRoute";
 import path from "path";
 
 export const app = express();
@@ -26,15 +27,17 @@ app.use(
 app.use(express.static("public"));
 
 // Configure Nunjucks
+const isTesting = process.env.NODE_ENV === "test";
 nunjucks.configure(["node_modules/govuk-frontend/", "src/views"], {
   autoescape: true, // prevents cross-site scripting attacks (XSS)
   express: app,
-  watch: true,
+  watch: !isTesting,
 });
 
 // Set Nunjucks as the Express view engine
 app.set("view engine", "njk");
 
 app.use("/", homeRoute);
+app.use("/:page", altRoute);
 
 export default app;
