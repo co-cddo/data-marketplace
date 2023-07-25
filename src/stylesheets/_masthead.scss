@@ -5,11 +5,13 @@
   background-color: #1d70b8;
   margin-top: -10px;
 }
+
 @media (min-width: 40.0625em) {
   .masthead {
     padding-bottom: 40px;
   }
 }
+
 .masthead__title {
   font-family: "GDS Transport", arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -21,11 +23,13 @@
   padding-top: 20px;
   margin-top: 0;
 }
+
 @media print {
   .masthead__title {
     font-family: sans-serif;
   }
 }
+
 @media (min-width: 40.0625em) {
   .masthead__title {
     font-size: 36px;
@@ -33,17 +37,20 @@
     line-height: 1.1111111111;
   }
 }
+
 @media print {
   .masthead__title {
     font-size: 24pt;
     line-height: 1.05;
   }
 }
+
 @media (min-width: 40.0625em) {
   .masthead__title {
     padding-top: 30px;
   }
 }
+
 .masthead__description {
   font-family: "GDS Transport", arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -55,11 +62,13 @@
   color: inherit;
   margin-bottom: 0;
 }
+
 @media print {
   .masthead__description {
     font-family: sans-serif;
   }
 }
+
 @media (min-width: 40.0625em) {
   .masthead__description {
     font-size: 19px;
@@ -67,12 +76,14 @@
     line-height: 1.3157894737;
   }
 }
+
 @media print {
   .masthead__description {
     font-size: 14pt;
     line-height: 1.15;
   }
 }
+
 .masthead__description a:not(:focus) {
   color: inherit;
 }
@@ -80,19 +91,23 @@
 .masthead__image {
   padding-top: 20px;
 }
+
 @media (min-width: 40.0625em) {
   .masthead__image {
     padding-top: 30px;
   }
 }
+
 .masthead__image img {
   max-width: 100%;
 }
+
 @media (max-width: 48.0525em) {
   .masthead__image {
     display: none;
   }
 }
+
 @media (min-width: 40.0625em) {
   .masthead--large .masthead__description {
     font-size: 24px;
@@ -100,6 +115,7 @@
     line-height: 1.25;
   }
 }
+
 .masthead--large .masthead__title {
   font-family: "GDS Transport", arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -109,17 +125,7 @@
   font-size: 2rem;
   line-height: 1.09375;
 }
-@media print {
-  .masthead--large .masthead__title {
-    font-family: sans-serif;
-  }
-}
-@media print {
-  .masthead--large .masthead__title {
-    font-size: 32pt;
-    line-height: 1.15;
-  }
-}
+
 .masthead--large .masthead__description {
   font-family: "GDS Transport", arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -129,11 +135,13 @@
   font-size: 1.125rem;
   line-height: 1.1111111111;
 }
+
 @media print {
   .masthead--large .masthead__description {
     font-family: sans-serif;
   }
 }
+
 @media (min-width: 40.0625em) {
   .masthead--large .masthead__description {
     font-size: 24px;
@@ -141,60 +149,53 @@
     line-height: 1.25;
   }
 }
-@media print {
-  .masthead--large .masthead__description {
-    font-size: 18pt;
-    line-height: 1.15;
-  }
-}
-@media print {
-  .masthead--large .masthead__title {
-    font-family: sans-serif;
-  }
-}
+
 @media (min-width: 40.0625em) {
   .masthead--large .masthead__title {
     font-size: 48px;
     font-size: 3rem;
     line-height: 1.0416666667;
   }
-}
-@media print {
-  .masthead--large .masthead__title {
-    font-size: 32pt;
-    line-height: 1.15;
-  }
-}
-.masthead__description {
-  font-family: "GDS Transport", arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-weight: 400;
-  font-size: 16px;
-  font-size: 1rem;
-  line-height: 1.25;
-  color: inherit;
-  margin: 0;
-  margin-bottom: 0;
-}
-@media print {
+  
   .masthead__description {
-    font-family: sans-serif;
+    font-family: "GDS Transport", arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 16px;
+    font-size: 1rem;
+    line-height: 1.25;
+    color: inherit;
+    margin: 0;
+    margin-bottom: 0;
+
+    a:not(:focus) {
+      color: inherit;
+    }
+
+    @media (min-width: 40.0625em) {
+      font-size: 19px;
+      font-size: 1.1875rem;
+      line-height: 1.3157894737;
+    }
+
+    @media print {
+      font-family: sans-serif;
+      font-size: 14pt;
+      line-height: 1.15;
+    }
   }
-}
-@media (min-width: 40.0625em) {
-  .masthead__description {
-    font-size: 19px;
-    font-size: 1.1875rem;
-    line-height: 1.3157894737;
+
+  @media print {
+    .masthead--large .masthead__title {
+      font-size: 32pt;
+      line-height: 1.15;
+      font-family: sans-serif;
+    }
+
+    .masthead--large .masthead__description {
+      font-size: 18pt;
+      line-height: 1.15;
+    }
   }
-}
-@media print {
-  .masthead__description {
-    font-size: 14pt;
-    line-height: 1.15;
-  }
-}
-.masthead__description a:not(:focus) {
-  color: inherit;
 }
