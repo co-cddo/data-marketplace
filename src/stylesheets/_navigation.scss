@@ -1,7 +1,13 @@
+$navigation-height: 50px;
+
 .app-navigation {
   border-bottom: 1px solid $govuk-border-colour;
-  background-color: #ffffff;
+  background-color: govuk-colour("white");
   margin-top: 10px;
+}
+a.govuk-link {
+  text-decoration: underline;
+  text-underline-offset: 2px; /* adjust distance as required */
 }
 .app-navigation__list {
   margin: 0;
@@ -30,8 +36,6 @@
     margin-right: -15px;
   }
   @include govuk-media-query($from: tablet) {
-    $navigation-height: 50px;
-
     @include govuk-font(19, $weight: bold, $line-height: $navigation-height);
     box-sizing: border-box;
     height: $navigation-height;

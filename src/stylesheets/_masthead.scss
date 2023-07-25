@@ -6,7 +6,7 @@ $osx-font-smoothing: grayscale;
   padding-bottom: 25px;
   padding-top: 0;
   color: #ffffff;
-  background-color: #1d70b8;
+  background-color: govuk-colour("blue");
   margin-top: -10px;
 
   &__title {
@@ -18,7 +18,7 @@ $osx-font-smoothing: grayscale;
     line-height: 1.0416666667;
     padding-top: 20px;
     margin-top: 0;
-    
+
     @media (min-width: 40.0625em) {
       padding-top: 30px;
     }
