@@ -20,6 +20,14 @@
             </div>
         </div>
     </div>
+
+
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-third">
+            <div class="moj-filter"></div>
+        </div>
+
         <div class="govuk-grid-column-two-thirds" role="region" aria-label="Search results">
 
             <div class="result-info">
@@ -29,20 +37,19 @@
                         <a class="gem-c-skip-link govuk-skip-link govuk-!-display-none-print" data-module="govuk-skip-link" href="#js-results" data-govuk-skip-link-module-started="true">Skip to results</a>
                     </div>
                 </div>
-            {# <div class="no-results govuk-!-font-size-19"> 
+            </div>
+            <div class="no-results govuk-!-font-size-19"> 
                 <p class="govuk-body govuk-!-font-weight-bold">There are no matching results.</p>
-                 <p class="govuk-body">Improve your search results by:</p> 
-                 <ul class="govuk-list govuk-list--bullet"> 
+                <p class="govuk-body">Improve your search results by:</p> 
+                <ul class="govuk-list govuk-list--bullet"> 
                     <li>removing filters</li> 
                     <li>double-checking your spelling</li> 
                     <li>using fewer keywords</li> 
                     <li>searching for something less specific</li> 
                 </ul>
-            </div> #}
-
+            </div> 
         </div>
     </div>
-
 </form>
 
 {% endblock %}

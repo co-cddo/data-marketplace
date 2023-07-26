@@ -109,3 +109,13 @@
 .gem-c-search--no-border .gem-c-search__input[type="search"] {
   border: 0
 }
+
+.result-info {
+  margin: 0 0 20px 0;
+  border-bottom: solid 1px #0b0c0c
+}
+
+// Temporary CSS style to sustain layout without filter content
+.moj-filter {
+  min-height: 1px;
+}
