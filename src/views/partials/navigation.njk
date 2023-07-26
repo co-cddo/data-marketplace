@@ -11,7 +11,11 @@
           </li>
           <li class="app-navigation__list-item app-navigation__list-item--right">
             <a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline app-navigation__link js-app-navigation__link" href="#">
-              Sign in
+              {% if home %}
+                Sign in
+              {% else %}
+                Sign out
+              {% endif %}
             </a>
           </li>
       </ul>

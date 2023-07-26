@@ -1,0 +1,48 @@
+{% extends "layouts/base.njk" %}
+
+{% block content %}
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-4">
+    Find government data
+</h1>
+<form action="{{ thisUrl }}" method="GET" id="searchForm">
+    <div class="gem-c-search gem-c-search--on-white govuk-!-width-two-thirds govuk-!-margin-bottom-4">
+        <label for="search" class="gem-c-search__label govuk-label">Search the Data Catalogue</label>
+        <div class="gem-c-search__item-wrapper">
+            <input  class="gem-c-search__item gem-c-search__input govuk-input js-class-toggle" id="search" name="q" title="Search" type="search" value="{{ query }}">
+                <div class="gem-c-search__item gem-c-search__submit-wrapper">
+                    <button class="gem-c-search__submit" type="submit" enterkeyhint="search">
+                        Search
+                <svg class="gem-c-search__icon" width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                <circle cx="12.0161" cy="11.0161" r="8.51613" stroke="currentColor" stroke-width="3"></circle>
+                <line x1="17.8668" y1="17.3587" x2="26.4475" y2="25.9393" stroke="currentColor" stroke-width="3"></line>
+                </svg>
+                </button> 
+            </div>
+        </div>
+    </div>
+        <div class="govuk-grid-column-two-thirds" role="region" aria-label="Search results">
+
+            <div class="result-info">
+                <div class="result-info__header">
+                    <h2 class="gem-c-heading govuk-heading-s govuk-!-margin-bottom-2" id="js-result-count">{{ count }} results</h2>
+                    <div data-track-category="filterClicked" data-track-action="skip-Link" data-track-label="">
+                        <a class="gem-c-skip-link govuk-skip-link govuk-!-display-none-print" data-module="govuk-skip-link" href="#js-results" data-govuk-skip-link-module-started="true">Skip to results</a>
+                    </div>
+                </div>
+            {# <div class="no-results govuk-!-font-size-19"> 
+                <p class="govuk-body govuk-!-font-weight-bold">There are no matching results.</p>
+                 <p class="govuk-body">Improve your search results by:</p> 
+                 <ul class="govuk-list govuk-list--bullet"> 
+                    <li>removing filters</li> 
+                    <li>double-checking your spelling</li> 
+                    <li>using fewer keywords</li> 
+                    <li>searching for something less specific</li> 
+                </ul>
+            </div> #}
+
+        </div>
+    </div>
+
+</form>
+
+{% endblock %}
