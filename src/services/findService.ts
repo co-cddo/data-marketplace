@@ -26,6 +26,10 @@ export async function fetchData(query?: string): Promise<Resource[]> {
     issuing_body_readable: item.organisation.title,
     distributions: [],
     description: item.description,
-    dateUpdated: item.modified,
+    dateUpdated: new Date(item.modified).toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }),
   }));
 }

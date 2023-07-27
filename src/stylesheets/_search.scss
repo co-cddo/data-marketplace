@@ -118,3 +118,18 @@
 .moj-filter {
   min-height: 1px;
 }
+
+/* Select the input field when it's showing the placeholder (i.e., it's empty) and apply styles to the label via a sibling selector (~) */
+.js-enabled .gem-c-search__input:placeholder-shown ~ .gem-c-search__label {
+  z-index: 2;
+}
+
+/* Select the input field when it's not showing the placeholder (i.e., it has a value) and apply styles to the label via a sibling selector (~) */
+.js-enabled .gem-c-search__input:not(:placeholder-shown) ~ .gem-c-search__label {
+  z-index: 0;
+}
+
+/* Apply a higher z-index to the input when it's not showing the placeholder */
+.js-enabled .gem-c-search__input:not(:placeholder-shown) {
+  z-index: 1;
+}

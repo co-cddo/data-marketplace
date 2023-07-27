@@ -163,7 +163,7 @@
 
   &:hover {
     text-decoration: underline;
-    text-underline-offset: .1em;
+    text-underline-offset: 0.1em;
     @include govuk-link-hover-decoration;
   }
 
@@ -200,11 +200,10 @@
   max-height: fit-content;
 }
 
-
 .result-list__limit-height {
   display: -webkit-box;
   -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;  
+  -webkit-box-orient: vertical;
   overflow: hidden;
 }
 

@@ -8,7 +8,7 @@
     <div class="gem-c-search gem-c-search--on-white govuk-!-width-two-thirds govuk-!-margin-bottom-4">
         <label for="search" class="gem-c-search__label govuk-label">Search the Data Catalogue</label>
         <div class="gem-c-search__item-wrapper">
-            <input  class="gem-c-search__item gem-c-search__input govuk-input js-class-toggle" id="search" name="q" title="Search" type="search" value="{{ query }}">
+            <input  class="gem-c-search__item gem-c-search__input govuk-input js-class-toggle" id="search" name="q" title="Search" type="search" value="{{ query }}" placeholder=" ">
                 <div class="gem-c-search__item gem-c-search__submit-wrapper">
                     <button class="gem-c-search__submit" type="submit" enterkeyhint="search">
                         Search
@@ -57,7 +57,7 @@
                         </div>
                         <span class="js-result-list-toggle-height govuk-accordion__section-toggle" data-nosnippet=""><span class="govuk-accordion__section-toggle-focus"><span class="govuk-accordion-nav__chevron govuk-accordion-nav__chevron--down"></span><span class="govuk-accordion__section-toggle-text">Show more</span></span></span>
                         <ul class="gem-c-document-list__item-metadata">
-                            <li class="gem-c-document-list__attribute"> Updated: <time datetime="2016-10-16">{{ resource.dateUpdated}}</time> </li>
+                            <li class="gem-c-document-list__attribute"> Updated: <time>{{ resource.dateUpdated}}</time> </li>
                         </ul>
                     </li>
                     {% endfor %}
