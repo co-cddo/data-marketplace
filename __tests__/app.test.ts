@@ -8,7 +8,7 @@ describe("GET /", () => {
   });
 });
 
-describe("GET /page", () => {
+describe("GET /find", () => {
   it('should respond as expected"', async () => {
     const response = await request(app).get("/page");
     expect(response.status).toBe(200);

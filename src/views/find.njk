@@ -4,7 +4,7 @@
 <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">
     Find government data
 </h1>
-<form action="{{ thisUrl }}" method="GET" id="searchForm">
+<form action="/find" method="GET" id="searchForm">
     <div class="gem-c-search gem-c-search--on-white govuk-!-width-two-thirds govuk-!-margin-bottom-4">
         <label for="search" class="gem-c-search__label govuk-label">Search the Data Catalogue</label>
         <div class="gem-c-search__item-wrapper">
@@ -21,8 +21,6 @@
         </div>
     </div>
 
-
-
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-third">
             <div class="moj-filter"></div>
@@ -32,22 +30,50 @@
 
             <div class="result-info">
                 <div class="result-info__header">
-                    <h2 class="gem-c-heading govuk-heading-s govuk-!-margin-bottom-2" id="js-result-count">{{ count }} results</h2>
+                    <h2 class="gem-c-heading govuk-heading-s govuk-!-margin-bottom-2" id="js-result-count">{{ resources.length }} results</h2>
                     <div data-track-category="filterClicked" data-track-action="skip-Link" data-track-label="">
                         <a class="gem-c-skip-link govuk-skip-link govuk-!-display-none-print" data-module="govuk-skip-link" href="#js-results" data-govuk-skip-link-module-started="true">Skip to results</a>
                     </div>
                 </div>
             </div>
+            {% if resources|length %}
+                <ul class="gem-c-document-list gem-c-document-list--no-underline govuk-!-margin-bottom-5" data-module="edge">
+                    {% for resource in resources %}
+                    <li class="gem-c-document-list__item ">
+                        <a href="./resources/{{ resource.slug | urlencode }}" class="gem-c-document-list__item-title  govuk-link">{{ resource.title}}</a>
+
+                        <p class="govuk-!-font-weight-bold govuk-!-margin-bottom-1 govuk-!-font-size-16">
+                            <span class="govuk-visually-hidden">Organisation: </span>{{ resource.issuing_body_readable }}
+                        </p>
+
+                        <p class="govuk-!-display-inline">
+                            {% for distribution in resource.distributions %}
+                                <strong class="govuk-tag govuk-tag--grey">{{ distribution }}</strong>
+                            {% endfor %}
+                        </p>
+                        
+                        <div class="result-list__limit-height govuk-!-margin-bottom-0 govuk-!-margin-top-1">
+                            <p class="gem-c-document-list__item-description ">{{ resource.description |  replace("\\n\\n", "\n") | safe }}</p>
+                        </div>
+                        <span class="js-result-list-toggle-height govuk-accordion__section-toggle" data-nosnippet=""><span class="govuk-accordion__section-toggle-focus"><span class="govuk-accordion-nav__chevron govuk-accordion-nav__chevron--down"></span><span class="govuk-accordion__section-toggle-text">Show more</span></span></span>
+                        <ul class="gem-c-document-list__item-metadata">
+                            <li class="gem-c-document-list__attribute"> Updated: <time datetime="2016-10-16">{{ resource.dateUpdated}}</time> </li>
+                        </ul>
+                    </li>
+                    {% endfor %}
+                </ul>                
+            {% else %}
             <div class="no-results govuk-!-font-size-19"> 
                 <p class="govuk-body govuk-!-font-weight-bold">There are no matching results.</p>
-                <p class="govuk-body">Improve your search results by:</p> 
-                <ul class="govuk-list govuk-list--bullet"> 
+                 <p class="govuk-body">Improve your search results by:</p> 
+                 <ul class="govuk-list govuk-list--bullet"> 
                     <li>removing filters</li> 
                     <li>double-checking your spelling</li> 
                     <li>using fewer keywords</li> 
                     <li>searching for something less specific</li> 
                 </ul>
-            </div> 
+            </div>
+            {% endif %}
         </div>
     </div>
 </form>

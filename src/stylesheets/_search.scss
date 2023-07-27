@@ -1,4 +1,3 @@
-
 .gem-c-search {
   position: relative;
   margin-bottom: 30px;
@@ -14,31 +13,32 @@
     color: $govuk-secondary-text-colour;
     background: govuk-colour("white");
   }
-// match label colour with the label component colour
-// when javascript is enabled and inline_label option  is set to false
-.js-enabled .gem-c-search--separate-label & {
-  color: $govuk-text-colour;
+  // match label colour with the label component colour
+  // when javascript is enabled and inline_label option  is set to false
+  .js-enabled .gem-c-search--separate-label & {
+    color: $govuk-text-colour;
+  }
 }
-}
-.gem-c-search__input[type="search"]:focus,.gem-c-search__input.focus[type="search"] {
-  z-index: 2
+.gem-c-search__input[type="search"]:focus,
+.gem-c-search__input.focus[type="search"] {
+  z-index: 2;
 }
 @media (min-width: 40.0625em) {
   .gem-c-search__label {
-      font-size:19px;
-      line-height: 2.1052631579
+    font-size: 19px;
+    line-height: 2.1052631579;
   }
 }
 .gem-c-search__item-wrapper {
   display: table;
   width: 100%;
-  background: #fff
+  background: #fff;
 }
 
 .gem-c-search__item {
   position: relative;
   display: table-cell;
-  vertical-align: top
+  vertical-align: top;
 }
 
 .gem-c-search__submit {
@@ -50,7 +50,7 @@
   width: 40px;
   height: 40px;
   text-indent: -5000px;
-  overflow: hidden
+  overflow: hidden;
 }
 
 .gem-c-search__submit .gem-c-search__icon {
@@ -60,59 +60,58 @@
   height: 20px;
   width: 20px;
   top: 10px;
-  left: 10px
+  left: 10px;
 }
 
 .gem-c-search--on-govuk-blue {
   .gem-c-search__input {
-      border-width: 0
+    border-width: 0;
   }
-  
+
   .gem-c-search__input:focus {
-      box-shadow: none
+    box-shadow: none;
   }
-  
+
   .gem-c-search__submit {
-      background-color: #0b0c0c;
-      color: #fff
+    background-color: #0b0c0c;
+    color: #fff;
   }
-   .gem-c-search__submit:hover {
-      background-color: #171919
+  .gem-c-search__submit:hover {
+    background-color: #171919;
   }
   .gem-c-search__item-wrapper {
-      background: transparent;
+    background: transparent;
   }
 }
 
-
 .js-enabled .gem-c-search--on-govuk-blue .gem-c-search__label {
-  color: #505a5f
+  color: #505a5f;
 }
 
 .gem-c-search--on-white .gem-c-search__submit {
   background-color: #1d70b8;
-  color: #fff
+  color: #fff;
 }
 
 .gem-c-search--on-white .gem-c-search__submit:hover {
-  background-color: #207dce
+  background-color: #207dce;
 }
 
 .gem-c-search--on-white .gem-c-search__input[type="search"] {
-  border-right-width: 0
+  border-right-width: 0;
 }
 
 .gem-c-search--on-white .gem-c-search__input[type="search"]:focus {
-  border-right-width: 2px
+  border-right-width: 2px;
 }
 
 .gem-c-search--no-border .gem-c-search__input[type="search"] {
-  border: 0
+  border: 0;
 }
 
 .result-info {
   margin: 0 0 20px 0;
-  border-bottom: solid 1px #0b0c0c
+  border-bottom: solid 1px #0b0c0c;
 }
 
 // Temporary CSS style to sustain layout without filter content
