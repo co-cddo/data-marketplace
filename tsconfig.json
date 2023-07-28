@@ -4,6 +4,7 @@
     "lib": ["ESNext"],
     "outDir": "build",
     "esModuleInterop": true,
+    "resolveJsonModule": true,
     "typeRoots": ["./node_modules/@types"]
   },
   "include": ["src", "package.json", "src/routes/homeRoute.ts"],
