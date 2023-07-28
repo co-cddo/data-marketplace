@@ -10,6 +10,6 @@ To get started:
 
 - Run `npm install`
 
-- Replace the API_ENDPOINT variable in the .env file with a link to the live API endpoint. 
+- In the project root folder, create a .env file and copy the contents of the .env.example file. Replace the API_ENDPOINT variable value with a link to the live API endpoint. 
 
 - Run `docker-compose up --build`
