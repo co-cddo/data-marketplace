@@ -55,14 +55,4 @@ describe('fetchData', () => {
     expect(result).toEqual(expectedData);
     expect(mockedAxios.get).toHaveBeenCalledWith(process.env.API_ENDPOINT);
   });
-  
 });
-
-
-
-
-
-
-
-
-
