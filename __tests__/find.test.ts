@@ -55,4 +55,9 @@ describe('fetchData', () => {
     expect(result).toEqual(expectedData);
     expect(mockedAxios.get).toHaveBeenCalledWith(process.env.API_ENDPOINT);
   });
+
+  it('should throw an error when the axios request fails', async () => {
+    mockedAxios.get.mockRejectedValue(new Error('An error occurred while fetching data from the API'));
+    await expect(fetchData()).rejects.toThrow('An error occurred while fetching data from the API');
+  });
 });
