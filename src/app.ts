@@ -3,7 +3,8 @@ import dotenv from "dotenv";
 import nunjucks from "nunjucks";
 import helmet from "helmet";
 import homeRoute from "./routes/homeRoute";
-import findRoute from "./routes/findRoute";
+import findRoutes from "./routes/findRoutes";
+import shareRoutes from "./routes/shareRoutes";
 import path from "path";
 
 export const app = express();
@@ -44,6 +45,7 @@ nunjucks.configure(["node_modules/govuk-frontend/", "src/views"], {
 app.set("view engine", "njk");
 
 app.use("/", homeRoute);
-app.use("/find", findRoute);
+app.use("/find", findRoutes);
+app.use("/share", shareRoutes);
 
 export default app;
