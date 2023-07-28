@@ -125,7 +125,9 @@
 }
 
 /* Select the input field when it's not showing the placeholder (i.e., it has a value) and apply styles to the label via a sibling selector (~) */
-.js-enabled .gem-c-search__input:not(:placeholder-shown) ~ .gem-c-search__label {
+.js-enabled
+  .gem-c-search__input:not(:placeholder-shown)
+  ~ .gem-c-search__label {
   z-index: 0;
 }
 
