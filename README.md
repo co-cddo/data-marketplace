@@ -9,4 +9,8 @@ Local development requires Docker & Docker compose.
 To get started:
 
 - Run `npm install`
-- Run `docker-compose up --build`
+- Run `npm run start:dev`
+
+To use dcoker:
+
+- Run `docker-compose up`

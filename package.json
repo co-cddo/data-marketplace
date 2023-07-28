@@ -6,6 +6,7 @@
   "scripts": {
     "clean": "rimraf ./build",
     "start:dev": "concurrently \"ts-node-dev ./src/server.ts\" \"npm run scss\"",
+    "start:hosted": "ts-node-dev ./src/server.ts",
     "start": "node ./build/server.js",
     "test": "cross-env NODE_ENV=test jest",
     "build": "npm-run-all lint format clean scss:build && tsc && shx mkdir -p build/views && copyfiles -VEau src/views/** build/views",
