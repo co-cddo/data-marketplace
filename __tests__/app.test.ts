@@ -16,12 +16,12 @@ describe("GET /page", () => {
 });
 
 describe("GET /share", () => {
-  it('should respond as expected"', async () => {
+  it('/ should respond as expected"', async () => {
     const response = await request(app).get("/share");
     expect(response.status).toBe(200);
     expect(response.text).toContain("Share journey");
   });
-  it('should respond as expected"', async () => {
+  it('/start should respond as expected"', async () => {
     const response = await request(app).get("/share/start");
     expect(response.status).toBe(200);
     expect(response.text).toContain("Start share journey");

@@ -2,7 +2,7 @@ import express from "express";
 import nunjucks from "nunjucks";
 import helmet from "helmet";
 import homeRoute from "./routes/homeRoute";
-import pagesRoute from "./routes/pages";
+import pagesRoutes from "./routes/pagesRoutes";
 import shareRoutes from "./routes/shareRoutes";
 import path from "path";
 
@@ -40,6 +40,6 @@ app.set("view engine", "njk");
 
 app.use("/", homeRoute);
 app.use("/share", shareRoutes);
-app.use("/:page", pagesRoute);
+app.use("/:page", pagesRoutes);
 
 export default app;
