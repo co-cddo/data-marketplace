@@ -22,4 +22,4 @@ WORKDIR /usr/src/app
 COPY --from=base /usr/src/app .
 
 # Specify the command to run your application
-CMD ["npm", "run" "start:hosted"]
+CMD ["npm", "run", "start:hosted"]
