@@ -1,3 +1,4 @@
+/* global document */
 document.addEventListener('DOMContentLoaded', function () {
     var toggleButtons = document.querySelectorAll('.js-result-list-toggle-height');
     toggleButtons.forEach(function (button) {
