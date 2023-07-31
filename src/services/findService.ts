@@ -3,9 +3,13 @@ import { DataService, ApiResponse, Resource } from "../models/dataModels";
 
 export async function fetchData(query?: string): Promise<Resource[]> {
   // Get data from the api
-  const response = await axios.get<ApiResponse[]>(
-    process.env.API_ENDPOINT as string,
-  );
+  const apiUrl = process.env.API_ENDPOINT;
+  if (!apiUrl) {
+    throw new Error(
+      "API endpoint is undefined. Please set the API_ENDPOINT environment variable.",
+    );
+  }
+  const response = await axios.get<ApiResponse[]>(apiUrl as string);
 
   // Flatten the array of data
   let resources = response.data.flatMap((apiResponse) => apiResponse.data);

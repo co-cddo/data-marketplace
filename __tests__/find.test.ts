@@ -27,12 +27,14 @@ const mockedAxios = axios as jest.Mocked<typeof axios>;
 describe('fetchData', () => {
   beforeEach(() => {
     // Set up the axios get mock before each test
+    process.env.API_ENDPOINT = 'http://mock-test.endpoint.com/test-api';
     mockedAxios.get.mockResolvedValue({ data: mockData });
   });
 
   afterEach(() => {
     // Clear the mock after each test
     mockedAxios.get.mockClear();
+    delete process.env.API_ENDPOINT;
   });
 
   it('should return the correct data when no query is provided', async () => {
