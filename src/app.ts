@@ -1,8 +1,9 @@
 import express from "express";
+import dotenv from "dotenv";
 import nunjucks from "nunjucks";
 import helmet from "helmet";
 import homeRoute from "./routes/homeRoute";
-import pagesRoutes from "./routes/pagesRoutes";
+import findRoutes from "./routes/findRoutes";
 import shareRoutes from "./routes/shareRoutes";
 import path from "path";
 
@@ -18,6 +19,7 @@ app.use(
     },
   }),
 );
+
 // Set static folder middleware
 app.use(
   "/assets",
@@ -25,7 +27,11 @@ app.use(
     path.join(__dirname, "../node_modules/govuk-frontend/govuk/assets"),
   ),
 );
+
 app.use(express.static("public"));
+
+// use dotenv for env variables
+dotenv.config();
 
 // Configure Nunjucks
 const isTesting = process.env.NODE_ENV === "test";
@@ -39,7 +45,7 @@ nunjucks.configure(["node_modules/govuk-frontend/", "src/views"], {
 app.set("view engine", "njk");
 
 app.use("/", homeRoute);
+app.use("/find", findRoutes);
 app.use("/share", shareRoutes);
-app.use("/:page", pagesRoutes);
 
 export default app;
