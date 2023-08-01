@@ -40,16 +40,14 @@
                 <ul class="gem-c-document-list gem-c-document-list--no-underline govuk-!-margin-bottom-5" data-module="edge">
                     {% for resource in resources %}
                     <li class="gem-c-document-list__item ">
-                        <a href="./resources/{{ resource.slug | urlencode }}" class="gem-c-document-list__item-title  govuk-link">{{ resource.title}}</a>
+                        <a href="./find/{{ resource.slug | urlencode }}" class="gem-c-document-list__item-title  govuk-link">{{ resource.title}}</a>
 
                         <p class="govuk-!-font-weight-bold govuk-!-margin-bottom-1 govuk-!-font-size-16">
                             <span class="govuk-visually-hidden">Organisation: </span>{{ resource.issuing_body_readable }}
                         </p>
 
                         <p class="govuk-!-display-inline">
-                            {% for distribution in resource.distributions %}
-                                <strong class="govuk-tag govuk-tag--grey">{{ distribution }}</strong>
-                            {% endfor %}
+                            <strong class="govuk-tag govuk-tag--grey">{{ resource.serviceType }}</strong>
                         </p>
                         
                         <div class="result-list__limit-height govuk-!-margin-bottom-0 govuk-!-margin-top-1">

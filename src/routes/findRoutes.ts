@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
 const router = express.Router();
-import { fetchData } from "../services/findService";
+import { fetchData, fetchResource } from "../services/findService";
 
 router.get("/", async (req: Request, res: Response, next: NextFunction) => {
   // Use the referer as the backLink, defaulting to '/' if no referer is set
@@ -23,6 +23,12 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
     // Catch errors if API call was unsuccessful and pass to error-handling middlewear
     next(error);
   }
+});
+
+router.get("/:resourceID", async (req: Request, res: Response) => {
+  const resourceID = req.params.resourceID;
+  const resource = await fetchResource(resourceID);
+  res.render("resources.njk", { resource });
 });
 
 export default router;
