@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
 import nunjucks from "nunjucks";
 import helmet from "helmet";
@@ -6,7 +6,11 @@ import homeRoute from "./routes/homeRoute";
 import resourcesRoute from "./routes/resourcesRoute";
 import findRoutes from "./routes/findRoutes";
 import shareRoutes from "./routes/shareRoutes";
+import cookieRoutes from "./routes/cookieRoutes";
 import path from "path";
+import cookieParser from "cookie-parser";
+import bodyParser from "body-parser";
+import { handleCookies } from "./middleware/cookieMiddleware";
 
 export const app = express();
 // Set up security headers with Helmet
@@ -29,7 +33,13 @@ app.use(
   ),
 );
 
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
 app.use(express.static("public"));
+
+app.use(handleCookies);
 
 // use dotenv for env variables
 dotenv.config();
@@ -45,9 +55,38 @@ nunjucks.configure(["node_modules/govuk-frontend/", "src/views"], {
 // Set Nunjucks as the Express view engine
 app.set("view engine", "njk");
 
+// Routes
 app.use("/", homeRoute);
 app.use("/resources", resourcesRoute);
 app.use("/find", findRoutes);
 app.use("/share", shareRoutes);
+app.use("/cookie-settings", cookieRoutes);
+
+// Error handling
+// Catch all route to handle errors
+app.use("*", (req: Request, res: Response) => {
+  const backLink = req.headers.referer || "/";
+  console.error(`Error: Page not found: ${req.originalUrl}`);
+  res.status(404).render("error", {
+    status: 404,
+    messageTitle: "Page not found",
+    messageBody:
+      "If you typed the web address, check it is correct. If you pasted the web address, check you copied the entire address.",
+    backLink: backLink,
+  });
+});
+
+// Error-handling middleware function placed after all routes. Error-handling middleware requires all 4 arguments, so we can disable the ESlint warning.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  const backLink = req.headers.referer || "/";
+  console.error(err);
+  res.status(500).render("error", {
+    status: 500,
+    messageTitle: "Sorry, there is a problem with the service",
+    messageBody: "Try again later.",
+    backLink: backLink,
+  });
+});
 
 export default app;

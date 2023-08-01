@@ -1,12 +1,14 @@
 {% extends "govuk/template.njk" %}
 
+{% block pageTitle %}Data Marketplace{% endblock %}
+
 {% block head %}
     <link href="/govuk-frontend/all.css" rel="text/stylesheet">
     <link href="{{ assetPath }}/stycssles/style.css" rel="stylesheet" />
 {% endblock %}
 
 {% block header %}
-
+  {% include "../partials/cookieBanner.njk" %}
 {{ govukHeader({
   homepageUrl: "/",
   serviceName: "Data Marketplace",
@@ -39,14 +41,11 @@
   {% endif %}
 {% endblock %}
 
-{% block bodyStart %}
-  <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
-{% endblock %}
-
 {% block bodyEnd %}
   {{ super() }}  
     <script src="{{ assetPath }}/javascripts/all.js" type="text/javascript"></script>
     <script src="{{ assetPath }}/javascripts/accordionExpander.js" type="text/javascript"></script>
+    <script src="{{ assetPath }}/javascripts/cookies.js" defer></script>
     <script>window.GOVUKFrontend.initAll()</script>
 {% endblock %}
 

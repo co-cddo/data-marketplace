@@ -8,8 +8,10 @@ Local development requires Docker & Docker compose.
 
 To get started:
 
+- In the project root folder, create a .env file and copy the contents of the .env.example file. Replace the API_ENDPOINT variable value with a link to the live API endpoint.
 - Run `npm install`
+- Run `npm run start:dev`
 
-- In the project root folder, create a .env file and copy the contents of the .env.example file. Replace the API_ENDPOINT variable value with a link to the live API endpoint. 
+To use dcoker:
 
-- Run `docker-compose up --build`
+- Run `docker-compose up`
