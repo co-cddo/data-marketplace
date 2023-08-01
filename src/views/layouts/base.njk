@@ -1,7 +1,7 @@
 {% extends "govuk/template.njk" %}
 
 {% block head %}
-    <link href="/govuk-frontend/all.css" rel="stylesheet">
+    <link href="/govuk-frontend/all.css" rel="text/stylesheet">
     <link href="{{ assetPath }}/stycssles/style.css" rel="stylesheet" />
 {% endblock %}
 
@@ -14,33 +14,39 @@
   containerClasses: "govuk-width-container"
 }) }}
 
-    {% if home %}
-      <div class="x-govuk-masthead x-govuk-masthead--large">
-      {% include "partials/navigation.njk" %}
+  {% include "partials/navigation.njk" %}
+  {% if home %}
+    <div class="x-govuk-masthead x-govuk-masthead--large">
       <div class="govuk-width-container">
         {% include "partials/phaseBannerInverse.njk" %}
         <h1 class="x-govuk-masthead__title">
           Data Marketplace
         </h1>
         <div class="govuk-grid-row">
-          <div class="govuk-grid-column-two-thirds-from-desktop">
-              <p class="x-govuk-masthead__description govuk-!-margin-bottom-3">
-                A place for people who work in government  organisations, agencies and public bodies to share data.
-              </p>
-          </div>
+        <div class="govuk-grid-column-two-thirds-from-desktop">
+          <p class="x-govuk-masthead__description govuk-!-margin-bottom-3">
+            A place for people who work in government  organisations, agencies and public bodies to share data.
+          </p>
         </div>
       </div>
     </div>
-    {% else %}
-     <div class="govuk-width-container">
-        {% include "partials/phaseBanner.njk" %}
-        </div>
-    {% endif %}
+  </div>
+  {% else %}
+  <div class="govuk-width-container">
+    {% include "partials/phaseBanner.njk" %}
+    <a class="govuk-back-link" href="{{ backLink }}">Back</a>
+  </div>
+  {% endif %}
+{% endblock %}
+
+{% block bodyStart %}
+  <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
 {% endblock %}
 
 {% block bodyEnd %}
   {{ super() }}  
-    <script src="{{ assetPath }}/javascripts/all.js"></script>
+    <script src="{{ assetPath }}/javascripts/all.js" type="text/javascript"></script>
+    <script src="{{ assetPath }}/javascripts/accordionExpander.js" type="text/javascript"></script>
     <script>window.GOVUKFrontend.initAll()</script>
 {% endblock %}
 
