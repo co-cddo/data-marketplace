@@ -6,7 +6,6 @@ if (cookieForm) {
   cookieForm.addEventListener("submit", (event) => {
     event.preventDefault();
     const cookiesButtonValue = event.submitter.value;
-    console.log(cookiesButtonValue);
     fetch("/cookie-settings", {
       method: "POST",
       headers: {
