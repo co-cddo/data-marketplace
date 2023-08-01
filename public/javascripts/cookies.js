@@ -25,20 +25,17 @@ if (cookieForm) {
   });
 }
 if (cookieHideAccept) {
-  cookieHideAccept.addEventListener("click", (event) => {
-    event.preventDefault();
-    const cookiesAcceptDiv = document.getElementById("cookies-accept");
-    if (cookiesAcceptDiv) {
-      cookiesAcceptDiv.style.display = "none";
-    }
-  });
+  hideConfirmBanner("cookies-accept", cookieHideAccept);
 }
 if (cookieHideReject) {
-  cookieHideReject.addEventListener("click", (event) => {
+  hideConfirmBanner("cookies-reject", cookieHideReject);
+}
+function hideConfirmBanner(id, element) {
+  element.addEventListener("click", (event) => {
     event.preventDefault();
-    const cookiesRejectDiv = document.getElementById("cookies-reject");
-    if (cookiesRejectDiv) {
-      cookiesRejectDiv.style.display = "none";
+    const cookiesDiv = document.getElementById(id);
+    if (cookiesDiv) {
+      cookiesDiv.style.display = "none";
     }
   });
 }
