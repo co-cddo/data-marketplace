@@ -1,5 +1,7 @@
 {% extends "govuk/template.njk" %}
 
+{% block pageTitle %}Data Marketplace{% endblock %}
+
 {% block head %}
     <link href="/govuk-frontend/all.css" rel="text/stylesheet">
     <link href="{{ assetPath }}/stycssles/style.css" rel="stylesheet" />
@@ -37,10 +39,6 @@
     <a class="govuk-back-link" href="{{ backLink }}">Back</a>
   </div>
   {% endif %}
-{% endblock %}
-
-{% block bodyStart %}
-  <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
 {% endblock %}
 
 {% block bodyEnd %}

@@ -1,8 +1,8 @@
-import express, { Request, Response } from "express";
+import express, { Request, Response, NextFunction } from "express";
 const router = express.Router();
 import { fetchData } from "../services/findService";
 
-router.get("/", async (req: Request, res: Response) => {
+router.get("/", async (req: Request, res: Response, next: NextFunction) => {
   // Use the referer as the backLink, defaulting to '/' if no referer is set
   const backLink = req.headers.referer || "/";
   // Extract the 'q' query parameter from the request, convert it to a string,
@@ -20,9 +20,8 @@ router.get("/", async (req: Request, res: Response) => {
       query: query,
     });
   } catch (error) {
-    // Catch errors if API call was unsuccessful
-    console.error(error);
-    res.status(500).send("An error occurred while fetching data from the API");
+    // Catch errors if API call was unsuccessful and pass to error-handling middlewear
+    next(error);
   }
 });
 
