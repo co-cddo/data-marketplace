@@ -2,7 +2,6 @@ const cookieForm = document.getElementById("cookieForm");
 const cookieHideAccept = document.querySelector(".hide-cookie-message-accept");
 const cookieHideReject = document.querySelector(".hide-cookie-message-reject");
 
-// console.log(cookieHide);
 if (cookieForm) {
   cookieForm.addEventListener("submit", (event) => {
     event.preventDefault();
