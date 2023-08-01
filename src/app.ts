@@ -5,6 +5,7 @@ import helmet from "helmet";
 import homeRoute from "./routes/homeRoute";
 import findRoutes from "./routes/findRoutes";
 import shareRoutes from "./routes/shareRoutes";
+import cookieRoutes from "./routes/cookieRoutes";
 import path from "path";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
@@ -33,6 +34,7 @@ app.use(
 
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 app.use(express.static("public"));
 
@@ -55,37 +57,6 @@ app.set("view engine", "njk");
 app.use("/", homeRoute);
 app.use("/find", findRoutes);
 app.use("/share", shareRoutes);
-
-app.post("/cookie-settings", (req, res) => {
-  const cookiesButtonValue = req.body.cookies;
-  const expirationDate = new Date();
-  expirationDate.setFullYear(expirationDate.getFullYear() + 1);
-  if (cookiesButtonValue === "accept") {
-    res.cookie(
-      "cookie_policy",
-      encodeURIComponent(JSON.stringify({ essential: true, extra: true })),
-      {
-        expires: expirationDate,
-      },
-    );
-    res.cookie("user_interacted", "true", { expires: expirationDate });
-    res.sendStatus(200);
-  } else if (cookiesButtonValue === "reject") {
-    res.cookie(
-      "cookie_policy",
-      encodeURIComponent(JSON.stringify({ essential: true, extra: false })),
-      {
-        expires: expirationDate,
-      },
-    );
-    res.cookie("user_interacted", "true", { expires: expirationDate });
-    res.sendStatus(200);
-  } else {
-    res.sendStatus(400);
-  }
-
-  const referer = req.headers.referer || "/";
-  res.redirect(referer);
-});
+app.use("/cookie-settings", cookieRoutes);
 
 export default app;
