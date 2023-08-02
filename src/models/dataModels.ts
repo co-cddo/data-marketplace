@@ -1,4 +1,3 @@
-// Organisation is an interface that describes the structure of the organisation that has issued or owns the CatalogueItem.
 interface Organisation {
   title: string;
   id: string;
@@ -6,7 +5,7 @@ interface Organisation {
   homepage: string;
 }
 
-// Creator is an interface that describes the structure of the entity that created the CatalogueItem.
+
 interface Creator {
   acronym: string;
   homepage: string;
@@ -14,20 +13,20 @@ interface Creator {
   title: string;
 }
 
-// ContactPoint is an interface that describes the structure of a point of contact associated with the CatalogueItem.
+
 interface ContactPoint {
   contactName: string;
   email: string;
 }
 
-// Distribution is an interface that describes the structure of a specific distribution of a CatalogueItem.
+
 interface Distribution {
   title: string;
   modified: string;
   mediaType: string;
 }
 
-// CatalogueItem is an interface that describes the structure of an item from the original API response.
+// CatalogueItem is an interface that describes the structure of an item from the API response.
 export interface CatalogueItem {
   accessRights: string;
   catalogueCreated: string;
@@ -35,13 +34,14 @@ export interface CatalogueItem {
   contactPoint: ContactPoint;
   creator: Creator[];
   description: string;
-  distribution: Distribution[];
+  distributions: Distribution[];
   endpointDescription: string;
   endpointURL: string;
   identifier: string;
   issued: string;
   keyword: string[];
   licence: string;
+  mediaType: string[];
   modified: string;
   organisation: Organisation;
   relatedAssets: unknown[];
@@ -53,8 +53,8 @@ export interface CatalogueItem {
   theme: string[];
   title: string;
   type: string;
+  updateFrequency: string;
   version: string;
-
 }
 
 // ApiResponse is an interface that describes the structure of the entire API response. It has a data property that contains an array of CatalogueItems.
@@ -62,27 +62,31 @@ export interface ApiResponse {
   data: CatalogueItem[];
 }
 
-// This describes the structure of the final resources after processing the original data obtained from the API.
-// This is useful to provide a simplified or restructured version of the API data that fits the needs of the application.
+// Resource is the interface that holds the properties common between both types of resources.
 export interface Resource {
-  slug: string;
-  title: string;
-  issuing_body_readable: string;
-  distributions: unknown[];
-  description: string;
-  dateUpdated: string;
-  type: string;
-  organisation: Organisation;
-  license: string;
-  modified: string;
-  contactPoint: ContactPoint;
+  catalogueCreated: string;
+  catalogueModified: string;
   creator: Creator[];
-  distribution: Distribution[];
-  serviceType: string;
-  serviceStatus: string;
+  identifier: string;
+  organisation: Organisation;
+  summary: string | null;
+  modified: string | null;
+  title: string;
+  type: string;
+}
+
+// DataSetResource is the interface that extends BaseResource with the properties unique to DataSets.
+export interface DataSetResource extends Resource {
+  mediaType: string[];
+  distributions: Distribution[];
+  updateFrequency: string;
+}
+
+// DataServiceResource is the interface that extends BaseResource with the properties unique to DataServices.
+export interface DataServiceResource extends Resource {
   endpointDescription: string;
   endpointURL: string;
-  securityClassification: string;
-  accessRights: string;
-  version: string;
+  servesData: string[];
+  serviceStatus: string;
+  serviceType: string;
 }

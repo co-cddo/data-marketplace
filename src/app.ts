@@ -46,12 +46,22 @@ dotenv.config();
 
 // Configure Nunjucks
 const isTesting = process.env.NODE_ENV === "test";
-nunjucks.configure(["node_modules/govuk-frontend/", "src/views"], {
+// Set up Nunjucks environment
+const env = nunjucks.configure(["node_modules/govuk-frontend/", "src/views"], {
   autoescape: true, // prevents cross-site scripting attacks (XSS)
   express: app,
   watch: !isTesting,
 });
 
+// Add a custom filter for date formatting
+env.addFilter("formatDate", function (date: string | number | Date) {
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+  return new Date(date).toLocaleDateString("en-GB", options);
+});
 // Set Nunjucks as the Express view engine
 app.set("view engine", "njk");
 
