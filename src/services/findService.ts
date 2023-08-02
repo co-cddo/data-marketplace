@@ -8,6 +8,7 @@ import {
 
 export async function fetchData(
   query?: string,
+  organisationFilter?: string
 ): Promise<{ resources: Resource[]; uniqueOrganisations: Organisation[] }> {
   // Get data from the api
   const apiUrl = process.env.API_ENDPOINT;
@@ -21,7 +22,7 @@ export async function fetchData(
   // Flatten the array of data
   let resources = response.data.flatMap((apiResponse) => apiResponse.data);
 
-  // Extract unique organizations
+  // Extract unique organisations
   const uniqueOrganisationsMap: Map<string, Organisation> = new Map();
   resources.forEach((dataService) => {
     uniqueOrganisationsMap.set(
@@ -31,6 +32,13 @@ export async function fetchData(
   });
 
   const uniqueOrganisations = Array.from(uniqueOrganisationsMap.values());
+
+  if (organisationFilter) {
+    const selectedOrganisations = organisationFilter.split(',');
+    resources = resources.filter((dataService) =>
+      selectedOrganisations.includes(dataService.organisation.id)
+    );
+  }
 
   console.log("Unique Organisations:", uniqueOrganisations);
 
@@ -58,6 +66,6 @@ export async function fetchData(
     }),
   }));
 
-  // console.log("mappedResources ",mappedResources);
+  // console.log("mappedResources ", mappedResources);
   return { resources: mappedResources, uniqueOrganisations };
 }

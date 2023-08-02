@@ -9,15 +9,28 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
   // change it to lowercase for case insensitive search, and assign it to the 'query' variable.
   // If 'q' doesn't exist, assign 'undefined' to the 'query' variable.
   const query: string | undefined = (req.query.q as string)?.toLowerCase();
+  const organisationFilter: string | undefined = req.query.organisationFilter as string | undefined;
 
   try {
     // Fetch the data from the API
-    const { resources, uniqueOrganisations } = await fetchData(query);
+    const { resources, uniqueOrganisations } = await fetchData(query, organisationFilter);
+
+  // Map the uniqueOrganisations to the format required bytemplate
+    const organisationsForTemplate = uniqueOrganisations.map(function(uniqueOrganisation) {
+      return {
+        value: uniqueOrganisation.id,
+        text: uniqueOrganisation.title,
+        attributes: {
+          "id": uniqueOrganisation.id
+        }
+      };
+    });
+
     res.render("find.njk", {
       route: req.params.page,
       backLink: backLink,
       resources: resources,
-      uniqueOrganisations: uniqueOrganisations,
+      uniqueOrganisations: organisationsForTemplate,
       query: query,
     });
   } catch (error) {

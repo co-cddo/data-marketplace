@@ -41,27 +41,13 @@
                             <path d="m225.84 414.16l256 256c16.683 16.683 43.691 16.683 60.331 0l256-256c16.683-16.683 16.683-43.691 0-60.331s-43.691-16.683-60.331 0l-225.84 225.84-225.84-225.84c-16.683-16.683-43.691-16.683-60.331 0s-16.683 43.691 0 60.331z"></path>
                         </svg>
                     </h2>
-                    <div class="app-c-expander__content js-content app-c-option-select__container" id="expander-content-organisations">                        
-                        {% for uniqueOrganisation in uniqueOrganisations %}
+                    <div class="app-c-expander__content js-content app-c-option-select__container" id="expander-content-organisations">
                         {{ govukCheckboxes({
-                            name: uniqueOrganisation.title,
                             classes: "govuk-checkboxes--small js-auto-submit",
-                            attributes: {
-                                "id": uniqueOrganisation.id
-                            },
-                            fieldset: {
-                                legend: {
-                                text: uniqueOrganisation.title,
-                                classes: "govuk-fieldset__legend--s govuk-visually-hidden"
-                                }
-                            },
-                            items: [{
-                                value: uniqueOrganisation.id,
-                                text: uniqueOrganisation.title
-                            }]
-                        }) }}
-                        {% endfor %} 
-                    </div>
+                            name: "organisationFilters",
+                            items: uniqueOrganisations
+                          }) }}
+                      </div>
                 </div>
                 
             </div>

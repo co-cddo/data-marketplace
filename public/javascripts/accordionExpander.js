@@ -46,4 +46,34 @@ document.addEventListener('DOMContentLoaded', function () {
       content.classList.toggle('app-c-expander__content--visible');
     }
   });
-})});
+})
+
+    // Put FilterOrganisation param script in here for now, doesnt seem to work on its own
+    var checkboxes = document.querySelectorAll('input[name="organisationFilters"]');
+
+    checkboxes.forEach(function(checkbox) {
+    checkbox.addEventListener('change', function() {
+        var selectedOrganisations = Array.from(checkboxes)
+        .filter(function(c) { return c.checked; })
+        .map(function(c) { return c.value; })
+        .join(',');
+
+        // Retrieve existing search parameters
+        var searchParams = new URLSearchParams(window.location.search);
+
+        // Set or delete the organization filter as needed
+        if (selectedOrganisations) {
+        searchParams.set('organisationFilter', selectedOrganisations);
+        } else {
+        searchParams.delete('organisationFilter'); // for now does nothing
+        }
+
+        var newUrl = window.location.pathname + '?' + searchParams.toString();
+
+        // Redirect to the updated URL only if it's different from the current URL
+        if (newUrl !== window.location.href) {
+        window.location.href = newUrl;
+        }
+    });
+    });
+});
