@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 import nunjucks from "nunjucks";
 import helmet from "helmet";
 import homeRoute from "./routes/homeRoute";
-import resourcesRoute from "./routes/resourcesRoute";
 import findRoutes from "./routes/findRoutes";
 import shareRoutes from "./routes/shareRoutes";
 import cookieRoutes from "./routes/cookieRoutes";
@@ -67,7 +66,6 @@ app.set("view engine", "njk");
 
 // Routes
 app.use("/", homeRoute);
-app.use("/resources", resourcesRoute);
 app.use("/find", findRoutes);
 app.use("/share", shareRoutes);
 app.use("/cookie-settings", cookieRoutes);
