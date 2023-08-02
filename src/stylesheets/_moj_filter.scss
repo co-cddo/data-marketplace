@@ -1,0 +1,111 @@
+.moj-override .moj-filter {
+  box-shadow: none;
+}
+
+.moj-override .moj-filter__header {
+  border: none;
+  padding: 0;
+  height: 0;
+}
+
+.moj-override .moj-filter__selected {
+  display: none;
+}
+
+.moj-override .moj-filter__options {
+  padding: 0;
+}
+
+.moj-override .app-c-option-select__container {
+  height: auto;
+  max-height: none;
+}
+
+.moj-override .app-c-expander:last-child {
+  border-bottom: 1px solid #b1b4b6;
+}
+
+.moj-override .govuk-button {
+  margin: 20px 0px 20px;
+  display: none;
+}
+
+.moj-override--selected-tags .moj-filter {
+  box-shadow: none;
+}
+
+.moj-override--selected-tags .moj-filter__header {
+  display: none;
+}
+
+.moj-override--selected-tags .moj-filter__options {
+  display: none;
+}
+
+.moj-override--selected-tags .moj-filter__selected {
+  border: none;
+  padding: 10px;
+  margin-bottom: 10px;
+  overflow: auto;
+}
+
+// .moj-override--selected-tags .moj-filter__selected-heading {
+//     display: none;
+// }
+
+.moj-override--selected-tags .moj-filter__heading-title {
+  display: none;
+}
+
+.moj-override--selected-tags p {
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+.moj-override--selected-tags .moj-filter__selected > h3 {
+  margin-right: 10px;
+  padding-top: 8px;
+}
+
+.moj-override--selected-tags .moj-filter__tag {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  padding: 0.5em;
+  border-radius: 0.3125em;
+}
+
+.moj-override--selected-tags .moj-filter__tag:hover {
+  background: #b1b4b6;
+  color: black;
+}
+
+.moj-override--selected-tags .moj-filter__tag:focus {
+  -webkit-box-shadow: inset 0 0 0 2px;
+  box-shadow: inset 0 0 0 2px;
+  border: solid 1px #0b0c0c;
+  outline: 3px solid #fd0;
+}
+
+.moj-override .app-c-option-select__container {
+  position: relative;
+  max-height: 200px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: #fff;
+}
+
+@media (min-width: 48.0625em) {
+  .moj-override .app-c-option-select__container::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+  }
+
+  .moj-override .app-c-option-select__container::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, 0.87);
+  }
+}

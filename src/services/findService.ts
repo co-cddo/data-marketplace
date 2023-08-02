@@ -1,7 +1,14 @@
 import axios from "axios";
-import { DataService, ApiResponse, Resource } from "../models/dataModels";
+import {
+  DataService,
+  Organisation,
+  ApiResponse,
+  Resource,
+} from "../models/dataModels";
 
-export async function fetchData(query?: string): Promise<Resource[]> {
+export async function fetchData(
+  query?: string,
+): Promise<{ resources: Resource[]; uniqueOrganisations: Organisation[] }> {
   // Get data from the api
   const apiUrl = process.env.API_ENDPOINT;
   if (!apiUrl) {
@@ -14,6 +21,19 @@ export async function fetchData(query?: string): Promise<Resource[]> {
   // Flatten the array of data
   let resources = response.data.flatMap((apiResponse) => apiResponse.data);
 
+  // Extract unique organizations
+  const uniqueOrganisationsMap: Map<string, Organisation> = new Map();
+  resources.forEach((dataService) => {
+    uniqueOrganisationsMap.set(
+      dataService.organisation.title,
+      dataService.organisation,
+    );
+  });
+
+  const uniqueOrganisations = Array.from(uniqueOrganisationsMap.values());
+
+  console.log("Unique Organisations:", uniqueOrganisations);
+
   // Search the data if query is present
   if (query) {
     resources = resources.filter((dataService) => {
@@ -23,8 +43,9 @@ export async function fetchData(query?: string): Promise<Resource[]> {
     });
   }
 
+  // console.log("JSON Data", resources)
   // Map the data to the new object shape
-  return resources.map((item: DataService) => ({
+  const mappedResources = resources.map((item: DataService) => ({
     slug: item.id,
     title: item.title,
     issuing_body_readable: item.organisation.title,
@@ -36,4 +57,7 @@ export async function fetchData(query?: string): Promise<Resource[]> {
       year: "numeric",
     }),
   }));
+
+  // console.log("mappedResources ",mappedResources);
+  return { resources: mappedResources, uniqueOrganisations };
 }

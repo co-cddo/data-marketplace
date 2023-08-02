@@ -33,4 +33,17 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
     });
-});
+
+    var filterAccordionButton = document.querySelectorAll('.app-c-expander__button');
+
+    filterAccordionButton.forEach(function(accordionButton) {
+    accordionButton.addEventListener('click', function() {
+    var toggleValue = this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true';
+    this.setAttribute('aria-expanded', toggleValue);
+
+    var content = this.parentNode.nextElementSibling;
+    if (content && content.classList.contains('app-c-expander__content')) {
+      content.classList.toggle('app-c-expander__content--visible');
+    }
+  });
+})});

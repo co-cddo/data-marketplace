@@ -12,11 +12,12 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
 
   try {
     // Fetch the data from the API
-    const resources = await fetchData(query);
+    const { resources, uniqueOrganisations } = await fetchData(query);
     res.render("find.njk", {
       route: req.params.page,
       backLink: backLink,
       resources: resources,
+      uniqueOrganisations: uniqueOrganisations,
       query: query,
     });
   } catch (error) {
