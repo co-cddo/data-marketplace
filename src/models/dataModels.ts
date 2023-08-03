@@ -5,7 +5,6 @@ interface Organisation {
   homepage: string;
 }
 
-
 interface Creator {
   acronym: string;
   homepage: string;
@@ -13,12 +12,10 @@ interface Creator {
   title: string;
 }
 
-
 interface ContactPoint {
   contactName: string;
   email: string;
 }
-
 
 interface Distribution {
   title: string;
@@ -26,7 +23,7 @@ interface Distribution {
   mediaType: string;
 }
 
-// CatalogueItem is an interface that describes the structure of an item from the API response.
+// CatalogueItem interface describes the structure of the data obtained from the API.
 export interface CatalogueItem {
   accessRights: string;
   catalogueCreated: string;
@@ -64,15 +61,38 @@ export interface ApiResponse {
 
 // Resource is the interface that holds the properties common between both types of resources.
 export interface Resource {
+  accessRights: string;
   catalogueCreated: string;
   catalogueModified: string;
+  contactPoint: ContactPoint;
   creator: Creator[];
+  description: string;
+  distributions?: Distribution[];
+  endpointDescription?: string;
+  endpointURL?: string;
   identifier: string;
-  organisation: Organisation;
-  summary: string | null;
+  issued: string;
+  keyword: string[];
+  licence: string;
+  mediaType?: string[];
   modified: string | null;
+  organisation: Organisation;
+  relatedAssets: unknown[];
+  securityClassification: string;
+  servesData?: string[];
+  serviceStatus?: string;
+  serviceType?: string;
+  summary: string | null;
+  theme: string[];
   title: string;
   type: string;
+  updateFrequency?: string;
+  version: string;
+}
+
+export interface SearchListResource extends Resource {
+  mediaType?: string[];
+  serviceType?: string;
 }
 
 // DataSetResource is the interface that extends BaseResource with the properties unique to DataSets.
