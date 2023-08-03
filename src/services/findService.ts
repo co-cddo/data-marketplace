@@ -8,7 +8,7 @@ import {
 
 export async function fetchData(
   query?: string,
-  organisationFilter?: string
+  organisationFilter?: string,
 ): Promise<{ resources: Resource[]; uniqueOrganisations: Organisation[] }> {
   // Get data from the api
   const apiUrl = process.env.API_ENDPOINT;
@@ -34,9 +34,9 @@ export async function fetchData(
   const uniqueOrganisations = Array.from(uniqueOrganisationsMap.values());
 
   if (organisationFilter) {
-    const selectedOrganisations = organisationFilter.split(',');
+    const selectedOrganisations = organisationFilter.split(",");
     resources = resources.filter((dataService) =>
-      selectedOrganisations.includes(dataService.organisation.id)
+      selectedOrganisations.includes(dataService.organisation.id),
     );
   }
 

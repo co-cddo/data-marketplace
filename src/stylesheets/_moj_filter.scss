@@ -97,6 +97,14 @@
   background-color: #fff;
 }
 
+.moj-filter__tag:after {
+  background-image: image-url("icon-tag-remove-cross.svg");
+}
+
+.moj-filter__tag:hover:after {
+  background-image: image-url("icon-tag-remove-cross-white.svg") !important;
+}
+
 @media (min-width: 48.0625em) {
   .moj-override .app-c-option-select__container::-webkit-scrollbar {
     -webkit-appearance: none;

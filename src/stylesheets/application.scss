@@ -6,3 +6,29 @@
 @import "_documentList";
 @import "_moj_filter";
 @import "_expander";
+
+.moj-override--selected-tags .moj-filter__tag {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  padding: 0.5em;
+  border-radius: 0.3125em;
+}
+
+.moj-override--selected-tags .moj-filter__tag:hover {
+  background: #b1b4b6;
+  color: black;
+}
+
+.moj-override--selected-tags .moj-filter__tag:hover:after {
+  background-image: url(/public/images/icon-tag-remove-cross.svg) !important;
+}
+
+.moj-override--selected-tags .moj-filter__tag:focus {
+  -webkit-box-shadow: inset 0 0 0 2px;
+  box-shadow: inset 0 0 0 2px;
+  border: solid 1px #0b0c0c;
+  outline: 3px solid #fd0;
+}

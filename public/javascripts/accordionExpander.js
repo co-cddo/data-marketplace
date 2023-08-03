@@ -48,32 +48,69 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 })
 
-    // Put FilterOrganisation param script in here for now, doesnt seem to work on its own
-    var checkboxes = document.querySelectorAll('input[name="organisationFilters"]');
 
-    checkboxes.forEach(function(checkbox) {
+// Put FilterOrganisation param script in here for now, doesn't seem to work on its own
+
+// Retrieve existing search parameters
+var searchParams = new URLSearchParams(window.location.search);
+var initialSelectedOrganisations = searchParams.get('organisationFilter') || '';
+var organisationsArray = new Set(initialSelectedOrganisations ? initialSelectedOrganisations.split(',') : []);
+var checkboxes = document.querySelectorAll('input[name="organisationFilters"]');
+
+if (initialSelectedOrganisations) {
+    Array.from(organisationsArray).forEach(function(organisation) { // Use Array.from() to iterate over the Set
+        // Render the tag for this organisation
+        updateTags(organisation);
+    });
+}
+
+
+checkboxes.forEach(function(checkbox) {
     checkbox.addEventListener('change', function() {
-        var selectedOrganisations = Array.from(checkboxes)
-        .filter(function(c) { return c.checked; })
-        .map(function(c) { return c.value; })
-        .join(',');
+        checkboxes.forEach(function(c) { c.disabled = true; });
+        checkbox.disabled = false;
 
-        // Retrieve existing search parameters
-        var searchParams = new URLSearchParams(window.location.search);
-
-        // Set or delete the organization filter as needed
-        if (selectedOrganisations) {
-        searchParams.set('organisationFilter', selectedOrganisations);
+        // Add or remove the selected organisation from the array
+        var organisation = checkbox.value;
+        if (checkbox.checked) {
+            organisationsArray.add(organisation); // Adds the organisation to the set
         } else {
-        searchParams.delete('organisationFilter'); // for now does nothing
+            organisationsArray.delete(organisation); // Removes the organisation from the set if it exists
+        }
+
+        var selectedOrganisations = Array.from(organisationsArray).join(',');
+
+        // Set or delete the organisation filter as needed
+        if (selectedOrganisations) {
+            searchParams.set('organisationFilter', selectedOrganisations);
+        } else {
+            searchParams.delete('organisationFilter');
         }
 
         var newUrl = window.location.pathname + '?' + searchParams.toString();
 
         // Redirect to the updated URL only if it's different from the current URL
         if (newUrl !== window.location.href) {
-        window.location.href = newUrl;
+            window.location.href = newUrl;
         }
-    });
+
+        // Added this part to update the tags
+        updateTags(selectedOrganisations);
     });
 });
+
+    function updateTags(selectedOrganisations) {
+        var tagsContainer = document.querySelector('.moj-override--selected-tags');
+        tagsContainer.innerHTML = ""; // clear existing tags
+        selectedOrganisations.split(',').forEach(function(organisation) {
+            var tagElement = document.createElement('span');
+            tagElement.className = "tag-class"; 
+            tagElement.textContent = organisation;
+            tagsContainer.appendChild(tagElement);
+        });
+    }
+    window.addEventListener('load', function() {
+        checkboxes.forEach(function(checkbox) { checkbox.disabled = false; });
+    });
+});
+    

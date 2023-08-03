@@ -63,6 +63,32 @@
                     </div>
                 </div>
             </div>
+            <div id="js-facet-tag-wrapper" class="facet-tags__container" aria-live="assertive">
+                <a id="clear-filters" href="{{assetpath}}/find"><span>Clear Filters</span></a> 
+
+                    <div class="moj-override--selected-tags">
+                        {# {filter.id}} #}
+                        <div class="app-c-expander__content js-content app-c-expander__content--visible app-c-option-select__container" id="expander-content-{">
+                           
+                                   
+                                    {{ govukCheckboxes({
+                                        name: organisation.title,
+                                        classes: "govuk-checkboxes--small js-auto-submit",
+                                        attributes: {
+                                            "id": organisation.id
+                                            },
+                                        fieldset: {
+                                            legend: {
+                                            text: organisation.title,
+                                            classes: "govuk-fieldset__legend--s govuk-visually-hidden"
+                                            }
+                                        },
+                                        items: organisationFilters.items
+                                        }) }}
+                                  
+                 
+                        </div>
+                </div>
             {% if resources|length %}
                 <ul class="gem-c-document-list gem-c-document-list--no-underline govuk-!-margin-bottom-5" data-module="edge">
                     {% for resource in resources %}
