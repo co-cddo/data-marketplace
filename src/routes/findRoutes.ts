@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
 const router = express.Router();
-import { fetchAllResources, fetchResource } from "../services/findService";
+import { fetchResources, fetchResourceById } from "../services/findService";
 
 router.get("/", async (req: Request, res: Response, next: NextFunction) => {
   // Use the referer as the backLink, defaulting to '/' if no referer is set
@@ -12,7 +12,7 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
 
   try {
     // Fetch the data from the API
-    const resources = await fetchAllResources(query);
+    const resources = await fetchResources(query);
     res.render("find.njk", {
       route: req.params.page,
       backLink: backLink,
@@ -28,7 +28,7 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
 router.get("/:resourceID", async (req: Request, res: Response) => {
   const backLink = req.headers.referer || "/";
   const resourceID = req.params.resourceID;
-  const resource = await fetchResource(resourceID);
+  const resource = await fetchResourceById(resourceID);
   res.render("resource.njk", {
     route: req.params.page,
     backLink: backLink,

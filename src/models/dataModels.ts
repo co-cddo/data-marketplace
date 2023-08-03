@@ -59,7 +59,7 @@ export interface ApiResponse {
   data: CatalogueItem[];
 }
 
-// Resource is the interface that holds the properties common between both types of resources.
+// Resource is the interface that holds the properties common between both types of resources. Includes optional properties.
 export interface Resource {
   accessRights: string;
   catalogueCreated: string;
@@ -89,24 +89,18 @@ export interface Resource {
   updateFrequency?: string;
   version: string;
 }
-
-export interface SearchListResource extends Resource {
-  mediaType?: string[];
-  serviceType?: string;
-}
-
 // DataSetResource is the interface that extends BaseResource with the properties unique to DataSets.
 export interface DataSetResource extends Resource {
-  mediaType: string[];
-  distributions: Distribution[];
-  updateFrequency: string;
+  mediaType?: string[];
+  distributions?: Distribution[];
+  updateFrequency?: string;
 }
 
 // DataServiceResource is the interface that extends BaseResource with the properties unique to DataServices.
 export interface DataServiceResource extends Resource {
-  endpointDescription: string;
-  endpointURL: string;
-  servesData: string[];
-  serviceStatus: string;
-  serviceType: string;
+  endpointDescription?: string;
+  endpointURL?: string;
+  servesData?: string[];
+  serviceStatus?: string;
+  serviceType?: string;
 }

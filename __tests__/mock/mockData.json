@@ -1,96 +1,105 @@
-[
-  {
-    "data": [
-      {
-        "id": "055917c4-7b5b-4e24-9af6-93860e54c311",
-        "organisation": {
-          "title": "British Geological Survey",
-          "id": "bgs",
-          "acronym": "BGS",
-          "homepage": "https://agsapi.bgs.ac.uk/"
-        },
-        "title": "AGS File Utilities Tool and API",
-        "description": "The tool (https://agsapi.bgs.ac.uk/) and associated API allow schema validation, data validation and conversion of your geotechnical AGS files. Features include; Accepts multiple AGS files, Tests AGS versions 4.x only, Files are not saved or stored by this tool. The codebase is available at https://github.com/BritishGeologicalSurvey/pyagsapi",
-        "created": "2022-02-01T00:00:00.000Z",
-        "type": "dataservice",
-        "modified": "2022-02-01T00:00:00.000Z"
-      }
-    ],
-    "facets": {
-      "topics": [],
-      "organisations": [
+{
+  "data": [
+    {
+      "accessRights": "INTERNAL",
+      "catalogueCreated": "2023-07-31T11:26:50.383Z",
+      "catalogueModified": "2023-07-31T11:26:50.383Z",
+      "contactPoint": {
+        "contactName": "Test Team",
+        "email": "test@gmail.com"
+      },
+      "creator": [
         {
-          "title": "British Geological Survey",
-          "id": "bgs"
+          "acronym": "TEST",
+          "homepage": "https://www.test.com",
+          "id": "department-for-test",
+          "title": "Department for Test"
         }
       ],
-      "assetTypes": [
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam gravida sagittis arcu. Duis orci augue, efficitur ac consequat vel, maximus at massa. Sed auctor metus fringilla felis vestibulum, non finibus velit cursus. Praesent nulla nisi, fermentum sit amet porta id, porttitor ut mi. Praesent elementum mattis turpis nec aliquam. Aenean lobortis, nulla a eleifend aliquet, turpis diam dignissim erat, sed auctor lectus elit vitae quam. Nam id ex elementum, molestie sem nec, pulvinar eros. Duis sit amet magna a nisi pharetra scelerisque eget at libero. Aenean et mollis erat, ac aliquam lectus. Aenean lacinia odio ut ipsum feugiat molestie. Morbi facilisis libero nisi. Fusce vel nibh sed neque maximus placerat quis non leo. Nulla volutpat metus ligula, eu blandit libero blandit non. Vestibulum at dictum nisi. In euismod, arcu eget sagittis accumsan, est diam maximus sapien, quis iaculis ipsum lectus in justo.",
+      "endpointDescription": "https://tests.com",
+      "endpointURL": "wwww.test.com",
+      "identifier": "fcbc4d3f-0c05-4857-b0h7-eeec6bfcd3a1",
+      "issued": "2022-01-23",
+      "keyword": [
+        "TEST Search",
+        "test"
+      ],
+      "licence": "https://test.com",
+      "modified": "2023-01-30",
+      "organisation": {
+        "acronym": "test",
+        "homepage": "https://www.test.com",
+        "id": "department-for-test",
+        "title": "Department for Test"
+      },
+      "relatedAssets": [],
+      "securityClassification": "OFFICIAL",
+      "servesData": [
+        "https://www.test.com",
+        "https://www.test2/com/2"
+      ],
+      "serviceStatus": "LIVE",
+      "serviceType": "SOAP",
+      "summary": "Test summary for displaying the summary",
+      "theme": [
+        "https://www.test.com"
+      ],
+      "title": "Test Service",
+      "type": "DataService",
+      "updateFrequency": "Yearly",
+      "version": "1.0.0"
+    },
+    {
+      "accessRights": "test",
+      "catalogueCreated": "2023-07-31T11:26:50.383Z",
+      "catalogueModified": "2023-07-31T11:26:50.383Z",
+      "contactPoint": {
+        "contactName": "test test Team",
+        "email": "test2@gmail.com"
+      },
+      "creator": [
         {
-          "title": "Codebase", 
-          "id": "asset-1" 
-        }
-      ]
-    }
-  },
-  {
-    "data": [
-      {
-        "id": "ba3d8fdf-39c1-4f19-b7a5-b01f6859f056",
-        "organisation": {
-          "title": "Department for Education",
-          "id": "dfe",
-          "acronym": "DfE",
-          "homepage": ""
-        },
-        "title": "Get into Teaching API",
-        "description": "Provides a RESTful API for integrating with the Get into Teaching CRM.",
-        "created": "2020-08-24T00:00:00.000Z",
-        "type": "dataservice",
-        "modified": "2020-08-24T00:00:00.000Z"
-      }
-    ],
-    "facets": {
-      "topics": [],
-      "organisations": [
-        {
-          "title": "CSV",
-          "id": "1"
+          "acronym": "test",
+          "homepage": "https://www.test.com",
+          "id": "test-for-work",
+          "title": "Department for Another Test"
         }
       ],
-      "assetTypes": []
-    }
-  },
-  {
-    "data": [
-      {
-        "id": "1da0a9cc-c5ee-4513-9f2b-d10a24dad2f7",
-        "organisation": {
-          "title": "British Geological Survey",
-          "id": "bgs",
-          "acronym": "BGS",
-          "homepage": "https://sensors.bgs.ac.uk/"
-        },
-        "title": "BGS Sensor Data Service",
-        "description": "This service provides an application programming interface (API) for data scientists, software developers and software applications to query and download BGS-hosted sensor data in machine-readable JSON format. The API is powered by FROST Server and conforms to the OGC SensorThings API specification (https://www.ogc.org/standards/sensorthings). See https://sensors.bgs.ac.uk/ for details, videos and code examples.",
-        "created": "2022-02-01T00:00:00.000Z",
-        "type": "dataset",
-        "modified": "2022-02-01T00:00:00.000Z"
-      }
-    ],
-    "facets": {
-      "topics": [],
-      "organisations": [
-        {
-          "title": "British Geological Survey",
-          "id": "bgs"
-        }
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam gravida sagittis arcu. Duis orci augue, efficitur ac consequat vel, maximus at massa. Sed auctor metus fringilla felis vestibulum, non finibus velit cursus. Praesent nulla nisi, fermentum sit amet porta id, porttitor ut mi. Praesent elementum mattis turpis nec aliquam. Aenean lobortis, nulla a eleifend aliquet, turpis diam dignissim erat, sed auctor lectus elit vitae quam. Nam id ex elementum, molestie sem nec, pulvinar eros. Duis sit amet magna a nisi pharetra scelerisque eget at libero. Aenean et mollis erat, ac aliquam lectus. Aenean lacinia odio ut ipsum feugiat molestie. Morbi facilisis libero nisi. Fusce vel nibh sed neque maximus placerat quis non leo. Nulla volutpat metus ligula, eu blandit libero blandit non. Vestibulum at dictum nisi. In euismod, arcu eget sagittis accumsan, est diam maximus sapien, quis iaculis ipsum lectus in justo.",
+      "endpointDescription": "https://test/apis/docs",
+      "endpointURL": "wwww.test.com",
+      "identifier": "fcad4d3f-0c07-8547-b0e3-eeec6bfea3a1",
+      "issued": "2021-01-26",
+      "keyword": [
+        "Address test",
+        "testtest"
       ],
-      "assetTypes": [
-        {
-          "title": "Data", 
-          "id": "asset-1" 
-        }
-      ]
+      "licence": "https://opensource.org/license/isc-license-txt/",
+      "modified": "2023-01-30",
+      "organisation": {
+        "acronym": "TEST",
+        "homepage": "https://www.test.uk/test/test/department-for-test-test",
+        "id": "department-for-test-test",
+        "title": "Department for test & test"
+      },
+      "relatedAssets": [],
+      "securityClassification": "OFFICIAL",
+      "servesData": [
+        "https://www.test.co.uk/os-test-test",
+        "https://www.test.co.uk/national-test-test",
+        "https://www.test.co.uk/one-test-test"
+      ],
+      "serviceStatus": "LIVE",
+      "serviceType": "REST",
+      "summary": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam gravida sagittis arcu.",
+      "theme": [
+        "https://www.tests.test.uk/search?filters%5Btopic%5D=test"
+      ],
+      "title": "Test Service for Testing",
+      "type": "DataService",
+      "updateFrequency": "Monthly",
+      "version": "2.0.0"
     }
-  }
-]
+  ]
+}
