@@ -1,5 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
+dotenv.config();
 import nunjucks from "nunjucks";
 import helmet from "helmet";
 import homeRoute from "./routes/homeRoute";
@@ -9,7 +10,14 @@ import cookieRoutes from "./routes/cookieRoutes";
 import path from "path";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
+import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
+import { Strategy as OAuth2Strategy } from "passport-oauth2";
+import session from "express-session";
 import { handleCookies } from "./middleware/cookieMiddleware";
+import passport from "passport";
+import axios from "axios";
+// import jwt from "jsonwebtoken";
+import jwksRsa from "jwks-rsa";
 
 export const app = express();
 // Set up security headers with Helmet
@@ -23,7 +31,18 @@ app.use(
     },
   }),
 );
+app.use(cookieParser());
 
+const loadJwtFromCookie = (req: Request, res: Response, next: NextFunction) => {
+  const jwtToken = req.cookies.jwtToken;
+
+  if (jwtToken) {
+    req.headers.authorization = `JWT ${jwtToken}`;
+  }
+  next();
+};
+
+app.use(loadJwtFromCookie);
 // Set static folder middleware
 app.use(
   "/assets",
@@ -32,9 +51,78 @@ app.use(
   ),
 );
 
-app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(
+  session({
+    secret: "sausage",
+    resave: false,
+    saveUninitialized: false,
+  }),
+);
+const oauth2Options = {
+  authorizationURL: process.env.SSO_AUTH_URL!,
+  tokenURL: process.env.SSO_TOKEN_URL!,
+  clientID: process.env.SSO_CLIENT_ID!,
+  clientSecret: process.env.SSO_CLIENT_SECRET!,
+  callbackURL: process.env.SSO_CALLBACK_URL!,
+  scope: ["openid", "profile", "email"],
+};
+passport.use(
+  "custom-sso",
+  new OAuth2Strategy(
+    oauth2Options,
+    async (
+      accessToken: string,
+      data: any,
+      extraParams: any,
+      profile: any,
+      done: any,
+    ) => {
+      const user = {
+        idToken: extraParams.id_token,
+        accessToken,
+      };
+      done(null, user);
+    },
+  ),
+);
+passport.use(
+  new JwtStrategy(
+    {
+      secretOrKeyProvider: jwksRsa.passportJwtSecret({
+        cache: true,
+        rateLimit: true,
+        jwksRequestsPerMinute: 5,
+        jwksUri: `https://sso.service.security.gov.uk/.well-known/jwks.json`,
+      }),
+      jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme("JWT"),
+    },
+    async (jwtPayload, done) => {
+      console.log(jwtPayload);
+      try {
+        const user = jwtPayload.display_name;
+        done(null, user);
+      } catch (error) {
+        done(error, false);
+      }
+    },
+  ),
+);
+
+// Initialize Passport and session middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Serialize user into the session
+passport.serializeUser((user: any, done) => {
+  done(null, user);
+});
+
+// Deserialize user from the session
+passport.deserializeUser((user: any, done) => {
+  done(null, user);
+});
 
 app.use(express.static("public"));
 
@@ -54,7 +142,37 @@ nunjucks.configure(["node_modules/govuk-frontend/", "src/views"], {
 // Set Nunjucks as the Express view engine
 app.set("view engine", "njk");
 
-// Routes
+app.get("/login", passport.authenticate("custom-sso"), (req, res, done) => {
+  done();
+});
+app.get(
+  "/auth/callback",
+  passport.authenticate("custom-sso", { session: false }),
+  async (req: Request, res: Response) => {
+    interface User {
+      idToken: string;
+    }
+    const user: User = req.user as User;
+    if (!req.user) {
+      res.redirect("/");
+    } else {
+      res.cookie("jwtToken", user.idToken, { httpOnly: true });
+      res.redirect("/profile");
+    }
+  },
+);
+
+app.get(
+  "/profile",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    console.log("here");
+    res.render("page.njk", {
+      heading: "Authed",
+    });
+  },
+);
+
 app.use("/", homeRoute);
 app.use("/find", findRoutes);
 app.use("/share", shareRoutes);
