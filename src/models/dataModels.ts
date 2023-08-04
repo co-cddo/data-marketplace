@@ -104,3 +104,9 @@ export interface DataServiceResource extends Resource {
   serviceStatus?: string;
   serviceType?: string;
 }
+
+export interface User {
+  id: number;
+  username: string;
+  email: string;
+}

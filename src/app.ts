@@ -10,14 +10,15 @@ import cookieRoutes from "./routes/cookieRoutes";
 import path from "path";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
-import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
-import { Strategy as OAuth2Strategy } from "passport-oauth2";
 import session from "express-session";
 import { handleCookies } from "./middleware/cookieMiddleware";
 import passport from "passport";
-import axios from "axios";
-// import jwt from "jsonwebtoken";
-import jwksRsa from "jwks-rsa";
+import { authenticateJWT } from "./middleware/authMiddleware";
+import {
+  loadJwtFromCookie,
+  oAuthStrategy,
+  JwtStrategy,
+} from "./middleware/authMiddleware";
 
 export const app = express();
 // Set up security headers with Helmet
@@ -33,17 +34,8 @@ app.use(
 );
 app.use(cookieParser());
 
-const loadJwtFromCookie = (req: Request, res: Response, next: NextFunction) => {
-  const jwtToken = req.cookies.jwtToken;
-
-  if (jwtToken) {
-    req.headers.authorization = `JWT ${jwtToken}`;
-  }
-  next();
-};
-
 app.use(loadJwtFromCookie);
-// Set static folder middleware
+
 app.use(
   "/assets",
   express.static(
@@ -60,67 +52,21 @@ app.use(
     saveUninitialized: false,
   }),
 );
-const oauth2Options = {
-  authorizationURL: process.env.SSO_AUTH_URL!,
-  tokenURL: process.env.SSO_TOKEN_URL!,
-  clientID: process.env.SSO_CLIENT_ID!,
-  clientSecret: process.env.SSO_CLIENT_SECRET!,
-  callbackURL: process.env.SSO_CALLBACK_URL!,
-  scope: ["openid", "profile", "email"],
-};
-passport.use(
-  "custom-sso",
-  new OAuth2Strategy(
-    oauth2Options,
-    async (
-      accessToken: string,
-      data: any,
-      extraParams: any,
-      profile: any,
-      done: any,
-    ) => {
-      const user = {
-        idToken: extraParams.id_token,
-        accessToken,
-      };
-      done(null, user);
-    },
-  ),
-);
-passport.use(
-  new JwtStrategy(
-    {
-      secretOrKeyProvider: jwksRsa.passportJwtSecret({
-        cache: true,
-        rateLimit: true,
-        jwksRequestsPerMinute: 5,
-        jwksUri: `https://sso.service.security.gov.uk/.well-known/jwks.json`,
-      }),
-      jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme("JWT"),
-    },
-    async (jwtPayload, done) => {
-      console.log(jwtPayload);
-      try {
-        const user = jwtPayload.display_name;
-        done(null, user);
-      } catch (error) {
-        done(error, false);
-      }
-    },
-  ),
-);
+
+passport.use("custom-sso", oAuthStrategy);
+passport.use(JwtStrategy);
 
 // Initialize Passport and session middleware
 app.use(passport.initialize());
 app.use(passport.session());
 
 // Serialize user into the session
-passport.serializeUser((user: any, done) => {
+passport.serializeUser((user: Express.User, done) => {
   done(null, user);
 });
 
 // Deserialize user from the session
-passport.deserializeUser((user: any, done) => {
+passport.deserializeUser((user: Express.User, done) => {
   done(null, user);
 });
 
@@ -149,6 +95,7 @@ env.addFilter("formatDate", function (date: string | number | Date) {
   };
   return new Date(date).toLocaleDateString("en-GB", options);
 });
+
 // Set Nunjucks as the Express view engine
 app.set("view engine", "njk");
 
@@ -159,14 +106,16 @@ app.get(
   "/auth/callback",
   passport.authenticate("custom-sso", { session: false }),
   async (req: Request, res: Response) => {
-    interface User {
+    interface User extends Express.User {
       idToken: string;
     }
     const user: User = req.user as User;
     if (!req.user) {
       res.redirect("/");
     } else {
+      console.log("USER: ", user);
       res.cookie("jwtToken", user.idToken, { httpOnly: true });
+
       res.redirect("/profile");
     }
   },
@@ -174,15 +123,32 @@ app.get(
 
 app.get(
   "/profile",
-  passport.authenticate("jwt", { session: false }),
-  async (req, res) => {
+  authenticateJWT,
+  async (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) {
+      return res.redirect("/error"); // Redirect to the error page
+    }
     console.log("here");
     res.render("page.njk", {
       heading: "Authed",
     });
   },
+  (err: Error, req: Request, res: Response, next: NextFunction) => {
+    // This block will execute if authentication fails
+    if (err.name === "UnauthorizedError") {
+      res.render("error.njk", {
+        messageBody: "Not authed",
+      });
+    } else {
+      next(err); // Forward other errors to the default error handler
+    }
+  },
 );
-
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.isAuthenticated();
+  console.log("LOCALS: ", res.locals);
+  next();
+});
 app.use("/", homeRoute);
 app.use("/find", findRoutes);
 app.use("/share", shareRoutes);
