@@ -14,3 +14,10 @@ services:
       - "3000:3000"
     environment:
       NODE_ENV: development
+    networks:
+      - marketplace
+
+networks:
+  marketplace:
+    name: marketplace
+    external: true

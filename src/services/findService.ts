@@ -9,10 +9,11 @@ export async function fetchData(query?: string): Promise<Resource[]> {
       "API endpoint is undefined. Please set the API_ENDPOINT environment variable.",
     );
   }
-  const response = await axios.get<ApiResponse[]>(apiUrl as string);
+  const response = await axios.get<ApiResponse>(apiUrl as string);
 
   // Flatten the array of data
-  let resources = response.data.flatMap((apiResponse) => apiResponse.data);
+  // let resources = response.data.flatMap((apiResponse) => apiResponse.data);
+  let resources = response.data.data;
 
   // Search the data if query is present
   if (query) {
