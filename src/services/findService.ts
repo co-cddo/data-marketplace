@@ -1,71 +1,87 @@
 import axios from "axios";
 import {
-  DataService,
-  Organisation,
+  CatalogueItem,
   ApiResponse,
-  Resource,
+  DataSetResource,
+  DataServiceResource,
 } from "../models/dataModels";
 
-export async function fetchData(
+export async function fetchResources(
   query?: string,
-  organisationFilter?: string,
-): Promise<{ resources: Resource[]; uniqueOrganisations: Organisation[] }> {
-  // Get data from the api
+): Promise<(DataSetResource | DataServiceResource)[]> {
   const apiUrl = process.env.API_ENDPOINT;
   if (!apiUrl) {
     throw new Error(
       "API endpoint is undefined. Please set the API_ENDPOINT environment variable.",
     );
   }
-  const response = await axios.get<ApiResponse[]>(apiUrl as string);
-
-  // Flatten the array of data
-  let resources = response.data.flatMap((apiResponse) => apiResponse.data);
-
-  // Extract unique organisations
-  const uniqueOrganisationsMap: Map<string, Organisation> = new Map();
-  resources.forEach((dataService) => {
-    uniqueOrganisationsMap.set(
-      dataService.organisation.title,
-      dataService.organisation,
-    );
-  });
-
-  const uniqueOrganisations = Array.from(uniqueOrganisationsMap.values());
-
-  if (organisationFilter) {
-    const selectedOrganisations = organisationFilter.split(",");
-    resources = resources.filter((dataService) =>
-      selectedOrganisations.includes(dataService.organisation.id),
-    );
-  }
-
-  console.log("Unique Organisations:", uniqueOrganisations);
-
+  const response = await axios.get<ApiResponse>(apiUrl as string);
+  let resources = response.data.data;
   // Search the data if query is present
   if (query) {
-    resources = resources.filter((dataService) => {
-      return Object.values(dataService).some(
+    resources = resources.filter((catalogueItem) => {
+      return Object.values(catalogueItem).some(
         (value) => value?.toString().toLowerCase().includes(query),
       );
     });
   }
-
-  // console.log("JSON Data", resources)
   // Map the data to the new object shape
-  const mappedResources = resources.map((item: DataService) => ({
-    slug: item.id,
-    title: item.title,
-    issuing_body_readable: item.organisation.title,
-    distributions: [],
-    description: item.description,
-    dateUpdated: new Date(item.modified).toLocaleDateString("en-GB", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    }),
-  }));
+  return resources.map((item: CatalogueItem) => {
+    if (item.type.toLowerCase() === "dataset") {
+      return {
+        ...item,
+        mediaType: item.mediaType,
+      } as DataSetResource;
+    } else if (item.type.toLowerCase() === "dataservice") {
+      return {
+        ...item,
+        serviceType: item.serviceType
+      } as DataServiceResource;
+    } else {
+      throw new Error("Unknown resource type.");
+    }
+  });
+}
 
-  // console.log("mappedResources ", mappedResources);
-  return { resources: mappedResources, uniqueOrganisations };
+export async function fetchResourceById(
+  resourceID: string,
+): Promise<DataSetResource | DataServiceResource> {
+  const apiUrl = process.env.API_ENDPOINT;
+  if (!apiUrl) {
+    throw new Error(
+      "API endpoint is undefined. Please set the API_ENDPOINT environment variable.",
+    );
+  }
+
+  const response = await axios.get<ApiResponse>(apiUrl as string);
+  const resources = response.data.data;
+
+  // Search the response and find the matching ID
+  const resource = resources.find(
+    (resource) => resource.identifier === resourceID,
+  );
+
+  if (!resource) {
+    throw new Error("Resource not found.");
+  }
+
+  // Depending on the type of the resource, return the appropriate structure
+  if (resource.type.toLowerCase() === "dataset") {
+    return {
+      ...resource,
+      distributions: resource.distributions,
+      updateFrequency: resource.updateFrequency
+    } as DataSetResource;
+  } else if (resource.type.toLowerCase() === "dataservice") {
+    return {
+      ...resource,
+      endpointDescription: resource.endpointDescription,
+      endpointURL: resource.endpointURL,
+      servesData: resource.servesData,
+      serviceStatus: resource.serviceStatus,
+      serviceType: resource.serviceType
+    } as DataServiceResource;
+  } else {
+    throw new Error("Unknown resource type.");
+  }
 }

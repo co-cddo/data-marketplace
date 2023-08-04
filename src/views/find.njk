@@ -93,24 +93,28 @@
                 <ul class="gem-c-document-list gem-c-document-list--no-underline govuk-!-margin-bottom-5" data-module="edge">
                     {% for resource in resources %}
                     <li class="gem-c-document-list__item ">
-                        <a href="./resources/{{ resource.slug | urlencode }}" class="gem-c-document-list__item-title  govuk-link">{{ resource.title}}</a>
+                        <a href="./find/{{ resource.identifier | urlencode }}" class="gem-c-document-list__item-title  govuk-link">{{ resource.title}}</a>
 
                         <p class="govuk-!-font-weight-bold govuk-!-margin-bottom-1 govuk-!-font-size-16">
-                            <span class="govuk-visually-hidden">Organisation: </span>{{ resource.issuing_body_readable }}
+                            <span class="govuk-visually-hidden">Organisation: </span>{{ resource.organisation.title }}
                         </p>
 
                         <p class="govuk-!-display-inline">
+                        {% if resource.type.toLowerCase() == "dataservice" %}
+                            <strong class="govuk-tag govuk-tag--grey">{{ resource.serviceType }}</strong>
+                        {% elif resource.type.toLowerCase() == "dataset" %}
                             {% for distribution in resource.distributions %}
-                                <strong class="govuk-tag govuk-tag--grey">{{ distribution }}</strong>
+                                <strong class="govuk-tag govuk-tag--grey">{{ distribution.mediaType }}</strong>
                             {% endfor %}
+                        {% endif %}
                         </p>
-                        
                         <div class="result-list__limit-height govuk-!-margin-bottom-0 govuk-!-margin-top-1">
-                            <p class="gem-c-document-list__item-description ">{{ resource.description |  replace("\\n\\n", "\n") | safe }}</p>
+                            <p class="gem-c-document-list__item-description ">{{ (resource.summary | default(resource.description, true)) | replace("\\n\\n", "\n") | safe }}</p>
                         </div>
                         <span class="js-result-list-toggle-height govuk-accordion__section-toggle" data-nosnippet=""><span class="govuk-accordion__section-toggle-focus"><span class="govuk-accordion-nav__chevron govuk-accordion-nav__chevron--down"></span><span class="govuk-accordion__section-toggle-text">Show more</span></span></span>
                         <ul class="gem-c-document-list__item-metadata">
-                            <li class="gem-c-document-list__attribute"> Updated: <time>{{ resource.dateUpdated}}</time> </li>
+                            <li class="gem-c-document-list__attribute"> Updated: <time>{{ resource.modified | formatDate }}</time> </li>
+
                         </ul>
                     </li>
                     {% endfor %}
