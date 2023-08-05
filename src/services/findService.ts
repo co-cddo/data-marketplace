@@ -16,15 +16,7 @@ export async function fetchResources(
     );
   }
   const response = await axios.get<ApiResponse>(apiUrl as string);
-<<<<<<< HEAD
-
-  // Flatten the array of data
-  // let resources = response.data.flatMap((apiResponse) => apiResponse.data);
   let resources = response.data.data;
-
-=======
-  let resources = response.data.data;
->>>>>>> main
   // Search the data if query is present
   if (query) {
     resources = resources.filter((catalogueItem) => {
