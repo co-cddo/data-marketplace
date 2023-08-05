@@ -1,0 +1,178 @@
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% extends "layouts/base.njk" %}
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop govuk-!-margin-bottom-4">
+        <span class="govuk-caption-xl">{{ resource.organisation.title }}</span>
+        <h1 class="govuk-heading-xl govuk-!-margin-bottom-1">{{ resource.title }}</h1>
+        <p class="govuk-caption-m">Last updated: <strong>{{ resource.modified | formatDate  }}</strong></p>
+
+        <p class="govuk-body govuk-!-margin-bottom-5">
+            {% if resource.type.toLowerCase() == "dataset" %}
+                <span>Dataset | Filetypes:</span>
+                {% for distribution in resource.distributions %}
+                    <strong class="govuk-tag govuk-tag--grey">{{ distribution.mediaType }}</strong>
+                {% endfor %}
+            {% elif resource.type.toLowerCase() == "dataservice" %}
+                <span>Data service | APIs:</span>
+                <strong class="govuk-tag govuk-tag--grey">{{ resource.serviceType }}</strong>
+            {% endif %}
+        </p>
+        <div class="result-list__limit-height">
+            <p class="govuk-body govuk-!-margin-bottom-0 govuk-!-margin-top-0">
+            {{ resource.description }}
+            </p>
+        </div>
+        <span class="js-result-list-toggle-height govuk-accordion__section-toggle govuk-body" data-nosnippet=""><span class="govuk-accordion__section-toggle-focus"><span class="govuk-accordion-nav__chevron govuk-accordion-nav__chevron--down"></span><span class="govuk-accordion__section-toggle-text">Show more</span></span></span>
+    </div>
+</div>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop govuk-!-margin-bottom-8">
+        <div class="additional-info govuk-!-margin-bottom-8">
+            {% if resource.type.toLowerCase() == "dataset" %}
+            <h2 class="govuk-heading-l">Request this dataset</h2>
+            {% elif resource.type.toLowerCase() == "dataservice" %}
+            <h2 class="govuk-heading-l">Request this data service</h2>
+            {% endif %}
+
+            <p class="govuk-body">This data contains sensitive information (such as personal details) and requires a data share agreement with {{ resource.organisation.title }}.</p>
+            <p class="govuk-body">You need to answer some questions to make sure your request meets GDPR and data sharing standards. You can see the <a href="#">list of questions <span class="govuk-visually-hidden">Used to evaluate a share request</span></a> before you start.</p>
+            <p class="govuk-body">Your answers will be reviewed by {{ resource.organisation.title }}</p>
+
+            <details class="govuk-details" data-module="govuk-details">
+                <summary class="govuk-details__summary">
+                    <span class="govuk-details__summary-text">
+                    Before you start
+                    </span>
+                </summary>
+                <div class="govuk-details__text">
+                    To answer these questions you may require support from people with skills in:
+
+                    <ul>
+                    <li>Technology</li>
+                    <li>Data security</li>
+                    <li>Data protection</li>
+                    <li>Legal</li>
+                    <li>Data governance</li>
+                    </ul>
+                </div>
+            </details>
+            {{ govukButton({
+                text: "Start a data share request",
+                href: '#'
+            }) }}
+            <p class="govuk-body">
+                <a href="#" class="govuk-link">Get more help</a>
+            </p>
+        </div>
+
+        {% if resource.type.toLowerCase() == "dataset" %}
+        <h2 class="govuk-heading-l">Data available</h2>
+        <p class="govuk-body">The following files are available as part of this dataset.</p>
+
+        <table class="govuk-table govuk-!-margin-bottom-8">
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header">File</th>
+                    <th scope="col" class="govuk-table__header">Date added</th>
+                    <th scope="col" class="govuk-table__header">File format</th>
+                </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+            {% for distribution in resource.distributions %}
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">{{ resource.title }}-{{ loop.index0 + 1 }}</th>
+                    <td class="govuk-table__cell">{{resource.catalogueCreated | formatDate }}</td>
+                    <td class="govuk-table__cell">{{ distribution.mediaType }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% elif resource.type.toLowerCase() == "dataservice" %}
+        <h2 class="govuk-heading-l">Data available</h2>
+        <p class="govuk-body">The API information is available for this data service.</p>
+
+        <table class="govuk-table govuk-!-margin-bottom-8">
+      
+            <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Service type</th>
+                    <td class="govuk-table__cell">
+                    {{ resource.serviceType }}
+                    </td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Service status</th>
+                    <td class="govuk-table__cell">{{resource.serviceStatus | lower | capitalize}}</td>
+                </tr>
+                {% if resource.endpointURL %}
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Endpoint URL (o)</th>
+                    <td class="govuk-table__cell"><a href="{{ resource.endpointURL }}" class="govuk-link">{{ resource.endpointURL }}</a></td>
+                </tr>
+                    {% endif %}
+                    
+            </tbody>
+        </table>
+        {% endif %}
+
+        <h2 class="govuk-heading-l">Further information</h2>
+    
+        <table class="govuk-table govuk-!-margin-bottom-8">
+        
+        <tbody class="govuk-table__body">
+              {% if resource.licence %}
+              <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header  govuk-!-width-one-half">Licence</th>
+                <td class="govuk-table__cell  govuk-!-width-one-half">{{ resource.licence }}</td>
+              </tr>
+            {% endif %}
+                <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header  govuk-!-width-one-half">Access rights</th>
+                <td class="govuk-table__cell  govuk-!-width-one-half">{{ resource.accessRights | lower | capitalize }}</td>
+                </tr>
+                <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header govuk-!-width-one-half">Security Classification</th>
+                <td class="govuk-table__cell govuk-!-width-one-half">{{resource.securityClassification | lower | capitalize}}</td>
+                </tr>
+                <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header govuk-!-width-one-half">Created</th>
+                <td class="govuk-table__cell govuk-!-width-one-half">{{resource.issued | formatDate }}</td>
+                </tr>
+                <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header govuk-!-width-one-half">Updated</th>
+                <td class="govuk-table__cell govuk-!-width-one-half">{{ resource.modified | formatDate }}</td>
+                </tr>
+                <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header govuk-!-width-one-half">Added to Data Marketplace</th>
+                <td class="govuk-table__cell govuk-!-width-one-half">{{ resource.catalogueCreated | formatDate }}</td>
+                </tr>
+                <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header govuk-!-width-one-half">Updated on Data Marketplace</th>
+                <td class="govuk-table__cell govuk-!-width-one-half">{{ resource.catalogueModified | formatDate }}</td>
+                </tr>
+                <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header govuk-!-width-one-half">Version</th>
+                <td class="govuk-table__cell govuk-!-width-one-half">{{resource.version}}</td>
+                </tr>
+                {% if resource.endpointDescription %}
+                <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">Documentation</th>
+                <td class="govuk-table__cell"><a href="{{ resource.endpointDescription }}" class="govuk-link">{{ resource.endpointDescription }}</a></td>
+                </tr>
+                {% endif %}
+                {% if resource.contactPoint.email %}
+                <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">Contact</th>
+                <td class="govuk-table__cell"><a href="mailto:{{ resource.contactPoint.email }}" class="govuk-link">{{ resource.contactPoint.email }}</a></td>
+                </tr>
+                {% endif %}
+        </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
