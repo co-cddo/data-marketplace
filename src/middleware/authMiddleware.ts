@@ -3,6 +3,7 @@ import { Strategy as OAuth2Strategy } from "passport-oauth2";
 import { Strategy as JwtStrategyPassport, ExtractJwt } from "passport-jwt";
 import jwksRsa from "jwks-rsa";
 import passport from "passport";
+import { UserData } from "../types/express";
 
 export const oauth2Options = {
   authorizationURL: process.env.SSO_AUTH_URL!,
@@ -58,7 +59,7 @@ export function authenticateJWT(
   passport.authenticate(
     "jwt",
     { session: false },
-    (err: Error, user: Express.User, info: any) => {
+    (err: Error, user: UserData, info: any) => {
       if (err || !user) {
         return res.redirect("/");
       }

@@ -98,25 +98,33 @@ env.addFilter("formatDate", function (date: string | number | Date) {
 
 // Set Nunjucks as the Express view engine
 app.set("view engine", "njk");
-
-app.get("/login", passport.authenticate("custom-sso"), (req, res, done) => {
-  done();
+app.use((req, res, next) => {
+  console.log(req.session);
+  res.locals.isAuthenticated = req.isAuthenticated();
+  console.log(req.isAuthenticated());
+  console.log("LOCALS: ", res.locals);
+  next();
+});
+app.get("/login", passport.authenticate("custom-sso"), (req, res, next) => {
+  res.cookie("jwtToken", false, { httpOnly: true });
+  next();
 });
 app.get(
   "/auth/callback",
   passport.authenticate("custom-sso", { session: false }),
   async (req: Request, res: Response) => {
-    interface User extends Express.User {
-      idToken: string;
-    }
-    const user: User = req.user as User;
-    if (!req.user) {
+    if (!req.isAuthenticated()) {
       res.redirect("/");
     } else {
-      console.log("USER: ", user);
-      res.cookie("jwtToken", user.idToken, { httpOnly: true });
+      req.logIn(req.user, (loginErr) => {
+        if (loginErr) {
+          res.redirect("/");
+        }
 
-      res.redirect("/profile");
+        res.cookie("jwtToken", req.user.idToken, { httpOnly: true });
+
+        res.redirect("/profile");
+      });
     }
   },
 );
@@ -126,7 +134,7 @@ app.get(
   authenticateJWT,
   async (req: Request, res: Response) => {
     if (!req.isAuthenticated()) {
-      return res.redirect("/error"); // Redirect to the error page
+      return res.redirect("/error");
     }
     console.log("here");
     res.render("page.njk", {
@@ -134,21 +142,16 @@ app.get(
     });
   },
   (err: Error, req: Request, res: Response, next: NextFunction) => {
-    // This block will execute if authentication fails
     if (err.name === "UnauthorizedError") {
       res.render("error.njk", {
         messageBody: "Not authed",
       });
     } else {
-      next(err); // Forward other errors to the default error handler
+      next(err);
     }
   },
 );
-app.use((req, res, next) => {
-  res.locals.isAuthenticated = req.isAuthenticated();
-  console.log("LOCALS: ", res.locals);
-  next();
-});
+
 app.use("/", homeRoute);
 app.use("/find", findRoutes);
 app.use("/share", shareRoutes);
