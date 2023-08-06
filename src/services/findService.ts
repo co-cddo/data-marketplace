@@ -9,7 +9,7 @@ import {
 export async function fetchResources(
   query?: string,
 ): Promise<(DataSetResource | DataServiceResource)[]> {
-  const apiUrl = process.env.API_ENDPOINT;
+  const apiUrl = `${process.env.API_ENDPOINT}/catalogue`;
   if (!apiUrl) {
     throw new Error(
       "API endpoint is undefined. Please set the API_ENDPOINT environment variable.",
@@ -46,7 +46,7 @@ export async function fetchResources(
 export async function fetchResourceById(
   resourceID: string,
 ): Promise<DataSetResource | DataServiceResource> {
-  const apiUrl = process.env.API_ENDPOINT;
+  const apiUrl = `${process.env.API_ENDPOINT}/catalogue`;
   if (!apiUrl) {
     throw new Error(
       "API endpoint is undefined. Please set the API_ENDPOINT environment variable.",
