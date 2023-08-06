@@ -45,11 +45,13 @@ app.use(
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+const oneDay = 1000 * 60 * 60 * 24;
 app.use(
   session({
     secret: "sausage",
     resave: false,
     saveUninitialized: false,
+    cookie: { maxAge: oneDay },
   }),
 );
 
@@ -98,6 +100,7 @@ env.addFilter("formatDate", function (date: string | number | Date) {
 
 // Set Nunjucks as the Express view engine
 app.set("view engine", "njk");
+
 app.use((req, res, next) => {
   console.log(req.session);
   res.locals.isAuthenticated = req.isAuthenticated();
@@ -137,8 +140,9 @@ app.get(
       return res.redirect("/error");
     }
     console.log("here");
-    res.render("page.njk", {
+    res.render("profile.njk", {
       heading: "Authed",
+      user: req.user,
     });
   },
   (err: Error, req: Request, res: Response, next: NextFunction) => {

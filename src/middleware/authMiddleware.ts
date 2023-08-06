@@ -41,9 +41,8 @@ export const JwtStrategy = new JwtStrategyPassport(
     jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme("JWT"),
   },
   (jwtPayload, done) => {
-    console.log(jwtPayload);
     try {
-      const user = jwtPayload.display_name;
+      const user = jwtPayload;
       return done(null, user);
     } catch (error) {
       console.log("failed auth in strategy");
@@ -51,6 +50,7 @@ export const JwtStrategy = new JwtStrategyPassport(
     }
   },
 );
+
 export function authenticateJWT(
   req: Request,
   res: Response,
@@ -68,6 +68,7 @@ export function authenticateJWT(
     },
   )(req, res, next);
 }
+
 export const loadJwtFromCookie = (
   req: Request,
   res: Response,
