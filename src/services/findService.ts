@@ -4,12 +4,15 @@ import {
   ApiResponse,
   DataSetResource,
   DataServiceResource,
+  Organisation,
 } from "../models/dataModels";
 
 export async function fetchResources(
   query?: string,
-): Promise<(DataSetResource | DataServiceResource)[]> {
-  const apiUrl = `${process.env.API_ENDPOINT}/catalogue`;
+  organisationFilters?: string[],
+  typeFilters?: string[]
+): Promise<{ resources: (DataSetResource | DataServiceResource)[], uniqueOrganisations: Organisation[], uniqueTypes: string[] }> {
+  const apiUrl = process.env.API_ENDPOINT;
   if (!apiUrl) {
     throw new Error(
       "API endpoint is undefined. Please set the API_ENDPOINT environment variable.",
@@ -25,8 +28,41 @@ export async function fetchResources(
       );
     });
   }
-  // Map the data to the new object shape
-  return resources.map((item: CatalogueItem) => {
+
+    // Extract unique organisations
+    const organisationsSet = new Set();
+    const uniqueOrganisations: Organisation[] = [];
+    resources.forEach((item) => {
+      if (item.organisation && !organisationsSet.has(item.organisation.id)) {
+        uniqueOrganisations.push(item.organisation);
+        organisationsSet.add(item.organisation.id);
+      }
+    });
+    console.log("uniqueOrganisations",uniqueOrganisations)
+    const uniqueTypesSet = new Set<string>();
+    resources.forEach((item) => {
+      if (item.type) {
+        uniqueTypesSet.add(item.type);
+      }
+    });
+
+    if (organisationFilters) {
+      resources = resources.filter(item =>
+        item.organisation && organisationFilters.includes(item.organisation.id)
+      );
+    }
+    const uniqueTypes = Array.from(uniqueTypesSet);
+
+    if (typeFilters) {
+      resources = resources.filter(item =>
+        item.type && typeFilters.includes(item.type)
+      );
+    }
+
+    // Add more filters here
+
+    // Map the data to the new object shape
+  const mappedResources = resources.map((item: CatalogueItem) => {
     if (item.type.toLowerCase() === "dataset") {
       return {
         ...item,
@@ -41,6 +77,12 @@ export async function fetchResources(
       throw new Error("Unknown resource type.");
     }
   });
+
+  return {
+    resources: mappedResources,
+    uniqueOrganisations: uniqueOrganisations,
+    uniqueTypes: uniqueTypes
+  };
 }
 
 export async function fetchResourceById(

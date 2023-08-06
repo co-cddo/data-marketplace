@@ -51,66 +51,104 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // Put FilterOrganisation param script in here for now, doesn't seem to work on its own
 
-// Retrieve existing search parameters
-var searchParams = new URLSearchParams(window.location.search);
-var initialSelectedOrganisations = searchParams.get('organisationFilter') || '';
-var organisationsArray = new Set(initialSelectedOrganisations ? initialSelectedOrganisations.split(',') : []);
-var checkboxes = document.querySelectorAll('input[name="organisationFilters"]');
+// Function to update tags
+function updateTags(filterId, selectedFilters) {
+    var tagsContainer = document.getElementById('tags-container-' + filterId);
 
-if (initialSelectedOrganisations) {
-    Array.from(organisationsArray).forEach(function(organisation) { // Use Array.from() to iterate over the Set
-        // Render the tag for this organisation
-        updateTags(organisation);
+    // Find the container for the tags (let's assume it's the next sibling of the h3)
+    var tagsWrapper = tagsContainer.querySelector('.moj-filter-tags');
+    tagsWrapper.innerHTML = ""; // clear existing tags
+
+    selectedFilters.forEach(function(filter) {
+        var tagElement = document.createElement('span');
+        tagElement.className = "moj-filter__tag";
+        tagElement.textContent = filter;
+        tagsWrapper.appendChild(tagElement);
+    });
+
+    // Show or hide the specific category based on whether there are any selected filters
+    if (selectedFilters.length > 0) {
+        tagsContainer.style.display = 'block';
+    } else {
+        tagsContainer.style.display = 'none';
+    }
+}
+
+// Function to handle checkbox change for a specific filter type
+function handleCheckboxChange(filterName, filterId, checkboxes) {
+    var searchParams = new URLSearchParams(window.location.search);
+    var initialSelectedFilters = searchParams.get(filterName) || '';
+    var filtersArray = new Set(initialSelectedFilters ? initialSelectedFilters.split(',') : []);
+
+    // Define a map to associate filter values with filter texts
+    var filterValueToText = {};
+
+    // Build the filterValueToText map
+    checkboxes.forEach(function(checkbox) {
+        filterValueToText[checkbox.value] = checkbox.nextSibling.wholeText.trim();
+    });
+
+    // Map filter values to their corresponding texts
+    var selectedFilters = Array.from(filtersArray).map(filterValue => filterValueToText[filterValue] || filterValue);
+    updateTags(filterId, selectedFilters);
+
+    if (!initialSelectedFilters) {
+        // Hide the container if there are no initial selected filters for this category
+        var tagsContainer = document.getElementById('tags-container-' + filterId);
+        tagsContainer.style.display = 'none';
+    }
+
+    checkboxes.forEach(function(checkbox) {
+        // Check the checkboxes that match the initial selected filters
+        if (filtersArray.has(checkbox.value)) {
+            checkbox.checked = true;
+        }
+
+        checkbox.addEventListener('change', function() {
+            checkboxes.forEach(function(c) { c.disabled = true; });
+            checkbox.disabled = false;
+
+            var filterValue = checkbox.value;
+            if (checkbox.checked) {
+                filtersArray.add(filterValue);
+            } else {
+                filtersArray.delete(filterValue);
+            }
+
+            var selectedFilters = Array.from(filtersArray).join(',');
+
+            if (selectedFilters) {
+                searchParams.set(filterName, selectedFilters);
+            } else {
+                searchParams.delete(filterName);
+            }
+
+            var newUrl = window.location.pathname + '?' + searchParams.toString();
+            if (newUrl !== window.location.href) {
+                window.location.href = newUrl;
+            }
+
+            // Use the filterValueToText map to translate ids to titles
+            updateTags(filterId, Array.from(filtersArray).map(value => filterValueToText[value]));
+        });
+    });
+
+    window.addEventListener('load', function() {
+        checkboxes.forEach(function(checkbox) { checkbox.disabled = false; });
     });
 }
 
 
-checkboxes.forEach(function(checkbox) {
-    checkbox.addEventListener('change', function() {
-        checkboxes.forEach(function(c) { c.disabled = true; });
-        checkbox.disabled = false;
+    // Call the handleCheckboxChange function for each filter type
+    var filterOptions = [
+        { filterName: 'organisationFilter', filterId: 'organisationFilters' },
+        { filterName: 'typeFilter', filterId: 'typeFilters' },
+        // Add more filters here as needed
+    ];
 
-        // Add or remove the selected organisation from the array
-        var organisation = checkbox.value;
-        if (checkbox.checked) {
-            organisationsArray.add(organisation); // Adds the organisation to the set
-        } else {
-            organisationsArray.delete(organisation); // Removes the organisation from the set if it exists
-        }
-
-        var selectedOrganisations = Array.from(organisationsArray).join(',');
-
-        // Set or delete the organisation filter as needed
-        if (selectedOrganisations) {
-            searchParams.set('organisationFilter', selectedOrganisations);
-        } else {
-            searchParams.delete('organisationFilter');
-        }
-
-        var newUrl = window.location.pathname + '?' + searchParams.toString();
-
-        // Redirect to the updated URL only if it's different from the current URL
-        if (newUrl !== window.location.href) {
-            window.location.href = newUrl;
-        }
-
-        // Added this part to update the tags
-        updateTags(selectedOrganisations);
-    });
-});
-
-    function updateTags(selectedOrganisations) {
-        var tagsContainer = document.querySelector('.moj-override--selected-tags');
-        tagsContainer.innerHTML = ""; // clear existing tags
-        selectedOrganisations.split(',').forEach(function(organisation) {
-            var tagElement = document.createElement('span');
-            tagElement.className = "tag-class"; 
-            tagElement.textContent = organisation;
-            tagsContainer.appendChild(tagElement);
-        });
-    }
-    window.addEventListener('load', function() {
-        checkboxes.forEach(function(checkbox) { checkbox.disabled = false; });
+    filterOptions.forEach(function(filterOption) {
+        var checkboxes = document.querySelectorAll('input[name="' + filterOption.filterId + '"]');
+        handleCheckboxChange(filterOption.filterName, filterOption.filterId, checkboxes);
     });
 });
     

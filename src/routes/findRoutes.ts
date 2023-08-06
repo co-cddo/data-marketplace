@@ -9,17 +9,47 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
   // change it to lowercase for case insensitive search, and assign it to the 'query' variable.
   // If 'q' doesn't exist, assign 'undefined' to the 'query' variable.
   const query: string | undefined = (req.query.q as string)?.toLowerCase();
-  const organisationFilter: string | undefined = req.query
-    .organisationFilter as string | undefined;
+  const organisationFilters: string[] | undefined = req.query.organisationFilter 
+  ? (req.query.organisationFilter as string).split(',')
+  : undefined;
+
+  const typeFilters: string[] | undefined = req.query.typeFilter 
+    ? (req.query.typeFilter as string).split(',')
+    : undefined;
 
   try {
     // Fetch the data from the API
-    const resources = await fetchResources(query);
+    const { resources, uniqueOrganisations, uniqueTypes } = await fetchResources(query, organisationFilters, typeFilters);
+
+    const filterOptions = [  // Define the shape of "filterOptions", add more as needed
+      {
+        id: "organisationFilters",
+        name: "organisationFilters",
+        title: "Organisations",
+        items: uniqueOrganisations.map(org => ({
+          value: org.id,
+          text: org.title,
+        })),
+      },
+      {
+        id: "typeFilters",
+        name: "typeFilters",
+        title: "Types",
+        items: uniqueTypes.map(type => ({
+          value: type,
+          text: type,
+        })),
+      },
+      // Add more filters here as needed
+    ];
+
+console.log(filterOptions)
+
     res.render("find.njk", {
       route: req.params.page,
       backLink: backLink,
       resources: resources,
-      uniqueOrganisations: organisationsForTemplate,
+      filterOptions, // filterOptions being passed here
       query: query,
     });
   } catch (error) {

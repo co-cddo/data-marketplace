@@ -26,12 +26,13 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-third">
-            <div class="moj-filter">
+            <div class="moj-override">
+                {% for filter in filterOptions %}
                 <div class="app-c-expander" data-module="expander">
                     <h2 class="app-c-expander__heading">
-                        <button type="button" class="app-c-expander__button js-button" aria-expanded="false"
-                                aria-controls="expander-content-organisations">Organisations</button>
-                                <svg version="1.1" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"
+                        <button type="button" class="app-c-expander__button js-button" aria-expanded="false" aria-controls="expander-content-{{ filter.id }}">{{ filter.title }}</button>
+                         
+                        <svg version="1.1" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"
                                 class="app-c-expander__icon app-c-expander__icon--up" aria-hidden="true" focusable="false">
                             <path d="m798.16 609.84l-256-256c-16.683-16.683-43.691-16.683-60.331 0l-256 256c-16.683 16.683-16.683 43.691 0 60.331s43.691 16.683 60.331 0l225.84-225.84 225.84 225.84c16.683 16.683 43.691 16.683 60.331 0s16.683-43.691 0-60.331z"></path>
                         </svg>
@@ -41,20 +42,26 @@
                             <path d="m225.84 414.16l256 256c16.683 16.683 43.691 16.683 60.331 0l256-256c16.683-16.683 16.683-43.691 0-60.331s-43.691-16.683-60.331 0l-225.84 225.84-225.84-225.84c-16.683-16.683-43.691-16.683-60.331 0s-16.683 43.691 0 60.331z"></path>
                         </svg>
                     </h2>
-                    <div class="app-c-expander__content js-content app-c-option-select__container" id="expander-content-organisations">
+                    <div class="app-c-expander__content js-content app-c-option-select__container" id="expander-content-{{filter.id}}">
                         {{ govukCheckboxes({
+                            name: filter.name,
                             classes: "govuk-checkboxes--small js-auto-submit",
-                            name: "organisationFilters",
-                            items: uniqueOrganisations
-                          }) }}
-                      </div>
+                            attributes: { "id": filter.id },
+                            fieldset: {
+                                legend: {
+                                    text: filter.title,
+                                    classes: "govuk-fieldset__legend--s govuk-visually-hidden"
+                                }
+                            },
+                            items: filter.items
+                        }) }}
+                    </div>
                 </div>
-                
+            {% endfor %}
             </div>
         </div>
 
         <div class="govuk-grid-column-two-thirds" role="region" aria-label="Search results">
-
             <div class="result-info">
                 <div class="result-info__header">
                     <h2 class="gem-c-heading govuk-heading-s govuk-!-margin-bottom-2" id="js-result-count">{{ resources.length }} results</h2>
@@ -62,33 +69,19 @@
                         <a class="gem-c-skip-link govuk-skip-link govuk-!-display-none-print" data-module="govuk-skip-link" href="#js-results" data-govuk-skip-link-module-started="true">Skip to results</a>
                     </div>
                 </div>
-            </div>
-            <div id="js-facet-tag-wrapper" class="facet-tags__container" aria-live="assertive">
-                <a id="clear-filters" href="{{assetpath}}/find"><span>Clear Filters</span></a> 
-
-                    <div class="moj-override--selected-tags">
-                        {# {filter.id}} #}
-                        <div class="app-c-expander__content js-content app-c-expander__content--visible app-c-option-select__container" id="expander-content-{">
-                           
-                                   
-                                    {{ govukCheckboxes({
-                                        name: organisation.title,
-                                        classes: "govuk-checkboxes--small js-auto-submit",
-                                        attributes: {
-                                            "id": organisation.id
-                                            },
-                                        fieldset: {
-                                            legend: {
-                                            text: organisation.title,
-                                            classes: "govuk-fieldset__legend--s govuk-visually-hidden"
-                                            }
-                                        },
-                                        items: organisationFilters.items
-                                        }) }}
-                                  
-                 
+                <div id="js-facet-tag-wrapper" class="facet-tags__container facet-tags__container--hidden" aria-live="assertive">
+                    <a id="clear-filters" class="govuk-link govuk-link--no-visited-state" href="{{assetpath}}/find">
+                        <span>Clear Filters</span>
+                    </a>
+                    {% for filter in filterOptions %}
+                        <div class="moj-override--selected-tags" id="tags-container-{{ filter.id }}" >
+                            <h3 class="govuk-heading-s govuk-!-margin-bottom-0">{{ filter.title }}</h3>
+                            <div class="moj-filter-tags">{# filter tags go in here #}</div> 
                         </div>
+                    {% endfor %}
                 </div>
+            </div> 
+                
             {% if resources|length %}
                 <ul class="gem-c-document-list gem-c-document-list--no-underline govuk-!-margin-bottom-5" data-module="edge">
                     {% for resource in resources %}
@@ -109,7 +102,7 @@
                         {% endif %}
                         </p>
                         <div class="result-list__limit-height govuk-!-margin-bottom-0 govuk-!-margin-top-1">
-                            <p class="gem-c-document-list__item-description ">{{ (resource.summary | default(resource.description, true)) | replace("\\n\\n", "\n") | safe }}</p>
+                            <p class="gem-c-document-list__item-description ">{{ (resource.description | default(resource.summary, true)) | replace("\\n\\n", "\n") | safe }}</p>
                         </div>
                         <span class="js-result-list-toggle-height govuk-accordion__section-toggle" data-nosnippet=""><span class="govuk-accordion__section-toggle-focus"><span class="govuk-accordion-nav__chevron govuk-accordion-nav__chevron--down"></span><span class="govuk-accordion__section-toggle-text">Show more</span></span></span>
                         <ul class="gem-c-document-list__item-metadata">
