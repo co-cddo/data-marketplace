@@ -85,7 +85,7 @@ function handleCheckboxChange(filterName, filterId, checkboxes) {
 
     // Build the filterValueToText map
     checkboxes.forEach(function(checkbox) {
-        filterValueToText[checkbox.value] = checkbox.nextSibling.wholeText.trim();
+        filterValueToText[checkbox.value] = checkbox.parentNode.textContent.trim();
     });
 
     // Map filter values to their corresponding texts

@@ -29,6 +29,8 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
         items: uniqueOrganisations.map(org => ({
           value: org.id,
           text: org.title,
+          acronym: org.acronym,
+          homepage: org.homepage,
         })),
       },
       {
@@ -43,7 +45,7 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
       // Add more filters here as needed
     ];
 
-console.log(filterOptions)
+console.log("filterOptions", filterOptions)
 
     res.render("find.njk", {
       route: req.params.page,
