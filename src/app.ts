@@ -48,7 +48,7 @@ app.use(bodyParser.json());
 const oneDay = 1000 * 60 * 60 * 24;
 app.use(
   session({
-    secret: "sausage",
+    secret: "super-secretoken",
     resave: false,
     saveUninitialized: false,
     cookie: { maxAge: oneDay },
