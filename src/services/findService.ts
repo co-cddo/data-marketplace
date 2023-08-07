@@ -10,9 +10,13 @@ import {
 export async function fetchResources(
   query?: string,
   organisationFilters?: string[],
-  typeFilters?: string[]
-): Promise<{ resources: (DataSetResource | DataServiceResource)[], uniqueOrganisations: Organisation[], uniqueTypes: string[] }> {
-  const apiUrl = process.env.API_ENDPOINT;
+  typeFilters?: string[],
+): Promise<{
+  resources: (DataSetResource | DataServiceResource)[];
+  uniqueOrganisations: Organisation[];
+  uniqueTypes: string[];
+}> {
+  const apiUrl = `${process.env.API_ENDPOINT}/catalogue`;
   if (!apiUrl) {
     throw new Error(
       "API endpoint is undefined. Please set the API_ENDPOINT environment variable.",
@@ -29,39 +33,40 @@ export async function fetchResources(
     });
   }
 
-    // Extract unique organisations
-    const organisationsSet = new Set();
-    const uniqueOrganisations: Organisation[] = [];
-    resources.forEach((item) => {
-      if (item.organisation && !organisationsSet.has(item.organisation.id)) {
-        uniqueOrganisations.push(item.organisation);
-        organisationsSet.add(item.organisation.id);
-      }
-    });
-    console.log("uniqueOrganisations",uniqueOrganisations)
-    const uniqueTypesSet = new Set<string>();
-    resources.forEach((item) => {
-      if (item.type) {
-        uniqueTypesSet.add(item.type);
-      }
-    });
-
-    if (organisationFilters) {
-      resources = resources.filter(item =>
-        item.organisation && organisationFilters.includes(item.organisation.id)
-      );
+  // Extract unique organisations
+  const organisationsSet = new Set();
+  const uniqueOrganisations: Organisation[] = [];
+  resources.forEach((item) => {
+    if (item.organisation && !organisationsSet.has(item.organisation.id)) {
+      uniqueOrganisations.push(item.organisation);
+      organisationsSet.add(item.organisation.id);
     }
-    const uniqueTypes = Array.from(uniqueTypesSet);
-
-    if (typeFilters) {
-      resources = resources.filter(item =>
-        item.type && typeFilters.includes(item.type)
-      );
+  });
+  console.log("uniqueOrganisations", uniqueOrganisations);
+  const uniqueTypesSet = new Set<string>();
+  resources.forEach((item) => {
+    if (item.type) {
+      uniqueTypesSet.add(item.type);
     }
+  });
 
-    // Add more filters here
+  if (organisationFilters) {
+    resources = resources.filter(
+      (item) =>
+        item.organisation && organisationFilters.includes(item.organisation.id),
+    );
+  }
+  const uniqueTypes = Array.from(uniqueTypesSet);
 
-    // Map the data to the new object shape
+  if (typeFilters) {
+    resources = resources.filter(
+      (item) => item.type && typeFilters.includes(item.type),
+    );
+  }
+
+  // Add more filters here
+
+  // Map the data to the new object shape
   const mappedResources = resources.map((item: CatalogueItem) => {
     if (item.type.toLowerCase() === "dataset") {
       return {
@@ -71,7 +76,7 @@ export async function fetchResources(
     } else if (item.type.toLowerCase() === "dataservice") {
       return {
         ...item,
-        serviceType: item.serviceType
+        serviceType: item.serviceType,
       } as DataServiceResource;
     } else {
       throw new Error("Unknown resource type.");
@@ -81,7 +86,7 @@ export async function fetchResources(
   return {
     resources: mappedResources,
     uniqueOrganisations: uniqueOrganisations,
-    uniqueTypes: uniqueTypes
+    uniqueTypes: uniqueTypes,
   };
 }
 
@@ -112,7 +117,7 @@ export async function fetchResourceById(
     return {
       ...resource,
       distributions: resource.distributions,
-      updateFrequency: resource.updateFrequency
+      updateFrequency: resource.updateFrequency,
     } as DataSetResource;
   } else if (resource.type.toLowerCase() === "dataservice") {
     return {
@@ -121,7 +126,7 @@ export async function fetchResourceById(
       endpointURL: resource.endpointURL,
       servesData: resource.servesData,
       serviceStatus: resource.serviceStatus,
-      serviceType: resource.serviceType
+      serviceType: resource.serviceType,
     } as DataServiceResource;
   } else {
     throw new Error("Unknown resource type.");

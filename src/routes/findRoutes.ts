@@ -9,43 +9,51 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
   // change it to lowercase for case insensitive search, and assign it to the 'query' variable.
   // If 'q' doesn't exist, assign 'undefined' to the 'query' variable.
   const query: string | undefined = (req.query.q as string)?.toLowerCase();
-  const organisationFilters: string[] | undefined = req.query.organisationFilter 
-  ? (req.query.organisationFilter as string).split(',')
-  : undefined;
+  const organisationFilters: string[] | undefined = req.query
+    .organisationFilters as string[] | undefined;
 
-  const typeFilters: string[] | undefined = req.query.typeFilter 
-    ? (req.query.typeFilter as string).split(',')
+  const typeFilters: string[] | undefined = req.query.typeFilter
+    ? (req.query.typeFilter as string).split(",")
     : undefined;
 
   try {
     // Fetch the data from the API
-    const { resources, uniqueOrganisations, uniqueTypes } = await fetchResources(query, organisationFilters, typeFilters);
+    console.log("QUERY", organisationFilters);
+    const { resources, uniqueOrganisations, uniqueTypes } =
+      await fetchResources(query, organisationFilters, typeFilters);
 
-    const filterOptions = [  // Define the shape of "filterOptions", add more as needed
+    const filterOptions = [
+      // Define the shape of "filterOptions", add more as needed
       {
         id: "organisationFilters",
         name: "organisationFilters",
         title: "Organisations",
-        items: uniqueOrganisations.map(org => ({
+        items: uniqueOrganisations.map((org) => ({
           value: org.id,
           text: org.title,
           acronym: org.acronym,
           homepage: org.homepage,
+          checked:
+            (Array.isArray(organisationFilters) &&
+              organisationFilters.includes(org.id)) ||
+            (typeof organisationFilters === "string" &&
+              organisationFilters === org.id)
+              ? "checked"
+              : "",
         })),
       },
       {
         id: "typeFilters",
         name: "typeFilters",
         title: "Types",
-        items: uniqueTypes.map(type => ({
+        items: uniqueTypes.map((type) => ({
           value: type,
           text: type,
         })),
       },
-      // Add more filters here as needed
     ];
 
-console.log("filterOptions", filterOptions)
+    console.log("filterOptions", filterOptions);
 
     res.render("find.njk", {
       route: req.params.page,
