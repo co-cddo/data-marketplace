@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 const router = express.Router();
 import { fetchResources, fetchResourceById } from "../services/findService";
+import { organisations } from "../mockData/organisations";
 
 router.get("/", async (req: Request, res: Response, next: NextFunction) => {
   // Use the referer as the backLink, defaulting to '/' if no referer is set
@@ -19,8 +20,11 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
     // Fetch the data from the API
     console.log("QUERY", organisationFilters);
-    const { resources, uniqueOrganisations, uniqueTypes } =
-      await fetchResources(query, organisationFilters, typeFilters);
+    const { resources, uniqueTypes } = await fetchResources(
+      query,
+      organisationFilters,
+      typeFilters,
+    );
 
     const filterOptions = [
       // Define the shape of "filterOptions", add more as needed
@@ -28,7 +32,7 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
         id: "organisationFilters",
         name: "organisationFilters",
         title: "Organisations",
-        items: uniqueOrganisations.map((org) => ({
+        items: organisations.map((org) => ({
           value: org.id,
           text: org.title,
           acronym: org.acronym,
