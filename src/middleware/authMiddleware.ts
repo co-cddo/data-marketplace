@@ -5,6 +5,18 @@ import jwksRsa from "jwks-rsa";
 import passport from "passport";
 import { UserData } from "../types/express";
 
+if (
+  !process.env.SSO_AUTH_URL ||
+  !process.env.SSO_TOKEN_URL ||
+  !process.env.SSO_CLIENT_ID ||
+  !process.env.SSO_CLIENT_SECRET ||
+  !process.env.SSO_CALLBACK_URL
+) {
+  throw new Error(
+    "Missing required environment variables for OAuth configuration.",
+  );
+}
+
 export const oauth2Options = {
   authorizationURL: process.env.SSO_AUTH_URL!,
   tokenURL: process.env.SSO_TOKEN_URL!,
