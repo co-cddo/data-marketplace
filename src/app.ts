@@ -139,7 +139,6 @@ app.get(
     if (!req.isAuthenticated()) {
       return res.redirect("/error");
     }
-    console.log("here");
     res.render("profile.njk", {
       heading: "Authed",
       user: req.user,
