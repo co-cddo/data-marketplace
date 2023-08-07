@@ -13,12 +13,14 @@ import { handleCookies } from "./middleware/cookieMiddleware";
 
 export const app = express();
 // Set up security headers with Helmet
+const upgradeDirective = process.env.NODE_ENV === "production" ? [] : null;
 app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
         "script-src": ["'self'", "'unsafe-inline'", "http://localhost:3000"],
         "style-src": ["'self'", "'unsafe-inline'"],
+        "upgrade-insecure-requests": upgradeDirective,
       },
     },
   }),
