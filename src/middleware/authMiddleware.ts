@@ -81,3 +81,12 @@ export const loadJwtFromCookie = (
   }
   next();
 };
+
+export function modifyApplicationMiddleware(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  res.locals.isAuthenticated = req.isAuthenticated();
+  next();
+}

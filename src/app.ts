@@ -7,17 +7,20 @@ import homeRoute from "./routes/homeRoute";
 import findRoutes from "./routes/findRoutes";
 import shareRoutes from "./routes/shareRoutes";
 import cookieRoutes from "./routes/cookieRoutes";
+import loginRoutes from "./routes/loginRoutes";
+import authRoutes from "./routes/authRoutes";
+import profileRoutes from "./routes/profileRoutes";
 import path from "path";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import session from "express-session";
 import { handleCookies } from "./middleware/cookieMiddleware";
 import passport from "passport";
-import { authenticateJWT } from "./middleware/authMiddleware";
 import {
   loadJwtFromCookie,
   oAuthStrategy,
   JwtStrategy,
+  modifyApplicationMiddleware,
 } from "./middleware/authMiddleware";
 
 export const app = express();
@@ -102,60 +105,13 @@ env.addFilter("formatDate", function (date: string | number | Date) {
 app.set("view engine", "njk");
 
 app.use((req, res, next) => {
-  console.log(req.session);
-  res.locals.isAuthenticated = req.isAuthenticated();
-  console.log(req.isAuthenticated());
-  console.log("LOCALS: ", res.locals);
-  next();
+  modifyApplicationMiddleware(req, res, next);
 });
-app.get("/login", passport.authenticate("custom-sso"), (req, res, next) => {
-  res.cookie("jwtToken", false, { httpOnly: true });
-  next();
-});
-app.get(
-  "/auth/callback",
-  passport.authenticate("custom-sso", { session: false }),
-  async (req: Request, res: Response) => {
-    if (!req.isAuthenticated()) {
-      res.redirect("/");
-    } else {
-      req.logIn(req.user, (loginErr) => {
-        if (loginErr) {
-          res.redirect("/");
-        }
 
-        res.cookie("jwtToken", req.user.idToken, { httpOnly: true });
-
-        res.redirect("/profile");
-      });
-    }
-  },
-);
-
-app.get(
-  "/profile",
-  authenticateJWT,
-  async (req: Request, res: Response) => {
-    if (!req.isAuthenticated()) {
-      return res.redirect("/error");
-    }
-    res.render("profile.njk", {
-      heading: "Authed",
-      user: req.user,
-    });
-  },
-  (err: Error, req: Request, res: Response, next: NextFunction) => {
-    if (err.name === "UnauthorizedError") {
-      res.render("error.njk", {
-        messageBody: "Not authed",
-      });
-    } else {
-      next(err);
-    }
-  },
-);
-
+app.use("/login", loginRoutes);
+app.use("/auth", authRoutes);
 app.use("/", homeRoute);
+app.use("/profile", profileRoutes);
 app.use("/find", findRoutes);
 app.use("/share", shareRoutes);
 app.use("/cookie-settings", cookieRoutes);
