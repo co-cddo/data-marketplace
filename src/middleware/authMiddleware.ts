@@ -1,3 +1,4 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 import { NextFunction, Request, Response } from "express";
 import { Strategy as OAuth2Strategy } from "passport-oauth2";
 import { Strategy as JwtStrategyPassport, ExtractJwt } from "passport-jwt";
@@ -71,7 +72,7 @@ export function authenticateJWT(
   passport.authenticate(
     "jwt",
     { session: false },
-    (err: Error, user: UserData, info: any) => {
+    (err: Error, user: UserData) => {
       if (err || !user) {
         return res.redirect("/");
       }
