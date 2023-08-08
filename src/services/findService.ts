@@ -10,11 +10,11 @@ import {
 export async function fetchResources(
   query?: string,
   organisationFilters?: string[],
-  typeFilters?: string[],
+  // typeFilters?: string[],
 ): Promise<{
   resources: (DataSetResource | DataServiceResource)[];
   uniqueOrganisations: Organisation[];
-  uniqueTypes: string[];
+  // uniqueTypes: string[];
 }> {
   const apiUrl = `${process.env.API_ENDPOINT}/catalogue`;
   if (!apiUrl) {
@@ -42,13 +42,15 @@ export async function fetchResources(
       organisationsSet.add(item.organisation.id);
     }
   });
+
   console.log("uniqueOrganisations", uniqueOrganisations);
-  const uniqueTypesSet = new Set<string>();
-  resources.forEach((item) => {
-    if (item.type) {
-      uniqueTypesSet.add(item.type);
-    }
-  });
+  
+  // const uniqueTypesSet = new Set<string>();
+  // resources.forEach((item) => {
+  //   if (item.type) {
+  //     uniqueTypesSet.add(item.type);
+  //   }
+  // });
 
   if (organisationFilters) {
     resources = resources.filter(
@@ -56,13 +58,13 @@ export async function fetchResources(
         item.organisation && organisationFilters.includes(item.organisation.id),
     );
   }
-  const uniqueTypes = Array.from(uniqueTypesSet);
+  // const uniqueTypes = Array.from(uniqueTypesSet);
 
-  if (typeFilters) {
-    resources = resources.filter(
-      (item) => item.type && typeFilters.includes(item.type),
-    );
-  }
+  // if (typeFilters) {
+  //   resources = resources.filter(
+  //     (item) => item.type && typeFilters.includes(item.type),
+  //   );
+  // }
 
   // Add more filters here
 
@@ -86,7 +88,7 @@ export async function fetchResources(
   return {
     resources: mappedResources,
     uniqueOrganisations: uniqueOrganisations,
-    uniqueTypes: uniqueTypes,
+    // uniqueTypes: uniqueTypes,
   };
 }
 

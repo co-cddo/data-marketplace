@@ -3,7 +3,6 @@ export interface Organisation {
   id: string;
   acronym: string;
   homepage: string;
-  name: string;
 }
 
 interface Creator {

@@ -13,17 +13,18 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
   const organisationFilters: string[] | undefined = req.query
     .organisationFilters as string[] | undefined;
 
-  const typeFilters: string[] | undefined = req.query.typeFilter
-    ? (req.query.typeFilter as string).split(",")
-    : undefined;
+  // const typeFilters: string[] | undefined = req.query.typeFilter
+  //   ? (req.query.typeFilter as string).split(",")
+  //   : undefined;
 
   try {
     // Fetch the data from the API
     console.log("QUERY", organisationFilters);
-    const { resources, uniqueTypes } = await fetchResources(
+    // console.log("type query",typeFilters)
+    const { resources } = await fetchResources(
       query,
       organisationFilters,
-      typeFilters,
+      // typeFilters,
     );
 
     const filterOptions = [
@@ -46,15 +47,15 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
               : "",
         })),
       },
-      {
-        id: "typeFilters",
-        name: "typeFilters",
-        title: "Types",
-        items: uniqueTypes.map((type) => ({
-          value: type,
-          text: type,
-        })),
-      },
+      // {
+      //   id: "typeFilters",
+      //   name: "typeFilters",
+      //   title: "Types",
+      //   items: uniqueTypes.map((type) => ({
+      //     value: type,
+      //     text: type,
+      //   })),
+      // },
     ];
 
     console.log("filterOptions", filterOptions);
