@@ -107,7 +107,7 @@
                         {% endif %}
                         </p>
                         <div class="result-list__limit-height govuk-!-margin-bottom-0 govuk-!-margin-top-1">
-                            <p class="gem-c-document-list__item-description ">{{ (resource.description | default(resource.summary, true)) | replace("\\n\\n", "\n") | safe }}</p>
+                            <p class="gem-c-document-list__item-description ">{{ (resource.summary | default(resource.description, true)) | replace("\\n\\n", "\n") | safe }}</p>
                         </div>
                         <span class="js-result-list-toggle-height govuk-accordion__section-toggle" data-nosnippet=""><span class="govuk-accordion__section-toggle-focus"><span class="govuk-accordion-nav__chevron govuk-accordion-nav__chevron--down"></span><span class="govuk-accordion__section-toggle-text">Show more</span></span></span>
                         <ul class="gem-c-document-list__item-metadata">
