@@ -42,7 +42,7 @@
                             <path d="m225.84 414.16l256 256c16.683 16.683 43.691 16.683 60.331 0l256-256c16.683-16.683 16.683-43.691 0-60.331s-43.691-16.683-60.331 0l-225.84 225.84-225.84-225.84c-16.683-16.683-43.691-16.683-60.331 0s-16.683 43.691 0 60.331z"></path>
                         </svg>
                     </h2>
-                    <div class="app-c-expander__content--visible js-content app-c-option-select__container" id="expander-content-{{filter.id}}">
+                    <div class="app-c-expander__content app-c-expander__content--visible js-content app-c-option-select__container" id="expander-content-{{filter.id}}">
                         {{ govukCheckboxes({
                             name: filter.name,
                             classes: "govuk-checkboxes--small js-auto-submit",
@@ -76,7 +76,7 @@
                     {% for category in filterOptionTags %}
                         {% if category.items.length > 0 %}
                         <div class="moj-override--selected-tags" id="tags-container-{{ category.id }}" >
-                            <h3 class="govuk-heading-s govuk-!-margin-bottom-0">{{ category.title }}</h3>
+                            <h3 class="govuk-heading-s govuk-!-margin-bottom-0 category-filter-title">{{ category.title }}</h3>
                             <div class="moj-filter-tags">
                                 {% for filter in category.items %}
                                     <span class="moj-filter__tag">{{ filter.text }}</span>
