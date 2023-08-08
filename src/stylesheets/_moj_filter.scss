@@ -231,10 +231,8 @@ div.app-c-expander{
   width: 16px;
 }
 
-// .facet-tags__container--hidden {
-//   display: none;
-// }
-
-// .moj-override--selected-tags {
-//   display: none;
-// }
+.moj-filter-tags {
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
