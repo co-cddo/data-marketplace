@@ -69,9 +69,9 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
       route: req.params.page,
       backLink: backLink,
       resources: resources,
-      filterOptions, // filterOptions being passed here
       query: query,
-      filterOptionTags
+      filterOptions,
+      filterOptionTags: filterOptionTags
     });
   } catch (error) {
     // Catch errors if API call was unsuccessful and pass to error-handling middlewear
