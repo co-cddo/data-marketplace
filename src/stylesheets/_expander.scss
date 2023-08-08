@@ -1,0 +1,119 @@
+.app-c-expander {
+  padding: 0 0 govuk-spacing(2);
+  margin-bottom: govuk-spacing(2);
+  border-bottom: 1px solid $govuk-border-colour;
+  &:last-child {
+    border-bottom: 0;
+  }
+}
+
+.app-c-expander__title {
+  @include govuk-font(19);
+  cursor: pointer;
+}
+
+.app-c-expander__content {
+  padding: govuk-spacing(2) 13px;
+
+  .govuk-form-group:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.js-enabled {
+  .app-c-expander__heading {
+    position: relative;
+    padding: 10px 8px 5px 43px;
+    margin: 0;
+  }
+
+  .app-c-expander__content {
+    display: none;
+  }
+
+  .app-c-expander__content--visible {
+    display: block;
+  }
+
+  [aria-expanded="true"] ~ .app-c-expander__icon--up {
+    display: block;
+  }
+
+  [aria-expanded="false"] ~ .app-c-expander__icon--down {
+    display: block;
+  }
+}
+
+.app-c-expander__icon {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 9px;
+  width: 30px;
+  height: 40px;
+  fill: govuk-colour("black");
+}
+
+.app-c-expander__button {
+  @include govuk-font(19);
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  padding: 0;
+  color: $govuk-link-colour;
+
+  &:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.1em;
+    @include govuk-link-hover-decoration;
+  }
+
+  &:focus {
+    outline: none;
+    text-decoration: none;
+    @include govuk-focused-text;
+  }
+
+  // Extend the touch area of the button to span the heading
+  &:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+  }
+}
+
+.app-c-expander__selected-counter {
+  @include govuk-font($size: 14);
+  display: block;
+  color: $govuk-text-colour;
+  margin-top: 3px;
+}
+.moj-override .app-c-option-select__container {
+  height: auto;
+  max-height: none;
+}
+.moj-override .app-c-option-select__container {
+  position: relative;
+  max-height: 200px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: #fff;
+}
+
+@media (max-width: 100vw) {
+  .moj-override .app-c-option-select__container::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+  }
+
+  .moj-override .app-c-option-select__container::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, 0.87);
+  }
+}

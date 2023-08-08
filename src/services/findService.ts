@@ -4,11 +4,18 @@ import {
   ApiResponse,
   DataSetResource,
   DataServiceResource,
+  Organisation,
 } from "../models/dataModels";
 
 export async function fetchResources(
   query?: string,
-): Promise<(DataSetResource | DataServiceResource)[]> {
+  organisationFilters?: string[],
+  filterOptionTags?: string[],
+): Promise<{
+  resources: (DataSetResource | DataServiceResource)[];
+  uniqueOrganisations: Organisation[];
+  selectedFilters?: string[];
+}> {
   const apiUrl = `${process.env.API_ENDPOINT}/catalogue`;
   if (!apiUrl) {
     throw new Error(
@@ -25,8 +32,26 @@ export async function fetchResources(
       );
     });
   }
+
+  // Extract unique organisations
+  const organisationsSet = new Set();
+  const uniqueOrganisations: Organisation[] = [];
+  resources.forEach((item) => {
+    if (item.organisation && !organisationsSet.has(item.organisation.id)) {
+      uniqueOrganisations.push(item.organisation);
+      organisationsSet.add(item.organisation.id);
+    }
+  });
+
+  if (organisationFilters) {
+    resources = resources.filter(
+      (item) =>
+        item.organisation && organisationFilters.includes(item.organisation.id),
+    );
+  }
+
   // Map the data to the new object shape
-  return resources.map((item: CatalogueItem) => {
+  const mappedResources = resources.map((item: CatalogueItem) => {
     if (item.type.toLowerCase() === "dataset") {
       return {
         ...item,
@@ -35,12 +60,18 @@ export async function fetchResources(
     } else if (item.type.toLowerCase() === "dataservice") {
       return {
         ...item,
-        serviceType: item.serviceType
+        serviceType: item.serviceType,
       } as DataServiceResource;
     } else {
       throw new Error("Unknown resource type.");
     }
   });
+
+  return {
+    resources: mappedResources,
+    uniqueOrganisations: uniqueOrganisations,
+    selectedFilters: filterOptionTags,
+  };
 }
 
 export async function fetchResourceById(
@@ -70,7 +101,7 @@ export async function fetchResourceById(
     return {
       ...resource,
       distributions: resource.distributions,
-      updateFrequency: resource.updateFrequency
+      updateFrequency: resource.updateFrequency,
     } as DataSetResource;
   } else if (resource.type.toLowerCase() === "dataservice") {
     return {
@@ -79,7 +110,7 @@ export async function fetchResourceById(
       endpointURL: resource.endpointURL,
       servesData: resource.servesData,
       serviceStatus: resource.serviceStatus,
-      serviceType: resource.serviceType
+      serviceType: resource.serviceType,
     } as DataServiceResource;
   } else {
     throw new Error("Unknown resource type.");

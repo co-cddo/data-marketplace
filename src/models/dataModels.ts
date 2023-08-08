@@ -1,4 +1,4 @@
-interface Organisation {
+export interface Organisation {
   title: string;
   id: string;
   acronym: string;

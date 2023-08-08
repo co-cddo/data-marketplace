@@ -1,5 +1,8 @@
 {% extends "layouts/base.njk" %}
-
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/accordion/macro.njk" import govukAccordion %}
+{%- from "govuk/components/tag/macro.njk" import govukTag -%}
 {% block content %}
 <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">
     Find government data
@@ -23,11 +26,41 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-third">
-            <div class="moj-filter"></div>
+            <div class="moj-override">
+                {% for filter in filterOptions %}
+                <div class="app-c-expander" data-module="expander">
+                    <h2 class="app-c-expander__heading">
+                        <button type="button" class="app-c-expander__button js-button" aria-expanded="true" aria-controls="expander-content-{{ filter.id }}">{{ filter.title }}</button>
+                         
+                        <svg version="1.1" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"
+                                class="app-c-expander__icon app-c-expander__icon--up" aria-hidden="true" focusable="false">
+                            <path d="m798.16 609.84l-256-256c-16.683-16.683-43.691-16.683-60.331 0l-256 256c-16.683 16.683-16.683 43.691 0 60.331s43.691 16.683 60.331 0l225.84-225.84 225.84 225.84c16.683 16.683 43.691 16.683 60.331 0s16.683-43.691 0-60.331z"></path>
+                        </svg>
+                        <svg version="1.1" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"
+                                class="app-c-expander__icon app-c-expander__icon--down" aria-hidden="true"
+                                focusable="false">
+                            <path d="m225.84 414.16l256 256c16.683 16.683 43.691 16.683 60.331 0l256-256c16.683-16.683 16.683-43.691 0-60.331s-43.691-16.683-60.331 0l-225.84 225.84-225.84-225.84c-16.683-16.683-43.691-16.683-60.331 0s-16.683 43.691 0 60.331z"></path>
+                        </svg>
+                    </h2>
+                    <div class="app-c-expander__content app-c-expander__content--visible js-content app-c-option-select__container" id="expander-content-{{filter.id}}">
+                        {{ govukCheckboxes({
+                            name: filter.name,
+                            classes: "govuk-checkboxes--small js-auto-submit",
+                            attributes: { "id": filter.id },
+                            fieldset: {
+                                legend: {
+                                    text: filter.title,
+                                    classes: "govuk-fieldset__legend--s govuk-visually-hidden"
+                                }
+                            },
+                            items: filter.items
+                        }) }}
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
         </div>
-
         <div class="govuk-grid-column-two-thirds" role="region" aria-label="Search results">
-
             <div class="result-info">
                 <div class="result-info__header">
                     <h2 class="gem-c-heading govuk-heading-s govuk-!-margin-bottom-2" id="js-result-count">{{ resources.length }} results</h2>
@@ -35,17 +68,32 @@
                         <a class="gem-c-skip-link govuk-skip-link govuk-!-display-none-print" data-module="govuk-skip-link" href="#js-results" data-govuk-skip-link-module-started="true">Skip to results</a>
                     </div>
                 </div>
-            </div>
+                <div id="js-facet-tag-wrapper" class="facet-tags__container facet-tags__container--hidden" aria-live="assertive">
+                    <a id="clear-filters" class="govuk-link govuk-link--no-visited-state" href="{{assetpath}}/find">
+                        <span>Clear Filters</span>
+                    </a>
+                    {% for category in filterOptionTags %}
+                        {% if category.items.length > 0 %}
+                        <div class="moj-override--selected-tags" id="tags-container-{{ category.id }}" >
+                            <h3 class="govuk-heading-s govuk-!-margin-bottom-0 category-filter-title">{{ category.title }}</h3>
+                            <div class="moj-filter-tags">                               
+                                {% for filter in category.items %}
+                                    <span class="moj-filter__tag">{{ filter.text }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div> 
             {% if resources|length %}
                 <ul class="gem-c-document-list gem-c-document-list--no-underline govuk-!-margin-bottom-5" data-module="edge">
                     {% for resource in resources %}
                     <li class="gem-c-document-list__item ">
                         <a href="./find/{{ resource.identifier | urlencode }}" class="gem-c-document-list__item-title  govuk-link">{{ resource.title}}</a>
-
                         <p class="govuk-!-font-weight-bold govuk-!-margin-bottom-1 govuk-!-font-size-16">
                             <span class="govuk-visually-hidden">Organisation: </span>{{ resource.organisation.title }}
                         </p>
-
                         <p class="govuk-!-display-inline">
                         {% if resource.type.toLowerCase() == "dataservice" %}
                             <strong class="govuk-tag govuk-tag--grey">{{ resource.serviceType }}</strong>
