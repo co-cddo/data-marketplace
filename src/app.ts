@@ -108,7 +108,7 @@ app.use((req, res, next) => {
   modifyApplicationMiddleware(req, res, next);
 });
 
-app.use("/login", loginRoutes);
+app.use("/", loginRoutes);
 app.use("/auth", authRoutes);
 app.use("/", homeRoute);
 app.use("/profile", profileRoutes);
