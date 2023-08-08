@@ -60,7 +60,6 @@
             {% endfor %}
             </div>
         </div>
-
         <div class="govuk-grid-column-two-thirds" role="region" aria-label="Search results">
             <div class="result-info">
                 <div class="result-info__header">
@@ -77,7 +76,7 @@
                         {% if category.items.length > 0 %}
                         <div class="moj-override--selected-tags" id="tags-container-{{ category.id }}" >
                             <h3 class="govuk-heading-s govuk-!-margin-bottom-0 category-filter-title">{{ category.title }}</h3>
-                            <div class="moj-filter-tags">
+                            <div class="moj-filter-tags">                               
                                 {% for filter in category.items %}
                                     <span class="moj-filter__tag">{{ filter.text }}</span>
                                 {% endfor %}
@@ -92,11 +91,9 @@
                     {% for resource in resources %}
                     <li class="gem-c-document-list__item ">
                         <a href="./find/{{ resource.identifier | urlencode }}" class="gem-c-document-list__item-title  govuk-link">{{ resource.title}}</a>
-
                         <p class="govuk-!-font-weight-bold govuk-!-margin-bottom-1 govuk-!-font-size-16">
                             <span class="govuk-visually-hidden">Organisation: </span>{{ resource.organisation.title }}
                         </p>
-
                         <p class="govuk-!-display-inline">
                         {% if resource.type.toLowerCase() == "dataservice" %}
                             <strong class="govuk-tag govuk-tag--grey">{{ resource.serviceType }}</strong>

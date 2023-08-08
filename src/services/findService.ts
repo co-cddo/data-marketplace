@@ -14,7 +14,7 @@ export async function fetchResources(
 ): Promise<{
   resources: (DataSetResource | DataServiceResource)[];
   uniqueOrganisations: Organisation[];
-  selectedFilters?: string[]; 
+  selectedFilters?: string[];
 }> {
   const apiUrl = `${process.env.API_ENDPOINT}/catalogue`;
   if (!apiUrl) {
@@ -43,15 +43,12 @@ export async function fetchResources(
     }
   });
 
-  console.log("uniqueOrganisations", uniqueOrganisations);
-
   if (organisationFilters) {
     resources = resources.filter(
       (item) =>
         item.organisation && organisationFilters.includes(item.organisation.id),
     );
   }
-  
 
   // Map the data to the new object shape
   const mappedResources = resources.map((item: CatalogueItem) => {
@@ -73,19 +70,9 @@ export async function fetchResources(
   return {
     resources: mappedResources,
     uniqueOrganisations: uniqueOrganisations,
-    selectedFilters: filterOptionTags
+    selectedFilters: filterOptionTags,
   };
 }
-
-
-
-
-
-
-
-
-
-
 
 export async function fetchResourceById(
   resourceID: string,

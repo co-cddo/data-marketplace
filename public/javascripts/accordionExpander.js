@@ -57,7 +57,6 @@ function handleFilterAccordion() {
   });
 }
 
-
 handleCheckboxes();
 handleDocumentListAccordion();
 handleFilterAccordion();
