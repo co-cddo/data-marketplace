@@ -46,7 +46,7 @@ export async function fetchResources(
 export async function fetchResourceById(
   resourceID: string,
 ): Promise<DataSetResource | DataServiceResource> {
-  const apiUrl = `${process.env.API_ENDPOINT}/catalogue`;
+  const apiUrl = `${process.env.API_ENDPOINT}/catalogue/${resourceID}`;
   if (!apiUrl) {
     throw new Error(
       "API endpoint is undefined. Please set the API_ENDPOINT environment variable.",
