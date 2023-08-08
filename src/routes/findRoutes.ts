@@ -10,22 +10,18 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
   // change it to lowercase for case insensitive search, and assign it to the 'query' variable.
   // If 'q' doesn't exist, assign 'undefined' to the 'query' variable.
   const query: string | undefined = (req.query.q as string)?.toLowerCase();
-  const organisationFilters: string[] | undefined = req.query
-    .organisationFilters as string[] | undefined;
-
-  // const typeFilters: string[] | undefined = req.query.typeFilter
-  //   ? (req.query.typeFilter as string).split(",")
-  //   : undefined;
+  const organisationFilters: string[] | undefined = req.query.organisationFilters as string[] | undefined;
 
   try {
     // Fetch the data from the API
-    console.log("QUERY", organisationFilters);
-    // console.log("type query",typeFilters)
+
     const { resources } = await fetchResources(
       query,
       organisationFilters,
-      // typeFilters,
     );
+
+    console.log("QUERY", organisationFilters);
+    // console.log("type query",typeFilters)
 
     const filterOptions = [
       // Define the shape of "filterOptions", add more as needed
@@ -47,18 +43,27 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
               : "",
         })),
       },
-      // {
-      //   id: "typeFilters",
-      //   name: "typeFilters",
-      //   title: "Types",
-      //   items: uniqueTypes.map((type) => ({
-      //     value: type,
-      //     text: type,
-      //   })),
-      // },
+      // more filters here
     ];
 
-    console.log("filterOptions", filterOptions);
+     // Create filterOptionTags based on the selected filters in organisationFilters
+     const filterOptionTags = [
+      {
+      id: "organisationFilters",
+      title: "Organisations",
+      items: organisations
+        .filter((org) => organisationFilters?.includes(org.id))
+        .map((org) => ({
+          value: org.id,
+          text: org.title,
+          checked: "checked",
+        })),
+     }
+     // more filters here
+    ]
+
+
+    console.log("checkboxFilterOptions", filterOptionTags);
 
     res.render("find.njk", {
       route: req.params.page,
@@ -66,6 +71,7 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
       resources: resources,
       filterOptions, // filterOptions being passed here
       query: query,
+      filterOptionTags
     });
   } catch (error) {
     // Catch errors if API call was unsuccessful and pass to error-handling middlewear
