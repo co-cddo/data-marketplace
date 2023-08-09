@@ -15,3 +15,7 @@ To get started:
 To use dcoker:
 
 - Run `docker-compose up`
+
+## SSO
+
+The project uses single sign on for authentication. The parameters can be grabbed from AWS parameter store if required locally. If you dont need to SSO locally, just put dummy strings into the ENV variales.
