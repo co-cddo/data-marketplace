@@ -8,7 +8,6 @@ import { UserData } from "../types/express";
 
 if (
   !process.env.SSO_AUTH_URL ||
-  !process.env.SSO_TOKEN_URL ||
   !process.env.SSO_CLIENT_ID ||
   !process.env.SSO_CLIENT_SECRET ||
   !process.env.SSO_CALLBACK_URL
@@ -19,8 +18,8 @@ if (
 }
 
 export const oauth2Options = {
-  authorizationURL: process.env.SSO_AUTH_URL!,
-  tokenURL: process.env.SSO_TOKEN_URL!,
+  authorizationURL: `${process.env.SSO_AUTH_URL}/auth/oidc`!,
+  tokenURL: `${process.env.SSO_AUTH_URL}/auth/token`!,
   clientID: process.env.SSO_CLIENT_ID!,
   clientSecret: process.env.SSO_CLIENT_SECRET!,
   callbackURL: process.env.SSO_CALLBACK_URL!,
