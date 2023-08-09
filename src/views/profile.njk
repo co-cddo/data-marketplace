@@ -1,0 +1,10 @@
+{% extends "page.njk" %}
+
+{% block content %}
+<h1>{{ heading }}</h1>
+{% if user %}
+    Authenticated: {{ isAuthenticated }}<br />
+    Display name: {{user.display_name}}<br />
+    Email: {{user.email}}
+{%endif%}
+{% endblock %}
