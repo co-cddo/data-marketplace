@@ -1,9 +1,9 @@
 import express, { Request, Response } from "express";
 const router = express.Router();
 
-router.get("/", (req: Request, res: Response) => {
+router.get("/acquirer", (req: Request, res: Response) => { // initial start screen before questions
   const backLink = req.headers.referer || "/";
-  res.render("page.njk", {
+  res.render("share.njk", {
     route: req.params.page,
     heading: "Share journey",
     backLink: backLink,
