@@ -1,0 +1,189 @@
+{
+    "requestId": null,
+    "dataAsset": null,
+    "ownedBy": null,
+    "status": null,
+    "sections": {
+        "purpose": {
+            "steps": [
+                "dataType",
+                "dataSubjects",
+                "projectAims",
+                "dataRequired",
+                "benefits",
+                "dataAccess",
+                "impact",
+                "date"
+            ]
+        },
+        "legal": {
+            "steps": [
+                "legalPower",
+                "legalGateway",
+                "legalReview"
+            ]
+        },
+        "dataProtection": {
+            "steps": [
+                "basis",
+                "dataTravel",
+                "role",
+                "protectionReview"
+            ]
+        },
+        "security": {
+            "steps": [
+                "delivery",
+                "format",
+                "disposal",
+                "securityReview"
+            ]
+        },
+        "review": {
+            "steps": [
+                "check"
+            ]
+        }
+    },
+    "steps": {
+        "dataType": {
+            "status": "COMPLETE",
+            "index": null,
+            "value": "",
+            "nextStep": "dataSubjects"
+        },
+        "dataSubjects": {
+            "status": "INCOMPLETE",
+            "value": "",
+            "nextStep": "projectAims"
+        },
+        "projectAims": {
+            "status": "INCOMPLETE",
+            "value": {
+                "aims": "",
+                "explanation": ""
+            },
+            "nextStep": "dataRequired"
+        },
+        "dataRequired": {
+            "status": "INCOMPLETE",
+            "value": "",
+            "nextStep": "benefits"
+        },
+        "benefits": {
+            "status": "INCOMPLETE",
+            "value": [
+                {
+                    "index": null,
+                    "value": ""
+                }
+            ],
+            "nextStep": "dataAccess"
+        },
+        "dataAccess": {
+            "status": "INCOMPLETE",
+            "index": null,
+            "value": "",
+            "nextStep": "impact"
+        },
+        "impact": {
+            "status": "INCOMPLETE",
+            "value": "",
+            "nextStep": "date"
+        },
+        "date": {
+            "status": "INCOMPLETE",
+            "value": {
+                "day": null,
+                "month": null,
+                "year": null
+            },
+            "nextStep": "legalPower"
+        },
+        "legalPower": {
+            "status": "INCOMPLETE",
+            "index": null,
+            "value": "",
+            "nextStep": "legalGateway"
+        },
+        "legalGateway": {
+            "status": "INCOMPLETE",
+            "index": null,
+            "value": "",
+            "nextStep": "legalReview"
+        },
+        "legalReview": {
+            "status": "INCOMPLETE",
+            "index": null,
+            "value": "",
+            "blockedBy": [
+                "legalPower",
+                "legalGateway"
+            ],
+            "nextStep": "basis"
+        },
+        "basis": {
+            "status": "INCOMPLETE",
+            "value": "",
+            "nextStep": "dataTravel"
+        },
+        "dataTravel": {
+            "status": "INCOMPLETE",
+            "index": null,
+            "value": "",
+            "nextStep": "role"
+        },
+        "role": {
+            "status": "INCOMPLETE",
+            "index": null,
+            "value": "",
+            "nextStep": "protectionReview"
+        },
+        "protectionReview": {
+            "status": "INCOMPLETE",
+            "index": null,
+            "value": "",
+            "blockedBy": [
+                "basis",
+                "dataTravel",
+                "role"
+            ],
+            "nextStep": "delivery"
+        },
+        "delivery": {
+            "status": "INCOMPLETE",
+            "value": null,
+            "nextStep": "format"
+        },
+        "format": {
+            "status": "INCOMPLETE",
+            "index": null,
+            "value": "",
+            "nextStep": "disposal"
+        },
+        "disposal": {
+            "status": "INCOMPLETE",
+            "value": "",
+            "nextStep": "securityReview"
+        },
+        "securityReview": {
+            "status": "INCOMPLETE",
+            "index": null,
+            "value": "",
+            "blockedBy": [
+                "delivery",
+                "format",
+                "disposal"
+            ],
+            "nextStep": "check"
+        },
+        "check": {
+            "status": "BLOCKED",
+            "blockedBy": [
+                "legalReview",
+                "protectionReview",
+                "securityReview"
+            ]
+        }
+    }
+}
