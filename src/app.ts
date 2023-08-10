@@ -6,6 +6,7 @@ import helmet from "helmet";
 import homeRoute from "./routes/homeRoute";
 import findRoutes from "./routes/findRoutes";
 import shareRoutes from "./routes/shareRoutes";
+import acquirerRoutes from "./routes/acquirerRoutes";
 import cookieRoutes from "./routes/cookieRoutes";
 import loginRoutes from "./routes/loginRoutes";
 import authRoutes from "./routes/authRoutes";
@@ -116,6 +117,7 @@ app.use("/", homeRoute);
 app.use("/profile", profileRoutes);
 app.use("/find", findRoutes);
 app.use("/share", shareRoutes);
+app.use("/acquirer", acquirerRoutes);
 app.use("/cookie-settings", cookieRoutes);
 
 // Error handling

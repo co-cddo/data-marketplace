@@ -1,4 +1,6 @@
 {% extends "page.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% block content %}
 
@@ -26,13 +28,16 @@
       </ul>
       
       <p><a href="#1" class="govuk-body govuk-body-m govuk-!-margin-bottom-1" >Check questions before you start</a></p>
-      <a href="020-tasks-cat" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
+      {# <a href"/acquirer/{{ resourceID }}/start" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
         Start now
         <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" aria-hidden="true" focusable="false">
           <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z" />
         </svg>
-      </a>
-
+      </a> #}
+      {{ govukButton({
+                text: "Start now",
+                href: '/acquirer/' + resource.identifier + '/start'
+            }) }}
       <br>
       <br>
 

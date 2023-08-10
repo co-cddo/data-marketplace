@@ -1,0 +1,220 @@
+{% extends "page.njk" %}
+{%- from "govuk/components/tag/macro.njk" import govukTag -%}
+
+{% block content %}
+<span class="govuk-caption-l">Request ID: RR523</span>
+<h1 class="govuk-heading-xl">
+  {{ resource.title }}
+</h1>
+
+<h2 class="govuk-heading-s govuk-!-margin-bottom-2">Request incomplete</h2>
+<p class="govuk-body govuk-!-margin-bottom-2">You have completed 0 of 5 sections.</p>
+<p class="govuk-body govuk-!-margin-bottom-7">More sections may be added depending on your answers.</p> 
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-l">Request ID: RR523</span>
+    <h1 class="govuk-heading-xl">
+      {{resource.title}}
+    </h1>
+    <h2 class="app-task-list__section">Request incomplete</h2>
+    <p class="govuk-body govuk-!-margin-bottom-2">You have completed 0 of 5 sections.</p>
+    <p class="govuk-body govuk-!-margin-bottom-7">More sections may be added depending on your answers.</p>
+    <ol class="app-task-list">
+      {# 1. Purpose of the data share section #}
+      <li>
+        <h2 class="app-task-list__section">
+          <span class="app-task-list__section-number">1.</span>Purpose of the data share
+        </h2>
+        <ul class="app-task-list__items">
+          <li class="app-task-list__item">
+            <span class="app-task-list__task-name">
+              <a href="030-what-type-data-cat" aria-describedby="Data type" class="govuk-link">
+                Data type
+              </a>
+            </span>
+            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="">Not started</strong>
+          </li>
+          <li class="app-task-list__item">
+            <span class="app-task-list__task-name">
+              <a href="030-data-subjects-cat" aria-describedby="Data type" class="govuk-link">
+                Data subjects
+              </a>
+            </span>
+            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="">Not started</strong>
+          </li>
+          <li class="app-task-list__item">
+            <span class="app-task-list__task-name">
+              <a href="030-aims-cat" aria-describedby="Data type" class="govuk-link" >
+                Project aims
+              </a>
+            </span>
+            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="">Not started</strong>
+          </li>
+          <li class="app-task-list__item">
+            <span class="app-task-list__task-name">
+              <a href="030-what-data-no-cat" aria-describedby="Data type" class="govuk-link">
+                Data required
+              </a>
+            </span>
+            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="">Not started</strong>
+          </li>
+          <li class="app-task-list__item">
+            <span class="app-task-list__task-name">
+              <a href="030-what-public-benefit-cat" aria-describedby="Data type" class="govuk-link">
+                Benefits
+              </a>
+            </span>
+            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="">Not started</strong>
+          </li>
+          <li class="app-task-list__item">
+            <span class="app-task-list__task-name">
+              <a href="030-others-cat" aria-describedby="Data type" class="govuk-link">
+                Data access
+              </a>
+            </span>
+            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="">Not started</strong>
+          </li>
+          <li class="app-task-list__item">
+            <span class="app-task-list__task-name">
+              <a href="030-how-impact-cat"aria-describedby="Data type" class="govuk-link">
+                Impact if data not given
+              </a>
+            </span>
+            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="">Not started</strong>
+          </li>
+          <li class="app-task-list__item">
+            <span class="app-task-list__task-name">
+              <a href="#" aria-describedby="Data type" class="govuk-link">
+                Date required
+              </a>
+            </span>
+            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="">Not started</strong>
+          </li>
+        </ul>
+      </li>
+      {# 2. Legal power and gateway section #}
+      <li>
+        <h2 class="app-task-list__section">
+        <span class="app-task-list__section-number">2.</span>Legal power and gateway
+        </h2>
+        <ul class="app-task-list__items">
+        <li class="app-task-list__item">
+          <span class="app-task-list__task-name">
+            <a href="030-what-type-data-cat" aria-describedby="" class="govuk-link">
+              Legal power
+            </a>
+          </span>
+          <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="">Not started</strong>
+        </li>
+        <li class="app-task-list__item">
+          <span class="app-task-list__task-name">
+            <a href="030-what-type-data-cat" aria-describedby="" class="govuk-link">
+              Legal gateway
+            </a>
+          </span>
+          <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="">Not started</strong>
+        </li>
+        <li class="app-task-list__item">
+          <span class="app-task-list__task-name">
+            <span>
+              Legal review
+            </span>
+          </span>
+          <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="">Cannot start yet</strong>
+        </li>
+        </ul>
+      </li>
+      {# 3. Data protection section #}
+      <li>
+        <h2 class="app-task-list__section">
+          <span class="app-task-list__section-number">2.</span>Data protection
+          </h2>
+        <ul class="app-task-list__items">
+          <li class="app-task-list__item">
+            <span class="app-task-list__task-name">
+                Lawful basis
+            </span>
+            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="">Cannot start yet</strong>
+          </li>
+          <li class="app-task-list__item">
+            <span class="app-task-list__task-name">
+              <a href="030-geography-cat" aria-describedby="" class="govuk-link">
+                Data travel outside UK
+              </a>
+            </span>
+            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="">Not started</strong>
+          </li>
+          <li class="app-task-list__item">
+            <span class="app-task-list__task-name">
+              <a href="030-role-cat" aria-describedby="" class="govuk-link">
+                Role of organisation
+              </a>
+            </span>
+            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="">Not started</strong>
+          </li>
+          <li class="app-task-list__item">
+            <span class="app-task-list__task-name">
+                Role of organisation
+            </span>
+            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="">Cannot start yet</strong>
+          </li>
+        </ul>
+      </li>
+      {# 4. Data governance, security and technology section #}
+      <li>
+          <h2 class="app-task-list__section">
+          <span class="app-task-list__section-number">2. </span> Legal power and gateway
+          </h2>
+        <ul class="app-task-list__items">
+          <li class="app-task-list__item">
+          <span class="app-task-list__task-name">
+            <a href="030-how-receive-cat" aria-describedby="" class="govuk-link">
+              Data delivery
+            </a>
+          </span>
+            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="">Not started</strong>
+          </li>
+          <li class="app-task-list__item">
+            <span class="app-task-list__task-name">
+              <a href="030-prefered-format-cat" aria-describedby="" class="govuk-link">
+                Data format
+              </a>
+            </span>
+            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="">Not started</strong>
+          </li>
+          <li class="app-task-list__item">
+            <span class="app-task-list__task-name">
+              <a href="030-how-dispose-cat.html" aria-describedby="" class="govuk-link">
+                Disposal of data
+              </a>
+            </span>
+            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="">Not started</strong>
+          </li>
+          <li class="app-task-list__item">
+            <span class="app-task-list__task-name">
+                Data security review
+            </span>
+            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="">Cannot start yet</strong>
+          </li>
+        </ul>
+      </li>  
+      {# 5. Review and send section #}
+            <li>
+            
+              <h2 class="app-task-list__section">
+              <span class="app-task-list__section-number">5. </span> Review and send
+              </h2>
+              <ul class="app-task-list__items">
+            <li class="app-task-list__item">
+              <span class="app-task-list__task-name">
+                  Check answers
+              </span>
+            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="submit-pay-status">Cannot start yet</strong>
+          </li>
+        </ul>
+      </li> 
+    </ol>
+  </div>
+</div>
+{% endblock %}
