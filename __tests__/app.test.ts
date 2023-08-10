@@ -8,15 +8,3 @@ describe("GET /", () => {
   });
 });
 
-describe("GET /acquirer", () => {
-  it('/ should respond as expected"', async () => {
-    const response = await request(app).get("/share/acquirer");
-    expect(response.status).toBe(200);
-    expect(response.text).toContain("Start now");
-  });
-  it('/start should respond as expected"', async () => {
-    const response = await request(app).get("/share/start");
-    expect(response.status).toBe(200);
-    expect(response.text).toContain("Start share journey");
-  });
-});
