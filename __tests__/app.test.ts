@@ -20,4 +20,3 @@ describe("GET /acquirer", () => {
     expect(response.text).toContain("Start share journey");
   });
 });
-
