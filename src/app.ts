@@ -5,6 +5,7 @@ import nunjucks from "nunjucks";
 import helmet from "helmet";
 import homeRoute from "./routes/homeRoute";
 import findRoutes from "./routes/findRoutes";
+import requestRoutes from "./routes/requestRoutes";
 import shareRoutes from "./routes/shareRoutes";
 import cookieRoutes from "./routes/cookieRoutes";
 import loginRoutes from "./routes/loginRoutes";
@@ -115,6 +116,7 @@ app.use("/auth", authRoutes);
 app.use("/", homeRoute);
 app.use("/profile", profileRoutes);
 app.use("/find", findRoutes);
+app.use("/", requestRoutes);
 app.use("/share", shareRoutes);
 app.use("/cookie-settings", cookieRoutes);
 
