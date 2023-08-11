@@ -1,0 +1,66 @@
+
+{% extends "page.njk" %}
+{%- from "govuk/components/tag/macro.njk" import govukTag -%}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <form action="/bMVP_i0--210" method="post">
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset" aria-describedby="contact-hint">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            <span class="govuk-caption-l">
+                Request ID: 
+                </span>
+            <h1 class="govuk-fieldset__heading">
+              Do you have the legal power to request this data?
+            </h1>
+          </legend>
+          <div id="contact-hint" class="govuk-hint">
+            For example, through common law or royal perogative.
+          </div>
+          <div class="govuk-radios" data-module="govuk-radios">
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="haveLegalPower" name="haveLegalPower" type="radio" value="havepower" data-aria-controls="conditional-haveLegalPower">
+              <label class="govuk-label govuk-radios__label" for="haveLegalPower">
+                Yes, we believe we have the legal power to do this
+              </label>
+            </div>
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-haveLegalPower">
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="haveLegalPower-details">
+                  What legal power will you use?
+                </label>
+                <input class="govuk-input govuk-!-width-one-half" id="haveLegalPower-detail" name="haveLegalPower-detail" type="text" spellcheck="false">
+              </div>
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="haveLegalPower-2" name="haveLegalPower" type="radio" value="donthavepower" data-aria-controls="conditional-haveLegalPower-2">
+              <label class="govuk-label govuk-radios__label" for="haveLegalPower-2">
+                No, we don't have the legal power to request this
+              </label>
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="haveLegalPower-3" name="haveLegalPower" type="radio" value="dontknow" data-aria-controls="conditional-haveLegalPower-3">
+              <label class="govuk-label govuk-radios__label" for="haveLegalPower-3">
+                We don't know
+              </label>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      <div class="govuk-button-group">
+        <button class="govuk-button" type="submit" data-module="govuk-button">
+          Save and continue
+        </button>
+        <button class="govuk-button govuk-button--secondary" type="button" data-module="govuk-button">
+          Save and return
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+{% endblock %}

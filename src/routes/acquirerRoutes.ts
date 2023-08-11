@@ -21,7 +21,7 @@ const formdata = [
         { 
           "name": "Legal power and gateway",
           "questions": [
-          { "name": "Legal power", "link": "030-have-legal-power-cat", "descriptionId": "", "status": "Not started" },
+          { "name": "Legal power", "link": "legal-power", "descriptionId": "", "status": "Not started" },
           { "name": "Legal gateway", "link": "030-legal-gateway-belief", "descriptionId": "", "status": "Not started" },
           { "name": "Legal review", "link": "#", "descriptionId": "", "status": "Cannot start yet" },
         ]
@@ -77,5 +77,32 @@ router.get("/:resourceID/start", async (req: Request, res: Response) => {
     res.status(500).send("An error occurred while fetching data from the API");
   }
 });
+
+router.get("/:resourceID/legal-power", async (req: Request, res: Response) => {
+  const backLink = req.headers.referer || "/";
+  const resourceID = req.params.resourceID;
+
+  try {
+    const resource = await fetchResourceById(resourceID);
+    if (!resource) {
+      res.status(404).send("Resource not found");
+      return;
+    }
+    console.log(req.params.page)
+    res.render("../views/partials/aquirer/legal-power-and-gateway/legalPower.njk", {
+      route: req.params.page,
+      heading: "Acquirer Start",
+      backLink: backLink,
+      resource: resource,
+      resourceID: resourceID,
+      formdata: formdata
+    });
+  } catch (error) {
+    console.error("An error occurred while fetching data from the API:", error);
+    res.status(500).send("An error occurred while fetching data from the API");
+  }
+});
+
+
 
 export default router;
