@@ -64,7 +64,7 @@ router.get("/:resourceID/start", async (req: Request, res: Response) => {
       res.status(404).send("Resource not found");
       return;
     }
-    res.render("../views/partials/aquirer/acquirerStart.njk", {
+    res.render("../views/partials/acquirer/acquirerStart.njk", {
       route: req.params.page,
       heading: "Acquirer Start",
       backLink: backLink,
