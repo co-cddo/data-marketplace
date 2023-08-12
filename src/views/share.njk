@@ -1,0 +1,38 @@
+{% extends "page.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">
+         Request {{ resource.title }} data
+      </h1>
+      <p class="govuk-body">You need to answer some questions to make sure your request meets GDPR and data sharing standards.</p>
+      <p class="govuk-body">Your answers will be reviewed by the department that owns the data.</p>
+      <h2 class="govuk-heading-l">
+        Before you start
+      </h2>
+      <p class="govuk-body">Some questions may require support from people with  skills in:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>technology</li>
+        <li>data security</li>
+        <li>data protection</li>
+        <li>legal</li>
+        <li>data governance</li>
+      </ul>
+      <p><a href="#1" class="govuk-body govuk-body-m govuk-!-margin-bottom-1" >Check questions before you start</a></p>
+      {{ govukButton({
+        text: "Start now",
+        href: '/acquirer/' + resource.identifier + '/start'
+      }) }}
+      <br>
+      <br>
+      <h3 class="govuk-heading-m">For more help</h3>
+      <ul class="govuk-list">
+        <li class="govuk-link"><a href="#1">How to set up a data share arrangement in government</a></li>
+      </ul>
+    </div>
+  </div>
+
+{% endblock %}

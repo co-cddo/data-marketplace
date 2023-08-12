@@ -1,0 +1,42 @@
+{% extends "page.njk" %}
+{%- from "govuk/components/tag/macro.njk" import govukTag -%}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-l">Request ID: RR523</span>
+    <h1 class="govuk-heading-xl">
+      {{resource.title}}
+    </h1>
+    <h2 class="app-task-list__section">Request incomplete</h2>
+    <p class="govuk-body govuk-!-margin-bottom-2">You have completed 0 of 5 sections.</p>
+    <p class="govuk-body govuk-!-margin-bottom-7">More sections may be added depending on your answers.</p>
+
+    <ol class="app-task-list">
+      {% for sectionObj in formdata[0].section %}
+        <li>
+          <h2 class="app-task-list__section">
+            <span class="app-task-list__section-number">{{ loop.index }}.</span> {{ sectionObj.name }}
+          </h2>
+          <ul class="app-task-list__items">
+            {% for question in sectionObj.questions %}
+              <li class="app-task-list__item">
+                <span class="app-task-list__task-name">
+                  {% if question.link != "#" %}
+                    <a href="{{ question.link }}" aria-describedby="{{ question.descriptionId }}" class="govuk-link">
+                      {{ question.name }}
+                    </a>
+                  {% else %}
+                    {{ question.name }}
+                  {% endif %}
+                </span>
+                <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="{{ question.descriptionId }}">{{ question.status }}</strong>
+              </li>
+            {% endfor %}
+          </ul>
+        </li>
+      {% endfor %}
+    </ol>
+  </div>
+</div>
+{% endblock %}
