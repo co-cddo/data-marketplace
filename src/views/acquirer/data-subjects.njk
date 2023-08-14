@@ -1,0 +1,30 @@
+{% extends "page.njk" %}
+{%- from "govuk/components/textarea/macro.njk" import govukTextarea -%}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-l">Request ID: {{requestId}}</span>
+      <form action="/acquirer/{{assetId}}/{{stepId}}" method="POST" id="dataTypeForm">
+        {{ govukTextarea({
+                    name: "data-subjects",
+                    id: "data-subjects",
+                    label: {
+                      text: "Who are the data subjects?",
+                      classes: "govuk-label--l",
+                      isPageHeading: true
+                    },
+                    rows: 4,
+                    hint: {
+                      html: "Be as specific as possible. For example, small business owners aged between 45 and 55."
+                    }
+                  }) }}
+        {{ govukButton({
+                    text: "Save and continue"
+                }) }}
+      </form>
+    </div>
+  </div>
+{% endblock %}
