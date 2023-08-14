@@ -1,11 +1,27 @@
+import axios from "axios";
 import request from "supertest";
 import app from "../src/app";
 import { fetchResourceById } from "../src/services/findService";
 import mockData from "./mock/mockData.json";
 
+// Mock axios get function
+jest.mock("axios");
 jest.mock("../src/services/findService");
+const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe("GET /:resourceID/start", () => {
+  beforeEach(() => {
+    // Set up the axios get mock before each test
+    process.env.API_ENDPOINT = "http://mock-test.endpoint.com/test-api";
+    mockedAxios.get.mockResolvedValue({ data: mockData });
+  });
+
+  afterEach(() => {
+    // Clear the mock after each test
+    mockedAxios.get.mockClear();
+    delete process.env.API_ENDPOINT;
+  });
+
   const resourceId = mockData.data[0].identifier;
   const expectedResource = mockData.data.find(resource => resource.identifier === resourceId);
   if (!expectedResource) {
@@ -37,5 +53,14 @@ describe("GET /:resourceID/start", () => {
     const response = await request(app).get(`/acquirer/${resourceId}/start`);
     expect(response.status).toBe(500);
     expect(response.text).toContain("An error occurred while fetching data from the API");
+  });
+
+  // Set up positive test to return the expected resource
+  it("should render datatype page", async () => {
+    (fetchResourceById as jest.Mock).mockResolvedValue(expectedResource);
+    const response = await request(app).get(`/acquirer/${resourceId}/datatype`);
+    expect(response.status).toBe(200);
+    expect(response.text).toContain("What type of data do you need?");
+    expect(response.text).toContain("Save and continue");
   });
 });
