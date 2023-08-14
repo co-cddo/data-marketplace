@@ -3,6 +3,7 @@ import { fetchResourceById } from "../services/findService";
 const router = express.Router();
 import formTemplate from "../models/shareRequestTemplate.json"
 import { randomUUID } from "crypto";
+import { Step } from "../types/express";
 
 function parseJwt(token: string) {
   return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
@@ -17,8 +18,11 @@ const generateFormTemplate = (req: Request, resourceID: string) => {
   template.requestId = randomUUID();
   return template;
 }
+interface RequestBody {
+  [key: string]: string | undefined;
+}
 
-const extractFormData = (stepData: any, body: any) => {
+const extractFormData = (stepData: Step, body: RequestBody ) => {
   // Return something that will get set in the 'value' key of the form step
   // Will need to something different depending on whether the input is a radio button
   //  or text field or checkbox etc.
@@ -33,7 +37,6 @@ const extractFormData = (stepData: any, body: any) => {
   // Other input types can go here
   return
 }
-
 
 router.get("/:resourceID/start", async (req: Request, res: Response) => {
   const backLink = req.headers.referer || "/";
@@ -71,7 +74,7 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   if (!req.session.acquirerForms?.[resourceID]) {
     return res.redirect(`/share/${resourceID}/acquirer`)
   }
-
+  
   const formdata = req.session.acquirerForms[resourceID]
   const stepData = formdata.steps[formStep]
   res.render(`../views/acquirer/${formStep}.njk`, {
@@ -83,16 +86,32 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
 });
 
 router.post("/:resourceID/:step", async (req: Request, res: Response) => {
+  if (!req.session.acquirerForms) {
+    return res.status(400).send("Acquirer forms not found in session");
+  }
+
   const resourceID = req.params.resourceID;
-  const formStep = req.params.step
+  const formStep = req.params.step;
   const formdata = req.session.acquirerForms[resourceID];
   const stepData = formdata.steps[formStep];
 
-  stepData.value = extractFormData(stepData, req.body)
-  stepData.value = req.body['data-type'];
-  stepData.status = "COMPLETED"
+  if (!formdata || !formdata.steps[formStep]) {
+    return res.status(400).send("Form data or step not found");
+  }
 
-  return res.redirect(`/acquirer/${resourceID}/${formdata.steps[formStep].nextStep}`)
+  if (!stepData) {
+    return res.status(400).send("Step data not found");
+  }
+
+  stepData.value = extractFormData(stepData, req.body) || "";
+  stepData.status = "COMPLETED";
+
+  if (formdata.steps[formStep].nextStep) {
+    return res.redirect(`/acquirer/${resourceID}/${formdata.steps[formStep].nextStep}`);
+  } else {
+    // Handle case when nextStep is not defined
+    return res.redirect(`/acquirer/${resourceID}/some-default-route`);
+  }
 });
 
 export default router;

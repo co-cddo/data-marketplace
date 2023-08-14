@@ -47,3 +47,15 @@ describe("GET /:resourceID/start", () => {
     expect(response.text).toContain("Resource not found");
   });
 });
+
+  // Handling case when fetchResourceById throws an error
+  it("should return a 500 status when an error occurs fetching resource data", async () => {
+    (fetchResourceById as jest.Mock).mockRejectedValue(new Error("An error occurred while fetching data from the API"));
+    const spy = jest.spyOn(console, 'error').mockImplementation();
+    const response = await request(app).get(`/acquirer/${resourceId}/start`);
+    expect(response.status).toBe(500);
+    expect(response.text).toContain("An error occurred while fetching data from the API");
+    expect(spy).toHaveBeenCalledWith("An error occurred while fetching data from the API:", expect.any(Error));
+    spy.mockRestore();
+  });
+});
