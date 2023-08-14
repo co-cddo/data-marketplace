@@ -1,0 +1,36 @@
+{% extends "page.njk" %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <form method="post">
+      <div class="govuk-form-group">
+        <h1 class="govuk-label-wrapper">
+          <span class="govuk-caption-l">Request ID: {{requestId}}</span>
+          <label class="govuk-label govuk-label--l" for="data-use-aim">
+            What are the aims of your project?
+          </label>
+        </h1>
+        <!-- <div id="data-use-aim-hint" class="govuk-hint"></div> -->
+      <textarea class="govuk-textarea" value="{{aim}}" id="data-use-aim" name="aims" rows="5" aria-describedby="data-use-aim-hint"></textarea>
+        <h2 class="govuk-label-wrapper">
+          <label class="govuk-label govuk-label--m" for="data-use-aim-achieve">
+            How will the data you want help you achieve this?
+          </label>
+        </h2>
+        <!-- <div id="data-use-aim-achieve-hint" class="govuk-hint"></div> -->
+       <textarea class="govuk-textarea" value="{{explanation}}" id="data-use-aim-achieve" name="explanation" rows="5" aria-describedby="data-use-aim-achieve-hint"></textarea>
+      </div>
+      <div class="govuk-button-group">
+        <button class="govuk-button" type="submit" data-module="govuk-button">
+          Save and continue
+        </button>
+        <button class="govuk-button govuk-button--secondary" type="button" data-module="govuk-button">
+          Save and return
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
