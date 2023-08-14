@@ -46,8 +46,6 @@ describe("GET /:resourceID/start", () => {
     expect(response.status).toBe(404);
     expect(response.text).toContain("Resource not found");
   });
-
-5
 });
 
 describe("GET /:resourceID/datatype", () => {
