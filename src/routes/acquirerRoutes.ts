@@ -89,7 +89,6 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
   const stepData = formdata.steps[formStep];
 
   stepData.value = extractFormData(stepData, req.body)
-  stepData.value = req.body['data-type'];
   stepData.status = "COMPLETED"
 
   return res.redirect(`/acquirer/${resourceID}/${formdata.steps[formStep].nextStep}`)
