@@ -23,22 +23,24 @@ router.get("/:resourceID/start", async (req: Request, res: Response) => {
   const backLink = req.headers.referer || "/";
   const resourceID = req.params.resourceID;
 
-  req.session.acquirerForms = req.session.acquirerForms || {};
-  const formData = req.session.acquirerForms?.[resourceID] || generateFormTemplate(req, resourceID);
   try {
     const resource = await fetchResourceById(resourceID);
     if (!resource) {
       res.status(404).send("Resource not found");
       return;
     }
-    req.session.acquirerForms[resourceID] = formData;
+
+    // Generate a new set of form data if there wasn't one already in the session
+    req.session.acquirerForms = req.session.acquirerForms || {};
+    req.session.acquirerForms[resourceID] = req.session.acquirerForms?.[resourceID] || generateFormTemplate(req, resourceID);
+
     res.render("../views/acquirer/start.njk", {
       route: req.params.page,
       heading: "Acquirer Start",
       backLink: backLink,
       resource: resource,
       resourceID: resourceID,
-      formdata: formData
+      formdata: req.session.acquirerForms[resourceID]
     });
   } catch (error) {
     console.error("An error occurred while fetching data from the API:", error);
