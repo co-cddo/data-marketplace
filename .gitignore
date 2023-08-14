@@ -3,3 +3,4 @@ node_modules
 build/*
 /public/stycssles/
 .env
+.DS_Store
