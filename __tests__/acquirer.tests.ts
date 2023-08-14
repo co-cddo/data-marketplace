@@ -38,4 +38,15 @@ describe("GET /:resourceID/start", () => {
     expect(response.status).toBe(500);
     expect(response.text).toContain("An error occurred while fetching data from the API");
   });
+
+  it("should render legal-power", async () => {
+    (fetchResourceById as jest.Mock).mockResolvedValue(expectedResource);
+    const response = await request(app).get(`/acquirer/${resourceId}/legal-power`);
+    expect(response.status).toBe(200);
+    // We render the question
+    expect(response.text).toContain("legal power");
+    // We render the last option
+    expect(response.text).toContain("We don't know");
+  });
+
 });
