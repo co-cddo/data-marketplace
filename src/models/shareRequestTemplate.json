@@ -55,7 +55,6 @@
       "id": "data-type",
       "name": "Data type",
       "status": "NOT STARTED",
-      "index": null,
       "value": "",
       "nextStep": "data-subjects"
     },

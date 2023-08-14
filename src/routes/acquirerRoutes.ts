@@ -18,6 +18,22 @@ const generateFormTemplate = (req: Request, resourceID: string) => {
   return template;
 }
 
+const extractFormData = (stepData: any, body: any) => {
+  // Return something that will get set in the 'value' key of the form step
+  // Will need to something different depending on whether the input is a radio button
+  //  or text field or checkbox etc.
+
+  // All simple radio button-style forms:
+  // (As long as the radio group has a name the same as the step id)
+  const radioFields = ['data-type', 'data-access'];
+  if (radioFields.includes(stepData.id)) {
+    return body[stepData.id]
+  }
+
+  // Other input types can go here
+  return
+}
+
 
 router.get("/:resourceID/start", async (req: Request, res: Response) => {
   const backLink = req.headers.referer || "/";
@@ -72,7 +88,7 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
   const formdata = req.session.acquirerForms[resourceID];
   const stepData = formdata.steps[formStep];
 
-  // TODO Properly update the form data with the POST-ed values
+  stepData.value = extractFormData(stepData, req.body)
   stepData.value = req.body['data-type'];
   stepData.status = "COMPLETED"
 
