@@ -1,158 +1,39 @@
 import express, { Request, Response } from "express";
 import { fetchResourceById } from "../services/findService";
 const router = express.Router();
+import formTemplate from "../models/shareRequestTemplate.json"
+import { randomUUID } from "crypto";
 
-const formdata = [
-  {
-    section: [
-      {
-        name: "Purpose of the data share section",
-        questions: [
-          {
-            name: "Data type",
-            link: "datatype",
-            descriptionId: "",
-            status: "Not started",
-          },
-          {
-            name: "Data subjects",
-            link: "030-data-subjects-cat",
-            descriptionId: "",
-            status: "Not started",
-          },
-          {
-            name: "Project aims",
-            link: "030-aims-cat",
-            descriptionId: "",
-            status: "Not started",
-          },
-          {
-            name: "Data required",
-            link: "030-what-data-no-cat",
-            descriptionId: "read-declaration-status",
-            status: "Not started",
-          },
-          {
-            name: "Benefits",
-            link: "030-what-public-benefit-cat",
-            descriptionId: "",
-            status: "Not started",
-          },
-          {
-            name: "Data access",
-            link: "030-others-cat",
-            descriptionId: "",
-            status: "Not started",
-          },
-          {
-            name: "Impact if data not given",
-            link: "030-how-impact-cat",
-            descriptionId: "eligibility-status",
-            status: "Not started",
-          },
-          {
-            name: "Date required",
-            link: "030-when-need-cat",
-            descriptionId: "read-declaration-status",
-            status: "Not started",
-          },
-        ],
-      },
-      {
-        name: "Legal power and gateway",
-        questions: [
-          {
-            name: "Legal power",
-            link: "030-have-legal-power-cat",
-            descriptionId: "",
-            status: "Not started",
-          },
-          {
-            name: "Legal gateway",
-            link: "030-legal-gateway-belief",
-            descriptionId: "",
-            status: "Not started",
-          },
-          {
-            name: "Legal review",
-            link: "#",
-            descriptionId: "",
-            status: "Cannot start yet",
-          },
-        ],
-      },
-      {
-        name: "Legal power and gateway",
-        questions: [
-          {
-            name: "Lawful basis",
-            link: "",
-            descriptionId: "",
-            status: "Cannot start yet",
-          },
-          {
-            name: "Data travel outside UK",
-            link: "030-geography-cat",
-            descriptionId: "",
-            status: "Not started",
-          },
-          {
-            name: "Role of organisation",
-            link: "030-role-cat",
-            descriptionId: "",
-            status: "Not started",
-          },
-          {
-            name: "Data protection review",
-            link: "#",
-            descriptionId: "",
-            status: "Cannot start yet",
-          },
-        ],
-      },
-      {
-        name: "Legal power and gateway",
-        questions: [
-          {
-            name: "Data delivery",
-            link: "030-how-receive-cat",
-            descriptionId: "",
-            status: "Not started",
-          },
-          {
-            name: "Data format",
-            link: "030-prefered-format-cat",
-            descriptionId: "",
-            status: "Not started",
-          },
-          {
-            name: "Disposal of data",
-            link: "030-how-dispose-cat.html",
-            descriptionId: "",
-            status: "Not started",
-          },
-          {
-            name: "Data security review",
-            link: "#",
-            descriptionId: "",
-            status: "Cannot start yet",
-          },
-        ],
-      },
-      {
-        name: "Legal power and gateway",
-        questions: [
-          {
-            name: "Check answers",
-            link: "",
-            descriptionId: "submit-pay-status",
-            status: "Cannot start yet",
-          },
-        ],
-      },
-    ],
-  },
-];
+function parseJwt(token: string) {
+  return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+}
+
+const generateFormTemplate = (req: Request, resourceID: string) => {
+  const userInfo = req.user ? parseJwt(req.user.idToken) : null;
+  const username = userInfo ? userInfo.email : 'anonymous';
+  const template = JSON.parse(JSON.stringify(formTemplate));
+  template.ownedBy = username;
+  template.dataAsset = resourceID;
+  template.requestId = randomUUID();
+  return template;
+}
+
+const extractFormData = (stepData: any, body: any) => {
+  // Return something that will get set in the 'value' key of the form step
+  // Will need to something different depending on whether the input is a radio button
+  //  or text field or checkbox etc.
+
+  // All simple radio button-style forms:
+  // (As long as the radio group has a name the same as the step id)
+  const radioFields = ['data-type', 'data-access'];
+  if (radioFields.includes(stepData.id)) {
+    return body[stepData.id]
+  }
+
+  // Other input types can go here
+  return
+}
+
 
 router.get("/:resourceID/start", async (req: Request, res: Response) => {
   const backLink = req.headers.referer || "/";
@@ -164,13 +45,18 @@ router.get("/:resourceID/start", async (req: Request, res: Response) => {
       res.status(404).send("Resource not found");
       return;
     }
-    res.render("../views/partials/acquirer/acquirerStart.njk", {
+
+    // Generate a new set of form data if there wasn't one already in the session
+    req.session.acquirerForms = req.session.acquirerForms || {};
+    req.session.acquirerForms[resourceID] = req.session.acquirerForms?.[resourceID] || generateFormTemplate(req, resourceID);
+
+    res.render("../views/acquirer/start.njk", {
       route: req.params.page,
       heading: "Acquirer Start",
       backLink: backLink,
       resource: resource,
       resourceID: resourceID,
-      formdata: formdata,
+      formdata: req.session.acquirerForms[resourceID]
     });
   } catch (error) {
     console.error("An error occurred while fetching data from the API:", error);
@@ -178,28 +64,35 @@ router.get("/:resourceID/start", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/:resourceID/datatype", async (req: Request, res: Response) => {
-  const backLink = req.headers.referer || "/";
+router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   const resourceID = req.params.resourceID;
+  const formStep = req.params.step
 
-  try {
-    const resource = await fetchResourceById(resourceID);
-    if (!resource) {
-      res.status(404).send("Resource not found");
-      return;
-    }
-   
-    res.render("../views/partials/acquirer/acquirerJourney/datatype.njk", {
-      route: req.params.page,
-      heading: "Acquirer Datatype",
-      backLink: backLink,
-      resource: resource,
-      resourceID: resourceID,
-      formdata: formdata
-    });
-  } catch (error) {
-    console.error("An error occurred while fetching data from the API:", error);
-    res.status(500).send("An error occurred while fetching data from the API");
+  if (!req.session.acquirerForms?.[resourceID]) {
+    return res.redirect(`/share/${resourceID}/acquirer`)
   }
+
+  const formdata = req.session.acquirerForms[resourceID]
+  const stepData = formdata.steps[formStep]
+  res.render(`../views/acquirer/${formStep}.njk`, {
+    requestId: formdata.requestId,
+    assetId: formdata.dataAsset,
+    stepId: formStep,
+    savedValue: stepData.value,
+  })
 });
+
+router.post("/:resourceID/:step", async (req: Request, res: Response) => {
+  const resourceID = req.params.resourceID;
+  const formStep = req.params.step
+  const formdata = req.session.acquirerForms[resourceID];
+  const stepData = formdata.steps[formStep];
+
+  stepData.value = extractFormData(stepData, req.body)
+  stepData.value = req.body['data-type'];
+  stepData.status = "COMPLETED"
+
+  return res.redirect(`/acquirer/${resourceID}/${formdata.steps[formStep].nextStep}`)
+});
+
 export default router;
