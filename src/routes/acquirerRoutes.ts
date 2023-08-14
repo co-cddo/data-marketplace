@@ -188,22 +188,18 @@ router.get("/:resourceID/datatype", async (req: Request, res: Response) => {
       res.status(404).send("Resource not found");
       return;
     }
-    console.log("resourceID", resourceID);
-    
-    res.render(
-      "../views/partials/acquirer/PurposeofDatashareSection/datatype.njk",
-      {
-        route: req.params.page,
-        heading: "Acquirer Datatype",
-        backLink: backLink,
-        resource: resource,
-        resourceID: resourceID,
-      },
-    );
+   
+    res.render("../views/partials/acquirer/acquirerJourney/datatype.njk", {
+      route: req.params.page,
+      heading: "Acquirer Datatype",
+      backLink: backLink,
+      resource: resource,
+      resourceID: resourceID,
+      formdata: formdata
+    });
   } catch (error) {
     console.error("An error occurred while fetching data from the API:", error);
     res.status(500).send("An error occurred while fetching data from the API");
   }
 });
-
 export default router;
