@@ -16,13 +16,20 @@ interface FormData {
   steps: Record<string, Step>;
 }
 
+type StepValue = string | undefined;
+
 interface Step {
   id: string;
   name: string;
   status: string;
-  value: string;
+  value: StepValue;
   nextStep?: string;
   blockedBy?: string[];
+}
+
+interface Section {
+  name: string;
+  steps: string[];
 }
 
 declare module "express-serve-static-core" {
