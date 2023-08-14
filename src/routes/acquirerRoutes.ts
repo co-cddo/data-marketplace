@@ -178,7 +178,7 @@ router.get("/:resourceID/start", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/:resourceID/dataType", async (req: Request, res: Response) => {
+router.get("/:resourceID/datatype", async (req: Request, res: Response) => {
   const backLink = req.headers.referer || "/";
   const resourceID = req.params.resourceID;
 
@@ -191,10 +191,10 @@ router.get("/:resourceID/dataType", async (req: Request, res: Response) => {
     console.log("resourceID", resourceID);
     
     res.render(
-      "../views/partials/acquirer/PurposeofDatashareSection/dataType.njk",
+      "../views/partials/acquirer/PurposeofDatashareSection/datatype.njk",
       {
         route: req.params.page,
-        heading: "Acquirer DataType",
+        heading: "Acquirer Datatype",
         backLink: backLink,
         resource: resource,
         resourceID: resourceID,

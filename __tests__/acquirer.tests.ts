@@ -9,6 +9,7 @@ jest.mock("axios");
 jest.mock("../src/services/findService");
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
+// ACQUIRER overview start tests
 describe("GET /:resourceID/start", () => {
   beforeEach(() => {
     // Set up the axios get mock before each test
@@ -54,13 +55,50 @@ describe("GET /:resourceID/start", () => {
     expect(response.status).toBe(500);
     expect(response.text).toContain("An error occurred while fetching data from the API");
   });
+});
 
-  // Set up positive test to return the expected resource
+// ACQUIRER datatype tests
+describe("GET /:resourceID/datatype", () => {
+  beforeEach(() => {
+    // Set up the axios get mock before each test
+    process.env.API_ENDPOINT = "http://mock-test.endpoint.com/test-api";
+    mockedAxios.get.mockResolvedValue({ data: mockData });
+  });
+
+  afterEach(() => {
+    // Clear the mock after each test
+    mockedAxios.get.mockClear();
+    delete process.env.API_ENDPOINT;
+  });
+
+  const resourceId = mockData.data[0].identifier;
+  const expectedResource = mockData.data.find(resource => resource.identifier === resourceId);
+  if (!expectedResource) {
+    throw new Error("Resource not found in mock data");
+  }
+
+ // Set up positive test to return the expected resource
   it("should render datatype page", async () => {
     (fetchResourceById as jest.Mock).mockResolvedValue(expectedResource);
     const response = await request(app).get(`/acquirer/${resourceId}/datatype`);
     expect(response.status).toBe(200);
     expect(response.text).toContain("What type of data do you need?");
     expect(response.text).toContain("Save and continue");
+  });
+
+  // Handling case when a resource is not found
+  it("should return a 404 status when resource ID does not exist", async () => {
+    (fetchResourceById as jest.Mock).mockResolvedValue(null);
+    const response = await request(app).get(`/acquirer/non-existing-id/datatype`);
+    expect(response.status).toBe(404);
+    expect(response.text).toContain("Resource not found");
+  });
+
+  // Handling case when fetchResourceById throws an error
+  it("should return a 500 status when an error occurs fetching resource data", async () => {
+    (fetchResourceById as jest.Mock).mockRejectedValue(new Error("An error occurred while fetching data from the API"));
+    const response = await request(app).get(`/acquirer/${resourceId}/datatype`);
+    expect(response.status).toBe(500);
+    expect(response.text).toContain("An error occurred while fetching data from the API");
   });
 });
