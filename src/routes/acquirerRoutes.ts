@@ -103,6 +103,13 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
     return res.status(400).send("Step data not found");
   }
 
+  // Check which button was clicked "Save and continue || Save and return"
+  if (req.body.returnButton) {
+    stepData.value = extractFormData(stepData, req.body) || "";
+    stepData.status = "IN PROGRESS";
+    return res.redirect(`/acquirer/${resourceID}/start`);
+  }
+  
   stepData.value = extractFormData(stepData, req.body) || "";
   stepData.status = "COMPLETED";
 
@@ -110,7 +117,7 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
     return res.redirect(`/acquirer/${resourceID}/${formdata.steps[formStep].nextStep}`);
   } else {
     // Handle case when nextStep is not defined
-    return res.redirect(`/acquirer/${resourceID}/some-default-route`);
+    return res.redirect(`/acquirer/${resourceID}/start`);
   }
 });
 

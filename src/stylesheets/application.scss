@@ -9,3 +9,18 @@
 @import "_expander";
 @import "_typography";
 @import "_task-list";
+
+//overrides
+.govuk-list {
+    li > .govuk-link {
+        cursor: pointer;
+        color: $govuk-link-colour;
+        &:hover {
+          color:  $govuk-link-hover-colour;
+          text-decoration: underline;
+          text-underline-offset: .18em;
+          text-decoration-thickness: 0.16em;
+          @include govuk-link-hover-decoration;
+        }
+    }
+}
