@@ -46,9 +46,19 @@
                       }
                   ]
                   }) }}
-        {{ govukButton({
-                    text: "Save and continue"
-                }) }}
+          <div class="govuk-button-group">
+            {{ govukButton({
+                text: "Save and continue",
+                name: "continueButton",
+                value: "continue"
+            }) }}
+            {{ govukButton({
+                text: "Save and return",
+                classes: "govuk-button--secondary",
+                name: "returnButton",
+                value: "return"
+            }) }}
+        </div>
         <h2 class="govuk-heading-m">More information</h2>
         <ul class="govuk-list">
           <li><a class="govuk-link" href="https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/personal-information-what-is-it/what-is-personal-data/what-is-personal-data/" target="_blank">What is personal data? (opens in new tab)</a></li>

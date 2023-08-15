@@ -46,9 +46,8 @@ describe("GET /:resourceID/start", () => {
     expect(response.status).toBe(404);
     expect(response.text).toContain("Resource not found");
   });
-});
-
   // Handling case when fetchResourceById throws an error
+
   it("should return a 500 status when an error occurs fetching resource data", async () => {
     (fetchResourceById as jest.Mock).mockRejectedValue(new Error("An error occurred while fetching data from the API"));
     const spy = jest.spyOn(console, 'error').mockImplementation();
@@ -59,3 +58,4 @@ describe("GET /:resourceID/start", () => {
     spy.mockRestore();
   });
 });
+  
