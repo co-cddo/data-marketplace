@@ -34,16 +34,17 @@ const extractFormData = (stepData: Step, body: RequestBody ) => {
     return body[stepData.id]
   }
 
+  const textFields = ['']; // add step names here if using textarea
+
   if (stepData.id === 'project-aims') {
     return {
       aims: body['aims'] || '',
       explanation: body['explanation'] || ''
     };
-  }
-
-  const textFields = ['project-aims'];
-  if (textFields.includes(stepData.id)) {
+  } else {
+    if (textFields.includes(stepData.id)) {
       return body[stepData.id]
+    } 
   }
 
   // Other input types can go here
@@ -90,13 +91,11 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   const formdata = req.session.acquirerForms[resourceID]
   const stepData = formdata.steps[formStep]
 
-  const formDataValues = stepData.value || {};
   res.render(`../views/acquirer/${formStep}.njk`, {
     requestId: formdata.requestId,
     assetId: formdata.dataAsset,
     stepId: formStep,
-    savedValue: stepData.value,
-    formDataValues
+    savedValue: stepData.value || {},
   })
 });
 
@@ -124,7 +123,7 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
     stepData.status = "IN PROGRESS";
     return res.redirect(`/acquirer/${resourceID}/start`);
   }
-  
+
   stepData.value = extractFormData(stepData, req.body) || "";
   stepData.status = "COMPLETED";
 

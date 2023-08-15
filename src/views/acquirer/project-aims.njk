@@ -18,7 +18,7 @@
           text: "Request ID: " + requestId
         },
         rows: 5,
-        value: formDataValues.aims
+        value: savedValue.aims
       }) }}
       {{ govukTextarea({
         name: "explanation",
@@ -28,7 +28,7 @@
           classes: "govuk-label--m"
         },
         rows: 5,
-        value: formDataValues.explanation
+        value: savedValue.explanation
       }) }}
       <div class="govuk-button-group">
         {{ govukButton({
