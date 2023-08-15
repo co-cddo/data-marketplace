@@ -2,7 +2,6 @@ import request from "supertest";
 import app from "../src/app";
 import { fetchResourceById } from "../src/services/findService";
 import mockData from "./mock/mockData.json";
-import exp from "constants";
 
 
 jest.mock("../src/services/findService");
