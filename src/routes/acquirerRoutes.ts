@@ -89,45 +89,22 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   
   const formdata = req.session.acquirerForms[resourceID]
   const stepData = formdata.steps[formStep]
+
+  const formDataValues = stepData.value || {};
   res.render(`../views/acquirer/${formStep}.njk`, {
     requestId: formdata.requestId,
     assetId: formdata.dataAsset,
     stepId: formStep,
     savedValue: stepData.value,
+    formDataValues
   })
 });
-  
-  router.post("/:resourceID/:step", async (req: Request, res: Response) => {
-    if (!req.session.acquirerForms) {
-      return res.status(400).send("Acquirer forms not found in session");
-    }
-  
-    const resourceID = req.params.resourceID;
-    const formStep = req.params.step;
-    const formdata = req.session.acquirerForms[resourceID];
-    const stepData = formdata.steps[formStep];
 
-    if (!formdata || !formdata.steps[formStep]) {
-      return res.status(400).send("Form data or step not found");
-    }
+router.post("/:resourceID/:step", async (req: Request, res: Response) => {
+  if (!req.session.acquirerForms) {
+    return res.status(400).send("Acquirer forms not found in session");
+  }
   
-    if (!stepData) {
-      return res.status(400).send("Step data not found");
-    }
-  
-    stepData.value = extractFormData(stepData, req.body) || "";
-    stepData.status = "COMPLETED";
-  
-    console.log("Updated stepData:", stepData);
-  
-    if (formdata.steps[formStep].nextStep) {
-      return res.redirect(`/acquirer/${resourceID}/${formdata.steps[formStep].nextStep}`);
-    } else {
-      // Handle case when nextStep is not defined
-      return res.redirect(`/acquirer/${resourceID}/some-default-route`);
-    }
-  });
-
   const resourceID = req.params.resourceID;
   const formStep = req.params.step;
   const formdata = req.session.acquirerForms[resourceID];
