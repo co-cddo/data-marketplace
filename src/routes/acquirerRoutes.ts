@@ -34,6 +34,19 @@ const extractFormData = (stepData: Step, body: RequestBody ) => {
     return body[stepData.id]
   }
 
+  const textFields = ['']; // add step names here if using textarea
+
+  if (stepData.id === 'project-aims') {
+    return {
+      aims: body['aims'] || '',
+      explanation: body['explanation'] || ''
+    };
+  } else {
+    if (textFields.includes(stepData.id)) {
+      return body[stepData.id]
+    } 
+  }
+
   // Other input types can go here
   return
 }
@@ -77,11 +90,12 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   
   const formdata = req.session.acquirerForms[resourceID]
   const stepData = formdata.steps[formStep]
+
   res.render(`../views/acquirer/${formStep}.njk`, {
     requestId: formdata.requestId,
     assetId: formdata.dataAsset,
     stepId: formStep,
-    savedValue: stepData.value,
+    savedValue: stepData.value || {},
   })
 });
 
@@ -89,7 +103,7 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
   if (!req.session.acquirerForms) {
     return res.status(400).send("Acquirer forms not found in session");
   }
-
+  
   const resourceID = req.params.resourceID;
   const formStep = req.params.step;
   const formdata = req.session.acquirerForms[resourceID];
@@ -109,7 +123,7 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
     stepData.status = "IN PROGRESS";
     return res.redirect(`/acquirer/${resourceID}/start`);
   }
-  
+
   stepData.value = extractFormData(stepData, req.body) || "";
   stepData.status = "COMPLETED";
 

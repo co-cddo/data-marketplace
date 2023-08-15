@@ -16,7 +16,7 @@ interface FormData {
   steps: Record<string, Step>;
 }
 
-type StepValue = string | undefined;
+type StepValue = string | ProjectAimStep;
 
 interface Step {
   id: string;
@@ -26,6 +26,13 @@ interface Step {
   nextStep?: string;
   blockedBy?: string[];
 }
+
+type ProjectAimStep = { 
+  aims: string; 
+  explanation: string;
+}
+
+type StepValue = string | ProjectAimStep;
 
 interface Section {
   name: string;
