@@ -7,6 +7,31 @@ interface UserData {
   idToken: string;
 }
 
+interface FormData {
+  requestId: string;
+  dataAsset: string;
+  ownedBy: string;
+  status: string;
+  sections: Record<string, Section>;
+  steps: Record<string, Step>;
+}
+
+type StepValue = string | undefined;
+
+interface Step {
+  id: string;
+  name: string;
+  status: string;
+  value: StepValue;
+  nextStep?: string;
+  blockedBy?: string[];
+}
+
+interface Section {
+  name: string;
+  steps: string[];
+}
+
 declare module "express-serve-static-core" {
   interface Request {
     user: UserData;
@@ -15,6 +40,6 @@ declare module "express-serve-static-core" {
 
 declare module "express-session" {
   interface SessionData {
-    acquirerForms?: any
+    acquirerForms?: Record<string, FormData>;
   }
 }
