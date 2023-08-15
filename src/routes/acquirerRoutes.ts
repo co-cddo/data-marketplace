@@ -105,9 +105,11 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
 
   // Check which button was clicked "Save and continue || Save and return"
   if (req.body.returnButton) {
+    stepData.value = extractFormData(stepData, req.body) || "";
     stepData.status = "IN PROGRESS";
     return res.redirect(`/acquirer/${resourceID}/start`);
   }
+  
   stepData.value = extractFormData(stepData, req.body) || "";
   stepData.status = "COMPLETED";
 
