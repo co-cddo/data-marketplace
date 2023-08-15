@@ -34,9 +34,7 @@ const extractFormData = (stepData: Step, body: RequestBody ) => {
     return body[stepData.id]
   }
 
-  let textFields = ['']; // add step names here if using textarea
-
-  if (stepData.id === 'data-subjects') textFields = ['data-subjects']
+  const textFields = ['data-subjects']; // add step names here if using textarea
 
   if (stepData.id === 'project-aims') {
     return {
