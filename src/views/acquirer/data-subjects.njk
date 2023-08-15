@@ -1,51 +1,40 @@
 {% extends "page.njk" %}
-{%- from "govuk/components/tag/macro.njk" import govukTag -%}
+{%- from "govuk/components/textarea/macro.njk" import govukTextarea -%}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% block content %}
-
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <form action="030-aims-cat" method="post">
-      <div class="govuk-form-group">
-        <h1 class="govuk-label-wrapper">
-          <span class="govuk-caption-l">Request ID: {{requestId}}</span>
-          <label class="govuk-label govuk-label--l" for="data-subject">
-            Who are the data subjects?
-          </label>
-        </h1>
-        <div id="data-subject-hint" class="govuk-hint">
-          Be as specific as possible. For example, small business owners aged between 45 and 55.
-        </div>
-        <details class="govuk-details" data-module="govuk-details">
-          <summary class="govuk-details__summary">
-            <span class="govuk-details__summary-text">
-              Data subject definition and examples
-            </span>
-          </summary>
-          <div class="govuk-details__text">
-            <p>Data subjects are the people whose data you are requesting.</p> 
-
-            <p>For example:</p>
-            <ul class="govuk-list govuk-list--bullet">
-              <li>Small business owners aged between 45 and 55.</li>
-              <li>All people using Universal Credit with children.</li>
-            </ul>
-            <p>Data subjects should be specific to the purpose of your data request.</p>
-          </div>
-        </details>
-        <textarea class="govuk-textarea" id="data-subject" name="data-subject" rows="5" aria-describedby=""></textarea>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-l">Request ID: {{requestId}}</span>
+      <form action="/acquirer/{{assetId}}/{{stepId}}" method="POST" id="dataTypeForm">
+        {{ govukTextarea({
+                    name: "data-subjects",
+                    id: "data-subjects",
+                    label: {
+                      text: "Who are the data subjects?",
+                      classes: "govuk-label--l",
+                      isPageHeading: true
+                    },
+                    rows: 4,
+                    hint: {
+                      html: "Be as specific as possible. For example, small business owners aged between 45 and 55."
+                    }
+                  }) }}
+        <div class="govuk-button-group">
+        {{ govukButton({
+            text: "Save and continue",
+            name: "continueButton",
+            value: "continue"
+        }) }}
+        {{ govukButton({
+            text: "Save and return",
+            classes: "govuk-button--secondary",
+            name: "returnButton",
+            value: "return"
+        }) }}
       </div>
-      <div class="govuk-button-group">
-        <button class="govuk-button" type="submit" data-module="govuk-button">
-          Save and continue
-        </button>
-        <button class="govuk-button govuk-button--secondary" type="button" data-module="govuk-button">
-          Save and return
-        </button>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
-</div>
-
-
 {% endblock %}
