@@ -128,4 +128,35 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
     }
   });
 
+  const resourceID = req.params.resourceID;
+  const formStep = req.params.step;
+  const formdata = req.session.acquirerForms[resourceID];
+  const stepData = formdata.steps[formStep];
+
+  if (!formdata || !formdata.steps[formStep]) {
+    return res.status(400).send("Form data or step not found");
+  }
+
+  if (!stepData) {
+    return res.status(400).send("Step data not found");
+  }
+
+  // Check which button was clicked "Save and continue || Save and return"
+  if (req.body.returnButton) {
+    stepData.value = extractFormData(stepData, req.body) || "";
+    stepData.status = "IN PROGRESS";
+    return res.redirect(`/acquirer/${resourceID}/start`);
+  }
+  
+  stepData.value = extractFormData(stepData, req.body) || "";
+  stepData.status = "COMPLETED";
+
+  if (formdata.steps[formStep].nextStep) {
+    return res.redirect(`/acquirer/${resourceID}/${formdata.steps[formStep].nextStep}`);
+  } else {
+    // Handle case when nextStep is not defined
+    return res.redirect(`/acquirer/${resourceID}/start`);
+  }
+});
+
 export default router;
