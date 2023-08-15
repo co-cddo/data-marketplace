@@ -12,13 +12,15 @@
 
 //overrides
 .govuk-list {
-    cursor: pointer;
-    color: $govuk-link-colour;
-   
-    .govuk-link:hover {
-      text-decoration: underline;
-      text-underline-offset: .18em;
-      text-decoration-thickness: 0.16em;
-      @include govuk-link-hover-decoration;
+    li > .govuk-link {
+        cursor: pointer;
+        color: $govuk-link-colour;
+        &:hover {
+          color:  $govuk-link-hover-colour;
+          text-decoration: underline;
+          text-underline-offset: .18em;
+          text-decoration-thickness: 0.16em;
+          @include govuk-link-hover-decoration;
+        }
     }
 }
