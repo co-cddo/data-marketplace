@@ -34,7 +34,9 @@ const extractFormData = (stepData: Step, body: RequestBody ) => {
     return body[stepData.id]
   }
 
-  const textFields = ['']; // add step names here if using textarea
+  let textFields = ['']; // add step names here if using textarea
+
+  if (stepData.id === 'data-subjects') textFields = ['data-subjects']
 
   if (stepData.id === 'project-aims') {
     return {
@@ -109,6 +111,7 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
   const formdata = req.session.acquirerForms[resourceID];
   const stepData = formdata.steps[formStep];
 
+
   if (!formdata || !formdata.steps[formStep]) {
     return res.status(400).send("Form data or step not found");
   }
@@ -126,6 +129,7 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
 
   stepData.value = extractFormData(stepData, req.body) || "";
   stepData.status = "COMPLETED";
+
 
   if (formdata.steps[formStep].nextStep) {
     return res.redirect(`/acquirer/${resourceID}/${formdata.steps[formStep].nextStep}`);
