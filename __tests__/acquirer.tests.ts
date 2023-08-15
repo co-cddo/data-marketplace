@@ -2,6 +2,8 @@ import request from "supertest";
 import app from "../src/app";
 import { fetchResourceById } from "../src/services/findService";
 import mockData from "./mock/mockData.json";
+import exp from "constants";
+
 
 jest.mock("../src/services/findService");
 
@@ -38,4 +40,23 @@ describe("GET /:resourceID/start", () => {
     expect(response.status).toBe(500);
     expect(response.text).toContain("An error occurred while fetching data from the API");
   });
+
 });
+
+describe("GET//:resourceID/:steps", () => {
+
+  const resourceId = mockData.data[0].identifier;
+  const expectedResource = mockData.data.find(resource => resource.identifier === resourceId);
+  if (!expectedResource) {
+    throw new Error("Resource not found in mock data");
+  }
+    // Handling data-subjects
+    it("should return a 302 status when select data-subjects", async () => {
+
+      const response = await request(app).get(`/acquirer/${resourceId}/data-subjects`)
+      expect(response.status).toBe(302);
+      expect(response.header.location).toBe('/share/fcbc4d3f-0c05-4857-b0h7-eeec6bfcd3a1/acquirer')
+
+    });
+    
+  });
