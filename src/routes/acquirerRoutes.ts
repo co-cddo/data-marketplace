@@ -59,6 +59,25 @@ const extractFormData = (stepData: Step, body: RequestBody ) => {
   return
 }
 
+function isValidDate(day: string, month: string, year: string): boolean {
+  
+  // If all fields are empty, consider it valid since the date is optional
+  if (!day && !month && !year) return true;
+
+  // Ensure day, month, year are numbers
+  if (isNaN(Number(day)) || isNaN(Number(month)) || isNaN(Number(year))) return false;
+
+  const d = Number(day);
+  const m = Number(month) - 1; // Month is 0-indexed (0 for January, 11 for December)
+  const y = Number(year);
+
+  // Use the Date object to create a date
+  const date = new Date(y, m, d);
+
+  // Validate if the created date matches the input values
+  return date && date.getMonth() === m && date.getDate() === d && date.getFullYear() === y;
+}
+
 router.get("/:resourceID/start", async (req: Request, res: Response) => {
   const backLink = req.headers.referer || "/";
   const resourceID = req.params.resourceID;
@@ -129,6 +148,16 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
   if (!stepData) {
     return res.status(400).send("Step data not found");
   }
+
+  const { day, month, year } = req.body;
+
+    if(!isValidDate(day, month, year)) {
+        res.render(`../views/acquirer/${formStep}.njk`, {
+            errorMessage: "Please enter a valid date."
+            // could add specific input field validation messages e.g: Please enter value Year
+        });
+      return;
+    }
 
   // Check which button was clicked "Save and continue || Save and return"
   if (req.body.returnButton) {
