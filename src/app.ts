@@ -1,15 +1,27 @@
 import express, { NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
+dotenv.config();
 import nunjucks from "nunjucks";
 import helmet from "helmet";
 import homeRoute from "./routes/homeRoute";
 import findRoutes from "./routes/findRoutes";
 import shareRoutes from "./routes/shareRoutes";
 import cookieRoutes from "./routes/cookieRoutes";
+import loginRoutes from "./routes/loginRoutes";
+import authRoutes from "./routes/authRoutes";
+import profileRoutes from "./routes/profileRoutes";
 import path from "path";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
+import session from "express-session";
 import { handleCookies } from "./middleware/cookieMiddleware";
+import passport from "passport";
+import {
+  loadJwtFromCookie,
+  oAuthStrategy,
+  JwtStrategy,
+  modifyApplicationMiddleware,
+} from "./middleware/authMiddleware";
 
 export const app = express();
 // Set up security headers with Helmet
@@ -25,8 +37,10 @@ app.use(
     },
   }),
 );
+app.use(cookieParser());
 
-// Set static folder middleware
+app.use(loadJwtFromCookie);
+
 app.use(
   "/assets",
   express.static(
@@ -34,9 +48,34 @@ app.use(
   ),
 );
 
-app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+const oneDay = 1000 * 60 * 60 * 24;
+app.use(
+  session({
+    secret: "super-secretoken",
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: oneDay },
+  }),
+);
+
+passport.use("custom-sso", oAuthStrategy);
+passport.use(JwtStrategy);
+
+// Initialize Passport and session middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Serialize user into the session
+passport.serializeUser((user: Express.User, done) => {
+  done(null, user);
+});
+
+// Deserialize user from the session
+passport.deserializeUser((user: Express.User, done) => {
+  done(null, user);
+});
 
 app.use(express.static("public"));
 
@@ -63,11 +102,18 @@ env.addFilter("formatDate", function (date: string | number | Date) {
   };
   return new Date(date).toLocaleDateString("en-GB", options);
 });
+
 // Set Nunjucks as the Express view engine
 app.set("view engine", "njk");
 
-// Routes
+app.use((req, res, next) => {
+  modifyApplicationMiddleware(req, res, next);
+});
+
+app.use("/", loginRoutes);
+app.use("/auth", authRoutes);
 app.use("/", homeRoute);
+app.use("/profile", profileRoutes);
 app.use("/find", findRoutes);
 app.use("/share", shareRoutes);
 app.use("/cookie-settings", cookieRoutes);
