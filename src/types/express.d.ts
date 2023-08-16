@@ -17,7 +17,7 @@ interface FormData {
   steps: Record<string, Step>;
 }
 
-type StepValue = string | ProjectAimStep;
+type StepValue = string | ProjectAimStep | DateStep;
 
 interface Step {
   id: string;
@@ -33,7 +33,11 @@ type ProjectAimStep = {
   explanation: string;
 }
 
-type StepValue = string | ProjectAimStep;
+type DateStep = {
+  day?: string | null;
+  month?: string | null;
+  year?: string | null;
+}
 
 interface Section {
   name: string;

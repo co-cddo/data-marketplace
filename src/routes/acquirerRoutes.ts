@@ -27,7 +27,7 @@ const extractFormData = (stepData: Step, body: RequestBody ) => {
   // Return something that will get set in the 'value' key of the form step
   // Will need to something different depending on whether the input is a radio button
   //  or text field or checkbox etc.
-
+  console.log("Function inputs:", stepData, body);
   // All simple radio button-style forms:
   // (As long as the radio group has a name the same as the step id)
   const radioFields = ['data-type', 'data-access'];
@@ -48,6 +48,13 @@ const extractFormData = (stepData: Step, body: RequestBody ) => {
     } 
   }
 
+  if (stepData.id === 'date') {
+    return {
+      day: body.day || null,
+      month: body.month || null,
+      year: body.year || null
+    };
+}
   // Other input types can go here
   return
 }
@@ -132,6 +139,7 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
 
   stepData.value = extractFormData(stepData, req.body) || "";
   stepData.status = "COMPLETED";
+  
 
   if (formdata.steps[formStep].nextStep) {
     return res.redirect(`/acquirer/${resourceID}/${formdata.steps[formStep].nextStep}`);
