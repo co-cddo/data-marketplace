@@ -27,7 +27,6 @@ const extractFormData = (stepData: Step, body: RequestBody ) => {
   // Return something that will get set in the 'value' key of the form step
   // Will need to something different depending on whether the input is a radio button
   //  or text field or checkbox etc.
-  console.log("Function inputs:", stepData, body);
   // All simple radio button-style forms:
   // (As long as the radio group has a name the same as the step id)
   const radioFields = ['data-type', 'data-access'];
@@ -60,7 +59,6 @@ const extractFormData = (stepData: Step, body: RequestBody ) => {
 }
 
 function isValidDate(day: string, month: string, year: string): boolean {
-  
   // If all fields are empty, consider it valid since the date is optional
   if (!day && !month && !year) return true;
 
@@ -70,7 +68,6 @@ function isValidDate(day: string, month: string, year: string): boolean {
   const d = Number(day);
   const m = Number(month) - 1; // Month is 0-indexed (0 for January, 11 for December)
   const y = Number(year);
-
   // Use the Date object to create a date
   const date = new Date(y, m, d);
 
@@ -85,7 +82,6 @@ router.get("/:resourceID/start", async (req: Request, res: Response) => {
   try {
     const resource = await fetchResourceById(resourceID);
    
-
     if (!resource) {
       res.status(404).send("Resource not found");
       return;
@@ -154,7 +150,7 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
     if(!isValidDate(day, month, year)) {
         res.render(`../views/acquirer/${formStep}.njk`, {
             errorMessage: "Please enter a valid date."
-            // could add specific input field validation messages e.g: Please enter value Year
+            // could add specific input field validation messages e.g: "Please enter valid Year"
         });
       return;
     }
@@ -169,7 +165,6 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
   stepData.value = extractFormData(stepData, req.body) || "";
   stepData.status = "COMPLETED";
   
-
   if (formdata.steps[formStep].nextStep) {
     return res.redirect(`/acquirer/${resourceID}/${formdata.steps[formStep].nextStep}`);
   } else {
