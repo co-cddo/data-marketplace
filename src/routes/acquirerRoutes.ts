@@ -9,13 +9,14 @@ function parseJwt(token: string) {
   return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
 }
 
-const generateFormTemplate = (req: Request, resourceID: string) => {
+const generateFormTemplate = (req: Request, resourceID: string, assetTitle: string) => {
   const userInfo = req.user ? parseJwt(req.user.idToken) : null;
   const username = userInfo ? userInfo.email : 'anonymous';
   const template = JSON.parse(JSON.stringify(formTemplate));
   template.ownedBy = username;
   template.dataAsset = resourceID;
   template.requestId = randomUUID();
+  template.assetTitle = assetTitle;
   return template;
 }
 interface RequestBody {
@@ -34,7 +35,7 @@ const extractFormData = (stepData: Step, body: RequestBody ) => {
     return body[stepData.id]
   }
 
-  const textFields = ['']; // add step names here if using textarea
+  const textFields = ['data-required']; // add step names here if using textarea
 
   if (stepData.id === 'project-aims') {
     return {
@@ -57,20 +58,23 @@ router.get("/:resourceID/start", async (req: Request, res: Response) => {
 
   try {
     const resource = await fetchResourceById(resourceID);
+   
+
     if (!resource) {
       res.status(404).send("Resource not found");
       return;
     }
-
+    const assetTitle = resource.title;
     // Generate a new set of form data if there wasn't one already in the session
     req.session.acquirerForms = req.session.acquirerForms || {};
-    req.session.acquirerForms[resourceID] = req.session.acquirerForms?.[resourceID] || generateFormTemplate(req, resourceID);
+    req.session.acquirerForms[resourceID] = req.session.acquirerForms?.[resourceID] || generateFormTemplate(req, resourceID, assetTitle);
 
     res.render("../views/acquirer/start.njk", {
       route: req.params.page,
       heading: "Acquirer Start",
       backLink: backLink,
       resource: resource,
+      assetTitle,
       resourceID: resourceID,
       formdata: req.session.acquirerForms[resourceID]
     });
@@ -90,12 +94,14 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   
   const formdata = req.session.acquirerForms[resourceID]
   const stepData = formdata.steps[formStep]
+  const assetTitle = formdata.assetTitle
 
   res.render(`../views/acquirer/${formStep}.njk`, {
     requestId: formdata.requestId,
     assetId: formdata.dataAsset,
+    assetTitle,
     stepId: formStep,
-    savedValue: stepData.value || {},
+    savedValue: stepData.value,
   })
 });
 

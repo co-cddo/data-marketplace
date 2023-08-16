@@ -9,6 +9,7 @@ interface UserData {
 
 interface FormData {
   requestId: string;
+  assetTitle: string;
   dataAsset: string;
   ownedBy: string;
   status: string;
