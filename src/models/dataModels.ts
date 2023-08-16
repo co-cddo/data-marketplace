@@ -62,4 +62,3 @@ export interface ApiResponse {
 export interface SingleApiResponse {
   asset: CatalogueItem; // Not an array
 }
-

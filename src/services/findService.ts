@@ -1,4 +1,3 @@
-
 import axios from "axios";
 import {
   SingleApiResponse,
@@ -67,8 +66,7 @@ export async function fetchResourceById(
   }
 
   const response = await axios.get<SingleApiResponse>(apiUrl as string);
-
-  const resource: CatalogueItem = response.data.asset;  // Extract from 'asset' property
+  const resource = response.data.asset;
 
   if (!resource) {
     throw new Error("Resource not found.");
