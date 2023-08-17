@@ -9,18 +9,15 @@
       <span class="govuk-caption-l">Request ID: {{requestId}}</span>
       <form action="/acquirer/{{assetId}}/{{stepId}}" method="POST" id="dataTypeForm">
         {{ govukTextarea({
-                    name: "data-subjects",
-                    id: "data-subjects",
+                    name: "impact",
+                    id: "impact",
                     label: {
-                      text: "Who are the data subjects?",
+                      text: "How will it impact your project if you don't get this data?",
                       classes: "govuk-label--l",
                       isPageHeading: true
                     },
-                    rows: 4,
-                    value: savedValue,
-                    hint: {
-                      html: "Be as specific as possible. For example, small business owners aged between 45 and 55."
-                    }
+                    rows: 5,
+                    value: savedValue
                   }) }}
         <div class="govuk-button-group">
         {{ govukButton({
