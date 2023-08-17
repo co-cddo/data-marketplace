@@ -79,27 +79,6 @@ const validateRequestBody = (step: string, body: RequestBody): string => {
   let errorMessage = "";
 
   switch (step) {
-    case "data-type": {
-      break;
-    }
-    case "data-subjects": {
-      break;
-    }
-    case "project-aims": {
-      break;
-    }
-    case "data-required": {
-      break;
-    }
-    case "benefits": {
-      break;
-    }
-    case "data-access": {
-      break;
-    }
-    case "impact": {
-      break;
-    }
     case "date": {
       const dateStep: DateStep = body as DateStep;
       errorMessage = validateDate(
@@ -109,15 +88,15 @@ const validateRequestBody = (step: string, body: RequestBody): string => {
       );
       break;
     }
-    
+
     default:
-      errorMessage = "Invalid step.";
+      errorMessage = "";
   }
 
   return errorMessage;
 };
 
-const extractFormData = (stepData: Step, body: RequestBody ) => {
+const extractFormData = (stepData: Step, body: RequestBody) => {
   // Return something that will get set in the 'value' key of the form step
   // Will need to something different depending on whether the input is a radio button
   //  or text field or checkbox etc.
@@ -139,11 +118,10 @@ const extractFormData = (stepData: Step, body: RequestBody ) => {
   } else {
     if (textFields.includes(stepData.id)) {
       return body[stepData.id]
-    } 
+    }
   }
 
   if (stepData.id === 'date') {
-    console.log("date fucntion body", stepData, body)
     return {
       day: body.day || null,
       month: body.month || null,

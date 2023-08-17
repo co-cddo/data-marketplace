@@ -68,6 +68,7 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
     assetTitle,
     stepId: formStep,
     savedValue: stepData.value,
+    errorMessage: stepData.errorMessage
   })
 
 });
@@ -76,12 +77,13 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
   if (!req.session.acquirerForms) {
     return res.status(400).send("Acquirer forms not found in session");
   }
-  
+
   const resourceID = req.params.resourceID;
   const formStep = req.params.step;
   const formdata = req.session.acquirerForms[resourceID];
   const stepData = formdata.steps[formStep];
   const errorMessage = validateRequestBody(formStep, req.body);
+  stepData.errorMessage = errorMessage;
 
   if (!formdata || !formdata.steps[formStep]) {
     return res.status(400).send("Form data or step not found");
@@ -92,9 +94,7 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
   }
 
   if (errorMessage) {
-    return res.render(`../views/acquirer/${formStep}.njk`, {
-      errorMessage: errorMessage
-    });
+    return res.redirect(`/acquirer/${resourceID}/${formStep}`)
   }
 
   // Check which button was clicked "Save and continue || Save and return"
@@ -106,7 +106,7 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
 
   stepData.value = extractFormData(stepData, req.body) || "";
   stepData.status = "COMPLETED";
-  
+
   if (formdata.steps[formStep].nextStep) {
     return res.redirect(`/acquirer/${resourceID}/${formdata.steps[formStep].nextStep}`);
   } else {
