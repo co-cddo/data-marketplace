@@ -1,0 +1,214 @@
+
+{% extends "page.njk" %}
+{%- from "govuk/components/textarea/macro.njk" import govukTextarea -%}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-l">Request ID: {{requestId}}</span>
+      <form method="POST" id="benefitsForm">
+        {% set publicBenefit1Html %}
+            {{ govukTextarea({
+            id: "decision-making",
+            name: "decision-making",
+            label: {
+    text: "How will your project do this?"
+  },
+            value: savedValue['decision-making']['explanation']
+            }) }}
+        {% endset -%}
+
+        {% set publicBenefit2Html %}
+            {{ govukTextarea({
+            id: "service-delivery",
+            name: "service-delivery",
+            label: {
+            text: "How will your project do this?"
+            },
+            value: savedValue['service-delivery']['explanation']
+            }) }}
+        {% endset -%}
+
+        {% set publicBenefit3Html %}
+            {{ govukTextarea({
+            id: "benefit-people",
+            name: "benefit-people",
+            label: {
+            text: "How will your project do this?"
+            },
+            value: savedValue['benefit-people']['explanation']
+            }) }}
+        {% endset -%}
+
+        {% set publicBenefit4Html %}
+            {{ govukTextarea({
+            id: "allocate-and-evaluate-funding",
+            name: "allocate-and-evaluate-funding",
+            label: {
+            text: "How will your project do this?"
+            },
+            value: savedValue['allocate-and-evaluate-funding']['explanation']
+            }) }}
+        {% endset -%}
+
+        {% set publicBenefit5Html %}
+            {{ govukTextarea({
+            id: "social-economic-trends",
+            name: "social-economic-trends",
+            label: {
+            text: "How will your project do this?"
+            },
+            value: savedValue['social-economic-trends']['explanation']
+            }) }}
+        {% endset -%}
+
+
+        {% set publicBenefit6Html %}
+            {{ govukTextarea({
+            id: "needs-of-the-public",
+            name: "needs-of-the-public",
+            label: {
+            text: "How will your project do this?"
+            },
+            value: savedValue['needs-of-the-public']['explanation']
+            }) }}
+        {% endset -%}
+
+         {% set publicBenefit7Html %}
+            {{ govukTextarea({
+            id: "statistical-information",
+            name: "statistical-information",
+            label: {
+            text: "How will your project do this?"
+            },
+            value: savedValue['statistical-information']['explanation']
+            }) }}
+        {% endset -%}
+
+        {% set publicBenefit8Html %}
+            {{ govukTextarea({
+            id: "existing-research-or-statistics",
+            name: "existing-research-or-statistics",
+            label: {
+            text: "How will your project do this?"
+            },
+            value: savedValue['existing-research-or-statistics']['explanation']
+            }) }}
+        {% endset -%}
+
+         {% set publicBenefit9Html %}
+            {{ govukTextarea({
+            id: "something-else",
+            name: "something-else",
+            label: {
+            text: "How will your project do this?"
+            },
+            value: savedValue['something-else']['explanation']
+            }) }}
+        {% endset -%}
+        {{ govukCheckboxes({
+            name: "benefits",
+            fieldset: {
+                legend: {
+                text: "What public benefit will your project provide?",
+                isPageHeading: true,
+                classes: "govuk-fieldset__legend--l"
+                }
+            },
+            hint: {
+                text: "Select all relevant options."
+            },
+            items: [
+                {
+                value: "decision-making",
+                text: "Evidence for public policy decision-making",
+                checked: savedValue['decision-making']['checked'],
+                conditional: {
+                    html: publicBenefit1Html
+                }
+                },
+                 {
+                value: "service-delivery",
+                text: "Evidence for public service delivery",
+                checked: savedValue['service-delivery']['checked'],
+                conditional: {
+                    html: publicBenefit2Html
+                }
+                },
+                 {
+                value: "benefit-people",
+                text: "Evidence for decisions which are likely to benefit people in the UK",
+                checked: savedValue['benefit-people']['checked'],
+                conditional: {
+                    html: publicBenefit3Html
+                }
+                },
+                {
+                value: "allocate-and-evaluate-funding",
+                text: "Evidence for decisions about how to allocate and evaluate funding",
+                checked: savedValue['allocate-and-evaluate-funding']['checked'],
+                conditional: {
+                    html: publicBenefit4Html
+                }
+                },
+                {
+                value: "social-economic-trends",
+                text: "Help understand social or economic trends",
+                checked: savedValue['social-economic-trends']['checked'],
+                conditional: {
+                    html: publicBenefit5Html
+                }
+                },
+                 {
+                value: "needs-of-the-public",
+                text: "Help understand the needs of the public",
+                checked: savedValue['needs-of-the-public']['checked'],
+                conditional: {
+                    html: publicBenefit6Html
+                }
+                },
+                 {
+                value: "statistical-information",
+                text: "Improve existing statistical information",
+                checked: savedValue['statistical-information']['checked'],
+                conditional: {
+                    html: publicBenefit7Html
+                }
+                },
+                {
+                value: "existing-research-or-statistics",
+                text: "Challenge or validate existing research or statistics",
+                checked: savedValue['existing-research-or-statistics']['checked'],
+                conditional: {
+                    html: publicBenefit8Html
+                }
+                },
+                {
+                value: "something-else",
+                text: "Something else",
+                checked: savedValue['something-else']['checked'],
+                conditional: {
+                    html: publicBenefit9Html
+                }
+                }
+                  ]
+                  }) }}
+          <div class="govuk-button-group">
+            {{ govukButton({
+                text: "Save and continue",
+                name: "continueButton",
+                value: "continue"
+            }) }}
+            {{ govukButton({
+                text: "Save and return",
+                classes: "govuk-button--secondary",
+                name: "returnButton",
+                value: "return"
+            }) }}
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

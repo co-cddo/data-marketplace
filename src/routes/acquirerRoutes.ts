@@ -29,8 +29,9 @@ const extractFormData = (stepData: Step, body: RequestBody ) => {
   //  or text field or checkbox etc.
 
   // All simple radio button-style forms:
-  // (As long as the radio group has a name the same as the step id)
-  const radioFields = ['data-type', 'data-access'];  
+  // (As long as the radio group has a name the same as the step id
+
+  const radioFields = ['data-type', 'data-access'];
   if (radioFields.includes(stepData.id)) {
     return body[stepData.id]
   }
@@ -46,6 +47,21 @@ const extractFormData = (stepData: Step, body: RequestBody ) => {
     if (textFields.includes(stepData.id)) {
       return body[stepData.id]
     } 
+  }
+
+  if(stepData.id === 'benefits') {
+    return {
+      'decision-making': {explanation: body['decision-making'], checked: body['benefits']?.includes('decision-making') },
+      'service-delivery': {explanation: body['service-delivery'], checked: body['benefits']?.includes('service-delivery')},
+      'benefit-people': {explanation: body['benefit-people'], checked: body['benefits']?.includes('benefit-people')},
+      'allocate-and-evaluate-funding': {explanation: body['allocate-and-evaluate-funding'], checked: body['benefits']?.includes('allocate-and-evaluate-funding')},
+      'social-economic-trends': {explanation: body['social-economic-trends'], checked: body['benefits']?.includes('social-economic-trends')},
+      'needs-of-the-public': {explanation: body['needs-of-the-public'], checked: body['benefits']?.includes('needs-of-the-public')},
+      'statistical-information': {explanation: body['statistical-information'], checked: body['benefits']?.includes('statistical-information')},
+      'existing-research-or-statistics': {explanation: body['existing-research-or-statistics'], checked: body['benefits']?.includes('existing-research-or-statistics')},
+      'something-else': {explanation: body['something-else'], checked: body['benefits']?.includes('something-else')},
+    }
+    
   }
 
   // Other input types can go here
@@ -103,6 +119,7 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
     stepId: formStep,
     savedValue: stepData.value || {},
   })
+
 });
 
 router.post("/:resourceID/:step", async (req: Request, res: Response) => {
