@@ -16,6 +16,25 @@ interface FormData {
   steps: Record<string, Step>;
 }
 
+interface Benefits {
+  explanation?: string | undefined;
+  checked?: boolean | undefined
+}
+
+type ProjectAimStep = { 
+  aims?: string; 
+  explanation?: string;
+  'decision-making'?: Benefits | undefined;
+  'service-delivery'?: Benefits | undefined;
+  'benefit-people'?: Benefits | undefined;
+  'allocate-and-evaluate-funding'?: Benefits | undefined;
+  'social-economic-trends'?: Benefits | undefined;
+  'needs-of-the-public'?: Benefits | undefined;
+  'statistical-information'?: Benefits | undefined;
+  'existing-research-or-statistics'?: Benefits | undefined;
+  'something-else'?: Benefits | undefined;
+}
+
 type StepValue = string | ProjectAimStep;
 
 interface Step {
@@ -26,13 +45,6 @@ interface Step {
   nextStep?: string;
   blockedBy?: string[];
 }
-
-type ProjectAimStep = { 
-  aims: string; 
-  explanation: string;
-}
-
-type StepValue = string | ProjectAimStep;
 
 interface Section {
   name: string;
