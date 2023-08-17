@@ -36,7 +36,7 @@ const extractFormData = (stepData: Step, body: RequestBody ) => {
     return body[stepData.id]
   }
 
-  const textFields = ['data-subjects', 'data-required']; // add step names here if using textarea
+  const textFields = ['data-subjects', 'data-required', 'impact']; // add step names here if using textarea
 
   if (stepData.id === 'project-aims') {
     return {
@@ -61,7 +61,6 @@ const extractFormData = (stepData: Step, body: RequestBody ) => {
       'existing-research-or-statistics': {explanation: body['existing-research-or-statistics'], checked: body['benefits']?.includes('existing-research-or-statistics')},
       'something-else': {explanation: body['something-else'], checked: body['benefits']?.includes('something-else')},
     }
-    
   }
 
   // Other input types can go here
@@ -75,7 +74,6 @@ router.get("/:resourceID/start", async (req: Request, res: Response) => {
   try {
     const resource = await fetchResourceById(resourceID);
    
-
     if (!resource) {
       res.status(404).send("Resource not found");
       return;

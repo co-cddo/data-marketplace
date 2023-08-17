@@ -1,0 +1,38 @@
+{% extends "page.njk" %}
+{%- from "govuk/components/textarea/macro.njk" import govukTextarea -%}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-l">Request ID: {{requestId}}</span>
+      <form action="/acquirer/{{assetId}}/{{stepId}}" method="POST" id="dataTypeForm">
+        {{ govukTextarea({
+                    name: "impact",
+                    id: "impact",
+                    label: {
+                      text: "How will it impact your project if you don't get this data?",
+                      classes: "govuk-label--l",
+                      isPageHeading: true
+                    },
+                    rows: 5,
+                    value: savedValue
+                  }) }}
+        <div class="govuk-button-group">
+        {{ govukButton({
+            text: "Save and continue",
+            name: "continueButton",
+            value: "continue"
+        }) }}
+        {{ govukButton({
+            text: "Save and return",
+            classes: "govuk-button--secondary",
+            name: "returnButton",
+            value: "return"
+        }) }}
+      </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
