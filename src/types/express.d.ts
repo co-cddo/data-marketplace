@@ -22,9 +22,7 @@ interface Benefits {
   checked?: boolean | undefined
 }
 
-type ProjectAimStep = { 
-  aims?: string; 
-  explanation?: string;
+type BenefitsStep = {
   'decision-making'?: Benefits | undefined;
   'service-delivery'?: Benefits | undefined;
   'benefit-people'?: Benefits | undefined;
@@ -36,7 +34,12 @@ type ProjectAimStep = {
   'something-else'?: Benefits | undefined;
 }
 
-type StepValue = string | ProjectAimStep;
+type ProjectAimStep = { 
+  aims: string; 
+  explanation: string;
+}
+
+type StepValue = string | ProjectAimStep | BenefitsStep;
 
 interface Step {
   id: string;
