@@ -17,7 +17,29 @@ interface FormData {
   steps: Record<string, Step>;
 }
 
-type StepValue = string | ProjectAimStep | DateStep;
+interface Benefits {
+  explanation?: string;
+  checked?: boolean
+}
+
+type BenefitsStep = {
+  'decision-making'?: Benefits;
+  'service-delivery'?: Benefits;
+  'benefit-people'?: Benefits;
+  'allocate-and-evaluate-funding'?: Benefits;
+  'social-economic-trends'?: Benefits;
+  'needs-of-the-public'?: Benefits;
+  'statistical-information'?: Benefits;
+  'existing-research-or-statistics'?: Benefits;
+  'something-else'?: Benefits;
+}
+
+type ProjectAimStep = { 
+  aims: string; 
+  explanation: string;
+}
+
+type StepValue = string | ProjectAimStep | BenefitsStep;
 
 interface Step {
   id: string;
