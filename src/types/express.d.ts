@@ -22,6 +22,10 @@ interface Benefits {
   checked?: boolean
 }
 
+export interface RequestBody {
+  [key: string]: string | undefined;
+}
+
 type BenefitsStep = {
   'decision-making'?: Benefits;
   'service-delivery'?: Benefits;
@@ -48,6 +52,17 @@ interface Step {
   value: StepValue;
   nextStep?: string;
   blockedBy?: string[];
+}
+
+type ProjectAimStep = { 
+  aims: string; 
+  explanation: string;
+}
+
+type DateStep = {
+  day?: number | null;
+  month?: number | null;
+  year?: number | null;
 }
 
 interface Section {

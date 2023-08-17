@@ -1,0 +1,66 @@
+{% extends "page.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form method="post">
+        <h1 class="govuk-heading-l">
+          <span class="govuk-caption-l">Request ID: {{requestId}}</span>
+          <label class="govuk-label govuk-label--l" for="more-detail">
+            What's the latest date you need this data? (optional)
+          </label>
+        </h1>
+        <p class="govuk-body">
+          Providing a date can help prioritise requests. Unreasonable dates may be rejected.
+        </p>
+        <div class="govuk-row">
+        {{ govukDateInput({
+            id: "date",
+            name: "date",
+            fieldset: {
+                legend: {
+                    text: "Enter date",
+                    isPageHeading: true,
+                    classes: "govuk-fieldset__legend--m"
+                }
+            },
+            hint: {
+                text: "For example, 02 03 2024"
+            },
+            errorMessage: {
+                text: errorMessage
+            },
+            items: [{
+                name: "day",
+                value: savedValue.day,
+                classes: "govuk-input--width-2"
+            }, {
+                name: "month",
+                value: savedValue.month,
+                classes: "govuk-input--width-2"
+            }, {
+                name: "year",
+                value: savedValue.year,
+                classes: "govuk-input--width-4"
+            }]
+        }) }}
+        </div>
+        <div class="govuk-button-group">
+          {{ govukButton({
+            text: "Save and continue",
+            name: "continueButton",
+            value: "continue"
+          }) }}
+          {{ govukButton({
+            text: "Save and return",
+            classes: "govuk-button--secondary",
+            name: "returnButton",
+            value: "return"
+          }) }}
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
