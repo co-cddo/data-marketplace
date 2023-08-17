@@ -79,6 +79,27 @@ const validateRequestBody = (step: string, body: RequestBody): string => {
   let errorMessage = "";
 
   switch (step) {
+    case "data-type": {
+      break;
+    }
+    case "data-subjects": {
+      break;
+    }
+    case "project-aims": {
+      break;
+    }
+    case "data-required": {
+      break;
+    }
+    case "benefits": {
+      break;
+    }
+    case "data-access": {
+      break;
+    }
+    case "impact": {
+      break;
+    }
     case "date": {
       const dateStep: DateStep = body as DateStep;
       errorMessage = validateDate(
@@ -88,6 +109,7 @@ const validateRequestBody = (step: string, body: RequestBody): string => {
       );
       break;
     }
+    
     default:
       errorMessage = "Invalid step.";
   }
@@ -107,7 +129,7 @@ const extractFormData = (stepData: Step, body: RequestBody ) => {
     return body[stepData.id]
   }
 
-  const textFields = ['data-required']; // add step names here if using textarea
+  const textFields = ['impact','data-subjects','data-required']; // add step names here if using textarea
 
   if (stepData.id === 'project-aims') {
     return {
