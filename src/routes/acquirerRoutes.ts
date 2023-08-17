@@ -25,7 +25,7 @@ router.get("/:resourceID/start", async (req: Request, res: Response) => {
 
   try {
     const resource = await fetchResourceById(resourceID);
-   
+
     if (!resource) {
       res.status(404).send("Resource not found");
       return;
@@ -57,7 +57,7 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   if (!req.session.acquirerForms?.[resourceID]) {
     return res.redirect(`/share/${resourceID}/acquirer`)
   }
-  
+
   const formdata = req.session.acquirerForms[resourceID]
   const stepData = formdata.steps[formStep]
   const assetTitle = formdata.assetTitle
@@ -83,7 +83,6 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
   const formdata = req.session.acquirerForms[resourceID];
   const stepData = formdata.steps[formStep];
   const errorMessage = validateRequestBody(formStep, req.body);
-  stepData.errorMessage = errorMessage;
 
   if (!formdata || !formdata.steps[formStep]) {
     return res.status(400).send("Form data or step not found");
@@ -93,18 +92,19 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
     return res.status(400).send("Step data not found");
   }
 
+  stepData.errorMessage = errorMessage;
+  stepData.value = extractFormData(stepData, req.body) || "";
+
   if (errorMessage) {
     return res.redirect(`/acquirer/${resourceID}/${formStep}`)
   }
 
   // Check which button was clicked "Save and continue || Save and return"
   if (req.body.returnButton) {
-    stepData.value = extractFormData(stepData, req.body) || "";
     stepData.status = "IN PROGRESS";
     return res.redirect(`/acquirer/${resourceID}/start`);
   }
 
-  stepData.value = extractFormData(stepData, req.body) || "";
   stepData.status = "COMPLETED";
 
   if (formdata.steps[formStep].nextStep) {
