@@ -1,6 +1,9 @@
 import express, { NextFunction, Request, Response } from "express";
 const router = express.Router();
 import { authenticateJWT } from "../middleware/authMiddleware";
+import axios from "axios";
+
+const URL = `${process.env.API_ENDPOINT}/user`
 
 router.get(
   "/",
@@ -9,6 +12,9 @@ router.get(
     if (!req.isAuthenticated()) {
       return res.redirect("/error");
     }
+
+    console.log(req.user);
+    const response = await axios.put(URL, { token: JSON.stringify(req.user) })
     res.render("profile.njk", {
       heading: "Authed",
       user: req.user,
