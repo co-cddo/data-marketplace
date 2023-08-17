@@ -18,20 +18,20 @@ interface FormData {
 }
 
 interface Benefits {
-  explanation?: string | undefined;
-  checked?: boolean | undefined
+  explanation?: string;
+  checked?: boolean
 }
 
 type BenefitsStep = {
-  'decision-making'?: Benefits | undefined;
-  'service-delivery'?: Benefits | undefined;
-  'benefit-people'?: Benefits | undefined;
-  'allocate-and-evaluate-funding'?: Benefits | undefined;
-  'social-economic-trends'?: Benefits | undefined;
-  'needs-of-the-public'?: Benefits | undefined;
-  'statistical-information'?: Benefits | undefined;
-  'existing-research-or-statistics'?: Benefits | undefined;
-  'something-else'?: Benefits | undefined;
+  'decision-making'?: Benefits;
+  'service-delivery'?: Benefits;
+  'benefit-people'?: Benefits;
+  'allocate-and-evaluate-funding'?: Benefits;
+  'social-economic-trends'?: Benefits;
+  'needs-of-the-public'?: Benefits;
+  'statistical-information'?: Benefits;
+  'existing-research-or-statistics'?: Benefits;
+  'something-else'?: Benefits;
 }
 
 type ProjectAimStep = { 
