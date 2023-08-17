@@ -56,5 +56,24 @@ describe("GET /:resourceID/start", () => {
     expect(spy).toHaveBeenCalledWith("An error occurred while fetching data from the API:", expect.any(Error));
     spy.mockRestore();
   });
+
 });
+
+describe("GET//:resourceID/:steps", () => {
+
+  const resourceId = mockData.data[0].identifier;
+  const expectedResource = mockData.data.find(resource => resource.identifier === resourceId);
+  if (!expectedResource) {
+    throw new Error("Resource not found in mock data");
+  }
+    // Handling data-subjects
+    it("should return a 302 status when select data-subjects", async () => {
+
+      const response = await request(app).get(`/acquirer/${resourceId}/data-subjects`)
+      expect(response.status).toBe(302);
+      expect(response.header.location).toBe('/share/fcbc4d3f-0c05-4857-b0h7-eeec6bfcd3a1/acquirer')
+
+    });
+    
+  });
   
