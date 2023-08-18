@@ -3,7 +3,10 @@ import { fetchResourceById } from "../services/findService";
 const router = express.Router();
 import formTemplate from "../models/shareRequestTemplate.json";
 import { randomUUID } from "crypto";
-import { extractFormData, validateRequestBody } from "../helperFunctions/helperFunctions";
+import {
+  extractFormData,
+  validateRequestBody,
+} from "../helperFunctions/helperFunctions";
 import { FormData } from "../types/express";
 function parseJwt(token: string) {
   return JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
@@ -33,17 +36,17 @@ const skipThisStep = (step: string, formdata: FormData) => {
   switch (step) {
     case "data-subjects": {
       // Skip data-subjects if the data-type is "none" i.e. anonymised
-      return (formdata.steps['data-type'].value === "none")
+      return formdata.steps["data-type"].value === "none";
     }
     case "other-orgs": {
       // Skip other-orgs if the answer to data-access was "no"
-      return (formdata.steps['data-access'].value === "no")
+      return formdata.steps["data-access"].value === "no";
     }
     default: {
-      return false
+      return false;
     }
   }
-}
+};
 
 router.get("/:resourceID/start", async (req: Request, res: Response) => {
   const backLink = req.headers.referer || "/";
@@ -91,8 +94,8 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   const assetTitle = formdata.assetTitle;
 
   if (skipThisStep(formStep, formdata)) {
-    stepData.skipped = true
-    return res.redirect(`/acquirer/${resourceID}/${stepData.nextStep}`)
+    stepData.skipped = true;
+    return res.redirect(`/acquirer/${resourceID}/${stepData.nextStep}`);
   }
 
   res.render(`../views/acquirer/${formStep}.njk`, {
