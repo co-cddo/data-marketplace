@@ -5,21 +5,21 @@
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 
 {% block content %}
-  <div class="govuk-grid-row">
+<div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <span class="govuk-caption-l">Request ID: {{requestId}}</span>
-      <form method="POST" id="legalGatewayForm">
-
+    <span class="govuk-caption-l">Request ID: {{requestId}}</span>
+        <form method="POST" id="legalGatewayForm">
+        
         {% set legalGatewayDecision1 %}
         {{ govukTextarea({
             id: "yes-decision",
             name: "yes-decision",
             type: "text",
             classes: "govuk-!-width-two-third",
-        label: {
-            text: "What is the legal gateway for acquiring this data?"
-        },
-        value: savedValue['yes-decision']['explanation']
+            label: {
+                text: "What is the legal gateway for acquiring this data?"
+            },
+            value: savedValue['yes-decision']['explanation']
         }) }}
         {% endset -%}
 
@@ -29,10 +29,10 @@
             name: "other-decision",
             type: "text",
             classes: "govuk-!-width-two-third",
-        label: {
-            text: "What other legal grounds do you have for acquiring this data?"
-        },
-        value: savedValue['other-decision']['explanation']
+            label: {
+                text: "What other legal grounds do you have for acquiring this data?"
+            },
+            value: savedValue['other-decision']['explanation']
         }) }}
         {% endset -%}
 
@@ -46,7 +46,7 @@
         }) }}
         {% endset -%}
 
-       {{ govukRadios({
+        {{ govukRadios({
         name: "legal-gateway",
         fieldset: {
             legend: {
@@ -80,8 +80,7 @@
                 html: textHtml
             }
             }
-        ]
-        }) }}
+        ]}) }}
 
         <div class="govuk-button-group">
         {{ govukButton({
@@ -95,25 +94,25 @@
             name: "returnButton",
             value: "return"
         }) }}
-      </div>
+        </div>
 
-      {% set detailsContent %}
+        {% set detailsContent %}
         <p>Legal gateways allow specified public authorities to share data with each other.</p>
         <p>Some gateways enable the sharing of personal data, while others allow the sharing of non-identifying data.</p>
         <p>Disclosing information through a legal gateway is often outlined in jointly agreed documents, for example in:</p>
         <ul>
-        <li>a memorandum of understanding (MOU)</li>
-        <li>a protocol</li>
-        <li>a partnership agreement</li>
-        <li>a statement of practice</li>
-        <li>a code of practice</li>
-    </ul>
-{% endset %}
-      {{ govukDetails({
-        summaryText: "What is a legal gateway?",
-        text: detailsContent  | safe
+            <li>a memorandum of understanding (MOU)</li>
+            <li>a protocol</li>
+            <li>a partnership agreement</li>
+            <li>a statement of practice</li>
+            <li>a code of practice</li>
+        </ul>
+        {% endset %}
+        {{ govukDetails({
+            summaryText: "What is a legal gateway?",
+            text: detailsContent  | safe
         }) }}
-      </form>
+        </form>
     </div>
-  </div>
+</div>
 {% endblock %}
