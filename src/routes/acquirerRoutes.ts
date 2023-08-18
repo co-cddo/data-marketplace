@@ -31,6 +31,10 @@ const skipThisStep = (step: string, formdata: FormData) => {
       // Skip data-subjects if the data-type is "none" i.e. anonymised
       return (formdata.steps['data-type'].value === "none")
     }
+    case "other-orgs": {
+      // Skip other-orgs if the answer to data-access was "no"
+      return (formdata.steps['data-access'].value === "no")
+    }
     default: {
       return false
     }
