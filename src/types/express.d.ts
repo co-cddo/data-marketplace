@@ -38,8 +38,8 @@ type BenefitsStep = {
   'something-else'?: Benefits;
 }
 
-type ProjectAimStep = { 
-  aims: string; 
+type ProjectAimStep = {
+  aims: string;
   explanation: string;
 }
 
@@ -53,6 +53,7 @@ interface Step {
   nextStep?: string;
   blockedBy?: string[];
   errorMessage?: string;
+  skipped?: boolean
 }
 
 type DateStep = {

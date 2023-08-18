@@ -4,6 +4,7 @@ const router = express.Router();
 import formTemplate from "../models/shareRequestTemplate.json"
 import { randomUUID } from "crypto";
 import { extractFormData, validateRequestBody } from "../helperFunctions/helperFunctions";
+import { FormData, Step } from "../types/express";
 function parseJwt(token: string) {
   return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
 }
@@ -17,6 +18,20 @@ const generateFormTemplate = (req: Request, resourceID: string, assetTitle: stri
   template.requestId = randomUUID();
   template.assetTitle = assetTitle;
   return template;
+}
+
+const skipThisStep = (step: string, formdata: FormData) => {
+  // Decide whether to skip the current step based on answers in previous steps
+  // Returns false by default.
+  switch (step) {
+    case "data-subjects": {
+      // Skip data-subjects if the data-type is "none" i.e. anonymised
+      return (formdata.steps['data-type'].value === "none")
+    }
+    default: {
+      return false
+    }
+  }
 }
 
 router.get("/:resourceID/start", async (req: Request, res: Response) => {
@@ -61,6 +76,11 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   const formdata = req.session.acquirerForms[resourceID]
   const stepData = formdata.steps[formStep]
   const assetTitle = formdata.assetTitle
+
+  if (skipThisStep(formStep, formdata)) {
+    stepData.skipped = true
+    return res.redirect(`/acquirer/${resourceID}/${stepData.nextStep}`)
+  }
 
   res.render(`../views/acquirer/${formStep}.njk`, {
     requestId: formdata.requestId,
