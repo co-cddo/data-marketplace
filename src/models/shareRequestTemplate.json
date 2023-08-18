@@ -125,7 +125,7 @@
       "id": "basis",
       "name": "Lawful basis",
       "status": "NOT STARTED",
-      "value": "",
+      "value": [],
       "nextStep": "data-travel"
     },
     "data-travel": {
