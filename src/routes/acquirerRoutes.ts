@@ -2,14 +2,12 @@ import express, { Request, Response } from "express";
 import { fetchResourceById } from "../services/findService";
 const router = express.Router();
 import formTemplate from "../models/shareRequestTemplate.json";
-import formTemplate from "../models/shareRequestTemplate.json";
 import { randomUUID } from "crypto";
 import {
   extractFormData,
   validateRequestBody,
 } from "../helperFunctions/helperFunctions";
 function parseJwt(token: string) {
-  return JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
   return JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
 }
 
@@ -18,13 +16,7 @@ const generateFormTemplate = (
   resourceID: string,
   assetTitle: string,
 ) => {
-const generateFormTemplate = (
-  req: Request,
-  resourceID: string,
-  assetTitle: string,
-) => {
   const userInfo = req.user ? parseJwt(req.user.idToken) : null;
-  const username = userInfo ? userInfo.email : "anonymous";
   const username = userInfo ? userInfo.email : "anonymous";
   const template = JSON.parse(JSON.stringify(formTemplate));
   template.ownedBy = username;
@@ -40,7 +32,6 @@ router.get("/:resourceID/start", async (req: Request, res: Response) => {
 
   try {
     const resource = await fetchResourceById(resourceID);
-
 
     if (!resource) {
       res.status(404).send("Resource not found");
