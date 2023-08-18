@@ -65,6 +65,12 @@ function validateDate(day: number, month: number, year: number): string {
     if (errors.has("invalid_day") && errors.has("invalid_month")) {
       return "Day and month are invalid.";
     }
+    if (errors.has("invalid_day") && errors.has("invalid_year")) {
+      return "Day and year are invalid.";
+    }
+    if (errors.has("invalid_month") && errors.has("invalid_year")) {
+      return "Month and year are invalid.";
+    }
     if (errors.has("invalid_day")) {
       return "Day is invalid.";
     }
