@@ -2,10 +2,14 @@ import express, { Request, Response } from "express";
 import { fetchResourceById } from "../services/findService";
 const router = express.Router();
 import formTemplate from "../models/shareRequestTemplate.json";
+import formTemplate from "../models/shareRequestTemplate.json";
 import { randomUUID } from "crypto";
-import { Step } from "../types/express";
-
+import {
+  extractFormData,
+  validateRequestBody,
+} from "../helperFunctions/helperFunctions";
 function parseJwt(token: string) {
+  return JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
   return JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
 }
 
@@ -14,7 +18,13 @@ const generateFormTemplate = (
   resourceID: string,
   assetTitle: string,
 ) => {
+const generateFormTemplate = (
+  req: Request,
+  resourceID: string,
+  assetTitle: string,
+) => {
   const userInfo = req.user ? parseJwt(req.user.idToken) : null;
+  const username = userInfo ? userInfo.email : "anonymous";
   const username = userInfo ? userInfo.email : "anonymous";
   const template = JSON.parse(JSON.stringify(formTemplate));
   template.ownedBy = username;
@@ -23,93 +33,6 @@ const generateFormTemplate = (
   template.assetTitle = assetTitle;
   return template;
 };
-interface RequestBody {
-  [key: string]: string | undefined;
-}
-
-const extractFormData = (stepData: Step, body: RequestBody) => {
-  // Return something that will get set in the 'value' key of the form step
-  // Will need to something different depending on whether the input is a radio button
-  //  or text field or checkbox etc.
-
-  // All simple radio button-style forms:
-  // (As long as the radio group has a name the same as the step id
-
-  const radioFields = ["data-type", "data-access", "legal-power"];
-  if (radioFields.includes(stepData.id)) {
-    return body[stepData.id];
-  }
-
-  const textFields = [
-    "data-subjects",
-    "data-required",
-    "impact",
-    "legal-power-textarea",
-  ]; // add step names here if using textarea
-
-  if (stepData.id === "project-aims") {
-    return {
-      aims: body["aims"] || "",
-      explanation: body["explanation"] || "",
-    };
-  } else {
-    if (textFields.includes(stepData.id)) {
-      return body[stepData.id];
-    }
-  }
-
-  if (stepData.id === "benefits") {
-    return {
-      "decision-making": {
-        explanation: body["decision-making"],
-        checked: body["benefits"]?.includes("decision-making"),
-      },
-      "service-delivery": {
-        explanation: body["service-delivery"],
-        checked: body["benefits"]?.includes("service-delivery"),
-      },
-      "benefit-people": {
-        explanation: body["benefit-people"],
-        checked: body["benefits"]?.includes("benefit-people"),
-      },
-      "allocate-and-evaluate-funding": {
-        explanation: body["allocate-and-evaluate-funding"],
-        checked: body["benefits"]?.includes("allocate-and-evaluate-funding"),
-      },
-      "social-economic-trends": {
-        explanation: body["social-economic-trends"],
-        checked: body["benefits"]?.includes("social-economic-trends"),
-      },
-      "needs-of-the-public": {
-        explanation: body["needs-of-the-public"],
-        checked: body["benefits"]?.includes("needs-of-the-public"),
-      },
-      "statistical-information": {
-        explanation: body["statistical-information"],
-        checked: body["benefits"]?.includes("statistical-information"),
-      },
-      "existing-research-or-statistics": {
-        explanation: body["existing-research-or-statistics"],
-        checked: body["benefits"]?.includes("existing-research-or-statistics"),
-      },
-      "something-else": {
-        explanation: body["something-else"],
-        checked: body["benefits"]?.includes("something-else"),
-      },
-    };
-  }
-
-  if (stepData.id === "legal-power") {
-    return {
-      "legal-power-textarea": {
-        explanation: body["legal-power-textarea"],
-        checked: body["legal-power"]?.includes("legal-power-textarea"),
-      },
-    };
-  }
-  // Other input types can go here
-  return;
-};
 
 router.get("/:resourceID/start", async (req: Request, res: Response) => {
   const backLink = req.headers.referer || "/";
@@ -117,6 +40,7 @@ router.get("/:resourceID/start", async (req: Request, res: Response) => {
 
   try {
     const resource = await fetchResourceById(resourceID);
+
 
     if (!resource) {
       res.status(404).send("Resource not found");
@@ -162,6 +86,7 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
     assetTitle,
     stepId: formStep,
     savedValue: stepData.value,
+    errorMessage: stepData.errorMessage,
   });
 });
 
@@ -174,6 +99,7 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
   const formStep = req.params.step;
   const formdata = req.session.acquirerForms[resourceID];
   const stepData = formdata.steps[formStep];
+  const errorMessage = validateRequestBody(formStep, req.body);
 
   if (!formdata || !formdata.steps[formStep]) {
     return res.status(400).send("Form data or step not found");
@@ -183,14 +109,19 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
     return res.status(400).send("Step data not found");
   }
 
+  stepData.errorMessage = errorMessage;
+  stepData.value = extractFormData(stepData, req.body) || "";
+
+  if (errorMessage) {
+    return res.redirect(`/acquirer/${resourceID}/${formStep}`);
+  }
+
   // Check which button was clicked "Save and continue || Save and return"
   if (req.body.returnButton) {
-    stepData.value = extractFormData(stepData, req.body) || "";
     stepData.status = "IN PROGRESS";
     return res.redirect(`/acquirer/${resourceID}/start`);
   }
 
-  stepData.value = extractFormData(stepData, req.body) || "";
   stepData.status = "COMPLETED";
 
   if (formdata.steps[formStep].nextStep) {

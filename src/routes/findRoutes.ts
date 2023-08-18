@@ -74,7 +74,6 @@ router.get("/:resourceID", async (req: Request, res: Response) => {
   const backLink = req.headers.referer || "/";
   const resourceID = req.params.resourceID;
   const resource = await fetchResourceById(resourceID);
-
   res.render("resource.njk", {
     route: req.params.page,
     backLink: backLink,

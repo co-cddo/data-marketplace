@@ -31,26 +31,26 @@ export interface CatalogueItem {
   contactPoint: ContactPoint;
   creator: Creator[];
   description: string;
-  distributions: Distribution[];
-  endpointDescription: string;
-  endpointURL: string;
+  distributions?: Distribution[] | null;
+  endpointDescription?: string | null;
+  endpointURL?: string | null;
   identifier: string;
   issued: string;
   keyword: string[];
   licence: string;
-  mediaType: string[];
-  modified: string;
+  mediaType?: string[] | null;
+  modified: string | null;
   organisation: Organisation;
   relatedAssets: unknown[];
   securityClassification: string;
-  servesData: string[];
-  serviceStatus: string;
-  serviceType: string;
-  summary: string;
+  servesData?: string[] | null;
+  serviceStatus?: string | null;
+  serviceType?: string | null;
+  summary: string | null;
   theme: string[];
   title: string;
   type: string;
-  updateFrequency: string;
+  updateFrequency?: string | null;
   version: string;
 }
 
@@ -59,48 +59,6 @@ export interface ApiResponse {
   data: CatalogueItem[];
 }
 
-// Resource is the interface that holds the properties common between both types of resources. Includes optional properties.
-export interface Resource {
-  accessRights: string;
-  catalogueCreated: string;
-  catalogueModified: string;
-  contactPoint: ContactPoint;
-  creator: Creator[];
-  description: string;
-  distributions?: Distribution[];
-  endpointDescription?: string;
-  endpointURL?: string;
-  identifier: string;
-  issued: string;
-  keyword: string[];
-  licence: string;
-  mediaType?: string[];
-  modified: string | null;
-  organisation: Organisation;
-  relatedAssets: unknown[];
-  securityClassification: string;
-  servesData?: string[];
-  serviceStatus?: string;
-  serviceType?: string;
-  summary: string | null;
-  theme: string[];
-  title: string;
-  type: string;
-  updateFrequency?: string;
-  version: string;
-}
-// DataSetResource is the interface that extends BaseResource with the properties unique to DataSets.
-export interface DataSetResource extends Resource {
-  mediaType?: string[];
-  distributions?: Distribution[];
-  updateFrequency?: string;
-}
-
-// DataServiceResource is the interface that extends BaseResource with the properties unique to DataServices.
-export interface DataServiceResource extends Resource {
-  endpointDescription?: string;
-  endpointURL?: string;
-  servesData?: string[];
-  serviceStatus?: string;
-  serviceType?: string;
+export interface SingleApiResponse {
+  asset: CatalogueItem; // Not an array
 }
