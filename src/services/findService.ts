@@ -1,9 +1,8 @@
 import axios from "axios";
 import {
-  CatalogueItem,
+  SingleApiResponse,
   ApiResponse,
-  DataSetResource,
-  DataServiceResource,
+  CatalogueItem,
   Organisation,
 } from "../models/dataModels";
 
@@ -12,7 +11,7 @@ export async function fetchResources(
   organisationFilters?: string[],
   filterOptionTags?: string[],
 ): Promise<{
-  resources: (DataSetResource | DataServiceResource)[];
+  resources: CatalogueItem[];
   uniqueOrganisations: Organisation[];
   selectedFilters?: string[];
 }> {
@@ -50,69 +49,28 @@ export async function fetchResources(
     );
   }
 
-  // Map the data to the new object shape
-  const mappedResources = resources.map((item: CatalogueItem) => {
-    if (item.type.toLowerCase() === "dataset") {
-      return {
-        ...item,
-        mediaType: item.mediaType,
-      } as DataSetResource;
-    } else if (item.type.toLowerCase() === "dataservice") {
-      return {
-        ...item,
-        serviceType: item.serviceType,
-      } as DataServiceResource;
-    } else {
-      throw new Error("Unknown resource type.");
-    }
-  });
-
   return {
-    resources: mappedResources,
+    resources: resources,
     uniqueOrganisations: uniqueOrganisations,
     selectedFilters: filterOptionTags,
   };
 }
-
 export async function fetchResourceById(
   resourceID: string,
-): Promise<DataSetResource | DataServiceResource> {
-  const apiUrl = `${process.env.API_ENDPOINT}/catalogue`;
+): Promise<CatalogueItem> {
+  const apiUrl = `${process.env.API_ENDPOINT}/catalogue/${resourceID}`;
   if (!apiUrl) {
     throw new Error(
       "API endpoint is undefined. Please set the API_ENDPOINT environment variable.",
     );
   }
 
-  const response = await axios.get<ApiResponse>(apiUrl as string);
-  const resources = response.data.data;
-
-  // Search the response and find the matching ID
-  const resource = resources.find(
-    (resource) => resource.identifier === resourceID,
-  );
+  const response = await axios.get<SingleApiResponse>(apiUrl as string);
+  const resource = response.data.asset;
 
   if (!resource) {
     throw new Error("Resource not found.");
   }
 
-  // Depending on the type of the resource, return the appropriate structure
-  if (resource.type.toLowerCase() === "dataset") {
-    return {
-      ...resource,
-      distributions: resource.distributions,
-      updateFrequency: resource.updateFrequency,
-    } as DataSetResource;
-  } else if (resource.type.toLowerCase() === "dataservice") {
-    return {
-      ...resource,
-      endpointDescription: resource.endpointDescription,
-      endpointURL: resource.endpointURL,
-      servesData: resource.servesData,
-      serviceStatus: resource.serviceStatus,
-      serviceType: resource.serviceType,
-    } as DataServiceResource;
-  } else {
-    throw new Error("Unknown resource type.");
-  }
+  return resource;
 }
