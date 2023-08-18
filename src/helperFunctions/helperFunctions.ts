@@ -181,6 +181,13 @@ const extractFormData = (stepData: Step, body: RequestBody) => {
     };
   }
 
+  if (stepData.id === "legal-power") {
+    return {
+      decision: body["legal-power"],
+      explanation: body["legal-power-textarea"] || null,
+    };
+  }
+
   if (stepData.id === "legal-gateway") {
     return {
       "yes-decision": {

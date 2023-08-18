@@ -43,7 +43,12 @@ type ProjectAimStep = {
   explanation: string;
 };
 
-type StepValue = string | ProjectAimStep | BenefitsStep;
+type LegalPowerStep = {
+  decision: "yes" | "no" | "we don't know";
+  explanation: string;
+};
+
+type StepValue = string | ProjectAimStep | BenefitsStep | LegalPowerStep;
 
 interface Step {
   id: string;

@@ -1,0 +1,27 @@
+{% extends "page.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-l">Request ID: {{requestId}}</span>
+      <h1 class="govuk-heading-l">Get legal advice</h1>
+      <p class="govuk-body">Contact a lawyer, or someone with legal expertise, to discuss your legal power for requesting data.</p>
+      <p class="govuk-body">Once you've provided your legal power, return to this service and continue.</p>
+      <p class="govuk-body"><a href="https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/data-sharing/data-sharing-a-code-of-practice/lawfulness/" class="govuk-link">See guidance on lawfulness from the Information Commissioner's Office (opens in new tab)</a></p>
+      <div class="govuk-button-group">
+            {{ govukButton({
+                text: "Save and continue",
+                name: "continueButton",
+                value: "continue"
+            }) }}
+            {{ govukButton({
+                text: "Save and return",
+                classes: "govuk-button--secondary",
+                name: "returnButton",
+                value: "return"
+            }) }}
+        </div>
+    </div>
+  </div>
+{%endblock%}
