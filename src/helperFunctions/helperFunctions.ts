@@ -116,6 +116,7 @@ const extractFormData = (stepData: Step, body: RequestBody) => {
 
   const radioFields = ["data-type", "data-access", "legal-review"];
   const textFields = ["impact", "data-subjects", "data-required"];
+  const checkBoxes = ["basis"]
 
   if (radioFields.includes(stepData.id)) {
     return body[stepData.id];
@@ -209,6 +210,10 @@ const extractFormData = (stepData: Step, body: RequestBody) => {
         checked: body["legal-gateway"]?.includes("dont-know-decision"),
       },
     };
+  }
+  
+  if (checkBoxes.includes(stepData.id)){
+    return body[stepData.id];
   }
   
   // Other input types can go here

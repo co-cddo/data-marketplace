@@ -1,0 +1,99 @@
+{% extends "page.njk" %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-l">Request ID: {{requestId}}</span>
+      <form method="POST" id="dataAccessForm">
+        {% set basisHint %}
+        <p class="govuk-body">
+           Find out more about having a 
+           <a class="govuk-link" href="https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/lawful-basis/a-guide-to-lawful-basis/">lawful basis for processing personal data (opens in new tab).</a>
+           <br>
+           You may need help from a data protection specialist.
+        </p>
+     {% endset %}
+            {{ govukCheckboxes({
+            name: "basis",
+            fieldset: {
+                legend: {
+                text: "What is your lawful basis for requesting special category data under UK GDPR?",
+                isPageHeading: true,
+                classes: "govuk-fieldset__legend--l squish-hints"
+                }
+            },
+            hint: {
+                text: basisHint | safe
+            },
+            items: [
+                {
+                value: "checbox1",
+                text: "Reasons of substantial public interest (with a basis in law)"
+                },
+                {
+                value: "checbox2",
+                text: "Legal claims or judicial acts"
+                },
+                {
+                value: "checbox3",
+                text: "Public health (with a basis in law)"
+                },
+                {
+                value: "checbox4",
+                text: "Health or social care (with a basis in law)"
+                },
+                {
+                value: "checbox5",
+                text: "Employment, social security and social protection (if authorised by law)"
+                },
+                {
+                value: "checbox6",
+                text: "Vital interests"
+                },
+                {
+                value: "checbox7",
+                text: "Explicit consent"
+                },
+                {
+                value: "checbox8",
+                text: "Made public by the data subject"
+                },
+                {
+                value: "checbox9",
+                text: "Archiving, research and statistics (with a basis in law)"
+                },
+                {
+                value: "checbox10",
+                text: "Not-for-profit bodies"
+                }
+            ]
+            }) }}
+          <div class="govuk-button-group">
+            {{ govukButton({
+                text: "Save and continue",
+                name: "continueButton",
+                value: "continue"
+            }) }}
+            {{ govukButton({
+                text: "Save and return",
+                classes: "govuk-button--secondary",
+                name: "returnButton",
+                value: "return"
+            }) }}
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
