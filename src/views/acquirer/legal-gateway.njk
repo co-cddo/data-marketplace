@@ -1,0 +1,121 @@
+{% extends "page.njk" %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{%- from "govuk/components/textarea/macro.njk" import govukTextarea -%}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-l">Request ID: {{requestId}}</span>
+        <form method="POST" id="legalGatewayForm">
+        
+        {% set legalGatewayDecision1 %}
+        {{ govukTextarea({
+            id: "yes-decision",
+            name: "yes-decision",
+            type: "text",
+            classes: "govuk-!-width-two-third",
+            label: {
+                text: "What is the legal gateway for acquiring this data?"
+            },
+            value: savedValue['yes-decision']['explanation']
+        }) }}
+        {% endset -%}
+
+        {% set legalGatewayDecision2 %}
+        {{ govukTextarea({
+            id: "other-decision",
+            name: "other-decision",
+            type: "text",
+            classes: "govuk-!-width-two-third",
+            label: {
+                text: "What other legal grounds do you have for acquiring this data?"
+            },
+            value: savedValue['other-decision']['explanation']
+        }) }}
+        {% endset -%}
+
+        {% set legalGatewayDecision3 %}
+        {{ govukTextarea({
+            id: "dont-know-decision",
+            name: "dont-know-decision",
+            type: "text",
+            classes: "govuk-!-width-two-third",
+            value: savedValue['dont-know-decision']['explanation']
+        }) }}
+        {% endset -%}
+
+        {{ govukRadios({
+        name: "legal-gateway",
+        fieldset: {
+            legend: {
+            text: "Is there a 'legal gateway' for acquiring this data?",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+            }
+        },
+        hint: {
+            text: "Your legal advisor may be asked to support this."
+        },
+        items: [
+            {
+            value: "yes-decision",
+            text: "Yes, there is a legal gateway for acquiring this data",
+            checked: savedValue['yes-decision']['checked'],
+            conditional: {
+                html: legalGatewayDecision1
+            }
+            },
+            {
+            value: "other-decision",
+            text: "We have other legal grounds for acquiring this data",
+            checked: savedValue['other-decision']['checked'],
+            conditional: {
+                html: legalGatewayDecision2
+            }
+            },
+            {
+            value: "dont-know-decision",
+            text: "We don't know",
+            checked: savedValue['dont-know-decision']['checked'],
+            conditional: {
+                html: textHtml
+            }
+            }
+        ]}) }}
+
+        <div class="govuk-button-group">
+        {{ govukButton({
+            text: "Save and continue",
+            name: "continueButton",
+            value: "continue"
+        }) }}
+        {{ govukButton({
+            text: "Save and return",
+            classes: "govuk-button--secondary",
+            name: "returnButton",
+            value: "return"
+        }) }}
+        </div>
+
+        {% set detailsContent %}
+        <p>Legal gateways allow specified public authorities to share data with each other.</p>
+        <p>Some gateways enable the sharing of personal data, while others allow the sharing of non-identifying data.</p>
+        <p>Disclosing information through a legal gateway is often outlined in jointly agreed documents, for example in:</p>
+        <ul>
+            <li>a memorandum of understanding (MOU)</li>
+            <li>a protocol</li>
+            <li>a partnership agreement</li>
+            <li>a statement of practice</li>
+            <li>a code of practice</li>
+        </ul>
+        {% endset %}
+        {{ govukDetails({
+            summaryText: "What is a legal gateway?",
+            text: detailsContent  | safe
+        }) }}
+        </form>
+    </div>
+</div>
+{% endblock %}
