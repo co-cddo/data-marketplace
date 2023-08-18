@@ -98,8 +98,8 @@
                         {% if resource.type.toLowerCase() == "dataservice" %}
                             <strong class="govuk-tag govuk-tag--grey">{{ resource.serviceType }}</strong>
                         {% elif resource.type.toLowerCase() == "dataset" %}
-                            {% for distribution in resource.distributions %}
-                                <strong class="govuk-tag govuk-tag--grey">{{ distribution.mediaType }}</strong>
+                            {% for mediaType in resource.mediaType %}
+                                <strong class="govuk-tag govuk-tag--grey">{{ mediaType }}</strong>
                             {% endfor %}
                         {% endif %}
                         </p>
