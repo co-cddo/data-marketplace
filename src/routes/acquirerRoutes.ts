@@ -1,24 +1,28 @@
 import express, { Request, Response } from "express";
 import { fetchResourceById } from "../services/findService";
 const router = express.Router();
-import formTemplate from "../models/shareRequestTemplate.json"
+import formTemplate from "../models/shareRequestTemplate.json";
 import { randomUUID } from "crypto";
 import { extractFormData, validateRequestBody } from "../helperFunctions/helperFunctions";
 import { FormData } from "../types/express";
 function parseJwt(token: string) {
-  return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+  return JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
 }
 
-const generateFormTemplate = (req: Request, resourceID: string, assetTitle: string) => {
+const generateFormTemplate = (
+  req: Request,
+  resourceID: string,
+  assetTitle: string,
+) => {
   const userInfo = req.user ? parseJwt(req.user.idToken) : null;
-  const username = userInfo ? userInfo.email : 'anonymous';
+  const username = userInfo ? userInfo.email : "anonymous";
   const template = JSON.parse(JSON.stringify(formTemplate));
   template.ownedBy = username;
   template.dataAsset = resourceID;
   template.requestId = randomUUID();
   template.assetTitle = assetTitle;
   return template;
-}
+};
 
 const skipThisStep = (step: string, formdata: FormData) => {
   // Decide whether to skip the current step based on answers in previous steps
@@ -55,7 +59,9 @@ router.get("/:resourceID/start", async (req: Request, res: Response) => {
     const assetTitle = resource.title;
     // Generate a new set of form data if there wasn't one already in the session
     req.session.acquirerForms = req.session.acquirerForms || {};
-    req.session.acquirerForms[resourceID] = req.session.acquirerForms?.[resourceID] || generateFormTemplate(req, resourceID, assetTitle);
+    req.session.acquirerForms[resourceID] =
+      req.session.acquirerForms?.[resourceID] ||
+      generateFormTemplate(req, resourceID, assetTitle);
 
     res.render("../views/acquirer/start.njk", {
       route: req.params.page,
@@ -64,7 +70,7 @@ router.get("/:resourceID/start", async (req: Request, res: Response) => {
       resource: resource,
       assetTitle,
       resourceID: resourceID,
-      formdata: req.session.acquirerForms[resourceID]
+      formdata: req.session.acquirerForms[resourceID],
     });
   } catch (error) {
     console.error("An error occurred while fetching data from the API:", error);
@@ -74,15 +80,15 @@ router.get("/:resourceID/start", async (req: Request, res: Response) => {
 
 router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   const resourceID = req.params.resourceID;
-  const formStep = req.params.step
+  const formStep = req.params.step;
 
   if (!req.session.acquirerForms?.[resourceID]) {
-    return res.redirect(`/share/${resourceID}/acquirer`)
+    return res.redirect(`/share/${resourceID}/acquirer`);
   }
 
-  const formdata = req.session.acquirerForms[resourceID]
-  const stepData = formdata.steps[formStep]
-  const assetTitle = formdata.assetTitle
+  const formdata = req.session.acquirerForms[resourceID];
+  const stepData = formdata.steps[formStep];
+  const assetTitle = formdata.assetTitle;
 
   if (skipThisStep(formStep, formdata)) {
     stepData.skipped = true
@@ -95,9 +101,8 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
     assetTitle,
     stepId: formStep,
     savedValue: stepData.value,
-    errorMessage: stepData.errorMessage
-  })
-
+    errorMessage: stepData.errorMessage,
+  });
 });
 
 router.post("/:resourceID/:step", async (req: Request, res: Response) => {
@@ -123,7 +128,7 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
   stepData.value = extractFormData(stepData, req.body) || "";
 
   if (errorMessage) {
-    return res.redirect(`/acquirer/${resourceID}/${formStep}`)
+    return res.redirect(`/acquirer/${resourceID}/${formStep}`);
   }
 
   // Check which button was clicked "Save and continue || Save and return"
@@ -135,7 +140,9 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
   stepData.status = "COMPLETED";
 
   if (formdata.steps[formStep].nextStep) {
-    return res.redirect(`/acquirer/${resourceID}/${formdata.steps[formStep].nextStep}`);
+    return res.redirect(
+      `/acquirer/${resourceID}/${formdata.steps[formStep].nextStep}`,
+    );
   } else {
     // Handle case when nextStep is not defined
     return res.redirect(`/acquirer/${resourceID}/start`);
