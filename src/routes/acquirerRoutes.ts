@@ -4,7 +4,7 @@ const router = express.Router();
 import formTemplate from "../models/shareRequestTemplate.json"
 import { randomUUID } from "crypto";
 import { extractFormData, validateRequestBody } from "../helperFunctions/helperFunctions";
-import { FormData, Step } from "../types/express";
+import { FormData } from "../types/express";
 function parseJwt(token: string) {
   return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
 }
@@ -22,7 +22,10 @@ const generateFormTemplate = (req: Request, resourceID: string, assetTitle: stri
 
 const skipThisStep = (step: string, formdata: FormData) => {
   // Decide whether to skip the current step based on answers in previous steps
-  // Returns false by default.
+  // Returns false (doesn't skip any steps) by default, so only hidden steps or
+  // ones that might need to be skipped in some circumstances need to be added to
+  // switch/case statement.
+
   switch (step) {
     case "data-subjects": {
       // Skip data-subjects if the data-type is "none" i.e. anonymised

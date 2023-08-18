@@ -30,6 +30,7 @@
       "name": "Data protection",
       "steps": [
         "lawful-basis-personal",
+        "lawful-basis-special",
         "data-travel",
         "role",
         "protection-review"
@@ -167,7 +168,7 @@
     },
     "lawful-basis-personal": {
       "id": "lawful-basis-personal",
-      "name": "Lawful basis",
+      "name": "Lawful basis for personal data",
       "status": "NOT STARTED",
       "value": [],
       "nextStep": "lawful-basis-special",
@@ -175,7 +176,7 @@
     },
     "lawful-basis-special": {
       "id": "lawful-basis-special",
-      "name": "Lawful basis",
+      "name": "Lawful basis for special category data",
       "status": "NOT STARTED",
       "value": [],
       "nextStep": "lawful-basis-special-public-interest",
