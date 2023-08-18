@@ -3,6 +3,10 @@ import { DateStep, RequestBody, Step } from "../types/express";
 function validateDate(day: number, month: number, year: number): string {
   const errors = new Set<string>();
 
+  if (!day && !month && !year) {
+    return ""; // allows date to be null
+  }
+
   const isLeapYear = (year: number) =>
     year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
 
