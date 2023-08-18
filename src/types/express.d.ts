@@ -19,7 +19,7 @@ interface FormData {
 
 interface Benefits {
   explanation?: string;
-  checked?: boolean
+  checked?: boolean;
 }
 
 export interface RequestBody {
@@ -27,21 +27,21 @@ export interface RequestBody {
 }
 
 type BenefitsStep = {
-  'decision-making'?: Benefits;
-  'service-delivery'?: Benefits;
-  'benefit-people'?: Benefits;
-  'allocate-and-evaluate-funding'?: Benefits;
-  'social-economic-trends'?: Benefits;
-  'needs-of-the-public'?: Benefits;
-  'statistical-information'?: Benefits;
-  'existing-research-or-statistics'?: Benefits;
-  'something-else'?: Benefits;
-}
+  "decision-making"?: Benefits;
+  "service-delivery"?: Benefits;
+  "benefit-people"?: Benefits;
+  "allocate-and-evaluate-funding"?: Benefits;
+  "social-economic-trends"?: Benefits;
+  "needs-of-the-public"?: Benefits;
+  "statistical-information"?: Benefits;
+  "existing-research-or-statistics"?: Benefits;
+  "something-else"?: Benefits;
+};
 
-type ProjectAimStep = { 
-  aims: string; 
+type ProjectAimStep = {
+  aims: string;
   explanation: string;
-}
+};
 
 type StepValue = string | ProjectAimStep | BenefitsStep;
 
@@ -59,7 +59,7 @@ type DateStep = {
   day?: number | null;
   month?: number | null;
   year?: number | null;
-}
+};
 
 interface Section {
   name: string;
