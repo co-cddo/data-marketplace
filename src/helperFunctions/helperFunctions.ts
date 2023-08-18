@@ -181,6 +181,29 @@ const extractFormData = (stepData: Step, body: RequestBody) => {
     };
   }
 
+  if (stepData.id === "legal-gateway") {
+    return {
+      "yes-decision": {
+        explanation: body["legal-gateway"]?.includes("yes-decision")
+          ? body["yes-decision"]
+          : "",
+        checked: body["legal-gateway"]?.includes("yes-decision"),
+      },
+      "other-decision": {
+        explanation: body["legal-gateway"]?.includes("other-decision")
+          ? body["other-decision"]
+          : "",
+        checked: body["legal-gateway"]?.includes("other-decision"),
+      },
+      "dont-know-decision": {
+        explanation: body["legal-gateway"]?.includes("dont-know-decision")
+          ? body["dont-know-decision"]
+          : "",
+        checked: body["legal-gateway"]?.includes("dont-know-decision"),
+      },
+    };
+  }
+  console.log("body functions", stepData, body);
   // Other input types can go here
   return;
 };
