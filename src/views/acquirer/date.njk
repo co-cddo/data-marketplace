@@ -2,6 +2,11 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 
+{% set errorText = ({text: errorMessage}
+if errorMessage else 
+  false
+) %}
+
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -29,9 +34,7 @@
             hint: {
                 text: "For example, 02 03 2024"
             },
-            errorMessage: {
-                text: errorMessage
-            },
+            errorMessage: errorText,
             items: [{
                 name: "day",
                 value: savedValue.day,

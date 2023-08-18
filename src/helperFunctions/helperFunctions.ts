@@ -3,6 +3,10 @@ import { DateStep, RequestBody, Step } from "../types/express";
 function validateDate(day: number, month: number, year: number): string {
   const errors = new Set<string>();
 
+  if (!day && !month && !year) {
+    return ""; // allows date to be null
+  }
+
   const isLeapYear = (year: number) =>
     year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
 
@@ -61,6 +65,12 @@ function validateDate(day: number, month: number, year: number): string {
     if (errors.has("invalid_day") && errors.has("invalid_month")) {
       return "Day and month are invalid.";
     }
+    if (errors.has("invalid_day") && errors.has("invalid_year")) {
+      return "Day and year are invalid.";
+    }
+    if (errors.has("invalid_month") && errors.has("invalid_year")) {
+      return "Month and year are invalid.";
+    }
     if (errors.has("invalid_day")) {
       return "Day is invalid.";
     }
@@ -88,14 +98,15 @@ const validateRequestBody = (step: string, body: RequestBody): string => {
       );
       break;
     }
+
     default:
-      errorMessage = "Invalid step.";
+      errorMessage = "";
   }
 
   return errorMessage;
 };
 
-const extractFormData = (stepData: Step, body: RequestBody ) => {
+const extractFormData = (stepData: Step, body: RequestBody) => {
   // Return something that will get set in the 'value' key of the form step
   // Will need to something different depending on whether the input is a radio button
   //  or text field or checkbox etc.
@@ -107,7 +118,7 @@ const extractFormData = (stepData: Step, body: RequestBody ) => {
     return body[stepData.id]
   }
 
-  const textFields = ['data-required']; // add step names here if using textarea
+  const textFields = ['impact','data-subjects','data-required']; // add step names here if using textarea
 
   if (stepData.id === 'project-aims') {
     return {
@@ -117,11 +128,10 @@ const extractFormData = (stepData: Step, body: RequestBody ) => {
   } else {
     if (textFields.includes(stepData.id)) {
       return body[stepData.id]
-    } 
+    }
   }
 
   if (stepData.id === 'date') {
-    console.log("date fucntion body", stepData, body)
     return {
       day: body.day || null,
       month: body.month || null,

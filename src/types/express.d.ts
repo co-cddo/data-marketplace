@@ -52,11 +52,7 @@ interface Step {
   value: StepValue;
   nextStep?: string;
   blockedBy?: string[];
-}
-
-type ProjectAimStep = { 
-  aims: string; 
-  explanation: string;
+  errorMessage?: string;
 }
 
 type DateStep = {
