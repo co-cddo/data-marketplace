@@ -1,0 +1,73 @@
+{% extends "page.njk" %}
+{%- from "govuk/components/textarea/macro.njk" import govukTextarea -%}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-l">Request ID: {{requestId}}</span>
+      <form method="POST" id="legalPowerForm">
+        {% set legalPowerDecision %}
+            {{ govukTextarea({
+                id: "legal-power-textarea",
+                name: "legal-power-textarea",
+                label: {
+                    text: "What legal power will you use?"
+                },
+                value: savedValue.explanation
+            }) }}
+        {% endset -%}
+        {{ govukRadios({
+            name: "legal-power",
+            fieldset: {
+                legend: {
+                    text: "Do you have the legal power to request this data?",
+                    isPageHeading: true,
+                    classes: "govuk-fieldset__legend--l"
+                }
+            },
+            hint: {
+                text: "For example, through common law or royal prerogative."
+            },
+            items: 
+            [
+            {
+                value: "yes",
+                text: "Yes, we believe we have the legal power to do this",
+                checked: savedValue.decision === 'yes',
+
+                conditional: {
+                    html: legalPowerDecision
+                }
+            },
+            {
+                value: "no",
+                text: "No, we don't have the legal power to request this",
+                checked: savedValue.decision === "no"
+            },
+            {
+                value: "we don't know",
+                text: "We don't know",
+                checked: savedValue.decision === "we don't know"
+            }
+            ]
+          }) 
+        }}
+        <div class="govuk-button-group">
+            {{ govukButton({
+                text: "Save and continue",
+                name: "continueButton",
+                value: "continue"
+            }) }}
+            {{ govukButton({
+                text: "Save and return",
+                classes: "govuk-button--secondary",
+                name: "returnButton",
+                value: "return"
+            }) }}
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
