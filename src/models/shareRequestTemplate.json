@@ -20,35 +20,19 @@
     },
     "legal": {
       "name": "Legal power and gateway",
-      "steps": [
-        "legal-power",
-        "legal-gateway",
-        "legal-review"
-      ]
+      "steps": ["legal-power", "legal-gateway", "legal-review"]
     },
     "dataProtection": {
       "name": "Data protection",
-      "steps": [
-        "basis",
-        "data-travel",
-        "role",
-        "protection-review"
-      ]
+      "steps": ["basis", "data-travel", "role", "protection-review"]
     },
     "security": {
       "name": "Data governance, security and technology",
-      "steps": [
-        "delivery",
-        "format",
-        "disposal",
-        "security-review"
-      ]
+      "steps": ["delivery", "format", "disposal", "security-review"]
     },
     "review": {
       "name": "Review and send",
-      "steps": [
-        "check"
-      ]
+      "steps": ["check"]
     }
   },
   "steps": {
@@ -134,10 +118,7 @@
       "name": "Legal review",
       "status": "CANNOT START YET",
       "value": "",
-      "blockedBy": [
-        "legal-power",
-        "legal-gateway"
-      ],
+      "blockedBy": ["legal-power", "legal-gateway"],
       "nextStep": "basis"
     },
     "basis": {
@@ -166,11 +147,7 @@
       "name": "Data protection review",
       "status": "CANNOT START YET",
       "value": "",
-      "blockedBy": [
-        "basis",
-        "data-travel",
-        "role"
-      ],
+      "blockedBy": ["basis", "data-travel", "role"],
       "nextStep": "delivery"
     },
     "delivery": {
@@ -198,22 +175,14 @@
       "name": "Data security review",
       "status": "CANNOT START YET",
       "value": "",
-      "blockedBy": [
-        "delivery",
-        "format",
-        "disposal"
-      ],
+      "blockedBy": ["delivery", "format", "disposal"],
       "nextStep": "check"
     },
     "check": {
       "id": "check",
       "name": "Check answers",
       "status": "CANNOT START YET",
-      "blockedBy": [
-        "legal-review",
-        "protection-review",
-        "security-review"
-      ]
+      "blockedBy": ["legal-review", "protection-review", "security-review"]
     }
   }
 }
