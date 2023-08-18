@@ -168,7 +168,7 @@
                 {% if resource.contactPoint.email %}
                 <tr class="govuk-table__row">
                 <th scope="row" class="govuk-table__header">Contact</th>
-                <td class="govuk-table__cell"><a href="mailto:{{ resource.contactPoint.email }}" class="govuk-link">{{ resource.contactPoint.email }}</a></td>
+                <td class="govuk-table__cell"><a href="mailto:{{ resource.contactPoint.email }}" class="govuk-link">{{ resource.contactPoint.name }}</a></td>
                 </tr>
                 {% endif %}
         </tbody>
