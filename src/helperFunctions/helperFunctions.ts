@@ -114,7 +114,7 @@ const extractFormData = (stepData: Step, body: RequestBody) => {
   // All simple radio button-style forms:
   // (As long as the radio group has a name the same as the step id
 
-  const radioFields = ["data-type", "data-access"];
+  const radioFields = ["data-type", "data-access", "legal-review"];
   if (radioFields.includes(stepData.id)) {
     return body[stepData.id];
   }
