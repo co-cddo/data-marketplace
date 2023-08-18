@@ -8,7 +8,7 @@
       <span class="govuk-caption-l">Request ID: {{requestId}}</span>
       <form method="POST" id="dataAccessForm">
         {{ govukRadios({
-            name: "data-access",
+            name: "legal-review",
             fieldset: {
                 legend: {
                 text: "Have your answers been reviewed by someone with legal knowledge?",
@@ -29,7 +29,7 @@
                 value: "no",
                 text: "No",
                 checked: savedValue === 'no'
-                },
+                }
             ]
         }) }}
         <div class="govuk-button-group">
