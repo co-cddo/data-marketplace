@@ -114,7 +114,7 @@ const extractFormData = (stepData: Step, body: RequestBody) => {
   // All simple radio button-style forms:
   // (As long as the radio group has a name the same as the step id
 
-  const radioFields = ["data-type", "data-access", "legal-power"];
+  const radioFields = ["data-type", "data-access"];
   if (radioFields.includes(stepData.id)) {
     return body[stepData.id];
   }
@@ -183,10 +183,8 @@ const extractFormData = (stepData: Step, body: RequestBody) => {
 
   if (stepData.id === "legal-power") {
     return {
-      "legal-power-textarea": {
-        explanation: body["legal-power-textarea"],
-        checked: body["legal-power"]?.includes("legal-power-textarea"),
-      },
+      decision: body["legal-power"],
+      explanation: body["legal-power-textarea"] || null,
     };
   }
 
