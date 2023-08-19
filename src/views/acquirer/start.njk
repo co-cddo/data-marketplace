@@ -2,41 +2,42 @@
 {%- from "govuk/components/tag/macro.njk" import govukTag -%}
 
 {% block content %}
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <span class="govuk-caption-l">Request ID: {{formdata.requestId}}</span>
-    <h1 class="govuk-heading-xl">
-      {{resource.title}}
-    </h1>
-    <h2 class="app-task-list__section">{{formdata.status}}</h2>
-    <p class="govuk-body govuk-!-margin-bottom-2">You have completed 0 of 5 sections.</p>
-    <p class="govuk-body govuk-!-margin-bottom-7">More sections may be added depending on your answers.</p>
-    <ol class="app-task-list">
-      {% for key, section in formdata.sections %}
-        <li>
-          <h2 class="app-task-list__section">
-            <span class="app-task-list__section-number">{{ loop.index }}.</span> {{ section.name }}
-          </h2>
-          <ul class="app-task-list__items">
-            {% for step in section.steps %}
-              {% set s = formdata.steps[step] %}
-              <li class="app-task-list__item">
-                <span class="app-task-list__task-name">
-                  {% if s.status != "CANNOT START YET" %}
-                    <a href="{{ s.id }}" class="govuk-link">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-l">Request ID: {{formdata.requestId}}</span>
+      <h1 class="govuk-heading-xl">
+        {{resource.title}}
+      </h1>
+      <h2 class="app-task-list__section">{{formdata.status}}</h2>
+      <p class="govuk-body govuk-!-margin-bottom-2">You have completed 0 of 5 sections.</p>
+      <p class="govuk-body govuk-!-margin-bottom-7">More sections may be added depending on your answers.</p>
+      <ol class="app-task-list">
+        {% for key, section in formdata.overviewSections %}
+          <li>
+            <h2 class="app-task-list__section">
+              <span class="app-task-list__section-number">{{ loop.index }}.</span>
+              {{ section.name }}
+            </h2>
+            <ul class="app-task-list__items">
+              {% for step in section.steps %}
+                {% set s = formdata.steps[step] %}
+                <li class="app-task-list__item">
+                  <span class="app-task-list__task-name">
+                    {% if s.status != "CANNOT START YET" %}
+                      <a href="{{ s.id }}" class="govuk-link">
+                        {{ s.name }}
+                      </a>
+                    {% else %}
                       {{ s.name }}
-                    </a>
-                  {% else %}
-                    {{ s.name }}
-                  {% endif %}
-                </span>
-                <strong class="govuk-tag govuk-tag--grey app-task-list__tag">{{ s.status }}</strong>
-              </li>
-            {% endfor %}
-          </ul>
-        </li>
-      {% endfor %}
-    </ol>
+                    {% endif %}
+                  </span>
+                  <strong class="govuk-tag govuk-tag--grey app-task-list__tag">{{ s.status }}</strong>
+                </li>
+              {% endfor %}
+            </ul>
+          </li>
+        {% endfor %}
+      </ol>
+    </div>
   </div>
-</div>
 {% endblock %}

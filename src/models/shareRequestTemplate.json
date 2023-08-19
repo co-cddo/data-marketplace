@@ -4,7 +4,7 @@
   "assetTitle": "",
   "ownedBy": "",
   "status": "Request incomplete",
-  "sections": {
+  "overviewSections": {
     "purpose": {
       "name": "Purpose of the data share section",
       "steps": [
@@ -24,7 +24,13 @@
     },
     "dataProtection": {
       "name": "Data protection",
-      "steps": ["basis", "data-travel", "role", "protection-review"]
+      "steps": [
+        "lawful-basis-personal",
+        "lawful-basis-special",
+        "data-travel",
+        "role",
+        "protection-review"
+      ]
     },
     "security": {
       "name": "Data governance, security and technology",
@@ -48,7 +54,8 @@
       "name": "Data subjects",
       "status": "NOT STARTED",
       "value": "",
-      "nextStep": "project-aims"
+      "nextStep": "project-aims",
+      "skipped": false
     },
     "project-aims": {
       "id": "project-aims",
@@ -79,7 +86,15 @@
       "name": "Data access",
       "status": "NOT STARTED",
       "value": "",
-      "nextStep": "impact"
+      "nextStep": "other-orgs"
+    },
+    "other-orgs": {
+      "id": "other-orgs",
+      "name": "Other organisations",
+      "status": "NOT STARTED",
+      "value": "",
+      "nextStep": "impact",
+      "skipped": false
     },
     "impact": {
       "id": "impact",
@@ -104,14 +119,30 @@
       "name": "Legal power",
       "status": "NOT STARTED",
       "value": "",
-      "nextStep": "legal-gateway"
+      "nextStep": "legal-power-advice"
+    },
+    "legal-power-advice": {
+      "id": "legal-power-advice",
+      "name": "Legal power advice",
+      "status": "NOT STARTED",
+      "value": "",
+      "nextStep": "legal-gateway",
+      "skipped": false
     },
     "legal-gateway": {
       "id": "legal-gateway",
       "name": "Legal gateway",
       "status": "NOT STARTED",
       "value": "",
-      "nextStep": "legal-review"
+      "nextStep": "legal-gateway-advice"
+    },
+    "legal-gateway-advice": {
+      "id": "legal-gateway-advice",
+      "name": "Legal gateway advice",
+      "status": "NOT STARTED",
+      "value": "",
+      "nextStep": "legal-review",
+      "skipped": false
     },
     "legal-review": {
       "id": "legal-review",
@@ -119,28 +150,54 @@
       "status": "CANNOT START YET",
       "value": "",
       "blockedBy": ["legal-power", "legal-gateway"],
-      "nextStep": "basis"
+      "nextStep": "lawful-basis-personal"
     },
-    "basis": {
-      "id": "basis",
+    "lawful-basis-personal": {
+      "id": "lawful-basis-personal",
+      "name": "Lawful basis for personal data",
+      "status": "NOT STARTED",
+      "value": [],
+      "nextStep": "lawful-basis-special",
+      "skipped": false
+    },
+    "lawful-basis-special": {
+      "id": "lawful-basis-special",
+      "name": "Lawful basis for special category data",
+      "status": "NOT STARTED",
+      "value": [],
+      "nextStep": "lawful-basis-special-public-interest",
+      "skipped": false
+    },
+    "lawful-basis-special-public-interest": {
+      "id": "lawful-basis-special-public-interest",
       "name": "Lawful basis",
       "status": "NOT STARTED",
-      "value": "",
-      "nextStep": "data-travel"
+      "value": [],
+      "nextStep": "data-travel",
+      "skipped": false
     },
     "data-travel": {
       "id": "data-travel",
       "name": "Data travel outside UK",
       "status": "NOT STARTED",
       "value": "",
-      "nextStep": "role"
+      "nextStep": "data-travel-location"
+    },
+    "data-travel-location": {
+      "id": "data-travel-location",
+      "name": "Data travel outside UK",
+      "status": "NOT STARTED",
+      "value": "",
+      "nextStep": "role",
+      "skipped": false
     },
     "role": {
       "id": "role",
       "name": "Role of organisation",
       "status": "NOT STARTED",
       "value": "",
-      "nextStep": "protection-review"
+      "nextStep": "protection-review",
+      "skipped": false
     },
     "protection-review": {
       "id": "protection-review",
