@@ -116,7 +116,7 @@ const extractFormData = (stepData: Step, body: RequestBody) => {
 
   const radioFields = ["data-type", "data-access", "legal-review"];
   const textFields = ["impact", "data-subjects", "data-required"];
-  const checkBoxes = ["basis"];
+  const checkBoxes = ["lawful-basis-special"];
 
   if (radioFields.includes(stepData.id)) {
     return body[stepData.id];
