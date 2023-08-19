@@ -1,0 +1,99 @@
+{% extends "page.njk" %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-l">Request ID: {{requestId}}</span>
+      <form method="POST" id="dataAccessForm">
+        {% set basisHint %}
+        <p class="govuk-body">
+          Find out more about having a 
+          <a class="govuk-link" href="https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/lawful-basis/a-guide-to-lawful-basis/">lawful basis for processing personal data (opens in new tab).</a>
+          <br>
+          You may need help from a data protection specialist.
+      </p>
+        {% endset %}
+        {{ govukCheckboxes({
+      name: "basis",
+      fieldset: {
+          legend: {
+          text: "What is your lawful basis for requesting special category data under UK GDPR?",
+          isPageHeading: true,
+          classes: "govuk-fieldset__legend--l squish-hints"
+          }
+      },
+      hint: {
+          html: basisHint
+      },
+      items: [
+          {
+          value: "basis-checkbox1",
+          text: "Reasons of substantial public interest (with a basis in law)",
+          checked: (savedValue.includes('basis-checkbox1'))
+          },
+          {
+          value: "basis-checkbox2",
+          text: "Legal claims or judicial acts",
+          checked: (savedValue.includes('basis-checkbox2'))
+          },
+          {
+          value: "basis-checkbox3",
+          text: "Public health (with a basis in law)",
+          checked: (savedValue.includes('basis-checkbox3'))
+          },
+          {
+          value: "basis-checkbox4",
+          text: "Health or social care (with a basis in law)",
+          checked: (savedValue.includes('basis-checkbox4'))
+          },
+          {
+          value: "basis-checkbox5",
+          text: "Employment, social security and social protection (if authorised by law)",
+          checked: (savedValue.includes('basis-checkbox5'))
+          },
+          {
+          value: "basis-checkbox6",
+          text: "Vital interests",
+          checked: (savedValue.includes('basis-checkbox6'))
+          },
+          {
+          value: "basis-checkbox7",
+          text: "Explicit consent",
+          checked: (savedValue.includes('basis-checkbox7'))
+          },
+          {
+          value: "basis-checkbox8",
+          text: "Made public by the data subject",
+          checked: (savedValue.includes('basis-checkbox8'))
+          },
+          {
+          value: "basis-checkbox9",
+          text: "Archiving, research and statistics (with a basis in law)",
+          checked: (savedValue.includes('basis-checkbox9'))
+          },
+          {
+          value: "basis-checkbox10",
+          text: "Not-for-profit bodies",
+          checked: (savedValue.includes('basis-checkbox10'))
+          }
+      ]
+      }) }}
+        <div class="govuk-button-group">
+          {{ govukButton({
+          text: "Save and continue",
+          name: "continueButton",
+          value: "continue"
+      }) }}
+          {{ govukButton({
+          text: "Save and return",
+          classes: "govuk-button--secondary",
+          name: "returnButton",
+          value: "return"
+      }) }}
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
