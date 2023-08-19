@@ -212,9 +212,7 @@ const extractFormData = (stepData: Step, body: RequestBody) => {
     };
   }
 
-  if (stepData.id === "basis") {
-    return body["basis"];
-  } else if (checkBoxes.includes(stepData.id)) {
+  if (checkBoxes.includes(stepData.id)) {
     return body[stepData.id];
   }
 
