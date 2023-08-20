@@ -1,0 +1,49 @@
+{% extends "page.njk" %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <form method="post">
+      {{ govukTextarea({
+        name: "aims",
+        id: "data-use-aim",
+        label: {
+          text: "What are the aims of your project?",
+          classes: "govuk-label--l",
+          isPageHeading: true
+        },
+        hint: {
+          text: "Request ID: " + requestId
+        },
+        rows: 5,
+        value: savedValue.aims
+      }) }}
+      {{ govukTextarea({
+        name: "explanation",
+        id: "data-use-aim-achieve",
+        label: {
+          text: "How will the data you want help you achieve this?",
+          classes: "govuk-label--m"
+        },
+        rows: 5,
+        value: savedValue.explanation
+      }) }}
+      <div class="govuk-button-group">
+        {{ govukButton({
+            text: "Save and continue",
+            name: "continueButton",
+            value: "continue"
+        }) }}
+        {{ govukButton({
+            text: "Save and return",
+            classes: "govuk-button--secondary",
+            name: "returnButton",
+            value: "return"
+        }) }}
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
