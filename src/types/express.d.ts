@@ -22,6 +22,20 @@ interface Benefits {
   checked?: boolean;
 }
 
+interface LawfulBasisPersonal {
+  checked?: boolean;
+}
+
+type LawfulBasisPersonalStep = {
+  "public-task"?: LawfulBasisPersonal;
+  "legal-obligation"?: LawfulBasisPersonal;
+  "contract"?: LawfulBasisPersonal;
+  "legitimate-interests"?: LawfulBasisPersonal;
+  "consent"?: LawfulBasisPersonal;
+  "vital-interests"?: LawfulBasisPersonal;
+  "law-enforcement"?: LawfulBasisPersonal;
+}
+
 export interface RequestBody {
   [key: string]: string | undefined;
 }
@@ -48,7 +62,7 @@ type LegalPowerStep = {
   explanation: string;
 };
 
-type StepValue = string | ProjectAimStep | BenefitsStep | LegalPowerStep;
+type StepValue = string | ProjectAimStep | BenefitsStep | LegalPowerStep | LawfulBasisPersonalStep;
 
 interface Step {
   id: string;

@@ -116,7 +116,6 @@ const extractFormData = (stepData: Step, body: RequestBody) => {
 
   const radioFields = ["data-type", "data-access", "legal-review"];
   const textFields = ["impact", "data-subjects", "data-required"];
-  const checkBoxes = ["lawful-basis-special"];
 
   if (radioFields.includes(stepData.id)) {
     return body[stepData.id];
@@ -212,10 +211,38 @@ const extractFormData = (stepData: Step, body: RequestBody) => {
     };
   }
 
-  if (checkBoxes.includes(stepData.id)) {
-    return body[stepData.id];
-  }
 
+  if (stepData.id === "lawful-basis-personal") {
+    console.log("test ", stepData, body)
+      return {
+      "public-task": {
+        checked: body["lawful-basis-personal"]?.includes("public-task"),
+      },
+      "legal-obligation": {
+        checked: body["lawful-basis-personal"]?.includes("legal-obligation"),
+      },
+      "contract": {
+        checked: body["lawful-basis-personal"]?.includes("contract"),
+      },
+      "legitimate-interests": {
+        checked: body["lawful-basis-personal"]?.includes("legitimate-interests"),
+      },
+      "consent": {
+        checked: body["lawful-basis-personal"]?.includes("consent"),
+      },
+      "vital-interest": {
+        checked: body["lawful-basis-personal"]?.includes("vital-interest"),
+      },
+      "law-enforcement": {
+        checked: body["lawful-basis-personal"]?.includes("law-enforcement"),
+      },
+    }
+  } else {
+    if (textFields.includes(stepData.id)) {
+      return body[stepData.id];
+    }
+  }
+ 
   // Other input types can go here
   return;
 };
