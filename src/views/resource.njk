@@ -127,56 +127,58 @@
         <table class="govuk-table govuk-!-margin-bottom-8">
         
         <tbody class="govuk-table__body">
-              {% if resource.licence %}
-              <tr class="govuk-table__row">
+        {% if resource.licence %}
+            <tr class="govuk-table__row">
                 <th scope="row" class="govuk-table__header  govuk-!-width-one-half">Licence</th>
                 <td class="govuk-table__cell  govuk-!-width-one-half">{{ resource.licence }}</td>
-              </tr>
-            {% endif %}
-                <tr class="govuk-table__row">
-                <th scope="row" class="govuk-table__header  govuk-!-width-one-half">Access rights</th>
-                <td class="govuk-table__cell  govuk-!-width-one-half">{{ resource.accessRights | lower | capitalize }}</td>
-                </tr>
-                <tr class="govuk-table__row">
-                <th scope="row" class="govuk-table__header govuk-!-width-one-half">Security Classification</th>
-                <td class="govuk-table__cell govuk-!-width-one-half">{{resource.securityClassification | lower | capitalize}}</td>
-                </tr>
-                <tr class="govuk-table__row">
-                <th scope="row" class="govuk-table__header govuk-!-width-one-half">Created</th>
-                <td class="govuk-table__cell govuk-!-width-one-half">{{resource.issued | formatDate }}</td>
-                </tr>
-                <tr class="govuk-table__row">
-                <th scope="row" class="govuk-table__header govuk-!-width-one-half">Updated</th>
-                <td class="govuk-table__cell govuk-!-width-one-half">{{ resource.modified | formatDate }}</td>
-                </tr>
-                <tr class="govuk-table__row">
-                <th scope="row" class="govuk-table__header govuk-!-width-one-half">Added to Data Marketplace</th>
-                <td class="govuk-table__cell govuk-!-width-one-half">{{ resource.catalogueCreated | formatDate }}</td>
-                </tr>
-                <tr class="govuk-table__row">
-                <th scope="row" class="govuk-table__header govuk-!-width-one-half">Update Frequency</th>
-                <td class="govuk-table__cell govuk-!-width-one-half">{{ resource.updateFrequency }}</td>
-                </tr>
-                <tr class="govuk-table__row">
-                <th scope="row" class="govuk-table__header govuk-!-width-one-half">Updated on Data Marketplace</th>
-                <td class="govuk-table__cell govuk-!-width-one-half">{{ resource.catalogueModified | formatDate }}</td>
-                </tr>
-                <tr class="govuk-table__row">
-                <th scope="row" class="govuk-table__header govuk-!-width-one-half">Version</th>
-                <td class="govuk-table__cell govuk-!-width-one-half">{{resource.version}}</td>
-                </tr>
-                {% if resource.endpointDescription %}
-                <tr class="govuk-table__row">
-                <th scope="row" class="govuk-table__header">Documentation</th>
-                <td class="govuk-table__cell"><a href="{{ resource.endpointDescription }}" class="govuk-link">{{ resource.endpointDescription }}</a></td>
-                </tr>
-                {% endif %}
-                {% if resource.contactPoint.email %}
-                <tr class="govuk-table__row">
-                <th scope="row" class="govuk-table__header">Contact</th>
-                <td class="govuk-table__cell"><a href="mailto:{{ resource.contactPoint.email }}" class="govuk-link">{{ resource.contactPoint.name }}</a></td>
-                </tr>
-                {% endif %}
+            </tr>
+        {% endif %}
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header  govuk-!-width-one-half">Access rights</th>
+            <td class="govuk-table__cell  govuk-!-width-one-half">{{ resource.accessRights | lower | capitalize }}</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header govuk-!-width-one-half">Security Classification</th>
+            <td class="govuk-table__cell govuk-!-width-one-half">{{resource.securityClassification | lower | capitalize}}</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header govuk-!-width-one-half">Created</th>
+            <td class="govuk-table__cell govuk-!-width-one-half">{{resource.issued | formatDate }}</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header govuk-!-width-one-half">Updated</th>
+            <td class="govuk-table__cell govuk-!-width-one-half">{{ resource.modified | formatDate }}</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header govuk-!-width-one-half">Added to Data Marketplace</th>
+            <td class="govuk-table__cell govuk-!-width-one-half">{{ resource.catalogueCreated | formatDate }}</td>
+        </tr>
+        {% if resource.updateFrequency %}
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header govuk-!-width-one-half">Update Frequency</th>
+            <td class="govuk-table__cell govuk-!-width-one-half">{{ resource.updateFrequency }}</td>
+        </tr>
+        {%endif%}
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header govuk-!-width-one-half">Updated on Data Marketplace</th>
+            <td class="govuk-table__cell govuk-!-width-one-half">{{ resource.catalogueModified | formatDate }}</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header govuk-!-width-one-half">Version</th>
+            <td class="govuk-table__cell govuk-!-width-one-half">{{resource.version}}</td>
+        </tr>
+        {% if resource.endpointDescription %}
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Documentation</th>
+            <td class="govuk-table__cell"><a href="{{ resource.endpointDescription }}" class="govuk-link">{{ resource.endpointDescription }}</a></td>
+        </tr>
+        {% endif %}
+        {% if resource.contactPoint.email %}
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Contact</th>
+            <td class="govuk-table__cell"><a href="mailto:{{ resource.contactPoint.email }}" class="govuk-link">{{ resource.contactPoint.name }}</a></td>
+        </tr>
+        {% endif %}
         </tbody>
         </table>
     </div>
