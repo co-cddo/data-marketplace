@@ -4,8 +4,8 @@ import { fetchResources, fetchResourceById } from "../services/findService";
 import { organisations } from "../mockData/organisations";
 
 router.get("/", async (req: Request, res: Response, next: NextFunction) => {
-  // Use the referer as the backLink, defaulting to '/' if no referer is set
-  const backLink = req.headers.referer || "/";
+  const backLink = req.session.backLink || "/";
+  req.session.backLink = req.originalUrl;
   // Extract the 'q' query parameter from the request, convert it to a string,
   // change it to lowercase for case insensitive search, and assign it to the 'query' variable.
   // If 'q' doesn't exist, assign 'undefined' to the 'query' variable.
@@ -75,7 +75,8 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
 });
 
 router.get("/:resourceID", async (req: Request, res: Response) => {
-  const backLink = req.headers.referer || "/";
+  const backLink = req.session.backLink || "/";
+  req.session.backLink = req.originalUrl;
   const resourceID = req.params.resourceID;
   const resource = await fetchResourceById(resourceID);
   res.render("resource.njk", {
