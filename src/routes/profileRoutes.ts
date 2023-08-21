@@ -13,8 +13,13 @@ router.get(
       return res.redirect("/error");
     }
 
-    console.log(req.user);
-    const response = await axios.put(URL, { token: JSON.stringify(req.user) })
+    try {
+      const response = await axios.put(URL, { token: req.cookies.jwtToken })
+      console.log(response)
+    } catch (error) {
+      console.log("USER API ERROR")
+      console.log(error)
+    }
     res.render("profile.njk", {
       heading: "Authed",
       user: req.user,

@@ -8,6 +8,8 @@ import {
   validateRequestBody,
 } from "../helperFunctions/helperFunctions";
 import { FormData } from "../types/express";
+import axios from "axios";
+
 function parseJwt(token: string) {
   return JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
 }
@@ -108,6 +110,8 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   });
 });
 
+const URL = `${process.env.API_ENDPOINT}/formdata`
+
 router.post("/:resourceID/:step", async (req: Request, res: Response) => {
   if (!req.session.acquirerForms) {
     return res.status(400).send("Acquirer forms not found in session");
@@ -141,6 +145,17 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
   }
 
   stepData.status = "COMPLETED";
+
+  console.log(formdata)
+  console.log(JSON.stringify(formdata))
+  try {
+    const response = await axios.put(URL, { jwt: req.cookies.jwtToken, formdata: JSON.stringify(formdata) })
+    console.log(response)
+  } catch (error) {
+    console.log("Formdata error:")
+    console.log(error)
+  }
+
 
   if (formdata.steps[formStep].nextStep) {
     return res.redirect(
