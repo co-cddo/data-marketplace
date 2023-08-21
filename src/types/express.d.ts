@@ -22,18 +22,31 @@ interface Benefits {
   checked?: boolean;
 }
 
-interface LawfulBasisPersonal {
+interface LawfulBasis {
   checked?: boolean;
 }
 
 type LawfulBasisPersonalStep = {
-  "public-task"?: LawfulBasisPersonal;
-  "legal-obligation"?: LawfulBasisPersonal;
-  "contract"?: LawfulBasisPersonal;
-  "legitimate-interests"?: LawfulBasisPersonal;
-  "consent"?: LawfulBasisPersonal;
-  "vital-interests"?: LawfulBasisPersonal;
-  "law-enforcement"?: LawfulBasisPersonal;
+  "public-task"?: LawfulBasis;
+  "legal-obligation"?: LawfulBasis;
+  "contract"?: LawfulBasis;
+  "legitimate-interests"?: LawfulBasis;
+  "consent"?: LawfulBasis;
+  "vital-interests"?: LawfulBasis;
+  "law-enforcement"?: LawfulBasis;
+}
+
+type LawfulBasisSpecialStep = {
+  "reasons-of-public-interest"?: LawfulBasis;
+  "legal-claim-or-judicial-acts"?: LawfulBasis;
+  "public-health"?: LawfulBasis;
+  "health-or-social-care"?: LawfulBasis;
+  "social-employment-security-and-protection"?: LawfulBasis;
+  "vital-interests"?: LawfulBasis;
+  "explicit-consent"?: LawfulBasis;
+  "public-by-data-subject"?: LawfulBasis;
+  "archiving-researching-statistics"?: LawfulBasis;
+  "not-for-profit-bodies"?: LawfulBasis;
 }
 
 export interface RequestBody {
@@ -62,7 +75,8 @@ type LegalPowerStep = {
   explanation: string;
 };
 
-type StepValue = string | ProjectAimStep | BenefitsStep | LegalPowerStep | LawfulBasisPersonalStep;
+type StepValue = string | ProjectAimStep | BenefitsStep |
+LegalPowerStep | LawfulBasisPersonalStep | LawfulBasisSpecialStep;
 
 interface Step {
   id: string;

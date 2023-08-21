@@ -213,7 +213,6 @@ const extractFormData = (stepData: Step, body: RequestBody) => {
 
 
   if (stepData.id === "lawful-basis-personal") {
-    console.log("test ", stepData, body)
       return {
       "public-task": {
         checked: body["lawful-basis-personal"]?.includes("public-task"),
@@ -243,6 +242,41 @@ const extractFormData = (stepData: Step, body: RequestBody) => {
     }
   }
  
+  if (stepData.id === "lawful-basis-special") {
+      return {
+      "reasons-of-public-interest": {
+        checked: body["lawful-basis-special"]?.includes("reasons-of-public-interest"),
+      },
+      "legal-claim-or-judicial-acts": {
+        checked: body["lawful-basis-special"]?.includes("legal-claim-or-judicial-acts"),
+      },
+      "public-health": {
+        checked: body["lawful-basis-special"]?.includes("public-health"),
+      },
+      "health-or-social-care": {
+        checked: body["lawful-basis-special"]?.includes("health-or-social-care"),
+      },
+      "social-employment-security-and-protection": {
+        checked: body["lawful-basis-special"]?.includes("social-employment-security-and-protection"),
+      },
+      "vital-interests": {
+        checked: body["lawful-basis-special"]?.includes("vital-interests"),
+      },
+      "explicit-consent": {
+        checked: body["lawful-basis-special"]?.includes("explicit-consent"),
+      },
+      "public-by-data-subject": {
+        checked: body["lawful-basis-special"]?.includes("public-by-data-subject"),
+      },
+      "archiving-researching-statistics": {
+        checked: body["lawful-basis-special"]?.includes("archiving-researching-statistics"),
+      },
+      "not-for-profit-bodies": {
+        checked: body["lawful-basis-special"]?.includes("not-for-profit-bodies"),
+      },
+    }
+  }
+
   // Other input types can go here
   return;
 };
