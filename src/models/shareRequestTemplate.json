@@ -20,11 +20,7 @@
     },
     "legal": {
       "name": "Legal power and gateway",
-      "steps": [
-        "legal-power",
-        "legal-gateway",
-        "legal-review"
-      ]
+      "steps": ["legal-power", "legal-gateway", "legal-review"]
     },
     "dataProtection": {
       "name": "Data protection",
@@ -38,18 +34,11 @@
     },
     "security": {
       "name": "Data governance, security and technology",
-      "steps": [
-        "delivery",
-        "format",
-        "disposal",
-        "security-review"
-      ]
+      "steps": ["delivery", "format", "disposal", "security-review"]
     },
     "review": {
       "name": "Review and send",
-      "steps": [
-        "check"
-      ]
+      "steps": ["check"]
     }
   },
   "steps": {
@@ -160,10 +149,7 @@
       "name": "Legal review",
       "status": "CANNOT START YET",
       "value": "",
-      "blockedBy": [
-        "legal-power",
-        "legal-gateway"
-      ],
+      "blockedBy": ["legal-power", "legal-gateway"],
       "nextStep": "lawful-basis-personal"
     },
     "lawful-basis-personal": {
@@ -251,22 +237,14 @@
       "name": "Data security review",
       "status": "CANNOT START YET",
       "value": "",
-      "blockedBy": [
-        "delivery",
-        "format",
-        "disposal"
-      ],
+      "blockedBy": ["delivery", "format", "disposal"],
       "nextStep": "check"
     },
     "check": {
       "id": "check",
       "name": "Check answers",
       "status": "CANNOT START YET",
-      "blockedBy": [
-        "legal-review",
-        "protection-review",
-        "security-review"
-      ]
+      "blockedBy": ["legal-review", "protection-review", "security-review"]
     }
   }
 }
