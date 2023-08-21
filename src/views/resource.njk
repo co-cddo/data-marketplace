@@ -22,9 +22,11 @@
             {% endif %}
         </p>
         <div class="result-list__limit-height">
-            <p class="govuk-body govuk-!-margin-bottom-0 govuk-!-margin-top-0">
-            {{ resource.description }}
-            </p>
+            <div class="govuk-body govuk-!-margin-bottom-0 govuk-!-margin-top-0">
+                {% markdown %}
+                    {{ resource.description }}
+                {% endmarkdown %}
+            </div>
         </div>
         <span class="js-result-list-toggle-height govuk-accordion__section-toggle govuk-body" data-nosnippet=""><span class="govuk-accordion__section-toggle-focus"><span class="govuk-accordion-nav__chevron govuk-accordion-nav__chevron--down"></span><span class="govuk-accordion__section-toggle-text">Show more</span></span></span>
     </div>
