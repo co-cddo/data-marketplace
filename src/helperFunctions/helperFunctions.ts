@@ -210,7 +210,13 @@ const extractFormData = (stepData: Step, body: RequestBody) => {
       },
     };
   }
-  
+
+  if(stepData.id === "delivery") {
+   return {
+    explanation: body["something-else"],
+    checked: body["delivery"],
+   }   
+  }
   // Other input types can go here
   return;
 };
