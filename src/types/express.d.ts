@@ -53,14 +53,14 @@ type LegalDecision = {
 };
 
 type LegalPowerStep = {
-  "yes": LegalDecision;
-  "no": LegalDecision;
+  yes: LegalDecision;
+  no: LegalDecision;
   "we-dont-know": LegalDecision;
 };
 
 type LegalGatewayStep = {
-  "yes": LegalDecision;
-  "other": LegalDecision;
+  yes: LegalDecision;
+  other: LegalDecision;
   "we-dont-know": LegalDecision;
 };
 
@@ -71,12 +71,12 @@ interface LawfulBasis {
 type LawfulBasisPersonalStep = {
   "public-task"?: LawfulBasis;
   "legal-obligation"?: LawfulBasis;
-  "contract"?: LawfulBasis;
+  contract?: LawfulBasis;
   "legitimate-interests"?: LawfulBasis;
-  "consent"?: LawfulBasis;
+  consent?: LawfulBasis;
   "vital-interests"?: LawfulBasis;
   "law-enforcement"?: LawfulBasis;
-}
+};
 
 type LawfulBasisSpecialStep = {
   "reasons-of-public-interest"?: LawfulBasis;
@@ -89,15 +89,16 @@ type LawfulBasisSpecialStep = {
   "public-by-data-subject"?: LawfulBasis;
   "archiving-researching-statistics"?: LawfulBasis;
   "not-for-profit-bodies"?: LawfulBasis;
-}
+};
 
-export type StepValue = string 
-  | ProjectAimStep 
-  | BenefitsStep 
-  | LegalPowerStep 
+export type StepValue =
+  | string
+  | ProjectAimStep
+  | BenefitsStep
+  | LegalPowerStep
   | LegalGatewayStep
   | DateStep
-  | LawfulBasisPersonalStep 
+  | LawfulBasisPersonalStep
   | LawfulBasisSpecialStep;
 
 interface Step {
@@ -116,7 +117,6 @@ type DateStep = {
   month?: number | null;
   year?: number | null;
 };
-
 
 interface Section {
   name: string;

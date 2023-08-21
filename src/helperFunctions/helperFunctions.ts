@@ -1,4 +1,17 @@
-import { BenefitsStep, DateStep, LawfulBasisPersonalStep, LawfulBasisSpecialStep, LegalGatewayStep, LegalPowerStep, ProjectAimStep,  RequestBody, Step, StepValue, RadioFieldStepID, TextFieldStepID } from "../types/express";
+import {
+  BenefitsStep,
+  DateStep,
+  LawfulBasisPersonalStep,
+  LawfulBasisSpecialStep,
+  LegalGatewayStep,
+  LegalPowerStep,
+  ProjectAimStep,
+  RequestBody,
+  Step,
+  StepValue,
+  RadioFieldStepID,
+  TextFieldStepID,
+} from "../types/express";
 
 function validateDate(day: number, month: number, year: number): string {
   const errors = new Set<string>();
@@ -126,7 +139,7 @@ const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
   if (isRadioField(stepData.id)) {
     return body[stepData.id] as StepValue;
   }
- 
+
   // Check for text fields
   if (isTextField(stepData.id)) {
     return body[stepData.id] as StepValue;
@@ -190,58 +203,55 @@ const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
 
   if (stepData.id === "legal-power") {
     return {
-      "yes": {
+      yes: {
         explanation: body["legal-power-textarea"] || "",
-        checked: body["legal-power"] === "yes"
+        checked: body["legal-power"] === "yes",
       },
-      "no": {
+      no: {
         explanation: body["legal-power-textarea"] || "",
-        checked: body["legal-power"] === "no"
+        checked: body["legal-power"] === "no",
       },
       "we-dont-know": {
-        checked: body["legal-power"] === "we-dont-know"
-      }
+        checked: body["legal-power"] === "we-dont-know",
+      },
     } as LegalPowerStep;
   }
 
   if (stepData.id === "legal-gateway") {
     return {
-      "yes": {
-        explanation: body["legal-gateway"] === "yes"
-          ? body["yes"]
-          : "",
-        checked: body["legal-gateway"] === "yes"
+      yes: {
+        explanation: body["legal-gateway"] === "yes" ? body["yes"] : "",
+        checked: body["legal-gateway"] === "yes",
       },
-      "other": {
-        explanation: body["legal-gateway"] === "other"
-          ? body["other"]
-          : "",
-        checked: body["legal-gateway"] === "other"
+      other: {
+        explanation: body["legal-gateway"] === "other" ? body["other"] : "",
+        checked: body["legal-gateway"] === "other",
       },
       "we-dont-know": {
-        explanation: body["legal-gateway"] === "we-dont-know"
-          ? body["we-dont-know"]
-          : "",
-        checked: body["legal-gateway"] === "we-dont-know"
-      }
+        explanation:
+          body["legal-gateway"] === "we-dont-know" ? body["we-dont-know"] : "",
+        checked: body["legal-gateway"] === "we-dont-know",
+      },
     } as LegalGatewayStep;
   }
 
   if (stepData.id === "lawful-basis-personal") {
-      return {
+    return {
       "public-task": {
         checked: body["lawful-basis-personal"]?.includes("public-task"),
       },
       "legal-obligation": {
         checked: body["lawful-basis-personal"]?.includes("legal-obligation"),
       },
-      "contract": {
+      contract: {
         checked: body["lawful-basis-personal"]?.includes("contract"),
       },
       "legitimate-interests": {
-        checked: body["lawful-basis-personal"]?.includes("legitimate-interests"),
+        checked: body["lawful-basis-personal"]?.includes(
+          "legitimate-interests",
+        ),
       },
-      "consent": {
+      consent: {
         checked: body["lawful-basis-personal"]?.includes("consent"),
       },
       "vital-interest": {
@@ -252,23 +262,31 @@ const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
       },
     } as LawfulBasisPersonalStep;
   }
- 
+
   if (stepData.id === "lawful-basis-special") {
-      return {
+    return {
       "reasons-of-public-interest": {
-        checked: body["lawful-basis-special"]?.includes("reasons-of-public-interest"),
+        checked: body["lawful-basis-special"]?.includes(
+          "reasons-of-public-interest",
+        ),
       },
       "legal-claim-or-judicial-acts": {
-        checked: body["lawful-basis-special"]?.includes("legal-claim-or-judicial-acts"),
+        checked: body["lawful-basis-special"]?.includes(
+          "legal-claim-or-judicial-acts",
+        ),
       },
       "public-health": {
         checked: body["lawful-basis-special"]?.includes("public-health"),
       },
       "health-or-social-care": {
-        checked: body["lawful-basis-special"]?.includes("health-or-social-care"),
+        checked: body["lawful-basis-special"]?.includes(
+          "health-or-social-care",
+        ),
       },
       "social-employment-security-and-protection": {
-        checked: body["lawful-basis-special"]?.includes("social-employment-security-and-protection"),
+        checked: body["lawful-basis-special"]?.includes(
+          "social-employment-security-and-protection",
+        ),
       },
       "vital-interests": {
         checked: body["lawful-basis-special"]?.includes("vital-interests"),
@@ -277,13 +295,19 @@ const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
         checked: body["lawful-basis-special"]?.includes("explicit-consent"),
       },
       "public-by-data-subject": {
-        checked: body["lawful-basis-special"]?.includes("public-by-data-subject"),
+        checked: body["lawful-basis-special"]?.includes(
+          "public-by-data-subject",
+        ),
       },
       "archiving-researching-statistics": {
-        checked: body["lawful-basis-special"]?.includes("archiving-researching-statistics"),
+        checked: body["lawful-basis-special"]?.includes(
+          "archiving-researching-statistics",
+        ),
       },
       "not-for-profit-bodies": {
-        checked: body["lawful-basis-special"]?.includes("not-for-profit-bodies"),
+        checked: body["lawful-basis-special"]?.includes(
+          "not-for-profit-bodies",
+        ),
       },
     } as LawfulBasisSpecialStep;
   }
