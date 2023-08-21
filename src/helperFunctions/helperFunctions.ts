@@ -216,12 +216,9 @@ const extractFormData = (stepData: Step, body: RequestBody) => {
   return;
 };
 
-function getLicenceTitleFromURL(licenceURL: string): string | undefined {
-  const normalizedLicenceURL = normaliseURL(licenceURL);
-  const licence = licences.find(
-    (l) => normaliseURL(l.url) === normalizedLicenceURL,
-  );
-  return licence ? licence.title : undefined;
+function getLicenceTitleFromURL(licenceURL: string): string {
+  const licence = licences.find(l => normaliseURL(l.url) === normaliseURL(licenceURL));
+  return licence ? licence.title : licenceURL; // return the original URL if no match found
 }
 
 function normaliseURL(url: string): string {
