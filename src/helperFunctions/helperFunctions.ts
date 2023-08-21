@@ -210,6 +210,13 @@ const extractFormData = (stepData: Step, body: RequestBody) => {
       },
     };
   }
+
+  if(stepData.id === "format") {
+    return {
+     explanation: body["something-else"],
+     checked: body["format"],
+    }   
+   }
   
   // Other input types can go here
   return;
