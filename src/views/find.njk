@@ -61,31 +61,33 @@
             </div>
         </div>
         <div class="govuk-grid-column-two-thirds" role="region" aria-label="Search results">
-            <div class="result-info">
+            <div class="{% if hasFilters %}result-info--with-border{% endif %}">
                 <div class="result-info__header">
                     <h2 class="gem-c-heading govuk-heading-s govuk-!-margin-bottom-2" id="js-result-count">{{ resources.length }} results</h2>
                     <div data-track-category="filterClicked" data-track-action="skip-Link" data-track-label="">
                         <a class="gem-c-skip-link govuk-skip-link govuk-!-display-none-print" data-module="govuk-skip-link" href="#js-results" data-govuk-skip-link-module-started="true">Skip to results</a>
                     </div>
                 </div>
+            </div>
+            {% if hasFilters %}
                 <div id="js-facet-tag-wrapper" class="facet-tags__container facet-tags__container--hidden" aria-live="assertive">
                     <a id="clear-filters" class="govuk-link govuk-link--no-visited-state" href="{{assetpath}}/find">
                         <span>Clear Filters</span>
                     </a>
                     {% for category in filterOptionTags %}
                         {% if category.items.length > 0 %}
-                        <div class="moj-override--selected-tags" id="tags-container-{{ category.id }}" >
-                            <h3 class="govuk-heading-s govuk-!-margin-bottom-0 category-filter-title">{{ category.title }}</h3>
-                            <div class="moj-filter-tags">                               
-                                {% for filter in category.items %}
-                                    <span class="moj-filter__tag">{{ filter.text }}</span>
-                                {% endfor %}
+                            <div class="moj-override--selected-tags" id="tags-container-{{ category.id }}" >
+                                <h3 class="govuk-heading-s govuk-!-margin-bottom-0 category-filter-title">{{ category.title }}</h3>
+                                <div class="moj-filter-tags">
+                                    {% for filter in category.items %}
+                                        <span class="moj-filter__tag">{{ filter.text }}</span>
+                                    {% endfor %}
+                                </div>
                             </div>
-                        </div>
                         {% endif %}
                     {% endfor %}
                 </div>
-            </div> 
+            {% endif %}
             {% if resources|length %}
                 <ul class="gem-c-document-list gem-c-document-list--no-underline govuk-!-margin-bottom-5" data-module="edge">
                     {% for resource in resources %}

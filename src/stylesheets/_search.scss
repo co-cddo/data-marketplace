@@ -109,15 +109,11 @@
   border: 0;
 }
 
-.result-info {
+.result-info--with-border {
   margin: 0 0 20px 0;
   border-bottom: solid 1px #0b0c0c;
 }
 
-// Temporary CSS style to sustain layout without filter content
-.moj-filter {
-  min-height: 1px;
-}
 
 /* Select the input field when it's showing the placeholder (i.e., it's empty) and apply styles to the label via a sibling selector (~) */
 .js-enabled .gem-c-search__input:placeholder-shown ~ .gem-c-search__label {

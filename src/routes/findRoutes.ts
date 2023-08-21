@@ -56,6 +56,9 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
       // more filters here
     ];
 
+    const hasFilters = filterOptionTags.some(category => category.items.length > 0);
+
+
     res.render("find.njk", {
       route: req.params.page,
       backLink: backLink,
@@ -63,6 +66,7 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
       query: query,
       filterOptions,
       filterOptionTags: filterOptionTags,
+      hasFilters: hasFilters
     });
   } catch (error) {
     // Catch errors if API call was unsuccessful and pass to error-handling middlewear
