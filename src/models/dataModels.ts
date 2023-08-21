@@ -42,6 +42,7 @@ export interface CatalogueItem {
   issued: string;
   keyword: string[];
   licence: string;
+  licenceTitle?: string | null;
   mediaType?: string[] | null;
   modified: string | null;
   organisation: Organisation;

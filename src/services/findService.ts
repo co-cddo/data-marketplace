@@ -5,6 +5,7 @@ import {
   CatalogueItem,
   Organisation,
 } from "../models/dataModels";
+import { getLicenceTitleFromURL } from "../helperFunctions/helperFunctions";
 
 export async function fetchResources(
   query?: string,
@@ -71,6 +72,10 @@ export async function fetchResourceById(
 
   if (!resource) {
     throw new Error("Resource not found.");
+  }
+
+  if (resource.licence) {
+    resource.licenceTitle = getLicenceTitleFromURL(resource.licence);
   }
 
   return resource;
