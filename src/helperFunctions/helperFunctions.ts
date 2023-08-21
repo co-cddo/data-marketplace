@@ -210,7 +210,7 @@ const extractFormData = (stepData: Step, body: RequestBody) => {
       },
     };
   }
-  
+
   // Other input types can go here
   return;
 };

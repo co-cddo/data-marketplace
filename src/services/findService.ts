@@ -36,16 +36,17 @@ export async function fetchResources(
   const organisationsSet = new Set();
   const uniqueOrganisations: Organisation[] = [];
   resources.forEach((item) => {
-    if (item.organisation && !organisationsSet.has(item.organisation.id)) {
+    if (item.organisation && !organisationsSet.has(item.organisation.slug)) {
       uniqueOrganisations.push(item.organisation);
-      organisationsSet.add(item.organisation.id);
+      organisationsSet.add(item.organisation.slug);
     }
   });
 
   if (organisationFilters) {
     resources = resources.filter(
       (item) =>
-        item.organisation && organisationFilters.includes(item.organisation.id),
+        item.organisation &&
+        organisationFilters.includes(item.organisation.slug),
     );
   }
 
@@ -73,4 +74,18 @@ export async function fetchResourceById(
   }
 
   return resource;
+}
+
+export async function fetchOrganisations(): Promise<Organisation[]> {
+  const apiUrl = `${process.env.API_ENDPOINT}/organisations`;
+
+  if (!apiUrl) {
+    throw new Error(
+      "API endpoint is undefined. Please set the API_ENDPOINT environment variable.",
+    );
+  }
+
+  const response = await axios.get<Organisation[]>(apiUrl);
+  const organisations: Organisation[] = response.data;
+  return organisations;
 }
