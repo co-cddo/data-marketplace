@@ -58,6 +58,7 @@ interface Step {
   nextStep?: string;
   blockedBy?: string[];
   errorMessage?: string;
+  skipped?: boolean;
 }
 
 type DateStep = {

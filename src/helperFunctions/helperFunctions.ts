@@ -116,7 +116,7 @@ const extractFormData = (stepData: Step, body: RequestBody) => {
 
   const radioFields = ["data-type", "data-access", "legal-review"];
   const textFields = ["impact", "data-subjects", "data-required"];
-  const checkBoxes = ["basis"];
+  const checkBoxes = ["lawful-basis-special"];
 
   if (radioFields.includes(stepData.id)) {
     return body[stepData.id];
@@ -212,9 +212,7 @@ const extractFormData = (stepData: Step, body: RequestBody) => {
     };
   }
 
-  if (stepData.id === "basis") {
-    return body["basis"];
-  } else if (checkBoxes.includes(stepData.id)) {
+  if (checkBoxes.includes(stepData.id)) {
     return body[stepData.id];
   }
 
