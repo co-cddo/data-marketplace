@@ -1,4 +1,4 @@
-import { DateStep, RequestBody, Step } from "../types/express";
+import { BenefitsStep, DateStep, LawfulBasisPersonalStep, LawfulBasisSpecialStep, LegalGatewayStep, LegalPowerStep, ProjectAimStep,  RequestBody, Step, StepValue, RadioFieldStepID, TextFieldStepID } from "../types/express";
 
 function validateDate(day: number, month: number, year: number): string {
   const errors = new Set<string>();
@@ -107,29 +107,36 @@ const validateRequestBody = (step: string, body: RequestBody): string => {
   return errorMessage;
 };
 
-const extractFormData = (stepData: Step, body: RequestBody) => {
+function isRadioField(id: string): id is RadioFieldStepID {
+  return ["data-type", "data-access", "legal-review"].includes(id);
+}
+
+function isTextField(id: string): id is TextFieldStepID {
+  return ["impact", "data-subjects", "data-required"].includes(id);
+}
+
+const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
   // Return something that will get set in the 'value' key of the form step
   // Will need to something different depending on whether the input is a radio button
   //  or text field or checkbox etc.
   // All simple radio button-style forms:
   // (As long as the radio group has a name the same as the step id
 
-  const radioFields = ["data-type", "data-access", "legal-review"];
-  const textFields = ["impact", "data-subjects", "data-required"];
-
-  if (radioFields.includes(stepData.id)) {
-    return body[stepData.id];
+  // Check for radio fields
+  if (isRadioField(stepData.id)) {
+    return body[stepData.id] as StepValue;
+  }
+ 
+  // Check for text fields
+  if (isTextField(stepData.id)) {
+    return body[stepData.id] as StepValue;
   }
 
   if (stepData.id === "project-aims") {
     return {
       aims: body["aims"] || "",
       explanation: body["explanation"] || "",
-    };
-  } else {
-    if (textFields.includes(stepData.id)) {
-      return body[stepData.id];
-    }
+    } as ProjectAimStep;
   }
 
   if (stepData.id === "date") {
@@ -137,7 +144,7 @@ const extractFormData = (stepData: Step, body: RequestBody) => {
       day: body.day || null,
       month: body.month || null,
       year: body.year || null,
-    };
+    } as DateStep;
   }
 
   if (stepData.id === "benefits") {
@@ -178,39 +185,47 @@ const extractFormData = (stepData: Step, body: RequestBody) => {
         explanation: body["something-else"],
         checked: body["benefits"]?.includes("something-else"),
       },
-    };
+    } as BenefitsStep;
   }
 
   if (stepData.id === "legal-power") {
     return {
-      decision: body["legal-power"],
-      explanation: body["legal-power-textarea"] || null,
-    };
+      "yes": {
+        explanation: body["legal-power-textarea"] || "",
+        checked: body["legal-power"] === "yes"
+      },
+      "no": {
+        explanation: body["legal-power-textarea"] || "",
+        checked: body["legal-power"] === "no"
+      },
+      "we-dont-know": {
+        checked: body["legal-power"] === "we-dont-know"
+      }
+    } as LegalPowerStep;
   }
 
   if (stepData.id === "legal-gateway") {
     return {
-      "yes-decision": {
-        explanation: body["legal-gateway"]?.includes("yes-decision")
-          ? body["yes-decision"]
+      "yes": {
+        explanation: body["legal-gateway"] === "yes"
+          ? body["yes"]
           : "",
-        checked: body["legal-gateway"]?.includes("yes-decision"),
+        checked: body["legal-gateway"] === "yes"
       },
-      "other-decision": {
-        explanation: body["legal-gateway"]?.includes("other-decision")
-          ? body["other-decision"]
+      "other": {
+        explanation: body["legal-gateway"] === "other"
+          ? body["other"]
           : "",
-        checked: body["legal-gateway"]?.includes("other-decision"),
+        checked: body["legal-gateway"] === "other"
       },
-      "dont-know-decision": {
-        explanation: body["legal-gateway"]?.includes("dont-know-decision")
-          ? body["dont-know-decision"]
+      "we-dont-know": {
+        explanation: body["legal-gateway"] === "we-dont-know"
+          ? body["we-dont-know"]
           : "",
-        checked: body["legal-gateway"]?.includes("dont-know-decision"),
-      },
-    };
+        checked: body["legal-gateway"] === "we-dont-know"
+      }
+    } as LegalGatewayStep;
   }
-
 
   if (stepData.id === "lawful-basis-personal") {
       return {
@@ -235,11 +250,7 @@ const extractFormData = (stepData: Step, body: RequestBody) => {
       "law-enforcement": {
         checked: body["lawful-basis-personal"]?.includes("law-enforcement"),
       },
-    }
-  } else {
-    if (textFields.includes(stepData.id)) {
-      return body[stepData.id];
-    }
+    } as LawfulBasisPersonalStep;
   }
  
   if (stepData.id === "lawful-basis-special") {
@@ -274,11 +285,11 @@ const extractFormData = (stepData: Step, body: RequestBody) => {
       "not-for-profit-bodies": {
         checked: body["lawful-basis-special"]?.includes("not-for-profit-bodies"),
       },
-    }
+    } as LawfulBasisSpecialStep;
   }
 
   // Other input types can go here
-  return;
+  return "";
 };
 
 export { extractFormData, validateDate, validateRequestBody };

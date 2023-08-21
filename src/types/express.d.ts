@@ -17,10 +17,52 @@ interface FormData {
   steps: Record<string, Step>;
 }
 
+export interface RequestBody {
+  [key: string]: string | undefined;
+}
+
+// Add id's here. Should only be able to handle single value
+type TextFieldStepID = "impact" | "data-subjects" | "data-required";
+type RadioFieldStepID = "data-type" | "data-access" | "legal-review";
+
 interface Benefits {
   explanation?: string;
   checked?: boolean;
 }
+
+type BenefitsStep = {
+  "decision-making"?: Benefits;
+  "service-delivery"?: Benefits;
+  "benefit-people"?: Benefits;
+  "allocate-and-evaluate-funding"?: Benefits;
+  "social-economic-trends"?: Benefits;
+  "needs-of-the-public"?: Benefits;
+  "statistical-information"?: Benefits;
+  "existing-research-or-statistics"?: Benefits;
+  "something-else"?: Benefits;
+};
+
+type ProjectAimStep = {
+  aims: string;
+  explanation: string;
+};
+
+type LegalDecision = {
+  explanation?: string;
+  checked: boolean;
+};
+
+type LegalPowerStep = {
+  "yes": LegalDecision;
+  "no": LegalDecision;
+  "we-dont-know": LegalDecision;
+};
+
+type LegalGatewayStep = {
+  "yes": LegalDecision;
+  "other": LegalDecision;
+  "we-dont-know": LegalDecision;
+};
 
 interface LawfulBasis {
   checked?: boolean;
@@ -49,37 +91,17 @@ type LawfulBasisSpecialStep = {
   "not-for-profit-bodies"?: LawfulBasis;
 }
 
-export interface RequestBody {
-  [key: string]: string | undefined;
-}
-
-type BenefitsStep = {
-  "decision-making"?: Benefits;
-  "service-delivery"?: Benefits;
-  "benefit-people"?: Benefits;
-  "allocate-and-evaluate-funding"?: Benefits;
-  "social-economic-trends"?: Benefits;
-  "needs-of-the-public"?: Benefits;
-  "statistical-information"?: Benefits;
-  "existing-research-or-statistics"?: Benefits;
-  "something-else"?: Benefits;
-};
-
-type ProjectAimStep = {
-  aims: string;
-  explanation: string;
-};
-
-type LegalPowerStep = {
-  decision: "yes" | "no" | "we don't know";
-  explanation: string;
-};
-
-type StepValue = string | ProjectAimStep | BenefitsStep |
-LegalPowerStep | LawfulBasisPersonalStep | LawfulBasisSpecialStep;
+export type StepValue = string 
+  | ProjectAimStep 
+  | BenefitsStep 
+  | LegalPowerStep 
+  | LegalGatewayStep
+  | DateStep
+  | LawfulBasisPersonalStep 
+  | LawfulBasisSpecialStep;
 
 interface Step {
-  id: string;
+  id: TextFieldStepID | RadioFieldStepID | string;
   name: string;
   status: string;
   value: StepValue;
@@ -94,6 +116,7 @@ type DateStep = {
   month?: number | null;
   year?: number | null;
 };
+
 
 interface Section {
   name: string;
