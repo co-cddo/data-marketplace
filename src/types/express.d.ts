@@ -22,7 +22,7 @@ export interface RequestBody {
 }
 
 // Add id's here. Should only be able to handle single value
-type TextFieldStepID = "impact" | "data-subjects" | "data-required";
+type TextFieldStepID = "impact" | "data-subjects" | "data-required" | "disposal";
 type RadioFieldStepID = "data-type" | "data-access" | "legal-review" | "role";
 
 interface Benefits {
@@ -50,6 +50,18 @@ type ProjectAimStep = {
 type LegalDecision = {
   explanation?: string;
   checked: boolean;
+};
+
+type DeliveryStep = {
+  "third-party": LegalDecision;
+  physical: LegalDecision;
+  something: LegalDecision
+}
+
+type FormatStep = {
+  csv: LegalDecision;
+  sql: LegalDecision;
+  something: LegalDecision;
 };
 
 type LegalPowerStep = {
@@ -99,7 +111,9 @@ export type StepValue =
   | LegalGatewayStep
   | DateStep
   | LawfulBasisPersonalStep
-  | LawfulBasisSpecialStep;
+  | LawfulBasisSpecialStep
+  | DeliveryStep
+  | FormatStep;
 
 interface Step {
   id: TextFieldStepID | RadioFieldStepID | string;

@@ -2,6 +2,7 @@ import { licences } from "../mockData/licences";
 import {
   BenefitsStep,
   DateStep,
+  FormatStep,
   LawfulBasisPersonalStep,
   LawfulBasisSpecialStep,
   LegalGatewayStep,
@@ -12,6 +13,7 @@ import {
   StepValue,
   RadioFieldStepID,
   TextFieldStepID,
+  DeliveryStep
 } from "../types/express";
 
 function validateDate(day: number, month: number, year: number): string {
@@ -126,7 +128,7 @@ function isRadioField(id: string): id is RadioFieldStepID {
 }
 
 function isTextField(id: string): id is TextFieldStepID {
-  return ["impact", "data-subjects", "data-required"].includes(id);
+  return ["impact", "data-subjects", "data-required", "disposal"].includes(id);
 }
 
 const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
@@ -209,7 +211,6 @@ const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
         checked: body["legal-power"] === "yes",
       },
       no: {
-        explanation: body["legal-power-textarea"] || "",
         checked: body["legal-power"] === "no",
       },
       "we-dont-know": {
@@ -236,6 +237,36 @@ const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
     } as LegalGatewayStep;
   }
 
+  if(stepData.id === "delivery") {
+   return {
+    "third-party": {
+      checked: body["delivery"] === "third-party",
+    },
+    physical: {
+      checked: body["delivery"] === "physical",
+    },
+    something: {
+      checked: body["delivery"] === "something",
+      explanation: body["delivery"] === "something" ? body["something-else"] : "",
+    }
+   }   as DeliveryStep;
+  };
+
+  if(stepData.id === "format") {
+    return {
+      csv: {
+        checked: body["format"] === "csv",
+      },
+      sql: {
+        checked: body["format"] === "sql",
+      },
+      something: {
+        checked: body["format"] === "something",
+        explanation: body["format"] === "something" ? body["something-else"] : "",
+    }   
+   } as FormatStep;
+  }
+  
   if (stepData.id === "lawful-basis-personal") {
     return {
       "public-task": {
