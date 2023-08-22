@@ -1,6 +1,8 @@
+import { licences } from "../mockData/licences";
 import {
   BenefitsStep,
   DateStep,
+  FormatStep,
   LawfulBasisPersonalStep,
   LawfulBasisSpecialStep,
   LegalGatewayStep,
@@ -126,7 +128,7 @@ function isRadioField(id: string): id is RadioFieldStepID {
 }
 
 function isTextField(id: string): id is TextFieldStepID {
-  return ["impact", "data-subjects", "data-required"].includes(id);
+  return ["impact", "data-subjects", "data-required", "disposal"].includes(id);
 }
 
 const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
@@ -209,7 +211,6 @@ const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
         checked: body["legal-power"] === "yes",
       },
       no: {
-        explanation: body["legal-power-textarea"] || "",
         checked: body["legal-power"] === "no",
       },
       "we-dont-know": {
@@ -251,6 +252,21 @@ const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
    }   as DeliveryStep;
   };
 
+  if(stepData.id === "format") {
+    return {
+      csv: {
+        checked: body["format"] === "csv",
+      },
+      sql: {
+        checked: body["format"] === "sql",
+      },
+      something: {
+        checked: body["format"] === "something",
+        explanation: body["format"] === "something" ? body["something-else"] : "",
+    }   
+   } as FormatStep;
+  }
+  
   if (stepData.id === "lawful-basis-personal") {
     return {
       "public-task": {
@@ -332,4 +348,31 @@ const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
   return "";
 };
 
-export { extractFormData, validateDate, validateRequestBody };
+function getLicenceTitleFromURL(licenceURL: string): string {
+  const licence = licences.find(
+    (l) => normaliseURL(l.url) === normaliseURL(licenceURL),
+  );
+  return licence ? licence.title : licenceURL; // return the original URL if no match found
+}
+
+function normaliseURL(url: string): string {
+  // Convert to lowercase
+  let normalisedURL = url.toLowerCase();
+
+  // Strip http:// or https://
+  normalisedURL = normalisedURL.replace(/^https?:\/\//, "");
+
+  // Remove trailing slash
+  if (normalisedURL.endsWith("/")) {
+    normalisedURL = normalisedURL.slice(0, -1);
+  }
+
+  return normalisedURL;
+}
+
+export {
+  extractFormData,
+  validateDate,
+  validateRequestBody,
+  getLicenceTitleFromURL,
+};

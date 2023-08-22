@@ -1,11 +1,14 @@
 import express, { Request, Response, NextFunction } from "express";
 const router = express.Router();
-import { fetchResources, fetchResourceById } from "../services/findService";
-import { organisations } from "../mockData/organisations";
+import {
+  fetchResources,
+  fetchResourceById,
+  fetchOrganisations,
+} from "../services/findService";
 
 router.get("/", async (req: Request, res: Response, next: NextFunction) => {
-  // Use the referer as the backLink, defaulting to '/' if no referer is set
-  const backLink = req.headers.referer || "/";
+  const backLink = req.session.backLink || "/";
+  req.session.backLink = req.originalUrl;
   // Extract the 'q' query parameter from the request, convert it to a string,
   // change it to lowercase for case insensitive search, and assign it to the 'query' variable.
   // If 'q' doesn't exist, assign 'undefined' to the 'query' variable.
@@ -16,7 +19,7 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
     // Fetch the data from the API
     const { resources } = await fetchResources(query, organisationFilters);
-
+    const organisations = await fetchOrganisations();
     const filterOptions = [
       // Define the shape of "filterOptions", add more as needed
       {
@@ -24,15 +27,15 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
         name: "organisationFilters",
         title: "Organisations",
         items: organisations.map((org) => ({
-          value: org.id,
+          value: org.slug,
           text: org.title,
-          acronym: org.acronym,
-          homepage: org.homepage,
+          abbreviation: org.abbreviation,
+          web_url: org.web_url,
           checked:
             (Array.isArray(organisationFilters) &&
-              organisationFilters.includes(org.id)) ||
+              organisationFilters.includes(org.slug)) ||
             (typeof organisationFilters === "string" &&
-              organisationFilters === org.id)
+              organisationFilters === org.slug)
               ? "checked"
               : "",
         })),
@@ -46,15 +49,19 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
         id: "organisationFilters",
         title: "Organisations",
         items: organisations
-          .filter((org) => organisationFilters?.includes(org.id))
+          .filter((org) => organisationFilters?.includes(org.slug))
           .map((org) => ({
-            value: org.id,
+            value: org.slug,
             text: org.title,
             checked: "checked",
           })),
       },
       // more filters here
     ];
+
+    const hasFilters = filterOptionTags.some(
+      (category) => category.items.length > 0,
+    );
 
     res.render("find.njk", {
       route: req.params.page,
@@ -63,6 +70,7 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
       query: query,
       filterOptions,
       filterOptionTags: filterOptionTags,
+      hasFilters: hasFilters,
     });
   } catch (error) {
     // Catch errors if API call was unsuccessful and pass to error-handling middlewear
@@ -71,7 +79,8 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
 });
 
 router.get("/:resourceID", async (req: Request, res: Response) => {
-  const backLink = req.headers.referer || "/";
+  const backLink = req.session.backLink || "/";
+  req.session.backLink = req.originalUrl;
   const resourceID = req.params.resourceID;
   const resource = await fetchResourceById(resourceID);
   res.render("resource.njk", {

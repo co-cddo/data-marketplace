@@ -22,7 +22,7 @@ export interface RequestBody {
 }
 
 // Add id's here. Should only be able to handle single value
-type TextFieldStepID = "impact" | "data-subjects" | "data-required";
+type TextFieldStepID = "impact" | "data-subjects" | "data-required" | "disposal";
 type RadioFieldStepID = "data-type" | "data-access" | "legal-review";
 
 interface Benefits {
@@ -56,6 +56,12 @@ type DeliveryStep = {
   "third-party": LegalDecision;
   physical: LegalDecision;
   something: LegalDecision
+}
+
+type FormatStep = {
+  csv: LegalDecision;
+  sql: LegalDecision;
+  something: LegalDecision;
 };
 
 type LegalPowerStep = {
@@ -106,7 +112,8 @@ export type StepValue =
   | DateStep
   | LawfulBasisPersonalStep
   | LawfulBasisSpecialStep
-  | DeliveryStep;
+  | DeliveryStep
+  | FormatStep;
 
 interface Step {
   id: TextFieldStepID | RadioFieldStepID | string;
@@ -139,5 +146,6 @@ declare module "express-serve-static-core" {
 declare module "express-session" {
   interface SessionData {
     acquirerForms?: Record<string, FormData>;
+    backLink: string;
   }
 }

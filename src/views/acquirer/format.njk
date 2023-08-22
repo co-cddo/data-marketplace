@@ -1,0 +1,64 @@
+{% extends "page.njk" %}
+{%- from "govuk/components/radios/macro.njk" import govukRadios -%}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-l">Request ID: {{requestId}}</span>
+      <form method="POST" id="dataFormatForm">
+         {% set somethingHTML %}
+            {{ govukInput({
+            id: "something-else",
+            name: "something-else",
+            value: savedValue['something']['explanation']
+            }) }}
+        {% endset -%}
+        {{ govukRadios({
+                 name: "format",
+                  fieldset: {
+                      legend: {
+                      text: "What is your preferred format for this data?",
+                      isPageHeading: true,
+                      classes: "govuk-fieldset__legend--l"
+                      }
+                  },
+                  items: [
+                      {
+                      value: "csv",
+                      text: "CSV file",
+                      checked: savedValue['csv']['checked']
+                      },
+                      {
+                      value: "sql",
+                      text: "SQL dataset",
+                      checked: savedValue['sql']['checked']
+                      },
+                      {
+                      value: "something",
+                      text: "Something else",
+                      checked: savedValue['something']['checked'],
+                    conditional: {
+                        html: somethingHTML
+                }
+                                      }
+                  ]
+                  }) }}
+          <div class="govuk-button-group">
+            {{ govukButton({
+                text: "Save and continue",
+                name: "continueButton",
+                value: "continue"
+            }) }}
+            {{ govukButton({
+                text: "Save and return",
+                classes: "govuk-button--secondary",
+                name: "returnButton",
+                value: "return"
+            }) }}
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
