@@ -210,7 +210,6 @@ const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
         checked: body["legal-power"] === "yes",
       },
       no: {
-        explanation: body["legal-power-textarea"] || "",
         checked: body["legal-power"] === "no",
       },
       "we-dont-know": {
