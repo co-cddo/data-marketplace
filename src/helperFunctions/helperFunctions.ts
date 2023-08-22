@@ -240,11 +240,9 @@ const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
    return {
     "third-party": {
       checked: body["delivery"] === "third-party",
-      explanation: body["delivery"] === "third-party" && "",
     },
     physical: {
       checked: body["delivery"] === "physical",
-      explanation: body["delivery"] === "physical" && "",
     },
     something: {
       checked: body["delivery"] === "something",
