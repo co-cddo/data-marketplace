@@ -241,11 +241,9 @@ const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
     return {
       csv: {
         checked: body["format"] === "csv",
-        explanation: body["format"] === "csv" && "",
       },
       sql: {
         checked: body["format"] === "sql",
-        explanation: body["format"] === "sql" && "",
       },
       something: {
         checked: body["format"] === "something",
