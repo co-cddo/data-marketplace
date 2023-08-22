@@ -1,3 +1,4 @@
+import { licences } from "../mockData/licences";
 import {
   BenefitsStep,
   DateStep,
@@ -316,4 +317,31 @@ const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
   return "";
 };
 
-export { extractFormData, validateDate, validateRequestBody };
+function getLicenceTitleFromURL(licenceURL: string): string {
+  const licence = licences.find(
+    (l) => normaliseURL(l.url) === normaliseURL(licenceURL),
+  );
+  return licence ? licence.title : licenceURL; // return the original URL if no match found
+}
+
+function normaliseURL(url: string): string {
+  // Convert to lowercase
+  let normalisedURL = url.toLowerCase();
+
+  // Strip http:// or https://
+  normalisedURL = normalisedURL.replace(/^https?:\/\//, "");
+
+  // Remove trailing slash
+  if (normalisedURL.endsWith("/")) {
+    normalisedURL = normalisedURL.slice(0, -1);
+  }
+
+  return normalisedURL;
+}
+
+export {
+  extractFormData,
+  validateDate,
+  validateRequestBody,
+  getLicenceTitleFromURL,
+};
