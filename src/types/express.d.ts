@@ -52,6 +52,12 @@ type LegalDecision = {
   checked: boolean;
 };
 
+type FormatStep = {
+  csv: LegalDecision;
+  sql: LegalDecision;
+  something: LegalDecision;
+};
+
 type LegalPowerStep = {
   yes: LegalDecision;
   no: LegalDecision;
@@ -99,7 +105,8 @@ export type StepValue =
   | LegalGatewayStep
   | DateStep
   | LawfulBasisPersonalStep
-  | LawfulBasisSpecialStep;
+  | LawfulBasisSpecialStep
+  | FormatStep;
 
 interface Step {
   id: TextFieldStepID | RadioFieldStepID | string;

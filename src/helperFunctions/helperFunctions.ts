@@ -2,6 +2,7 @@ import { licences } from "../mockData/licences";
 import {
   BenefitsStep,
   DateStep,
+  FormatStep,
   LawfulBasisPersonalStep,
   LawfulBasisSpecialStep,
   LegalGatewayStep,
@@ -209,7 +210,6 @@ const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
         checked: body["legal-power"] === "yes",
       },
       no: {
-        explanation: body["legal-power-textarea"] || "",
         checked: body["legal-power"] === "no",
       },
       "we-dont-know": {
@@ -236,6 +236,21 @@ const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
     } as LegalGatewayStep;
   }
 
+  if(stepData.id === "format") {
+    return {
+      csv: {
+        checked: body["format"] === "csv",
+      },
+      sql: {
+        checked: body["format"] === "sql",
+      },
+      something: {
+        checked: body["format"] === "something",
+        explanation: body["format"] === "something" ? body["something-else"] : "",
+    }   
+   } as FormatStep;
+  }
+  
   if (stepData.id === "lawful-basis-personal") {
     return {
       "public-task": {
