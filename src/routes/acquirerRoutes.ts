@@ -43,7 +43,7 @@ const skipThisStep = (step: string, formdata: FormData) => {
       return formdata.steps["data-access"].value === "no";
     }
     case "role": {
-      return formdata.steps["data-type"].value === "none";
+      return formdata.steps["data-type"].value === "none" || formdata.steps["data-type"].value === "";
     }
     default: {
       return false;

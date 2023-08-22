@@ -1,15 +1,19 @@
 export interface Organisation {
-  title: string;
   id: string;
-  acronym: string;
-  homepage: string;
+  title: string;
+  abbreviation: string;
+  slug: string;
+  format: string;
+  web_url: string;
 }
 
 interface Creator {
-  acronym: string;
-  homepage: string;
   id: string;
   title: string;
+  abbreviation: string;
+  slug: string;
+  format: string;
+  web_url: string;
 }
 
 interface ContactPoint {
@@ -38,6 +42,7 @@ export interface CatalogueItem {
   issued: string;
   keyword: string[];
   licence: string;
+  licenceTitle?: string | null;
   mediaType?: string[] | null;
   modified: string | null;
   organisation: Organisation;

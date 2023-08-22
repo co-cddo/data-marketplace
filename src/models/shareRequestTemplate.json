@@ -204,7 +204,12 @@
       "name": "Data protection review",
       "status": "CANNOT START YET",
       "value": "",
-      "blockedBy": ["basis", "data-travel", "role"],
+      "blockedBy": [
+        "lawful-basis-personal",
+        "lawful-basis-special",
+        "data-travel",
+        "role"
+      ],
       "nextStep": "delivery"
     },
     "delivery": {
