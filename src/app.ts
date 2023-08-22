@@ -2,6 +2,8 @@ import express, { NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
 dotenv.config();
 import nunjucks from "nunjucks";
+import markdown from "nunjucks-markdown";
+import marked from "marked";
 import helmet from "helmet";
 import homeRoute from "./routes/homeRoute";
 import findRoutes from "./routes/findRoutes";
@@ -93,6 +95,8 @@ const env = nunjucks.configure(["node_modules/govuk-frontend/", "src/views"], {
   express: app,
   watch: !isTesting,
 });
+// Configure Nunjucks Markdown
+markdown.register(env, marked.parse);
 
 // Add a custom filter for date formatting
 env.addFilter("formatDate", function (date: string | number | Date) {

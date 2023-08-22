@@ -12,37 +12,37 @@
         
         {% set legalGatewayDecision1 %}
         {{ govukTextarea({
-            id: "yes-decision",
-            name: "yes-decision",
+            id: "yes",
+            name: "yes",
             type: "text",
             classes: "govuk-!-width-two-third",
             label: {
                 text: "What is the legal gateway for acquiring this data?"
             },
-            value: savedValue['yes-decision']['explanation']
+            value: savedValue['yes']['explanation']
         }) }}
         {% endset -%}
 
         {% set legalGatewayDecision2 %}
         {{ govukTextarea({
-            id: "other-decision",
-            name: "other-decision",
+            id: "other",
+            name: "other",
             type: "text",
             classes: "govuk-!-width-two-third",
             label: {
                 text: "What other legal grounds do you have for acquiring this data?"
             },
-            value: savedValue['other-decision']['explanation']
+            value: savedValue['other']['explanation']
         }) }}
         {% endset -%}
 
         {% set legalGatewayDecision3 %}
         {{ govukTextarea({
-            id: "dont-know-decision",
-            name: "dont-know-decision",
+            id: "we-dont-know",
+            name: "we-dont-know",
             type: "text",
             classes: "govuk-!-width-two-third",
-            value: savedValue['dont-know-decision']['explanation']
+            value: savedValue['we-dont-know']['explanation']
         }) }}
         {% endset -%}
 
@@ -60,25 +60,25 @@
         },
         items: [
             {
-            value: "yes-decision",
+            value: "yes",
             text: "Yes, there is a legal gateway for acquiring this data",
-            checked: savedValue['yes-decision']['checked'],
+            checked: savedValue['yes']['checked'],
             conditional: {
                 html: legalGatewayDecision1
             }
             },
             {
-            value: "other-decision",
+            value: "other",
             text: "We have other legal grounds for acquiring this data",
-            checked: savedValue['other-decision']['checked'],
+            checked: savedValue['other']['checked'],
             conditional: {
                 html: legalGatewayDecision2
             }
             },
             {
-            value: "dont-know-decision",
+            value: "we-dont-know",
             text: "We don't know",
-            checked: savedValue['dont-know-decision']['checked'],
+            checked: savedValue['we-dont-know']['checked'],
             conditional: {
                 html: textHtml
             }

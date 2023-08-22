@@ -12,7 +12,7 @@
             {{ govukInput({
             id: "something-else",
             name: "something-else",
-            value: savedValue['explanation']
+            value: savedValue['something']['explanation']
             }) }}
         {% endset -%}
         {{ govukRadios({
@@ -28,17 +28,17 @@
                       {
                       value: "csv",
                       text: "CSV file",
-                      checked: savedValue['checked'] === 'csv'
+                      checked: savedValue['csv']['checked']
                       },
                       {
                       value: "sql",
                       text: "SQL dataset",
-                      checked: savedValue['checked'] === 'sql'
+                      checked: savedValue['sql']['checked']
                       },
                       {
                       value: "something",
                       text: "Something else",
-                      checked: savedValue['checked'] === 'something',
+                      checked: savedValue['something']['checked'],
                     conditional: {
                         html: somethingHTML
                 }

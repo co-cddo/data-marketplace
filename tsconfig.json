@@ -3,9 +3,10 @@
   "compilerOptions": {
     "lib": ["ESNext"],
     "outDir": "build",
+    "moduleResolution": "node",
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "typeRoots": ["./node_modules/@types", "src/types/express.d.ts"]
+    "typeRoots": ["./node_modules/@types", "src/types"]
   },
   "include": ["src", "package.json", "src/routes/homeRoute.ts"],
   "exclude": ["node_modules", "**/*.test.ts", "build"]

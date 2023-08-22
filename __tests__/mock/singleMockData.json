@@ -10,10 +10,11 @@
       },
       "creator": [
         {
-          "acronym": "TEST",
-          "homepage": "https://www.test.com",
-          "id": "department-for-test",
-          "title": "Department for Test"
+          "abbreviation": "test",
+          "id": "https://www.test.com",
+          "slug": "department-for-test",
+          "title": "Department for Test",
+          "web_url": "https://www.web_url_test.com"
         }
       ],
       "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam gravida sagittis arcu. Duis orci augue, efficitur ac consequat vel, maximus at massa. Sed auctor metus fringilla felis vestibulum, non finibus velit cursus. Praesent nulla nisi, fermentum sit amet porta id, porttitor ut mi. Praesent elementum mattis turpis nec aliquam. Aenean lobortis, nulla a eleifend aliquet, turpis diam dignissim erat, sed auctor lectus elit vitae quam. Nam id ex elementum, molestie sem nec, pulvinar eros. Duis sit amet magna a nisi pharetra scelerisque eget at libero. Aenean et mollis erat, ac aliquam lectus. Aenean lacinia odio ut ipsum feugiat molestie. Morbi facilisis libero nisi. Fusce vel nibh sed neque maximus placerat quis non leo. Nulla volutpat metus ligula, eu blandit libero blandit non. Vestibulum at dictum nisi. In euismod, arcu eget sagittis accumsan, est diam maximus sapien, quis iaculis ipsum lectus in justo.",
@@ -28,10 +29,11 @@
       "licence": "https://test.com",
       "modified": "2023-01-30",
       "organisation": {
-        "acronym": "test",
-        "homepage": "https://www.test.com",
-        "id": "department-for-test",
-        "title": "Department for Test"
+        "abbreviation": "test",
+        "id": "https://www.test.com",
+        "slug": "department-for-test",
+        "title": "Department for Test",
+        "web_url": "https://www.web_url_test.com"
       },
       "relatedAssets": [],
       "securityClassification": "OFFICIAL",

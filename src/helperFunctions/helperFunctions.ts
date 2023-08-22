@@ -1,4 +1,19 @@
-import { DateStep, RequestBody, Step } from "../types/express";
+import { licences } from "../mockData/licences";
+import {
+  BenefitsStep,
+  DateStep,
+  FormatStep,
+  LawfulBasisPersonalStep,
+  LawfulBasisSpecialStep,
+  LegalGatewayStep,
+  LegalPowerStep,
+  ProjectAimStep,
+  RequestBody,
+  Step,
+  StepValue,
+  RadioFieldStepID,
+  TextFieldStepID,
+} from "../types/express";
 
 function validateDate(day: number, month: number, year: number): string {
   const errors = new Set<string>();
@@ -107,29 +122,36 @@ const validateRequestBody = (step: string, body: RequestBody): string => {
   return errorMessage;
 };
 
-const extractFormData = (stepData: Step, body: RequestBody) => {
+function isRadioField(id: string): id is RadioFieldStepID {
+  return ["data-type", "data-access", "legal-review"].includes(id);
+}
+
+function isTextField(id: string): id is TextFieldStepID {
+  return ["impact", "data-subjects", "data-required"].includes(id);
+}
+
+const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
   // Return something that will get set in the 'value' key of the form step
   // Will need to something different depending on whether the input is a radio button
   //  or text field or checkbox etc.
   // All simple radio button-style forms:
   // (As long as the radio group has a name the same as the step id
 
-  const radioFields = ["data-type", "data-access", "legal-review"];
-  const textFields = ["impact", "data-subjects", "data-required"];
+  // Check for radio fields
+  if (isRadioField(stepData.id)) {
+    return body[stepData.id] as StepValue;
+  }
 
-  if (radioFields.includes(stepData.id)) {
-    return body[stepData.id];
+  // Check for text fields
+  if (isTextField(stepData.id)) {
+    return body[stepData.id] as StepValue;
   }
 
   if (stepData.id === "project-aims") {
     return {
       aims: body["aims"] || "",
       explanation: body["explanation"] || "",
-    };
-  } else {
-    if (textFields.includes(stepData.id)) {
-      return body[stepData.id];
-    }
+    } as ProjectAimStep;
   }
 
   if (stepData.id === "date") {
@@ -137,7 +159,7 @@ const extractFormData = (stepData: Step, body: RequestBody) => {
       day: body.day || null,
       month: body.month || null,
       year: body.year || null,
-    };
+    } as DateStep;
   }
 
   if (stepData.id === "benefits") {
@@ -178,48 +200,166 @@ const extractFormData = (stepData: Step, body: RequestBody) => {
         explanation: body["something-else"],
         checked: body["benefits"]?.includes("something-else"),
       },
-    };
+    } as BenefitsStep;
   }
 
   if (stepData.id === "legal-power") {
     return {
-      decision: body["legal-power"],
-      explanation: body["legal-power-textarea"] || null,
-    };
+      yes: {
+        explanation: body["legal-power-textarea"] || "",
+        checked: body["legal-power"] === "yes",
+      },
+      no: {
+        explanation: body["legal-power-textarea"] || "",
+        checked: body["legal-power"] === "no",
+      },
+      "we-dont-know": {
+        checked: body["legal-power"] === "we-dont-know",
+      },
+    } as LegalPowerStep;
   }
 
   if (stepData.id === "legal-gateway") {
     return {
-      "yes-decision": {
-        explanation: body["legal-gateway"]?.includes("yes-decision")
-          ? body["yes-decision"]
-          : "",
-        checked: body["legal-gateway"]?.includes("yes-decision"),
+      yes: {
+        explanation: body["legal-gateway"] === "yes" ? body["yes"] : "",
+        checked: body["legal-gateway"] === "yes",
       },
-      "other-decision": {
-        explanation: body["legal-gateway"]?.includes("other-decision")
-          ? body["other-decision"]
-          : "",
-        checked: body["legal-gateway"]?.includes("other-decision"),
+      other: {
+        explanation: body["legal-gateway"] === "other" ? body["other"] : "",
+        checked: body["legal-gateway"] === "other",
       },
-      "dont-know-decision": {
-        explanation: body["legal-gateway"]?.includes("dont-know-decision")
-          ? body["dont-know-decision"]
-          : "",
-        checked: body["legal-gateway"]?.includes("dont-know-decision"),
+      "we-dont-know": {
+        explanation:
+          body["legal-gateway"] === "we-dont-know" ? body["we-dont-know"] : "",
+        checked: body["legal-gateway"] === "we-dont-know",
       },
-    };
+    } as LegalGatewayStep;
   }
 
   if(stepData.id === "format") {
     return {
-     explanation: body["something-else"],
-     checked: body["format"],
+      csv: {
+        checked: body["format"] === "csv",
+        explanation: body["format"] === "csv" && "",
+      },
+      sql: {
+        checked: body["format"] === "sql",
+        explanation: body["format"] === "sql" && "",
+      },
+      something: {
+        checked: body["format"] === "something",
+        explanation: body["format"] === "something" ? body["something-else"] : "",
     }   
-   }
+   } as FormatStep;
+  }
   
+  if (stepData.id === "lawful-basis-personal") {
+    return {
+      "public-task": {
+        checked: body["lawful-basis-personal"]?.includes("public-task"),
+      },
+      "legal-obligation": {
+        checked: body["lawful-basis-personal"]?.includes("legal-obligation"),
+      },
+      contract: {
+        checked: body["lawful-basis-personal"]?.includes("contract"),
+      },
+      "legitimate-interests": {
+        checked: body["lawful-basis-personal"]?.includes(
+          "legitimate-interests",
+        ),
+      },
+      consent: {
+        checked: body["lawful-basis-personal"]?.includes("consent"),
+      },
+      "vital-interest": {
+        checked: body["lawful-basis-personal"]?.includes("vital-interest"),
+      },
+      "law-enforcement": {
+        checked: body["lawful-basis-personal"]?.includes("law-enforcement"),
+      },
+    } as LawfulBasisPersonalStep;
+  }
+
+  if (stepData.id === "lawful-basis-special") {
+    return {
+      "reasons-of-public-interest": {
+        checked: body["lawful-basis-special"]?.includes(
+          "reasons-of-public-interest",
+        ),
+      },
+      "legal-claim-or-judicial-acts": {
+        checked: body["lawful-basis-special"]?.includes(
+          "legal-claim-or-judicial-acts",
+        ),
+      },
+      "public-health": {
+        checked: body["lawful-basis-special"]?.includes("public-health"),
+      },
+      "health-or-social-care": {
+        checked: body["lawful-basis-special"]?.includes(
+          "health-or-social-care",
+        ),
+      },
+      "social-employment-security-and-protection": {
+        checked: body["lawful-basis-special"]?.includes(
+          "social-employment-security-and-protection",
+        ),
+      },
+      "vital-interests": {
+        checked: body["lawful-basis-special"]?.includes("vital-interests"),
+      },
+      "explicit-consent": {
+        checked: body["lawful-basis-special"]?.includes("explicit-consent"),
+      },
+      "public-by-data-subject": {
+        checked: body["lawful-basis-special"]?.includes(
+          "public-by-data-subject",
+        ),
+      },
+      "archiving-researching-statistics": {
+        checked: body["lawful-basis-special"]?.includes(
+          "archiving-researching-statistics",
+        ),
+      },
+      "not-for-profit-bodies": {
+        checked: body["lawful-basis-special"]?.includes(
+          "not-for-profit-bodies",
+        ),
+      },
+    } as LawfulBasisSpecialStep;
+  }
+
   // Other input types can go here
-  return;
+  return "";
 };
 
-export { extractFormData, validateDate, validateRequestBody };
+function getLicenceTitleFromURL(licenceURL: string): string {
+  const licence = licences.find(
+    (l) => normaliseURL(l.url) === normaliseURL(licenceURL),
+  );
+  return licence ? licence.title : licenceURL; // return the original URL if no match found
+}
+
+function normaliseURL(url: string): string {
+  // Convert to lowercase
+  let normalisedURL = url.toLowerCase();
+
+  // Strip http:// or https://
+  normalisedURL = normalisedURL.replace(/^https?:\/\//, "");
+
+  // Remove trailing slash
+  if (normalisedURL.endsWith("/")) {
+    normalisedURL = normalisedURL.slice(0, -1);
+  }
+
+  return normalisedURL;
+}
+
+export {
+  extractFormData,
+  validateDate,
+  validateRequestBody,
+  getLicenceTitleFromURL,
+};

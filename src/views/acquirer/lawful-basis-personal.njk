@@ -1,0 +1,105 @@
+{% extends "page.njk" %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-l">Request ID: {{requestId}}</span>
+      <form method="POST" id="dataAccessForm">
+        {% set basisHint %}
+        <div>
+          <p class="govuk-body">Find out more about having a 
+            <a target="_blank" class="govuk-link" href="https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/lawful-basis/a-guide-to-lawful-basis/">
+            lawful basis for processing personal data (opens in new tab).</a>
+          <p class="govuk-body">You may need help from a data protection specialist.</p>
+        </div>
+        {% endset %}
+        {{ govukCheckboxes({
+      name: "lawful-basis-personal",
+      fieldset: {
+          legend: {
+          text: "What is your lawful basis for requesting personal category data under UK GDPR?",
+          isPageHeading: true,
+          classes: "govuk-fieldset__legend--l squish-hints"
+          }
+      },
+      hint: {
+          html: basisHint
+      },
+      items: [
+          {
+          value: "public-task",
+          text: "Public Task",
+          checked: savedValue["public-task"].checked,
+          hint: {
+            text: "The processing is necessary for you to perform a task in the public interest or for your official functions, and the task or function has a clear basis in law."
+          }
+          },
+          {
+          value: "legal-obligation",
+          text: "Legal obligation",
+          checked: savedValue["legal-obligation"].checked,
+          hint: {
+            text: "The processing is necessary for the Controller to comply with the law (not including contractual obligations)."
+          }
+          },
+          {
+          value: "contract",
+          text: "Contract",
+          checked: savedValue["contract"].checked,
+          hint: {
+            text: "The processing is necessary for a contract the Controller has with the individual, or because they have asked you to take specific steps before entering into a contract."
+          }
+          },
+          {
+          value: "legitimate-interests",
+          text: "Legitimate interests",
+          checked: savedValue["legitimate-interests"].checked,
+          hint: {
+            text: "The processing is necessary for your legitimate interests or the legitimate interests of a third party unless there is a good reason to protect the individual’s personal data which overrides those legitimate interests."
+          }
+          },
+          {
+          value: "consent",
+          text: "Consent",
+          checked: savedValue["consent"].checked,
+          hint: {
+            text: "The individual has given clear consent for you to process their personal data for a specific purpose."
+          }
+          },
+          {
+          value: "vital-interest",
+          text: "Vital interests",
+          checked: savedValue["vital-interest"].checked,
+          hint: {
+            text: "The processing is necessary to protect someone’s life."
+          }
+          },
+          {
+          value: "law-enforcement",
+          text: "Law enforcement",
+          checked: savedValue["law-enforcement"].checked,
+          hint: {
+            text: "The data processing is under Part 3 DPA18 and either by consent or is necessary for the performance of a task carried out for that purpose by a competent authority"
+          }
+        }
+      ]
+      }) }}
+        <div class="govuk-button-group">
+          {{ govukButton({
+          text: "Save and continue",
+          name: "continueButton",
+          value: "continue"
+      }) }}
+          {{ govukButton({
+          text: "Save and return",
+          classes: "govuk-button--secondary",
+          name: "returnButton",
+          value: "return"
+      }) }}
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
