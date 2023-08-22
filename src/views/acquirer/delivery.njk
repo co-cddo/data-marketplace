@@ -12,7 +12,7 @@
             {{ govukInput({
             id: "something-else",
             name: "something-else",
-            value: savedValue['explanation']
+            value: savedValue['something']['explanation']
             }) }}
         {% endset -%}
         {{ govukRadios({
@@ -28,17 +28,17 @@
                       {
                       value: "third-party",
                       text: "Through secure third-party software",
-                      checked: savedValue['checked'] === 'third-party'
+                      checked: savedValue['third-party']['checked']
                       },
                       {
                       value: "physical",
                       text: "Physical delivery",
-                      checked: savedValue['checked'] === 'physical'
+                      checked: savedValue['physical']['checked']
                       },
                       {
                       value: "something",
                       text: "Something else",
-                      checked: savedValue['checked'] === 'something',
+                      checked: savedValue['something']['checked'],
                     conditional: {
                         html: somethingHTML
                 }

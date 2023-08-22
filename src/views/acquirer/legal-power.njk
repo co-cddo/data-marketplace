@@ -15,7 +15,7 @@
                 label: {
                     text: "What legal power will you use?"
                 },
-                value: savedValue.explanation
+                value: savedValue['yes']['explanation']
             }) }}
         {% endset -%}
         {{ govukRadios({
@@ -35,8 +35,7 @@
             {
                 value: "yes",
                 text: "Yes, we believe we have the legal power to do this",
-                checked: savedValue.decision === 'yes',
-
+                checked: savedValue['yes']['checked'],
                 conditional: {
                     html: legalPowerDecision
                 }
@@ -44,12 +43,12 @@
             {
                 value: "no",
                 text: "No, we don't have the legal power to request this",
-                checked: savedValue.decision === "no"
+                checked: savedValue['no']['checked']
             },
             {
-                value: "we don't know",
+                value: "we-dont-know",
                 text: "We don't know",
-                checked: savedValue.decision === "we don't know"
+                checked: savedValue['we-dont-know']['checked']
             }
             ]
           }) 
