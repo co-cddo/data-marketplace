@@ -13,6 +13,7 @@ import {
   StepValue,
   RadioFieldStepID,
   TextFieldStepID,
+  DeliveryStep
 } from "../types/express";
 
 function validateDate(day: number, month: number, year: number): string {
@@ -235,6 +236,21 @@ const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
       },
     } as LegalGatewayStep;
   }
+
+  if(stepData.id === "delivery") {
+   return {
+    "third-party": {
+      checked: body["delivery"] === "third-party",
+    },
+    physical: {
+      checked: body["delivery"] === "physical",
+    },
+    something: {
+      checked: body["delivery"] === "something",
+      explanation: body["delivery"] === "something" ? body["something-else"] : "",
+    }
+   }   as DeliveryStep;
+  };
 
   if(stepData.id === "format") {
     return {

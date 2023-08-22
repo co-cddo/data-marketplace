@@ -52,6 +52,12 @@ type LegalDecision = {
   checked: boolean;
 };
 
+type DeliveryStep = {
+  "third-party": LegalDecision;
+  physical: LegalDecision;
+  something: LegalDecision
+}
+
 type FormatStep = {
   csv: LegalDecision;
   sql: LegalDecision;
@@ -106,6 +112,7 @@ export type StepValue =
   | DateStep
   | LawfulBasisPersonalStep
   | LawfulBasisSpecialStep
+  | DeliveryStep
   | FormatStep;
 
 interface Step {
