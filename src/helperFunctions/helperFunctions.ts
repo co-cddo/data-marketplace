@@ -150,19 +150,15 @@ const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
   }
 
   if (stepData.id === "data-type") {
-    const isNoneChecked = body["data-type"]?.includes("none");
-    const isPersonalChecked = !isNoneChecked && body["data-type"]?.includes("personal");
-    const isSpecialChecked = !isNoneChecked && body["data-type"]?.includes("special");
-
     return {
       "personal": {
-        checked: isPersonalChecked,
+        checked: body["data-type"]?.includes("personal"),
       },
       "special": {
-        checked: isSpecialChecked,
+        checked: body["data-type"]?.includes("special"),
       },
       "none": {
-        checked: isNoneChecked,
+        checked: body["data-type"]?.includes("none"),
       },
     } as DataTypeStep;
   }
