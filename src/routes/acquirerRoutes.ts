@@ -7,7 +7,8 @@ import {
   extractFormData,
   validateRequestBody,
 } from "../helperFunctions/helperFunctions";
-import { FormData } from "../types/express";
+import { FormData, LegalGatewayStep, LegalPowerStep } from "../types/express";
+
 function parseJwt(token: string) {
   return JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
 }
@@ -41,6 +42,16 @@ const skipThisStep = (step: string, formdata: FormData) => {
     case "other-orgs": {
       // Skip other-orgs if the answer to data-access was "no"
       return formdata.steps["data-access"].value === "no";
+    }
+    case "legal-power-advice": {
+      // Skip legal-power-advice if the answer to legal-power was "Yes"
+      const legalPowerStep = formdata.steps["legal-power"].value as LegalPowerStep
+      return legalPowerStep.yes.checked
+    }
+    case "legal-gateway-advice": {
+      // Skip legal-gateway-advice if the answer to legal-gateway was "yes" or "other"
+      const legalGatewayStep = formdata.steps["legal-gateway"].value as LegalGatewayStep
+      return legalGatewayStep.yes.checked || legalGatewayStep.other.checked
     }
     case "role": {
       return formdata.steps["data-type"].value === "none" || formdata.steps["data-type"].value === "";
