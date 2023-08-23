@@ -46,7 +46,7 @@ describe("fetchResources", () => {
     const organisationFilter = "department-for-test";
     
     const expectedData = mockData.data.filter((resource) => {
-      return resource.organisation.id.toLowerCase() === organisationFilter.toLowerCase();
+      return resource.organisation.slug.toLowerCase() === organisationFilter.toLowerCase();
     });
     // use undefined in the function call to explicitly state that we"re not passing a value for query
     const result = await fetchResources(undefined, [organisationFilter]);
@@ -60,7 +60,7 @@ describe("fetchResources", () => {
     const organisationFilters = ["department-for-test", "department-for-test-test"];
   
     const expectedData = mockData.data.filter(resource => {
-      return organisationFilters.includes(resource.organisation.id.toLowerCase());
+      return organisationFilters.includes(resource.organisation.slug.toLowerCase());
     });
     // use undefined in the function call to explicitly state that we"re not passing a value for query
     const result = await fetchResources(undefined, organisationFilters);
@@ -76,7 +76,7 @@ describe("fetchResources", () => {
         const matchesQuery = Object.values(resource).some(
             (value) => value?.toString().toLowerCase().includes(query)
         );
-        const matchesOrgFilter = resource.organisation.id.toLowerCase() === organisationFilter.toLowerCase();
+        const matchesOrgFilter = resource.organisation.slug.toLowerCase() === organisationFilter.toLowerCase();
         
         return matchesQuery && matchesOrgFilter;
     });
@@ -93,7 +93,7 @@ describe("fetchResources", () => {
         const matchesQuery = Object.values(resource).some(
             (value) => value?.toString().toLowerCase().includes(query)
         );
-        const matchesOrgFilter = resource.organisation.id.toLowerCase() === organisationFilter.toLowerCase();
+        const matchesOrgFilter = resource.organisation.slug.toLowerCase() === organisationFilter.toLowerCase();
 
         return matchesQuery || matchesOrgFilter;
     });
