@@ -1,5 +1,6 @@
 import { licences } from "../mockData/licences";
 import {
+  DataTypeStep,
   BenefitsStep,
   DateStep,
   FormatStep,
@@ -124,7 +125,7 @@ const validateRequestBody = (step: string, body: RequestBody): string => {
 };
 
 function isRadioField(id: string): id is RadioFieldStepID {
-  return ["data-type", "data-access", "legal-review", "role"].includes(id);
+  return ["data-access", "legal-review", "role"].includes(id);
 }
 
 function isTextField(id: string): id is TextFieldStepID {
@@ -146,6 +147,24 @@ const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
   // Check for text fields
   if (isTextField(stepData.id)) {
     return body[stepData.id] as StepValue;
+  }
+
+  if (stepData.id === "data-type") {
+    const isNoneChecked = body["data-type"]?.includes("none");
+    const isPersonalChecked = !isNoneChecked && body["data-type"]?.includes("personal");
+    const isSpecialChecked = !isNoneChecked && body["data-type"]?.includes("special");
+
+    return {
+      "personal": {
+        checked: isPersonalChecked,
+      },
+      "special": {
+        checked: isSpecialChecked,
+      },
+      "none": {
+        checked: isNoneChecked,
+      },
+    } as DataTypeStep;
   }
 
   if (stepData.id === "project-aims") {
