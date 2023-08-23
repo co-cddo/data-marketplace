@@ -23,7 +23,7 @@ export interface RequestBody {
 
 // Add id's here. Should only be able to handle single value
 type TextFieldStepID = "impact" | "data-subjects" | "data-required" | "disposal";
-type RadioFieldStepID = "data-type" | "data-access" | "legal-review";
+type RadioFieldStepID = "data-type" | "data-access" | "legal-review" | "role";
 
 interface Benefits {
   explanation?: string;

@@ -53,6 +53,9 @@ const skipThisStep = (step: string, formdata: FormData) => {
       const legalGatewayStep = formdata.steps["legal-gateway"].value as LegalGatewayStep
       return legalGatewayStep.yes.checked || legalGatewayStep.other.checked
     }
+    case "role": {
+      return formdata.steps["data-type"].value === "none" || formdata.steps["data-type"].value === "";
+    }
     default: {
       return false;
     }

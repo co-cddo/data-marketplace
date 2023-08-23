@@ -1,6 +1,6 @@
 {
   "name": "digital-marketplace",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "imagename": "dm-frontend",
   "description": "",
   "main": "index.js",
