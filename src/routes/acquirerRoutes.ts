@@ -42,6 +42,9 @@ const skipThisStep = (step: string, formdata: FormData) => {
       // Skip other-orgs if the answer to data-access was "no"
       return formdata.steps["data-access"].value === "no";
     }
+    case "role": {
+      return formdata.steps["data-type"].value === "none" || formdata.steps["data-type"].value === "";
+    }
     default: {
       return false;
     }

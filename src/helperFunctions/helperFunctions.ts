@@ -124,7 +124,7 @@ const validateRequestBody = (step: string, body: RequestBody): string => {
 };
 
 function isRadioField(id: string): id is RadioFieldStepID {
-  return ["data-type", "data-access", "legal-review"].includes(id);
+  return ["data-type", "data-access", "legal-review", "role"].includes(id);
 }
 
 function isTextField(id: string): id is TextFieldStepID {
