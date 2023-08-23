@@ -141,21 +141,12 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
   // Check which button was clicked "Save and continue || Save and return"
   if (req.body.returnButton) {
     stepData.status = "IN PROGRESS";
+    axios.put(URL, { jwt: req.cookies.jwtToken, formdata: JSON.stringify(formdata) })
     return res.redirect(`/acquirer/${resourceID}/start`);
   }
 
   stepData.status = "COMPLETED";
-
-  console.log(formdata)
-  console.log(JSON.stringify(formdata))
-  try {
-    const response = await axios.put(URL, { jwt: req.cookies.jwtToken, formdata: JSON.stringify(formdata) })
-    console.log(response)
-  } catch (error) {
-    console.log("Formdata error:")
-    console.log(error)
-  }
-
+  axios.put(URL, { jwt: req.cookies.jwtToken, formdata: JSON.stringify(formdata) })
 
   if (formdata.steps[formStep].nextStep) {
     return res.redirect(

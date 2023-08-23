@@ -1,10 +1,17 @@
 {% extends "page.njk" %}
 
 {% block content %}
-<h1>{{ heading }}</h1>
-{% if user %}
-    Authenticated: {{ isAuthenticated }}<br />
-    Display name: {{user.display_name}}<br />
+    <h1>{{ heading }}</h1>
+    {% if user %}
+    Authenticated: {{ isAuthenticated }}<br/>
+    Display name: {{user.display_name}}<br/>
     Email: {{user.email}}
-{%endif%}
-{% endblock %}
+        <br/>
+    Share requests:
+    <ul>
+            {% for requestId, requestData in requestForms %}
+                <li>{{requestId}}</li>
+            {% endfor %}
+        </ul>
+        {%endif%}
+    {% endblock %}

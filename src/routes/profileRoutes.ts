@@ -13,9 +13,12 @@ router.get(
       return res.redirect("/error");
     }
 
+    let requestForms = {}
     try {
       const response = await axios.put(URL, { token: req.cookies.jwtToken })
-      console.log(response)
+      requestForms = response.data["request_forms"] || {}
+      const parsedForms = Object.fromEntries(Object.entries(requestForms).map(([k, v], i) => [k, JSON.parse(v as string)]))
+      req.session.acquirerForms = parsedForms
     } catch (error) {
       console.log("USER API ERROR")
       console.log(error)
@@ -23,6 +26,7 @@ router.get(
     res.render("profile.njk", {
       heading: "Authed",
       user: req.user,
+      requestForms: requestForms
     });
   },
   (err: Error, req: Request, res: Response, next: NextFunction) => {
