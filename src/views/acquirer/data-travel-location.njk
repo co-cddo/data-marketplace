@@ -1,19 +1,18 @@
 {% extends "page.njk" %}
-{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% block content %}
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
+  <div class="govuk-grid-column-one-half">
     <form method="post">
-      {{ govukTextarea({
+      {{ govukInput({
             id: "data-travel-location",
             name: "data-travel-location",
             label: {
                 text: "What countries will the data travel through?",
                 classes: "govuk-label--m"
             },
-            rows: 5,
             value: savedValue
             }) }}
       <div class="govuk-button-group">

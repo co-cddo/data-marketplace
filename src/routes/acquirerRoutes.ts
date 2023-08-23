@@ -7,7 +7,7 @@ import {
   extractFormData,
   validateRequestBody,
 } from "../helperFunctions/helperFunctions";
-import { FormData, LegalGatewayStep, LegalPowerStep } from "../types/express";
+import { DataTypeStep, FormData, LawfulBasisSpecialStep, LegalGatewayStep, LegalPowerStep } from "../types/express";
 
 function parseJwt(token: string) {
   return JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
@@ -54,7 +54,23 @@ const skipThisStep = (step: string, formdata: FormData) => {
       return legalGatewayStep.yes.checked || legalGatewayStep.other.checked
     }
     case "role": {
-      return formdata.steps["data-type"].value === "none" || formdata.steps["data-type"].value === "";
+      const data = formdata.steps["data-type"].value as DataTypeStep
+      return (data.personal.checked === false && data.special.checked === false)
+    }
+    case "lawful-basis-personal": {
+      const data = formdata.steps["data-type"].value as DataTypeStep
+      return data.personal.checked === false
+    }
+    case "lawful-basis-special": {
+      const data = formdata.steps["data-type"].value as DataTypeStep
+      return data.special.checked === false
+    }
+    case "lawful-basis-special-public-interest": {
+      const data = formdata.steps["lawful-basis-special"].value as LawfulBasisSpecialStep
+      return (data["reasons-of-public-interest"]?.checked === false || data["reasons-of-public-interest"]?.checked === undefined)
+    }
+    case "data-travel-location": {
+      return formdata.steps["data-travel"].value === "no" || formdata.steps["data-travel"].value === ""
     }
     default: {
       return false;
