@@ -1,5 +1,5 @@
 {% extends "page.njk" %}
-{%- from "govuk/components/radios/macro.njk" import govukRadios -%}
+{%- from "govuk/components/checkboxes/macro.njk" import govukCheckboxes -%}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% block content %}
@@ -7,7 +7,7 @@
     <div class="govuk-grid-column-two-thirds">
       <span class="govuk-caption-l">Request ID: {{requestId}}</span>
       <form method="POST" id="dataTypeForm">
-        {{ govukRadios({
+        {{ govukCheckboxes({
                   name: "data-type",
                   fieldset: {
                       legend: {
@@ -20,7 +20,7 @@
                       {
                       value: "personal",
                       text: "Personal data",
-                      checked: savedValue === 'personal',
+                      checked: savedValue["personal"].checked,
                       hint: {
                           text: "For example, names or addresses."
                       }
@@ -28,7 +28,7 @@
                       {
                       value: "special",
                       text: "Special category data",
-                      checked: savedValue === 'special',
+                      checked: savedValue["special"].checked,
                       hint: {
                           text: "For example, data about health or religious beliefs."
                       }
@@ -39,7 +39,7 @@
                       {
                       value: "none",
                       text: "None of the above",
-                      checked: savedValue === 'none',
+                      checked: savedValue["none"].checked,
                       hint: {
                           text: "For example, anonymised data."
                       }
