@@ -156,10 +156,14 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
 
   stepData.status = "COMPLETED";
 
-  if (formdata.steps[formStep].nextStep) {
-    return res.redirect(
-      `/acquirer/${resourceID}/${formdata.steps[formStep].nextStep}`,
-    );
+  // Set the status of the next step to "NOT STARTED"
+  const nextStep = formdata.steps[formStep].nextStep;
+  if (nextStep && formdata.steps[nextStep]) {
+    formdata.steps[nextStep].status = "NOT STARTED";
+  }
+
+  if (nextStep) {
+    return res.redirect(`/acquirer/${resourceID}/${nextStep}`);
   } else {
     // Handle case when nextStep is not defined
     return res.redirect(`/acquirer/${resourceID}/start`);

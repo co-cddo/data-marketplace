@@ -52,7 +52,7 @@
     "data-subjects": {
       "id": "data-subjects",
       "name": "Data subjects",
-      "status": "NOT STARTED",
+      "status": "CANNOT START YET",
       "value": "",
       "nextStep": "project-aims",
       "skipped": false
@@ -60,7 +60,7 @@
     "project-aims": {
       "id": "project-aims",
       "name": "Project aims",
-      "status": "NOT STARTED",
+      "status": "CANNOT START YET",
       "value": {
         "aims": "",
         "explanation": ""
@@ -70,28 +70,28 @@
     "data-required": {
       "id": "data-required",
       "name": "Data required",
-      "status": "NOT STARTED",
+      "status": "CANNOT START YET",
       "value": "",
       "nextStep": "benefits"
     },
     "benefits": {
       "id": "benefits",
       "name": "Benefits",
-      "status": "NOT STARTED",
+      "status": "CANNOT START YET",
       "value": [],
       "nextStep": "data-access"
     },
     "data-access": {
       "id": "data-access",
       "name": "Data access",
-      "status": "NOT STARTED",
+      "status": "CANNOT START YET",
       "value": "",
       "nextStep": "other-orgs"
     },
     "other-orgs": {
       "id": "other-orgs",
       "name": "Other organisations",
-      "status": "NOT STARTED",
+      "status": "CANNOT START YET",
       "value": "",
       "nextStep": "impact",
       "skipped": false
@@ -99,14 +99,14 @@
     "impact": {
       "id": "impact",
       "name": "Impact if data not given",
-      "status": "NOT STARTED",
+      "status": "CANNOT START YET",
       "value": "",
       "nextStep": "date"
     },
     "date": {
       "id": "date",
       "name": "Date required",
-      "status": "NOT STARTED",
+      "status": "CANNOT START YET",
       "value": {
         "day": null,
         "month": null,
@@ -117,14 +117,14 @@
     "legal-power": {
       "id": "legal-power",
       "name": "Legal power",
-      "status": "NOT STARTED",
+      "status": "CANNOT START YET",
       "value": "",
       "nextStep": "legal-power-advice"
     },
     "legal-power-advice": {
       "id": "legal-power-advice",
       "name": "Legal power advice",
-      "status": "NOT STARTED",
+      "status": "CANNOT START YET",
       "value": "",
       "nextStep": "legal-gateway",
       "skipped": false
@@ -132,14 +132,14 @@
     "legal-gateway": {
       "id": "legal-gateway",
       "name": "Legal gateway",
-      "status": "NOT STARTED",
+      "status": "CANNOT START YET",
       "value": "",
       "nextStep": "legal-gateway-advice"
     },
     "legal-gateway-advice": {
       "id": "legal-gateway-advice",
       "name": "Legal gateway advice",
-      "status": "NOT STARTED",
+      "status": "CANNOT START YET",
       "value": "",
       "nextStep": "legal-review",
       "skipped": false
@@ -155,7 +155,7 @@
     "lawful-basis-personal": {
       "id": "lawful-basis-personal",
       "name": "Lawful basis for personal data",
-      "status": "NOT STARTED",
+      "status": "CANNOT START YET",
       "value": [],
       "nextStep": "lawful-basis-special",
       "skipped": false
@@ -163,7 +163,7 @@
     "lawful-basis-special": {
       "id": "lawful-basis-special",
       "name": "Lawful basis for special category data",
-      "status": "NOT STARTED",
+      "status": "CANNOT START YET",
       "value": [],
       "nextStep": "lawful-basis-special-public-interest",
       "skipped": false
@@ -171,7 +171,7 @@
     "lawful-basis-special-public-interest": {
       "id": "lawful-basis-special-public-interest",
       "name": "Lawful basis",
-      "status": "NOT STARTED",
+      "status": "CANNOT START YET",
       "value": [],
       "nextStep": "data-travel",
       "skipped": false
@@ -179,14 +179,14 @@
     "data-travel": {
       "id": "data-travel",
       "name": "Data travel outside UK",
-      "status": "NOT STARTED",
+      "status": "CANNOT START YET",
       "value": "",
       "nextStep": "data-travel-location"
     },
     "data-travel-location": {
       "id": "data-travel-location",
       "name": "Data travel outside UK",
-      "status": "NOT STARTED",
+      "status": "CANNOT START YET",
       "value": "",
       "nextStep": "role",
       "skipped": false
@@ -194,7 +194,7 @@
     "role": {
       "id": "role",
       "name": "Role of organisation",
-      "status": "NOT STARTED",
+      "status": "CANNOT START YET",
       "value": "",
       "nextStep": "protection-review",
       "skipped": false
@@ -215,20 +215,20 @@
     "delivery": {
       "id": "delivery",
       "name": "Data delivery",
-      "status": "NOT STARTED",
+      "status": "CANNOT START YET",
       "nextStep": "format"
     },
     "format": {
       "id": "format",
       "name": "Data format",
-      "status": "NOT STARTED",
+      "status": "CANNOT START YET",
       "value": "",
       "nextStep": "disposal"
     },
     "disposal": {
       "id": "disposal",
       "name": "Disposal of data",
-      "status": "NOT STARTED",
+      "status": "CANNOT START YET",
       "value": "",
       "nextStep": "security-review"
     },
