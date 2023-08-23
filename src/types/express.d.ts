@@ -23,7 +23,7 @@ export interface RequestBody {
 
 // Add id's here. Should only be able to handle single value
 type TextFieldStepID = "impact" | "data-subjects" | "data-required" | "disposal";
-type RadioFieldStepID = "data-type" | "data-access" | "legal-review" | "role";
+type RadioFieldStepID = "data-access" | "legal-review" | "role";
 
 interface Benefits {
   explanation?: string;
@@ -42,38 +42,44 @@ type BenefitsStep = {
   "something-else"?: Benefits;
 };
 
+type DataTypeStep = {
+  personal: GenericDecisions;
+  special: GenericDecisions;
+  none: GenericDecisions;
+}
+
 type ProjectAimStep = {
   aims: string;
   explanation: string;
 };
 
-type LegalDecision = {
+type GenericDecisions = {
   explanation?: string;
   checked: boolean;
 };
 
 type DeliveryStep = {
-  "third-party": LegalDecision;
-  physical: LegalDecision;
-  something: LegalDecision
+  "third-party": GenericDecisions;
+  physical: GenericDecisions;
+  something: GenericDecisions
 }
 
 type FormatStep = {
-  csv: LegalDecision;
-  sql: LegalDecision;
-  something: LegalDecision;
+  csv: GenericDecisions;
+  sql: GenericDecisions;
+  something: GenericDecisions;
 };
 
 type LegalPowerStep = {
-  yes: LegalDecision;
-  no: LegalDecision;
-  "we-dont-know": LegalDecision;
+  yes: GenericDecisions;
+  no: GenericDecisions;
+  "we-dont-know": GenericDecisions;
 };
 
 type LegalGatewayStep = {
-  yes: LegalDecision;
-  other: LegalDecision;
-  "we-dont-know": LegalDecision;
+  yes: GenericDecisions;
+  other: GenericDecisions;
+  "we-dont-know": GenericDecisions;
 };
 
 interface LawfulBasis {
@@ -131,6 +137,7 @@ type LawfulBasisSpecialPublicInterestStep = {
 
 export type StepValue =
   | string
+  | DataTypeStep
   | ProjectAimStep
   | BenefitsStep
   | LegalPowerStep
