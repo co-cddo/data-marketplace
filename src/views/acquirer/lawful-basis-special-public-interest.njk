@@ -1,0 +1,158 @@
+{% extends "page.njk" %}
+{%- from "govuk/components/checkboxes/macro.njk" import govukCheckboxes -%}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form method="POST" id="LawfulSpecialPublicInterestForm">
+      <span class="govuk-caption-l">Request ID: {{requestId}}</span>
+       {% set lawfulPublicInterestHTML %}
+          <p class="govuk-body">You may need help from a data protection specialist.</p>
+        {% endset %}
+      {{ govukCheckboxes({
+      name: "lawful-basis-special-public-interest",
+      fieldset: {
+          legend: {
+          text: "What is the substantial public interest for requesting special category data under UK GDPR?",
+          isPageHeading: true,
+          classes: "govuk-fieldset__legend--l squish-hints"
+          }
+      },
+      hint: {
+          html: lawfulPublicInterestHTML
+      },
+      items: [
+          {
+          value: "statutory-government-purposes",
+          text: "Statutory and government purposes",
+          checked: savedValue["statutory-government-purposes"].checked
+          },
+           {
+          value: "administration-justice-parliamentary-purposes",
+          text: "Administration of justice and parliamentary purposes",
+          checked: savedValue["administration-justice-parliamentary-purposes"].checked
+          },
+          {
+          value: "equality-opportunity-or-treatment",
+          text: "Equality of opportunity or treatment",
+          checked: savedValue["equality-opportunity-or-treatment"].checked
+          },
+          {
+          value: "preventing-or-detecting-unlawful-acts",
+          text: "Preventing or detecting unlawful acts",
+          checked: savedValue["preventing-or-detecting-unlawful-acts"].checked
+          },
+             {
+          value: "protecting-the-public",
+          text: "Protecting the public",
+          checked: savedValue["protecting-the-public"].checked
+          },
+             {
+          value: "racial-ethnic-diversity-senior-levels",
+          text: "Racial and ethnic diversity at senior levels",
+          checked: savedValue["racial-ethnic-diversity-senior-levels"].checked
+          },
+             {
+          value: "regulatory-requirements",
+          text: "Regulatory requirements",
+          checked: savedValue["regulatory-requirements"].checked
+          },
+          {
+          value: "journalism-academia-art-literature",
+          text: "Journalism, academia, art and literature",
+          checked: savedValue["journalism-academia-art-literature"].checked
+          },
+          {
+          value: "preventing-fraud",
+          text: "Preventing fraud",
+          checked: savedValue["preventing-fraud"].checked
+          },
+             {
+          value: "suspicion-terrorist-financing-or-money-laundering",
+          text: "Suspicion of terrorist financing or money laundering",
+          checked: savedValue["suspicion-terrorist-financing-or-money-laundering"].checked
+          },
+             {
+          value: "support-particular-disability-or-mental-condition",
+          text: "Support for individuals with a particular disability or medical condition",
+          checked: savedValue["support-particular-disability-or-mental-condition"].checked
+          },
+             {
+          value: "counselling",
+          text: "Counselling",
+          checked: savedValue["counselling"].checked
+          },
+             {
+          value: "safeguarding-children-individuals-risk",
+          text: "Safeguarding of children and individuals at risk",
+          checked: savedValue["safeguarding-children-individuals-risk"].checked
+          },
+             {
+          value: "safeguarding-economic-well-being",
+          text: "Safeguarding of economic well-being of certain individuals",
+          checked: savedValue["safeguarding-economic-well-being"].checked
+          },
+             {
+          value: "insurance",
+          text: "Insurance",
+          checked: savedValue["insurance"].checked
+          },
+             {
+          value: "occupational-pensions",
+          text: "Occupational pensions",
+          checked: savedValue["occupational-pensions"].checked
+          },
+             {
+          value: "political-parties",
+          text: "Political parties",
+          checked: savedValue["political-parties"].checked
+          },
+             {
+          value: "elected-representatives-responding-requests",
+          text: "Elected representatives responding to requests",
+          checked: savedValue["elected-representatives-responding-requests"].checked
+          },
+             {
+          value: "disclosure-elected-representatives",
+          text: "Disclosure to elected representatives",
+          checked: savedValue["disclosure-elected-representatives"].checked
+          },
+             {
+          value: "informing-elected-representatives-about-prisoners",
+          text: "Informing elected representatives about prisoners",
+          checked: savedValue["informing-elected-representatives-about-prisoners"].checked
+          },
+             {
+          value: "publication-legal-judgments",
+          text: "Publication of legal judgments",
+          checked: savedValue["publication-legal-judgments"].checked
+          },
+             {
+          value: "anti-doping-sport",
+          text: "Anti-doping in sport",
+          checked: savedValue["anti-doping-sport"].checked
+          },
+             {
+          value: "standards-behaviour-sport",
+          text: "Standards of behaviour in sport",
+          checked: savedValue["standards-behaviour-sport"].checked
+        }       
+      ]
+      }) }}
+        <div class="govuk-button-group">
+          {{ govukButton({
+          text: "Save and continue",
+          name: "continueButton",
+          value: "continue"
+      }) }}
+          {{ govukButton({
+          text: "Save and return",
+          classes: "govuk-button--secondary",
+          name: "returnButton",
+          value: "return"
+      }) }}
+    </div>
+    </form>
+  </div>
+{% endblock %}

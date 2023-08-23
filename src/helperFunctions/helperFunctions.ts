@@ -6,6 +6,7 @@ import {
   FormatStep,
   LawfulBasisPersonalStep,
   LawfulBasisSpecialStep,
+  LawfulSpecialPublicInterestStep,
   LegalGatewayStep,
   LegalPowerStep,
   ProjectAimStep,
@@ -14,7 +15,8 @@ import {
   StepValue,
   RadioFieldStepID,
   TextFieldStepID,
-  DeliveryStep
+  DeliveryStep,
+ 
 } from "../types/express";
 
 function validateDate(day: number, month: number, year: number): string {
@@ -363,6 +365,112 @@ const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
     } as LawfulBasisSpecialStep;
   }
 
+  if (stepData.id === "lawful-basis-special-public-interest") {
+    return {
+      "statutory-government-purposes": {
+        checked: body["lawful-basis-special-public-interest"]?.includes(
+          "statutory-government-purposes",
+        ),
+      },
+      "administration-justice-parliamentary-purposes": {
+        checked: body["lawful-basis-special-public-interest"]?.includes(
+          "administration-justice-parliamentary-purposes",
+        ),
+      },
+      "equality-opportunity-or-treatment": {
+        checked: body["lawful-basis-special-public-interest"]?.includes(
+          "equality-opportunity-or-treatment",
+        ),
+      },
+      "preventing-or-detecting-unlawful-acts": {
+        checked: body["lawful-basis-special-public-interest"]?.includes(
+          "preventing-or-detecting-unlawful-acts",
+        ),
+      },
+      "protecting-the-public": {
+        checked: body["lawful-basis-special-public-interest"]?.includes("protecting-the-public"),
+      },
+      "racial-ethnic-diversity-senior-levels": {
+        checked: body["lawful-basis-special-public-interest"]?.includes(
+          "racial-ethnic-diversity-senior-levels",
+        ),
+      },
+      "regulatory-requirements": {
+        checked: body["lawful-basis-special-public-interest"]?.includes(
+          "regulatory-requirements",
+        ),
+      },
+      "journalism-academia-art-literature": {
+        checked: body["lawful-basis-special-public-interest"]?.includes(
+          "journalism-academia-art-literature",
+        ),
+      },
+      "preventing-fraud": {
+        checked: body["lawful-basis-special-public-interest"]?.includes("preventing-fraud"),
+      },
+      "suspicion-terrorist-financing-or-money-laundering": {
+        checked: body["lawful-basis-special-public-interest"]?.includes(
+          "suspicion-terrorist-financing-or-money-laundering",
+        ),
+      },
+      "support-particular-disability-or-mental-condition": {
+        checked: body["lawful-basis-special-public-interest"]?.includes(
+          "support-particular-disability-or-mental-condition",
+        ),
+      },
+      "counselling": {
+        checked: body["lawful-basis-special-public-interest"]?.includes("counselling"),
+      },
+      "safeguarding-children-individuals-risk": {
+        checked: body["lawful-basis-special-public-interest"]?.includes(
+          "safeguarding-children-individuals-risk",
+        ),
+      },
+      "safeguarding-economic-well-being": {
+        checked: body["lawful-basis-special-public-interest"]?.includes(
+          "safeguarding-economic-well-being",
+        ),
+      },
+      "insurance": {
+        checked: body["lawful-basis-special-public-interest"]?.includes("insurance"),
+      },
+      "occupational-pensions": {
+        checked: body["lawful-basis-special-public-interest"]?.includes("occupational-pensions"),
+      },
+      "political-parties": {
+        checked: body["lawful-basis-special-public-interest"]?.includes("political-parties"),
+      },
+      "elected-representatives-responding-requests": {
+        checked: body["lawful-basis-special-public-interest"]?.includes(
+          "elected-representatives-responding-requests",
+        ),
+      },
+      "disclosure-elected-representatives": {
+        checked: body["lawful-basis-special-public-interest"]?.includes(
+          "disclosure-elected-representatives",
+        ),
+      },
+      "informing-elected-representatives-about-prisoners": {
+        checked: body["lawful-basis-special-public-interest"]?.includes(
+          "informing-elected-representatives-about-prisoners",
+        ),
+      },
+      "publication-legal-judgments": {
+        checked: body["lawful-basis-special-public-interest"]?.includes(
+          "publication-legal-judgments",
+        ),
+      },
+      "anti-doping-sport": {
+        checked: body["lawful-basis-special-public-interest"]?.includes("anti-doping-sport"),
+      },
+      "standards-behaviour-sport": {
+        checked: body["lawful-basis-special-public-interest"]?.includes(
+          "standards-behaviour-sport",
+        ),
+      },
+    } as LawfulSpecialPublicInterestStep;
+  }
+  
   // Other input types can go here
   return "";
 };

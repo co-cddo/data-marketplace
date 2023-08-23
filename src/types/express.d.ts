@@ -109,6 +109,32 @@ type LawfulBasisSpecialStep = {
   "not-for-profit-bodies"?: LawfulBasis;
 };
 
+type LawfulSpecialPublicInterestStep = {
+  "statutory-government-purposes"?: LawfulBasis;
+  "administration-justice-parliamentary-purposes"?: LawfulBasis;
+  "equality-opportunity-or-treatment"?: LawfulBasis;
+  "preventing-or-detecting-unlawful-acts"?: LawfulBasis;
+  "protecting-the-public"?: LawfulBasis;
+  "racial-ethnic-diversity-senior-levels"?: LawfulBasis;
+  "regulatory-requirements"?: LawfulBasis;
+  "journalism-academia-art-literature"?: LawfulBasis;
+  "preventing-fraud"?: LawfulBasis;
+  "suspicion-terrorist-financing-or-money-laundering"?: LawfulBasis;
+  "support-particular-disability-or-mental-condition"?: LawfulBasis;
+  "counselling"?: LawfulBasis;
+  "safeguarding-children-individuals-risk"?: LawfulBasis;
+  "safeguarding-economic-well-being"?: LawfulBasis;
+  "insurance"?: LawfulBasis;
+  "occupational-pensions"?: LawfulBasis;
+  "political-parties"?: LawfulBasis;
+  "elected-representatives-responding-requests"?: LawfulBasis;
+  "disclosure-elected-representatives"?: LawfulBasis;
+  "informing-elected-representatives-about-prisoners"?: LawfulBasis;
+  "publication-legal-judgments"?: LawfulBasis;
+  "anti-doping-sport"?: LawfulBasis;
+  "standards-behaviour-sport"?: LawfulBasis;
+};
+
 export type StepValue =
   | string
   | DataTypeStep
@@ -119,6 +145,7 @@ export type StepValue =
   | DateStep
   | LawfulBasisPersonalStep
   | LawfulBasisSpecialStep
+  | LawfulSpecialPublicInterestStep
   | DeliveryStep
   | FormatStep;
 

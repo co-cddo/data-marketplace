@@ -7,7 +7,7 @@ import {
   extractFormData,
   validateRequestBody,
 } from "../helperFunctions/helperFunctions";
-import { FormData, LegalGatewayStep, LegalPowerStep } from "../types/express";
+import { FormData, DataTypeStep, LegalGatewayStep, LegalPowerStep } from "../types/express";
 
 function parseJwt(token: string) {
   return JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
@@ -53,8 +53,20 @@ const skipThisStep = (step: string, formdata: FormData) => {
       const legalGatewayStep = formdata.steps["legal-gateway"].value as LegalGatewayStep
       return legalGatewayStep.yes.checked || legalGatewayStep.other.checked
     }
+    case "lawful-basis-personal": {
+      // Skip lawful-basis-personal if answer to data-type was "special" or "none"
+      const DataTypeStep = formdata.steps["data-type"].value as DataTypeStep
+      return DataTypeStep.special.checked || DataTypeStep.none.checked
+    }
+    case "lawful-basis-special": {
+      // Skip lawful-basis-special if answer to data-type was "personal" or "none"
+      const DataTypeStep = formdata.steps["data-type"].value as DataTypeStep
+      return DataTypeStep.personal.checked || DataTypeStep.none.checked
+    }
     case "role": {
-      return formdata.steps["data-type"].value === "none" || formdata.steps["data-type"].value === "";
+      // Skip role if answer to data-type was "none" or "null"
+      const DataTypeStep = formdata.steps["data-type"].value as DataTypeStep
+      return DataTypeStep.none.checked || formdata.steps["data-type"].value === "";
     }
     default: {
       return false;
