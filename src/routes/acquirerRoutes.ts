@@ -37,7 +37,8 @@ const skipThisStep = (step: string, formdata: FormData) => {
   switch (step) {
     case "data-subjects": {
       // Skip data-subjects if the data-type is "none" i.e. anonymised
-      return formdata.steps["data-type"].value === "none";
+      const DataTypeStep = formdata.steps["data-type"].value as DataTypeStep
+      return DataTypeStep.none.checked;
     }
     case "other-orgs": {
       // Skip other-orgs if the answer to data-access was "no"
@@ -169,7 +170,7 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
   const formdata = req.session.acquirerForms[resourceID];
   const stepData = formdata.steps[formStep];
   const errorMessage = validateRequestBody(formStep, req.body);
-  
+
   if (!formdata || !formdata.steps[formStep]) {
     return res.status(400).send("Form data or step not found");
   }
