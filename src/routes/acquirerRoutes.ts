@@ -119,15 +119,40 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   const stepData = formdata.steps[formStep];
   const assetTitle = formdata.assetTitle;
 
+  if (req.query.action === 'back' && formdata.stepHistory) {
+    formdata.stepHistory.pop();
+  }
+
   if (skipThisStep(formStep, formdata)) {
     stepData.skipped = true;
     return res.redirect(`/acquirer/${resourceID}/${stepData.nextStep}`);
   }
+  
+  let backLink = null; 
+
+  if (!formdata.stepHistory) {
+    formdata.stepHistory = [];
+  }
+  
+  // If we have history and are pressing back, we set the back link.
+  if (formdata.stepHistory.length > 1) {
+    backLink = `/acquirer/${resourceID}/${formdata.stepHistory[formdata.stepHistory.length - 2]}?action=back`;
+ }
+
+ if (formStep === 'data-type') {
+  // If current step is 'data-type', set the back link to start page -> 
+  // in preperation for Maddies current work before Annual leave data-type being the only page to start from
+  backLink = `/acquirer/${resourceID}/start`;
+} else if (formdata.stepHistory && formdata.stepHistory.length > 1) {
+  // Otherwise, set it to the previous step from stepHistory
+  backLink = `/acquirer/${resourceID}/${formdata.stepHistory[formdata.stepHistory.length - 2]}?action=back`;
+}
 
   res.render(`../views/acquirer/${formStep}.njk`, {
     requestId: formdata.requestId,
     assetId: formdata.dataAsset,
     assetTitle,
+    backLink,
     stepId: formStep,
     savedValue: stepData.value,
     errorMessage: stepData.errorMessage,
@@ -144,7 +169,7 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
   const formdata = req.session.acquirerForms[resourceID];
   const stepData = formdata.steps[formStep];
   const errorMessage = validateRequestBody(formStep, req.body);
-
+  
   if (!formdata || !formdata.steps[formStep]) {
     return res.status(400).send("Form data or step not found");
   }
@@ -159,15 +184,25 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
   if (errorMessage) {
     return res.redirect(`/acquirer/${resourceID}/${formStep}`);
   }
-
+  if (!formdata.stepHistory) {
+    formdata.stepHistory = [];
+  }
+  
   // Check which button was clicked "Save and continue || Save and return"
   if (req.body.returnButton) {
     stepData.status = "IN PROGRESS";
+    // Clear the stepHistory array if "Save and return" is clicked
+    formdata.stepHistory = [];
     return res.redirect(`/acquirer/${resourceID}/start`);
+  } else {
+    // Add the current step to the history if it's not already there
+    if (formdata.stepHistory.indexOf(formStep) === -1) {
+      formdata.stepHistory.push(formStep);
+    }
   }
 
   stepData.status = "COMPLETED";
-
+ 
   if (formdata.steps[formStep].nextStep) {
     return res.redirect(
       `/acquirer/${resourceID}/${formdata.steps[formStep].nextStep}`,

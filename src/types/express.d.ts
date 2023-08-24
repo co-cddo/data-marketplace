@@ -15,6 +15,7 @@ interface FormData {
   status: string;
   sections: Record<string, Section>;
   steps: Record<string, Step>;
+  stepHistory?: string[];
 }
 
 export interface RequestBody {
