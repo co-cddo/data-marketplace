@@ -110,30 +110,30 @@ type LawfulBasisSpecialStep = {
   "not-for-profit-bodies"?: LawfulBasis;
 };
 
-type LawfulSpecialPublicInterestStep = {
-  "statutory-government-purposes"?: LawfulBasis;
-  "administration-justice-parliamentary-purposes"?: LawfulBasis;
-  "equality-opportunity-or-treatment"?: LawfulBasis;
-  "preventing-or-detecting-unlawful-acts"?: LawfulBasis;
-  "protecting-the-public"?: LawfulBasis;
-  "racial-ethnic-diversity-senior-levels"?: LawfulBasis;
+type LawfulBasisSpecialPublicInterestStep = {
+  statutory?: LawfulBasis;
+  administration?: LawfulBasis;
+  equality?: LawfulBasis;
+  "preventing-detecting"?: LawfulBasis;
+  protecting?: LawfulBasis;
   "regulatory-requirements"?: LawfulBasis;
-  "journalism-academia-art-literature"?: LawfulBasis;
+  journalism?: LawfulBasis;
   "preventing-fraud"?: LawfulBasis;
-  "suspicion-terrorist-financing-or-money-laundering"?: LawfulBasis;
-  "support-particular-disability-or-mental-condition"?: LawfulBasis;
-  "counselling"?: LawfulBasis;
-  "safeguarding-children-individuals-risk"?: LawfulBasis;
-  "safeguarding-economic-well-being"?: LawfulBasis;
-  "insurance"?: LawfulBasis;
+  suspicion?: LawfulBasis;
+  support?: LawfulBasis;
+
+  counselling?: LawfulBasis;
+  "safeguarding-children"?: LawfulBasis;
+  "safeguarding-economic"?: LawfulBasis;
+  insurance?: LawfulBasis;
   "occupational-pensions"?: LawfulBasis;
   "political-parties"?: LawfulBasis;
-  "elected-representatives-responding-requests"?: LawfulBasis;
-  "disclosure-elected-representatives"?: LawfulBasis;
-  "informing-elected-representatives-about-prisoners"?: LawfulBasis;
-  "publication-legal-judgments"?: LawfulBasis;
-  "anti-doping-sport"?: LawfulBasis;
-  "standards-behaviour-sport"?: LawfulBasis;
+  elected?: LawfulBasis;
+  disclosure?: LawfulBasis;
+  informing?: LawfulBasis;
+  "legal-judgments"?: LawfulBasis;
+  "anti-doping"?: LawfulBasis;
+  standards?: LawfulBasis;
 };
 
 export type StepValue =
@@ -146,7 +146,7 @@ export type StepValue =
   | DateStep
   | LawfulBasisPersonalStep
   | LawfulBasisSpecialStep
-  | LawfulSpecialPublicInterestStep
+  | LawfulBasisSpecialPublicInterestStep
   | DeliveryStep
   | FormatStep;
 
