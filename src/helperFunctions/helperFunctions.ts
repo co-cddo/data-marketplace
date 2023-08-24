@@ -16,6 +16,7 @@ import {
   RadioFieldStepID,
   TextFieldStepID,
   DeliveryStep,
+  MoreOrganisation
 } from "../types/express";
 
 function validateDate(day: number, month: number, year: number): string {
@@ -162,6 +163,16 @@ const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
     return body[stepData.id] as StepValue;
   }
 
+  if (stepData.id === "other-orgs") {
+    console.log("IN THE EXTRACTFORMDATA FUNCTION", body, stepData)
+   
+    const orgValues = Object.keys(body)
+        .filter(key => key.startsWith("org-name-"))
+        .map(key => body[key]);
+
+    return orgValues as MoreOrganisation;
+}
+  
   if (stepData.id === "data-type") {
     return {
       personal: {

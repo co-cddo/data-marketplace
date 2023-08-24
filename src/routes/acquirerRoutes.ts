@@ -162,7 +162,6 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
     formdata.stepHistory = [];
   }
 
-
   if (formStep === "data-type") {
     // If current step is 'data-type', set the back link to start page ->
     // in preperation for Maddies current work before Annual leave data-type being the only page to start from
@@ -216,6 +215,16 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
     formdata.stepHistory = [];
   }
 
+  if (req.body.addMoreOrgs) {  // If "Add another organisation" is clicked.
+    if (Array.isArray(formdata.steps["other-orgs"].value)) {
+        formdata.steps["other-orgs"].value.push('');  // Add a new empty string.
+    } else {
+        // handle error or other logic if value isn't an array
+        console.error("Expected 'other-orgs' value to be an array but it wasn't.");
+    }
+    return res.redirect(`/acquirer/${resourceID}/other-orgs`);  // Refresh the current page.
+}
+  
   // Check which button was clicked "Save and continue || Save and return"
   if (req.body.returnButton) {
     stepData.status = "IN PROGRESS";
