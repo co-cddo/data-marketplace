@@ -1,0 +1,153 @@
+{% extends "page.njk" %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-l">Request ID: {{requestId}}</span>
+      <form method="POST" id="specialPublicInterestForm">
+        {{ govukCheckboxes({
+            name: "lawful-basis-special-public-interest",
+            fieldset: {
+                legend: {
+                text: "What is the substantial public interest for requesting special category data under UK GDPR?",
+                isPageHeading: true,
+                classes: "govuk-fieldset__legend--l"
+                }
+            },
+            hint: {
+                text: "You may need help from a data protection specialist."
+            },
+            items: [
+                {
+                value: "statutory",
+                text: "Statutory and government purposes",
+                checked: savedValue['statutory']['checked']
+                },
+                 {
+                value: "administration",
+                text: "Administration of justice and parliamentary purposes",
+                checked: savedValue['administration']['checked']
+                },
+                 {
+                value: "equality",
+                text: "Equality of opportunity or treatment",
+                checked: savedValue['equality']['checked']
+                },
+                {
+                value: "preventing-detecting",
+                text: "Preventing or detecting unlawful acts",
+                checked: savedValue['preventing-detecting']['checked']
+                },
+                {
+                value: "protecting",
+                text: "Protecting the public",
+                checked: savedValue['protecting']['checked']
+                },
+                 {
+                value: "regulatory-requirements",
+                text: "Regulatory requirements",
+                checked: savedValue['regulatory-requirements']['checked']
+                },
+                 {
+                value: "journalism",
+                text: "Journalism, academia, art and literature",
+                checked: savedValue['journalism']['checked']
+                },
+                {
+                value: "preventing-fraud",
+                text: "Preventing fraud",
+                checked: savedValue['preventing-fraud']['checked']
+                },
+                {
+                value: "suspicion",
+                text: "Suspicion of terrorist financing or money laundering",
+                checked: savedValue['suspicion']['checked']
+                },
+                {
+                value: "support",
+                text: "Support for individuals with a particular disability or medical condition",
+                checked: savedValue['support']['checked']
+                },
+                 {
+                value: "counselling",
+                text: "Counselling",
+                checked: savedValue['counselling']['checked']
+                },
+                {
+                value: "safeguarding-children",
+                text: "Safeguarding of children and individuals at risk",
+                checked: savedValue['safeguarding-children']['checked']
+                },
+                {
+                value: "safeguarding-economic",
+                text: "Safeguarding of economic well-being of certain individuals",
+                checked: savedValue['safeguarding-economic']['checked']
+                },
+
+                {
+                value: "insurance",
+                text: "Insurance",
+                checked: savedValue['insurance']['checked']
+                },
+                {
+                value: "occupational-pensions",
+                text: "Occupational pensions",
+                checked: savedValue['occupational-pensions']['checked']
+                },
+                {
+                value: "political-parties",
+                text: "Political parties",
+                checked: savedValue['political-parties']['checked']
+                },
+                 {
+                value: "elected",
+                text: "Elected representatives responding to requests",
+                checked: savedValue['elected']['checked']
+                },
+                {
+                value: "disclosure",
+                text: "Disclosure to elected representatives",
+                checked: savedValue['disclosure']['checked']
+                },
+                {
+                value: "informing",
+                text: "Informing elected representatives about prisoners",
+                checked: savedValue['informing']['checked']
+                },
+                
+                {
+                value: "legal-judgments",
+                text: "Publication of legal judgments",
+                checked: savedValue['legal-judgments']['checked']
+                },
+                {
+                value: "anti-doping",
+                text: "Anti-doping in sport",
+                checked: savedValue['anti-doping']['checked']
+                },
+                 {
+                value: "standards",
+                text: "Standards of behaviour in sport",
+                checked: savedValue['standards']['checked']
+                }
+                  ]
+                  }) }}
+          <div class="govuk-button-group">
+            {{ govukButton({
+                text: "Save and continue",
+                name: "continueButton",
+                value: "continue"
+            }) }}
+            {{ govukButton({
+                text: "Save and return",
+                classes: "govuk-button--secondary",
+                name: "returnButton",
+                value: "return"
+            }) }}
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
