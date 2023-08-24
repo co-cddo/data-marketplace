@@ -55,15 +55,15 @@ const skipThisStep = (step: string, formdata: FormData) => {
     }
     case "role": {
       const data = formdata.steps["data-type"].value as DataTypeStep
-      return (data.personal.checked === false && data.special.checked === false)
+      return (data.none.checked || (data.personal.checked === undefined && data.special.checked === undefined))
     }
     case "lawful-basis-personal": {
       const data = formdata.steps["data-type"].value as DataTypeStep
-      return data.personal.checked === false
+      return data.personal.checked === false || data.personal.checked === undefined
     }
     case "lawful-basis-special": {
       const data = formdata.steps["data-type"].value as DataTypeStep
-      return data.special.checked === false
+      return data.special.checked === false || data.special.checked === undefined
     }
     case "lawful-basis-special-public-interest": {
       const data = formdata.steps["lawful-basis-special"].value as LawfulBasisSpecialStep
