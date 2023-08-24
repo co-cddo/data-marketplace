@@ -54,16 +54,6 @@ const skipThisStep = (step: string, formdata: FormData) => {
       const legalGatewayStep = formdata.steps["legal-gateway"].value as LegalGatewayStep
       return legalGatewayStep.yes.checked || legalGatewayStep.other.checked
     }
-    case "lawful-basis-personal": {
-      // Skip lawful-basis-personal if answer to data-type was "special" or "none"
-      const DataTypeStep = formdata.steps["data-type"].value as DataTypeStep
-      return DataTypeStep.special.checked || DataTypeStep.none.checked
-    }
-    case "lawful-basis-special": {
-      // Skip lawful-basis-special if answer to data-type was "personal" or "none"
-      const DataTypeStep = formdata.steps["data-type"].value as DataTypeStep
-      return DataTypeStep.personal.checked || DataTypeStep.none.checked
-    }
     case "role": {
       const data = formdata.steps["data-type"].value as DataTypeStep
       return (data.none.checked || (data.personal.checked === undefined && data.special.checked === undefined))
@@ -158,9 +148,9 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   // If current step is 'data-type', set the back link to start page -> 
   // in preperation for Maddies current work before Annual leave data-type being the only page to start from
   backLink = `/acquirer/${resourceID}/start`;
-} else if (formdata.stepHistory && formdata.stepHistory.length > 1) {
+} else if (formdata.stepHistory && formdata.stepHistory.length > 0) {
   // Otherwise, set it to the previous step from stepHistory
-  backLink = `/acquirer/${resourceID}/${formdata.stepHistory[formdata.stepHistory.length - 2]}?action=back`;
+  backLink = `/acquirer/${resourceID}/${formdata.stepHistory[formdata.stepHistory.length - 1]}?action=back`;
 }
 
   res.render(`../views/acquirer/${formStep}.njk`, {
