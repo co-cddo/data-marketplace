@@ -15,6 +15,7 @@ interface FormData {
   status: string;
   sections: Record<string, Section>;
   steps: Record<string, Step>;
+  stepHistory?: string[];
 }
 
 export interface RequestBody {
@@ -22,7 +23,11 @@ export interface RequestBody {
 }
 
 // Add id's here. Should only be able to handle single value
-type TextFieldStepID = "impact" | "data-subjects" | "data-required" | "disposal";
+type TextFieldStepID =
+  | "impact"
+  | "data-subjects"
+  | "data-required"
+  | "disposal";
 type RadioFieldStepID = "data-access" | "legal-review" | "role";
 
 interface Benefits {
@@ -46,7 +51,7 @@ type DataTypeStep = {
   personal: GenericDecisions;
   special: GenericDecisions;
   none: GenericDecisions;
-}
+};
 
 type ProjectAimStep = {
   aims: string;
@@ -61,8 +66,8 @@ type GenericDecisions = {
 type DeliveryStep = {
   "third-party": GenericDecisions;
   physical: GenericDecisions;
-  something: GenericDecisions
-}
+  something: GenericDecisions;
+};
 
 type FormatStep = {
   csv: GenericDecisions;
