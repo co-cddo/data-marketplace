@@ -46,7 +46,7 @@
       "id": "data-type",
       "name": "Data type",
       "status": "NOT STARTED",
-      "value": "",
+      "value": [],
       "nextStep": "data-subjects"
     },
     "data-subjects": {

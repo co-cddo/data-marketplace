@@ -1,10 +1,12 @@
 import { licences } from "../mockData/licences";
 import {
+  DataTypeStep,
   BenefitsStep,
   DateStep,
   FormatStep,
   LawfulBasisPersonalStep,
   LawfulBasisSpecialStep,
+  LawfulBasisSpecialPublicInterestStep,
   LegalGatewayStep,
   LegalPowerStep,
   ProjectAimStep,
@@ -124,11 +126,11 @@ const validateRequestBody = (step: string, body: RequestBody): string => {
 };
 
 function isRadioField(id: string): id is RadioFieldStepID {
-  return ["data-type", "data-access", "legal-review", "role"].includes(id);
+  return ["data-access", "legal-review", "role", "data-travel", "protection-review"].includes(id);
 }
 
 function isTextField(id: string): id is TextFieldStepID {
-  return ["impact", "data-subjects", "data-required", "disposal"].includes(id);
+  return ["impact", "data-subjects", "data-required", "disposal", "data-travel-location"].includes(id);
 }
 
 const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
@@ -146,6 +148,20 @@ const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
   // Check for text fields
   if (isTextField(stepData.id)) {
     return body[stepData.id] as StepValue;
+  }
+
+  if (stepData.id === "data-type") {
+    return {
+      "personal": {
+        checked: body["data-type"]?.includes("personal"),
+      },
+      "special": {
+        checked: body["data-type"]?.includes("special"),
+      },
+      "none": {
+        checked: body["data-type"]?.includes("none"),
+      },
+    } as DataTypeStep;
   }
 
   if (stepData.id === "project-aims") {
@@ -342,6 +358,108 @@ const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
         ),
       },
     } as LawfulBasisSpecialStep;
+  }
+
+  if (stepData.id === "lawful-basis-special-public-interest") {
+    return {
+      statutory: {
+        checked: body["lawful-basis-special-public-interest"]?.includes(
+          "statutory",
+        ),
+      },
+      administration: {
+        checked: body["lawful-basis-special-public-interest"]?.includes(
+          "administration",
+        ),
+      },
+      equality: {
+        checked: body["lawful-basis-special-public-interest"]?.includes("equality"),
+      },
+      "preventing-detecting": {
+        checked: body["lawful-basis-special-public-interest"]?.includes(
+          "preventing-detecting",
+        ),
+      },
+      protecting: {
+        checked: body["lawful-basis-special-public-interest"]?.includes(
+          "protecting",
+        ),
+      },
+      "regulatory-requirements": {
+        checked: body["lawful-basis-special-public-interest"]?.includes("regulatory-requirements"),
+      },
+      journalism: {
+        checked: body["lawful-basis-special-public-interest"]?.includes("journalism"),
+      },
+      "preventing-fraud": {
+        checked: body["lawful-basis-special-public-interest"]?.includes(
+          "preventing-fraud",
+        ),
+      },
+      suspicion: {
+        checked: body["lawful-basis-special-public-interest"]?.includes(
+          "suspicion",
+        ),
+      },
+      support: {
+        checked: body["lawful-basis-special-public-interest"]?.includes(
+          "support",
+        ),
+      },
+
+      counselling: {
+        checked: body["lawful-basis-special-public-interest"]?.includes(
+          "counselling",
+        ),
+      },
+      "safeguarding-children": {
+        checked: body["lawful-basis-special-public-interest"]?.includes("safeguarding-children"),
+      },
+      "safeguarding-economic": {
+        checked: body["lawful-basis-special-public-interest"]?.includes("safeguarding-economic"),
+      },
+      insurance: {
+        checked: body["lawful-basis-special-public-interest"]?.includes(
+          "insurance",
+        ),
+      },
+      "occupational-pensions": {
+        checked: body["lawful-basis-special-public-interest"]?.includes(
+          "occupational-pensions",
+        ),
+      },
+      "political-parties": {
+        checked: body["lawful-basis-special-public-interest"]?.includes(
+          "political-parties",
+        ),
+      },
+      elected: {
+        checked: body["lawful-basis-special-public-interest"]?.includes(
+          "elected",
+        ),
+      },
+      disclosure: {
+        checked: body["lawful-basis-special-public-interest"]?.includes("disclosure"),
+      },
+      informing: {
+        checked: body["lawful-basis-special-public-interest"]?.includes("informing"),
+      },
+      "legal-judgments": {
+        checked: body["lawful-basis-special-public-interest"]?.includes(
+          "legal-judgments",
+        ),
+      },
+      "anti-doping": {
+        checked: body["lawful-basis-special-public-interest"]?.includes(
+          "anti-doping",
+        ),
+      },
+      standards: {
+        checked: body["lawful-basis-special-public-interest"]?.includes(
+          "standards",
+        ),
+      },
+    } as LawfulBasisSpecialPublicInterestStep;
   }
 
   // Other input types can go here
