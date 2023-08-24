@@ -139,7 +139,7 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   });
 });
 
-const URL = `${process.env.API_ENDPOINT}/formdata`
+const URL = `${process.env.API_ENDPOINT}/sharedata`
 
 router.post("/:resourceID/:step", async (req: Request, res: Response) => {
   if (!req.session.acquirerForms) {
@@ -170,12 +170,12 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
   // Check which button was clicked "Save and continue || Save and return"
   if (req.body.returnButton) {
     stepData.status = "IN PROGRESS";
-    axios.put(URL, { jwt: req.cookies.jwtToken, formdata: JSON.stringify(formdata) })
+    axios.put(URL, { jwt: req.cookies.jwtToken, sharedata: JSON.stringify(formdata) })
     return res.redirect(`/acquirer/${resourceID}/start`);
   }
 
   stepData.status = "COMPLETED";
-  axios.put(URL, { jwt: req.cookies.jwtToken, formdata: JSON.stringify(formdata) })
+  axios.put(URL, { jwt: req.cookies.jwtToken, sharedata: JSON.stringify(formdata) })
 
   if (formdata.steps[formStep].nextStep) {
     return res.redirect(
