@@ -178,6 +178,8 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
     backLink = `/acquirer/${resourceID}/${
       formdata.stepHistory[formdata.stepHistory.length - 1]
     }?action=back`;
+  } else {
+      backLink = `/acquirer/${resourceID}/start`;
   }
 
   res.render(`../views/acquirer/${formStep}.njk`, {
