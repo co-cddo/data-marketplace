@@ -7,7 +7,13 @@ import {
   extractFormData,
   validateRequestBody,
 } from "../helperFunctions/helperFunctions";
-import { DataTypeStep, FormData, LawfulBasisSpecialStep, LegalGatewayStep, LegalPowerStep } from "../types/express";
+import {
+  DataTypeStep,
+  FormData,
+  LawfulBasisSpecialStep,
+  LegalGatewayStep,
+  LegalPowerStep,
+} from "../types/express";
 
 function parseJwt(token: string) {
   return JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
@@ -37,7 +43,7 @@ const skipThisStep = (step: string, formdata: FormData) => {
   switch (step) {
     case "data-subjects": {
       // Skip data-subjects if the data-type is "none" i.e. anonymised
-      const DataTypeStep = formdata.steps["data-type"].value as DataTypeStep
+      const DataTypeStep = formdata.steps["data-type"].value as DataTypeStep;
       return DataTypeStep.none.checked;
     }
     case "other-orgs": {
@@ -46,32 +52,49 @@ const skipThisStep = (step: string, formdata: FormData) => {
     }
     case "legal-power-advice": {
       // Skip legal-power-advice if the answer to legal-power was "Yes"
-      const legalPowerStep = formdata.steps["legal-power"].value as LegalPowerStep
-      return legalPowerStep.yes.checked
+      const legalPowerStep = formdata.steps["legal-power"]
+        .value as LegalPowerStep;
+      return legalPowerStep.yes.checked;
     }
     case "legal-gateway-advice": {
       // Skip legal-gateway-advice if the answer to legal-gateway was "yes" or "other"
-      const legalGatewayStep = formdata.steps["legal-gateway"].value as LegalGatewayStep
-      return legalGatewayStep.yes.checked || legalGatewayStep.other.checked
+      const legalGatewayStep = formdata.steps["legal-gateway"]
+        .value as LegalGatewayStep;
+      return legalGatewayStep.yes.checked || legalGatewayStep.other.checked;
     }
     case "role": {
-      const data = formdata.steps["data-type"].value as DataTypeStep
-      return (data.none.checked || (data.personal.checked === undefined && data.special.checked === undefined))
+      const data = formdata.steps["data-type"].value as DataTypeStep;
+      return (
+        data.none.checked ||
+        (data.personal.checked === undefined &&
+          data.special.checked === undefined)
+      );
     }
     case "lawful-basis-personal": {
-      const data = formdata.steps["data-type"].value as DataTypeStep
-      return data.personal.checked === false || data.personal.checked === undefined
+      const data = formdata.steps["data-type"].value as DataTypeStep;
+      return (
+        data.personal.checked === false || data.personal.checked === undefined
+      );
     }
     case "lawful-basis-special": {
-      const data = formdata.steps["data-type"].value as DataTypeStep
-      return data.special.checked === false || data.special.checked === undefined
+      const data = formdata.steps["data-type"].value as DataTypeStep;
+      return (
+        data.special.checked === false || data.special.checked === undefined
+      );
     }
     case "lawful-basis-special-public-interest": {
-      const data = formdata.steps["lawful-basis-special"].value as LawfulBasisSpecialStep
-      return (data["reasons-of-public-interest"]?.checked === false || data["reasons-of-public-interest"]?.checked === undefined)
+      const data = formdata.steps["lawful-basis-special"]
+        .value as LawfulBasisSpecialStep;
+      return (
+        data["reasons-of-public-interest"]?.checked === false ||
+        data["reasons-of-public-interest"]?.checked === undefined
+      );
     }
     case "data-travel-location": {
-      return formdata.steps["data-travel"].value === "no" || formdata.steps["data-travel"].value === ""
+      return (
+        formdata.steps["data-travel"].value === "no" ||
+        formdata.steps["data-travel"].value === ""
+      );
     }
     default: {
       return false;
@@ -124,7 +147,7 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   const stepData = formdata.steps[formStep];
   const assetTitle = formdata.assetTitle;
 
-  if (req.query.action === 'back' && formdata.stepHistory) {
+  if (req.query.action === "back" && formdata.stepHistory) {
     formdata.stepHistory.pop();
   }
 
@@ -132,26 +155,30 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
     stepData.skipped = true;
     return res.redirect(`/acquirer/${resourceID}/${stepData.nextStep}`);
   }
-  
-  let backLink = null; 
+
+  let backLink = null;
 
   if (!formdata.stepHistory) {
     formdata.stepHistory = [];
   }
-  
+
   // If we have history and are pressing back, we set the back link.
   if (formdata.stepHistory.length > 1) {
-    backLink = `/acquirer/${resourceID}/${formdata.stepHistory[formdata.stepHistory.length - 2]}?action=back`;
- }
+    backLink = `/acquirer/${resourceID}/${
+      formdata.stepHistory[formdata.stepHistory.length - 2]
+    }?action=back`;
+  }
 
- if (formStep === 'data-type') {
-  // If current step is 'data-type', set the back link to start page -> 
-  // in preperation for Maddies current work before Annual leave data-type being the only page to start from
-  backLink = `/acquirer/${resourceID}/start`;
-} else if (formdata.stepHistory && formdata.stepHistory.length > 0) {
-  // Otherwise, set it to the previous step from stepHistory
-  backLink = `/acquirer/${resourceID}/${formdata.stepHistory[formdata.stepHistory.length - 1]}?action=back`;
-}
+  if (formStep === "data-type") {
+    // If current step is 'data-type', set the back link to start page ->
+    // in preperation for Maddies current work before Annual leave data-type being the only page to start from
+    backLink = `/acquirer/${resourceID}/start`;
+  } else if (formdata.stepHistory && formdata.stepHistory.length > 0) {
+    // Otherwise, set it to the previous step from stepHistory
+    backLink = `/acquirer/${resourceID}/${
+      formdata.stepHistory[formdata.stepHistory.length - 1]
+    }?action=back`;
+  }
 
   res.render(`../views/acquirer/${formStep}.njk`, {
     requestId: formdata.requestId,
@@ -192,7 +219,7 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
   if (!formdata.stepHistory) {
     formdata.stepHistory = [];
   }
-  
+
   // Check which button was clicked "Save and continue || Save and return"
   if (req.body.returnButton) {
     stepData.status = "IN PROGRESS";
@@ -207,7 +234,7 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
   }
 
   stepData.status = "COMPLETED";
- 
+
   if (formdata.steps[formStep].nextStep) {
     return res.redirect(
       `/acquirer/${resourceID}/${formdata.steps[formStep].nextStep}`,
