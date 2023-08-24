@@ -80,8 +80,8 @@ const skipThisStep = (step: string, formdata: FormData) => {
 };
 
 router.get("/:resourceID/start", async (req: Request, res: Response) => {
-  const backLink = req.headers.referer || "/";
   const resourceID = req.params.resourceID;
+  const backLink = req.headers.referer || `/share/${resourceID}/acquirer`;
 
   try {
     const resource = await fetchResourceById(resourceID);
