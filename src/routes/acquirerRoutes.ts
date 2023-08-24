@@ -162,12 +162,6 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
     formdata.stepHistory = [];
   }
 
-  // If we have history and are pressing back, we set the back link.
-  if (formdata.stepHistory.length > 1) {
-    backLink = `/acquirer/${resourceID}/${
-      formdata.stepHistory[formdata.stepHistory.length - 2]
-    }?action=back`;
-  }
 
   if (formStep === "data-type") {
     // If current step is 'data-type', set the back link to start page ->
