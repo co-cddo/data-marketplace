@@ -8,7 +8,8 @@
     <div class="govuk-grid-column-two-thirds">
       <span class="govuk-caption-l">Request ID: {{requestId}}</span>
       <form method="POST" id="otherOrgsForm">
-        <p class="govuk-body">What other organisations will access the data?</p> 
+        <h1 class="govuk-heading-l govuk-fieldset__legend govuk-fieldset__legend--l">What other organisations will access the data?</h1>
+        <div class="govuk-hint">List all the organisations you will be sharing the data with.</div>
 
         {% for org in savedValue %}
           <div class="govuk-grid-row">
