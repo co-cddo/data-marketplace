@@ -133,6 +133,7 @@ function isRadioField(id: string): id is RadioFieldStepID {
     "role",
     "data-travel",
     "protection-review",
+    "security-review"
   ].includes(id);
 }
 
