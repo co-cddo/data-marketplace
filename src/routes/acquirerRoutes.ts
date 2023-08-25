@@ -13,6 +13,7 @@ import {
   LawfulBasisSpecialStep,
   LegalGatewayStep,
   LegalPowerStep,
+  MoreOrganisationStep,
 } from "../types/express";
 
 function parseJwt(token: string) {
@@ -223,7 +224,19 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
         console.error("Expected 'other-orgs' value to be an array but it wasn't.");
     }
     return res.redirect(`/acquirer/${resourceID}/other-orgs`);  // Refresh the current page.
-}
+  }
+
+  if (req.body.removeOrg !== undefined) {
+    const orgIndexToRemove = parseInt(req.body.removeOrg, 10) - 1;
+    if (formdata.steps["other-orgs"] && Array.isArray(formdata.steps["other-orgs"].value)) {
+      const orgs = formdata.steps["other-orgs"].value as MoreOrganisationStep;
+
+      if (Number.isInteger(orgIndexToRemove) && orgIndexToRemove >= 0 && orgIndexToRemove < orgs.length) {
+        orgs.splice(orgIndexToRemove, 1);
+      }
+    }
+    return res.redirect(`/acquirer/${resourceID}/other-orgs`);
+  }
   
   // Check which button was clicked "Save and continue || Save and return"
   if (req.body.returnButton) {
