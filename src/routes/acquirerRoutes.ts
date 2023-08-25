@@ -35,17 +35,40 @@ const generateFormTemplate = (
   return template;
 };
 
-const allStepsCompleted = (steps: string[], formdata: FormData) => {
+const everyStepCompleted = (steps: string[], formdata: FormData) => {
   return steps.every((step) =>
     ["COMPLETED", "NOT REQUIRED"].includes(formdata.steps[step].status),
-  )
-}
+  );
+};
 
 const updateStepsStatus = (
   currentStep: string,
   stepValue: StepValue,
   formdata: FormData,
+  returnToStart: boolean,
 ) => {
+  const completedSections = new Set();
+
+  // Group up the steps so we can work out which sections have been completed later
+  const purposeSteps = [
+    "data-type",
+    "data-subjects",
+    "project-aims",
+    "data-required",
+    "benefits",
+    "data-access",
+    "other-orgs",
+    "impact",
+    "date",
+  ];
+
+  const legalSteps = [
+    "legal-power",
+    "legal-power-advice",
+    "legal-gateway",
+    "legal-gateway-advice",
+  ];
+
   const dataProtectionSteps = [
     "lawful-basis-personal",
     "lawful-basis-special",
@@ -57,36 +80,37 @@ const updateStepsStatus = (
 
   const securitySteps = ["delivery", "format", "disposal"];
 
-  // Assume that if we're at this point then then current step has been
-  //  completed successfully.
-  // Any validation should happen before this function is called.
-  formdata.steps[currentStep].status = "COMPLETED";
+  // If "Save and return" was clicked, set to "IN PROGRESS" if needed and return
+  if (returnToStart) {
+    if (formdata.steps[currentStep].status !== "COMPLETED") {
+      formdata.steps[currentStep].status = "IN PROGRESS";
+    }
+    return;
+  } else {
+    // If "Save and Continue" was clicked, set this step to "COMPLETED"
+    formdata.steps[currentStep].status = "COMPLETED";
+  }
 
   if (currentStep === "data-type") {
-    // Grab all of the step names so we can set (most of) them to "Not Started".
-    const allSteps = new Set(Object.keys(formdata.steps));
-    allSteps.delete("data-type");
-
-    // The following steps need to stay at their default status until other steps have been completed:
-    [
-      "legal-review",
-      "lawful-basis-special-public-interest",
-      "protection-review",
-      "security-review",
-      "check",
-    ].forEach((s) => allSteps.delete(s));
-
-    // Figure out which steps need to be set to "Not Required"
     let notRequiredSteps = new Set<string>();
+    let notStartedSteps = new Set<string>();
     const val = stepValue as DataTypeStep;
     // If personal is not checked then lawful-basis-personal is not required
     if (!val.personal.checked) {
       notRequiredSteps.add("lawful-basis-personal");
+    } else {
+      notStartedSteps.add("data-subjects");
+      notStartedSteps.add("lawful-basis-personal");
+      notStartedSteps.add("role");
     }
     // If special is not checked then lawful-basis-special is not required
     if (!val.special.checked) {
       notRequiredSteps.add("lawful-basis-special");
       notRequiredSteps.add("lawful-basis-special-public-interest");
+    } else {
+      notStartedSteps.add("data-subjects");
+      notStartedSteps.add("lawful-basis-special");
+      notStartedSteps.add("role");
     }
     // If none is checked, a few other steps are not required
     if (val.none.checked) {
@@ -99,38 +123,32 @@ const updateStepsStatus = (
       ].forEach((s) => notRequiredSteps.add(s));
     }
 
-    // Remove the "not required" steps from the full list of steps
-    //  to get the ones that need to be set to "not started"
-    const notStartedSteps = new Set(
-      [...allSteps].filter((x) => !notRequiredSteps.has(x)),
-    );
-
     for (const s of notRequiredSteps) {
       formdata.steps[s].status = "NOT REQUIRED";
     }
 
     for (const s of notStartedSteps) {
       const stepStatus = formdata.steps[s].status;
-      if (stepStatus === "COMPLETED" || stepStatus === "IN PROGRESS") {
-        continue;
+      if (!["COMPLETED", "IN PROGRESS"].includes(stepStatus)) {
+        formdata.steps[s].status = "NOT STARTED";
       }
-      formdata.steps[s].status = "NOT STARTED";
     }
   }
 
   if (currentStep === "data-access") {
     if (stepValue === "no") {
       formdata.steps["other-orgs"].status = "NOT REQUIRED";
+    } else {
+      formdata.steps["other-orgs"].status = "NOT STARTED";
     }
   }
 
   if (currentStep === "legal-power") {
     if ((stepValue as LegalPowerStep).yes.checked) {
       formdata.steps["legal-power-advice"].status = "NOT REQUIRED";
-    }
-    // If legal gateway has already been completed, set legal-review to NOT STARTED
-    if (formdata.steps["legal-gateway"].status === "COMPLETED") {
-      formdata.steps["legal-review"].status = "NOT STARTED";
+    } else {
+      formdata.steps["legal-power-advice"].status = "NOT STARTED";
+      formdata.steps[currentStep].status = "IN PROGRESS";
     }
   }
 
@@ -138,10 +156,9 @@ const updateStepsStatus = (
     const legalGatewayStep = stepValue as LegalGatewayStep;
     if (legalGatewayStep.yes.checked || legalGatewayStep.other.checked) {
       formdata.steps["legal-gateway-advice"].status = "NOT REQUIRED";
-    }
-    // If legal power has already been completed, set legal-review to NOT STARTED
-    if (formdata.steps["legal-power"].status === "COMPLETED") {
-      formdata.steps["legal-review"].status = "NOT STARTED";
+    } else {
+      formdata.steps["legal-gateway-advice"].status = "NOT STARTED";
+      formdata.steps[currentStep].status = "IN PROGRESS";
     }
   }
 
@@ -171,97 +188,59 @@ const updateStepsStatus = (
     }
   }
 
-  if (dataProtectionSteps.includes(currentStep)) {
-    if (allStepsCompleted(dataProtectionSteps, formdata)) {
-      formdata.steps["protection-review"].status = "NOT STARTED";
-    } else {
-      formdata.steps["protection-review"].status = "CANNOT START YET";
-    }
+  // Loop over all the steps in each section to check whether the
+  //  section is complete and/or the 'review' step can be enabled
+
+  if (everyStepCompleted(purposeSteps, formdata)) {
+    completedSections.add("purpose");
+  } else {
+    completedSections.delete("purpose");
   }
 
-  if (securitySteps.includes(currentStep)) {
-    if (allStepsCompleted(securitySteps, formdata)) {
-      formdata.steps["security-review"].status = "NOT STARTED";
+  if (everyStepCompleted(legalSteps, formdata)) {
+    if (formdata.steps["legal-review"].status === "COMPLETED") {
+      completedSections.add("legal");
     } else {
-      formdata.steps["security-review"].status = "CANNOT START YET";
+      formdata.steps["legal-review"].status = "NOT STARTED";
     }
+  } else {
+    formdata.steps["legal-review"].status = "CANNOT START YET";
+    completedSections.delete("legal");
+  }
+
+  if (everyStepCompleted(dataProtectionSteps, formdata)) {
+    if (formdata.steps["protection-review"].status === "COMPLETED") {
+      completedSections.add("data-protection");
+    } else {
+      formdata.steps["protection-review"].status = "NOT STARTED";
+    }
+  } else {
+    formdata.steps["protection-review"].status = "CANNOT START YET";
+    completedSections.delete("data-protection");
+  }
+
+  if (everyStepCompleted(securitySteps, formdata)) {
+    if (formdata.steps["security-review"].status === "COMPLETED") {
+      completedSections.add("security");
+    } else {
+      formdata.steps["security-review"].status = "NOT STARTED";
+    }
+  } else {
+    formdata.steps["security-review"].status = "CANNOT START YET";
+    completedSections.delete("security");
   }
 
   // If every other step is COMPLETED or NOT REQUIRED, set the
   //  check step to NOT STARTED.
-  const allSteps = new Set(Object.keys(formdata.steps))
-  allSteps.delete("check")
-  if (allStepsCompleted([...allSteps], formdata)) {
-    formdata.steps["check"].status = "NOT STARTED"
+  const allSteps = new Set(Object.keys(formdata.steps));
+  allSteps.delete("check");
+  if (everyStepCompleted([...allSteps], formdata)) {
+    formdata.steps["check"].status = "NOT STARTED";
+  } else {
+    formdata.steps["check"].status = "CANNOT START YET";
   }
-};
 
-const skipThisStep = (step: string, formdata: FormData) => {
-  // Decide whether to skip the current step based on answers in previous steps
-  // Returns false (doesn't skip any steps) by default, so only hidden steps or
-  // ones that might need to be skipped in some circumstances need to be added to
-  // switch/case statement.
-
-  switch (step) {
-    case "data-subjects": {
-      // Skip data-subjects if the data-type is "none" i.e. anonymised
-      const DataTypeStep = formdata.steps["data-type"].value as DataTypeStep;
-      return DataTypeStep.none.checked;
-    }
-    case "other-orgs": {
-      // Skip other-orgs if the answer to data-access was "no"
-      return formdata.steps["data-access"].value === "no";
-    }
-    case "legal-power-advice": {
-      // Skip legal-power-advice if the answer to legal-power was "Yes"
-      const legalPowerStep = formdata.steps["legal-power"]
-        .value as LegalPowerStep;
-      return legalPowerStep.yes.checked;
-    }
-    case "legal-gateway-advice": {
-      // Skip legal-gateway-advice if the answer to legal-gateway was "yes" or "other"
-      const legalGatewayStep = formdata.steps["legal-gateway"]
-        .value as LegalGatewayStep;
-      return legalGatewayStep.yes.checked || legalGatewayStep.other.checked;
-    }
-    case "role": {
-      const data = formdata.steps["data-type"].value as DataTypeStep;
-      return (
-        data.none.checked ||
-        (data.personal.checked === undefined &&
-          data.special.checked === undefined)
-      );
-    }
-    case "lawful-basis-personal": {
-      const data = formdata.steps["data-type"].value as DataTypeStep;
-      return (
-        data.personal.checked === false || data.personal.checked === undefined
-      );
-    }
-    case "lawful-basis-special": {
-      const data = formdata.steps["data-type"].value as DataTypeStep;
-      return (
-        data.special.checked === false || data.special.checked === undefined
-      );
-    }
-    case "lawful-basis-special-public-interest": {
-      const data = formdata.steps["lawful-basis-special"]
-        .value as LawfulBasisSpecialStep;
-      return (
-        data["reasons-of-public-interest"]?.checked === false ||
-        data["reasons-of-public-interest"]?.checked === undefined
-      );
-    }
-    case "data-travel-location": {
-      return (
-        formdata.steps["data-travel"].value === "no" ||
-        formdata.steps["data-travel"].value === ""
-      );
-    }
-    default: {
-      return false;
-    }
-  }
+  formdata.completedSections = completedSections.size;
 };
 
 router.get("/:resourceID/start", async (req: Request, res: Response) => {
@@ -326,14 +305,11 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
     formdata.stepHistory = [];
   }
 
-  if (formStep === "data-type") {
-    // If current step is 'data-type', set the back link to start page ->
-    // in preperation for Maddies current work before Annual leave data-type being the only page to start from
-    backLink = `/acquirer/${resourceID}/start`;
-  } else if (formdata.stepHistory && formdata.stepHistory.length > 0) {
+  if (formdata.stepHistory && formdata.stepHistory.length > 0) {
     // Otherwise, set it to the previous step from stepHistory
-    backLink = `/acquirer/${resourceID}/${formdata.stepHistory[formdata.stepHistory.length - 1]
-      }?action=back`;
+    backLink = `/acquirer/${resourceID}/${
+      formdata.stepHistory[formdata.stepHistory.length - 1]
+    }?action=back`;
   } else {
     backLink = `/acquirer/${resourceID}/start`;
   }
@@ -379,11 +355,9 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
   }
 
   // Check which button was clicked "Save and continue || Save and return"
+  let redirectURL = `/acquirer/${resourceID}/start`;
   if (req.body.returnButton) {
-    stepData.status = "IN PROGRESS";
-    // Clear the stepHistory array if "Save and return" is clicked
     formdata.stepHistory = [];
-    return res.redirect(`/acquirer/${resourceID}/start`);
   } else {
     // Add the current step to the history if it's not already there
     if (formdata.stepHistory.indexOf(formStep) === -1) {
@@ -391,18 +365,15 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
     }
   }
 
-  updateStepsStatus(formStep, stepData.value, formdata);
-  // stepData.status = "COMPLETED";
+  updateStepsStatus(formStep, stepData.value, formdata, req.body.returnButton);
 
-  // Set the status of the next step to "NOT STARTED"
   const nextStep = formdata.steps[formStep].nextStep;
 
-  if (nextStep) {
-    return res.redirect(`/acquirer/${resourceID}/${nextStep}`);
-  } else {
-    // Handle case when nextStep is not defined
-    return res.redirect(`/acquirer/${resourceID}/start`);
+  if (req.body.continueButton && nextStep) {
+    redirectURL = `/acquirer/${resourceID}/${nextStep}`;
   }
+
+  return res.redirect(redirectURL);
 });
 
 export default router;

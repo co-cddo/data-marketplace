@@ -12,6 +12,7 @@ interface FormData {
   assetTitle: string;
   dataAsset: string;
   ownedBy: string;
+  completedSections: number;
   status: string;
   sections: Record<string, Section>;
   steps: Record<string, Step>;
@@ -28,8 +29,12 @@ type TextFieldStepID =
   | "data-subjects"
   | "data-required"
   | "disposal";
-  
-type RadioFieldStepID = "data-access" | "legal-review" | "role" | "security-review";
+
+type RadioFieldStepID =
+  | "data-access"
+  | "legal-review"
+  | "role"
+  | "security-review";
 
 interface Benefits {
   explanation?: string;

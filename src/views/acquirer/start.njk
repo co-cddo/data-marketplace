@@ -9,7 +9,7 @@
         {{resource.title}}
       </h1>
       <h2 class="app-task-list__section">{{formdata.status}}</h2>
-      <p class="govuk-body govuk-!-margin-bottom-2">You have completed 0 of 5 sections.</p>
+      <p class="govuk-body govuk-!-margin-bottom-2">You have completed {{formdata.completedSections}} of 5 sections.</p>
       <p class="govuk-body govuk-!-margin-bottom-7">More sections may be added depending on your answers.</p>
       <ol class="app-task-list">
         {% for key, section in formdata.overviewSections %}
