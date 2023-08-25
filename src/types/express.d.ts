@@ -144,7 +144,7 @@ type MoreOrganisationStep = string[];
 
 export type StepValue =
   | string
-  | MoreOrganisationStep  
+  | MoreOrganisationStep
   | DataTypeStep
   | ProjectAimStep
   | BenefitsStep
