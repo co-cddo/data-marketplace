@@ -8,18 +8,18 @@
     <div class="govuk-grid-column-two-thirds">
       <span class="govuk-caption-l">Request ID: {{requestId}}</span>
       <form method="POST" id="otherOrgsForm">
-        <div>
-          <p class="govuk-body">What other organisations will access the data?</p>
-        </div>
+          <p class="govuk-body">What other organisations will access the data?</p> 
 
-        {% for org in savedValue %}
-          {% call govukFieldset({
-            classes: "add-another__organisation" ,
-            legend: {
-              classes: 'govuk-fieldset__legend--m',
-              isPageHeading: false
-            }
-          }) %}
+          {% for org in savedValue %}
+            <div class="govuk-grid-column-two-thirds">
+              {% call govukFieldset({
+                classes: "add-another__organisation" ,
+                legend: {
+                  classes: 'govuk-fieldset__legend--m',
+                  isPageHeading: false
+                }
+              }) %}
+
             {{ govukInput({
               id: "org-name-" + loop.index,
               name: "org-name-" + loop.index,
@@ -30,7 +30,7 @@
                 'data-id': 'orgs[' + loop.index + ']'
               }
             }) }}
-
+            </div>
             {# Only show the remove button if it's not the first input #}
             {% if loop.index > 1 %}
               <p class="govuk-body">
