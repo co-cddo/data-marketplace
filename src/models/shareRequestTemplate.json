@@ -54,8 +54,7 @@
       "name": "Data subjects",
       "status": "CANNOT START YET",
       "value": "",
-      "nextStep": "project-aims",
-      "skipped": false
+      "nextStep": "project-aims"
     },
     "project-aims": {
       "id": "project-aims",
@@ -126,8 +125,7 @@
       "name": "Legal power advice",
       "status": "CANNOT START YET",
       "value": "",
-      "nextStep": "legal-gateway",
-      "skipped": false
+      "nextStep": "legal-gateway"
     },
     "legal-gateway": {
       "id": "legal-gateway",
@@ -141,8 +139,7 @@
       "name": "Legal gateway advice",
       "status": "CANNOT START YET",
       "value": "",
-      "nextStep": "legal-review",
-      "skipped": false
+      "nextStep": "legal-review"
     },
     "legal-review": {
       "id": "legal-review",
@@ -157,24 +154,21 @@
       "name": "Lawful basis for personal data",
       "status": "CANNOT START YET",
       "value": [],
-      "nextStep": "lawful-basis-special",
-      "skipped": false
+      "nextStep": "lawful-basis-special"
     },
     "lawful-basis-special": {
       "id": "lawful-basis-special",
       "name": "Lawful basis for special category data",
       "status": "CANNOT START YET",
       "value": [],
-      "nextStep": "lawful-basis-special-public-interest",
-      "skipped": false
+      "nextStep": "lawful-basis-special-public-interest"
     },
     "lawful-basis-special-public-interest": {
       "id": "lawful-basis-special-public-interest",
       "name": "Lawful basis",
-      "status": "CANNOT START YET",
+      "status": "NOT REQUIRED",
       "value": [],
-      "nextStep": "data-travel",
-      "skipped": false
+      "nextStep": "data-travel"
     },
     "data-travel": {
       "id": "data-travel",
@@ -188,16 +182,14 @@
       "name": "Data travel outside UK",
       "status": "CANNOT START YET",
       "value": "",
-      "nextStep": "role",
-      "skipped": false
+      "nextStep": "role"
     },
     "role": {
       "id": "role",
       "name": "Role of organisation",
       "status": "CANNOT START YET",
       "value": "",
-      "nextStep": "protection-review",
-      "skipped": false
+      "nextStep": "protection-review"
     },
     "protection-review": {
       "id": "protection-review",
@@ -244,7 +236,8 @@
       "id": "check",
       "name": "Check answers",
       "status": "CANNOT START YET",
-      "blockedBy": ["legal-review", "protection-review", "security-review"]
+      "blockedBy": ["legal-review", "protection-review", "security-review"],
+      "nextStep": "start"
     }
   }
 }
