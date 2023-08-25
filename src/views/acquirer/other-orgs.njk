@@ -1,6 +1,7 @@
 {% extends "page.njk" %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 
 {% block content %}
   <div class="govuk-grid-row">
@@ -10,28 +11,49 @@
         <div>
           <p class="govuk-body">What other organisations will access the data?</p>
         </div>
-       {% for org in savedValue %}
-        {{ govukInput({
-            id: "org-name-" + loop.index,
-            name: "org-name-" + loop.index,
-            classes: "govuk-input--width-20",
-            value: org
-        }) }}
+
+        {% for org in savedValue %}
+          {% call govukFieldset({
+            classes: "add-another__organisation",
+            legend: {
+              classes: 'govuk-fieldset__legend--m',
+              isPageHeading: false
+            }
+          }) %}
+            {{ govukInput({
+              id: "org-name-" + loop.index,
+              name: "org-name-" + loop.index,
+              value: org,
+              classes: "govuk-input--width-20",
+              attributes: {
+                'data-name': 'orgs[' + loop.index + ']',
+                'data-id': 'orgs[' + loop.index + ']'
+              }
+            }) }}
+          {% endcall %}
         {% endfor %}
+
         <p class="govuk-body">
-          <button type="submit" name="addMoreOrgs" value="true" class="govuk-link">Add another organisation</button>
+          {{ govukButton({
+            text: "Add another organisation",
+            name: "addMoreOrgs",
+            classes: "govuk-button--secondary",
+            value: "true"
+          }) }}
         </p>
-        {{ govukButton({
-          text: "Save and continue",
-          name: "continueButton",
-          value: "continue"
-        }) }}
-        {{ govukButton({
-          text: "Save and return",
-          classes: "govuk-button--secondary",
-          name: "returnButton",
-          value: "return"
-        }) }}
+
+        <div class="govuk-button-group">
+          {{ govukButton({
+            text: "Save and continue",
+            name: "continueButton",
+            value: "continue"
+          }) }}
+          {{ govukButton({
+            text: "Save and return",
+            classes: "govuk-button--secondary",
+            name: "returnButton",
+            value: "return"
+          }) }}
         </div>
       </form>
     </div>
