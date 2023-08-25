@@ -28,7 +28,8 @@ type TextFieldStepID =
   | "data-subjects"
   | "data-required"
   | "disposal";
-type RadioFieldStepID = "data-access" | "legal-review" | "role";
+  
+type RadioFieldStepID = "data-access" | "legal-review" | "role" | "security-review";
 
 interface Benefits {
   explanation?: string;
