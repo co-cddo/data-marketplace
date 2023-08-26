@@ -28,8 +28,12 @@ type TextFieldStepID =
   | "data-subjects"
   | "data-required"
   | "disposal";
-  
-type RadioFieldStepID = "data-access" | "legal-review" | "role" | "security-review";
+
+type RadioFieldStepID =
+  | "data-access"
+  | "legal-review"
+  | "role"
+  | "security-review";
 
 interface Benefits {
   explanation?: string;
@@ -141,8 +145,11 @@ type LawfulBasisSpecialPublicInterestStep = {
   standards?: LawfulBasis;
 };
 
+type MoreOrganisationStep = string[];
+
 export type StepValue =
   | string
+  | MoreOrganisationStep
   | DataTypeStep
   | ProjectAimStep
   | BenefitsStep

@@ -16,6 +16,7 @@ import {
   RadioFieldStepID,
   TextFieldStepID,
   DeliveryStep,
+  MoreOrganisationStep,
 } from "../types/express";
 
 function validateDate(day: number, month: number, year: number): string {
@@ -132,7 +133,7 @@ function isRadioField(id: string): id is RadioFieldStepID {
     "role",
     "data-travel",
     "protection-review",
-    "security-review"
+    "security-review",
   ].includes(id);
 }
 
@@ -161,6 +162,14 @@ const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
   // Check for text fields
   if (isTextField(stepData.id)) {
     return body[stepData.id] as StepValue;
+  }
+
+  if (stepData.id === "other-orgs") {
+    const orgValues = Object.keys(body)
+      .filter((key) => key.startsWith("org-name-"))
+      .map((key) => body[key]);
+
+    return orgValues as MoreOrganisationStep;
   }
 
   if (stepData.id === "data-type") {
