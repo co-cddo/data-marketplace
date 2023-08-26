@@ -3,8 +3,8 @@ const router = express.Router();
 
 router.get("/", async (req: Request, res: Response) => {
   const backLink = req.headers.referer || "/";
-  res.render("../views/supplier/manage-shares.njk",{
-    backLink
+  res.render("../views/supplier/manage-shares.njk", {
+    backLink,
   });
 });
 
