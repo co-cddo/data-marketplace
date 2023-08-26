@@ -146,8 +146,11 @@ type LawfulBasisSpecialPublicInterestStep = {
   standards?: LawfulBasis;
 };
 
+type MoreOrganisationStep = string[];
+
 export type StepValue =
   | string
+  | MoreOrganisationStep
   | DataTypeStep
   | ProjectAimStep
   | BenefitsStep

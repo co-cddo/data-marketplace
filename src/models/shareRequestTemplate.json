@@ -92,7 +92,7 @@
       "id": "other-orgs",
       "name": "Other organisations",
       "status": "NOT STARTED",
-      "value": "",
+      "value": [""],
       "nextStep": "impact",
       "skipped": false
     },

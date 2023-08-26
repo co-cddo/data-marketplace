@@ -14,6 +14,7 @@ import {
   LegalGatewayStep,
   LegalPowerStep,
   StepValue,
+  MoreOrganisationStep,
 } from "../types/express";
 
 function parseJwt(token: string) {
@@ -307,9 +308,8 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
 
   if (formdata.stepHistory && formdata.stepHistory.length > 0) {
     // Otherwise, set it to the previous step from stepHistory
-    backLink = `/acquirer/${resourceID}/${
-      formdata.stepHistory[formdata.stepHistory.length - 1]
-    }?action=back`;
+    backLink = `/acquirer/${resourceID}/${formdata.stepHistory[formdata.stepHistory.length - 1]
+      }?action=back`;
   } else {
     backLink = `/acquirer/${resourceID}/start`;
   }
@@ -352,6 +352,38 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
   }
   if (!formdata.stepHistory) {
     formdata.stepHistory = [];
+  }
+
+  if (req.body.addMoreOrgs) {
+    // If "Add another organisation" is clicked.
+    if (Array.isArray(formdata.steps["other-orgs"].value)) {
+      formdata.steps["other-orgs"].value.push(""); // Add a new empty string.
+    } else {
+      // handle error or other logic if value isn't an array
+      console.error(
+        "Expected 'other-orgs' value to be an array but it wasn't.",
+      );
+    }
+    return res.redirect(`/acquirer/${resourceID}/other-orgs`); // Refresh the current page.
+  }
+
+  if (req.body.removeOrg !== undefined) {
+    const orgIndexToRemove = parseInt(req.body.removeOrg, 10) - 1;
+    if (
+      formdata.steps["other-orgs"] &&
+      Array.isArray(formdata.steps["other-orgs"].value)
+    ) {
+      const orgs = formdata.steps["other-orgs"].value as MoreOrganisationStep;
+
+      if (
+        Number.isInteger(orgIndexToRemove) &&
+        orgIndexToRemove >= 0 &&
+        orgIndexToRemove < orgs.length
+      ) {
+        orgs.splice(orgIndexToRemove, 1);
+      }
+    }
+    return res.redirect(`/acquirer/${resourceID}/other-orgs`);
   }
 
   // Check which button was clicked "Save and continue || Save and return"
