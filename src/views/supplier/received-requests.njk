@@ -9,8 +9,8 @@
     <h1 class="govuk-heading-xl">Received requests</h1>
   </div>
 
-  <div class="govuk-grid-column-one-thirds">
-    <aside class="app-related-items" role="complementary">
+  <div class="govuk-grid-column-one-third">
+    <aside class="app-related-items">
         <nav role="navigation" aria-labelledby="subsection-title">
           <ul class="govuk-list">
             <li><a href="created-requests" class="govuk-link">View created requests</a></li>
@@ -25,7 +25,6 @@
         {{ govukTable({
             caption: "Current requests",
             captionClasses: "govuk-table__caption--l",
-            firstCellIsHeader: true,
             head: [
             {
                 text: "Request ID"
@@ -125,7 +124,6 @@
     {{ govukTable({
         caption: "Completed  requests",
         captionClasses: "govuk-table__caption--l",
-        firstCellIsHeader: true,
         head: [
         {
             text: "Request ID"
