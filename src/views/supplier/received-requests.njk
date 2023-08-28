@@ -1,0 +1,194 @@
+{% extends "page.njk" %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{%- from "govuk/components/tag/macro.njk" import govukTag -%}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-l">Manage data share requests</span>
+    <h1 class="govuk-heading-xl">Received requests</h1>
+  </div>
+
+  <div class="govuk-grid-column-one-thirds">
+    <aside class="app-related-items" role="complementary">
+        <nav role="navigation" aria-labelledby="subsection-title">
+          <ul class="govuk-list">
+            <li><a href="created-requests" class="govuk-link">View created requests</a></li>
+          </ul>
+        </nav>
+    </aside>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        {{ govukTable({
+            caption: "Current requests",
+            captionClasses: "govuk-table__caption--l",
+            firstCellIsHeader: true,
+            head: [
+            {
+                text: "Request ID"
+            },
+            {
+                text: "From"
+            },
+            {
+                text: "Dataset"
+            },
+            {
+                text: "Received"
+            },
+            {
+                text: "Needed by"
+            },
+            {
+                text: "Status"
+            }
+            ],
+            rows: [
+            [
+                {
+                text: "RR523 - View"
+                },
+                {
+                text: "Department X"
+                },
+                {
+                text: "citizen-relationships"
+                },
+                {
+                text: "8 Jul 2023"
+                },
+                {
+                text: "16 Mar 2024"
+                },
+                {
+                html: govukTag({
+                    classes: "govuk-tag--red",
+                    text: "TO REVIEW"
+                  })
+                }
+            ],
+            [
+            {
+            text: "RR330 - View"
+            },
+            {
+            text: "Department for Work and Pensions"
+            },
+            {
+            text: "citizen-switch-input"
+            },
+            {
+            text: "	2 Jul 2023"
+            },
+            {
+            text: "16 Mar 2024"
+            },
+            {
+            html: govukTag({
+                classes: "govuk-tag--blue",
+                text: "REVIEWING"
+              })
+            }
+        ],
+        [
+            {
+            text: "RR221 - View"
+            },
+            {
+            text: "HM Revenue and Customs"
+            },
+            {
+            text: "tax-rate-change_brackets"
+            },
+            {
+            text: "	2 Jul 2023"
+            },
+            {
+            text: "16 Mar 2024"
+            },
+            {
+            html: govukTag({
+                classes: "govuk-tag--grey",
+                text: "RETURNED"
+              })
+            }
+        ]
+        ]}) }}
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+    {{ govukTable({
+        caption: "Completed  requests",
+        captionClasses: "govuk-table__caption--l",
+        firstCellIsHeader: true,
+        head: [
+        {
+            text: "Request ID"
+        },
+        {
+            text: "From"
+        },
+        {
+            text: "Dataset"
+        },
+        {
+            text: "Received"
+        },
+        {
+            text: "Completed"
+        },
+        {
+            text: "Decision"
+        }
+        ],
+        rows: [
+        [
+            {
+            text: "RR147 - View"
+            },
+            {
+            text: "Department for Education"
+            },
+            {
+            text: "Inline-core_reporting-and-location"
+            },
+            {
+            text: "18 Apr 2023"
+            },
+            {
+            text: "2 May 2023"
+            },
+            {
+            text: "Accepted"
+            }
+        ],
+        [
+            {
+            text: "RR109 - View"
+            },
+            {
+            text: "Department for Education"
+            },
+            {
+            text: "Input-switch_slice3"
+            },
+            {
+            text: "2 Apr 2023"
+            },
+            {
+            text: "2 May 2023"
+            },
+            {
+            text: "Rejected"
+            }
+        ]
+    ]}) }}
+  </div>
+</div>
+  
+{% endblock %} 
