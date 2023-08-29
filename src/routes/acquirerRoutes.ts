@@ -166,7 +166,12 @@ const updateStepsStatus = (
   }
 
   if (currentStep === "declaration"){
-    formdata.steps["confirmation"].status = "NOT STARTED";
+    const declarationStep = stepValue as StepValue;
+    if(declarationStep){
+      formdata.steps["confirmation"].status = "NOT STARTED";
+    } else {
+      formdata.steps["confirmation"].status = "CANNOT START YET";
+    }
   }
 
   if (currentStep === "lawful-basis-special") {
