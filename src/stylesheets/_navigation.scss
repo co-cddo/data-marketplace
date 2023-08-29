@@ -3,11 +3,25 @@ $navigation-height: 50px;
 .app-navigation {
   border-bottom: 1px solid $govuk-border-colour;
   background-color: govuk-colour("white");
-  margin-top: 10px;
 }
-a.govuk-link {
+a,
+.govuk-link,
+.app-task-list__task-name > a {
+  font-family: "GDS Transport", arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   text-decoration: underline;
-  text-underline-offset: 2px; /* adjust distance as required */
+  text-decoration-thickness: max(1px, 0.0625rem);
+  text-underline-offset: 0.1em;
+}
+
+a:hover,
+.govuk-link:hover {
+  text-decoration-thickness: max(3px, 0.1875rem, 0.12em);
+  -webkit-text-decoration-skip-ink: none;
+  text-decoration-skip-ink: none;
+  -webkit-text-decoration-skip: none;
+  text-decoration-skip: none;
 }
 .app-navigation__list {
   margin: 0;

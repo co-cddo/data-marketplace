@@ -13,6 +13,7 @@ import cookieRoutes from "./routes/cookieRoutes";
 import loginRoutes from "./routes/loginRoutes";
 import authRoutes from "./routes/authRoutes";
 import profileRoutes from "./routes/profileRoutes";
+import manageRoutes from "./routes/supplierRoutes";
 import path from "path";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
@@ -122,6 +123,7 @@ app.use("/profile", profileRoutes);
 app.use("/find", findRoutes);
 app.use("/share", shareRoutes);
 app.use("/acquirer", acquirerRoutes);
+app.use("/manage-shares", manageRoutes);
 app.use("/cookie-settings", cookieRoutes);
 
 // Error handling
