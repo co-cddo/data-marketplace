@@ -165,6 +165,7 @@ const updateStepsStatus = (
     }
   }
 
+
   if (currentStep === "lawful-basis-special") {
     if (
       (stepValue as LawfulBasisSpecialStep)["reasons-of-public-interest"]
@@ -372,7 +373,6 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
     }
     return res.redirect(`/acquirer/${resourceID}/other-orgs`); // Refresh the current page.
   }
-
   if (req.body.removeOrg !== undefined) {
     const orgIndexToRemove = parseInt(req.body.removeOrg, 10) - 1;
     if (
@@ -390,6 +390,10 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
       }
     }
     return res.redirect(`/acquirer/${resourceID}/other-orgs`);
+  }
+
+  if (req.body.continueButton && formStep === "confirmation"){
+    return res.redirect(`/manage-shares`);
   }
 
   // Check which button was clicked "Save and continue || Save and return"
