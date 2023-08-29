@@ -14,8 +14,10 @@ import {
   StepValue,
   RadioFieldStepID,
   TextFieldStepID,
-  DeliveryStep
+  DeliveryStep,
+  FormData
 } from "../types/express";
+import { titles, replace } from "./checkhelper";
 
 function validateDate(day: number, month: number, year: number): string {
   const errors = new Set<string>();
@@ -385,9 +387,82 @@ function normaliseURL(url: string): string {
   return normalisedURL;
 }
 
+function checkAnswer(formdata: FormData) {
+const steps = formdata.steps; 
+const res: any = [];
+const dataObj: any = [];
+
+
+for(const [key] of Object.entries(steps)){
+      // only return the completed answer
+      if(steps[key].status === "COMPLETED") {
+      const dataTypeValue: string[] = [];
+      // if the value is text
+      if(typeof steps[key].value === "string") {
+        // data-access, legal-review and role were defined as RadioField so we need handle separatly
+        if(key ==="data-access" || key === "legal-review" || key === "role") {
+          const keys = steps[key].value as string
+          const answer = replace[key][keys]
+          dataTypeValue.push(`<p>${answer}</p>`)
+        }
+        // all the other types of text
+        dataTypeValue.push(`<p>${steps[key].value}</p>`)
+      } else {
+        // if value is an object 
+        for (const [k, v] of Object.entries(steps[key].value)) {
+          // date is handled separate
+          if(key === "date") {
+            const date = steps[key].value as DateStep
+            if(v === date.day) dataTypeValue.push(`${date.day}/`)
+            else if(v === date.month) dataTypeValue.push(`${date.month}/`)
+            else dataTypeValue.push(`${date.year}`)
+            // project aims has two inputs with diferent definition
+          } else if(key === "project-aims") {
+            const data = steps[key].value as ProjectAimStep
+            dataTypeValue.push(`<p>${data.aims}</p> <p class="govuk-caption-m">${data.explanation}</p>`)
+          }
+          // check for checked field
+          else if(v.checked) {
+            const answer = replace[key][k]
+            if(v.explanation) {
+              dataTypeValue.length === 0 
+              ? dataTypeValue.push(`<p>${answer}</p> <p class="govuk-caption-m">${v.explanation}</p>`) 
+              : dataTypeValue.push(`<br/><p>${answer}</p> <p class="govuk-caption-m">${v.explanation}</p>`)
+            } else {
+              dataTypeValue.push(`<p>${answer}</p>`)
+            }
+          }
+        }
+      }
+      res.push({
+        step: key,
+        value: dataTypeValue
+      })
+    }
+}
+
+// create final obj with title and the array with all answers
+titles.forEach((el) => {
+  const newData: any = []
+  for(let i =0; i<res.length; i++){
+    if(el.steps.includes(res[i].step)){
+      newData.push(res[i])
+    }
+  }
+  dataObj.push({
+    name: el.name,
+    data: newData
+  })
+})
+
+return dataObj
+
+}
+
 export {
   extractFormData,
   validateDate,
   validateRequestBody,
   getLicenceTitleFromURL,
+  checkAnswer
 };

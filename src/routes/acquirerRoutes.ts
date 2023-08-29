@@ -6,6 +6,7 @@ import { randomUUID } from "crypto";
 import {
   extractFormData,
   validateRequestBody,
+  checkAnswer
 } from "../helperFunctions/helperFunctions";
 import { FormData, LegalGatewayStep, LegalPowerStep } from "../types/express";
 
@@ -119,6 +120,7 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
     stepId: formStep,
     savedValue: stepData.value,
     errorMessage: stepData.errorMessage,
+    data: checkAnswer(formdata)
   });
 });
 
@@ -154,7 +156,7 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
     return res.redirect(`/acquirer/${resourceID}/start`);
   }
 
-  stepData.status = "COMPLETED";
+  stepData.status = "COMPLETED"; 
 
   if (formdata.steps[formStep].nextStep) {
     return res.redirect(

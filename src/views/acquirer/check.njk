@@ -1,0 +1,52 @@
+{% extends "page.njk" %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-l">Request ID: {{requestId}}</span>
+       <h1 class="govuk-heading-xl">Check your answers before sending your request</h1>
+       {% for name in data %}
+       <h2 class="govuk-heading-m">{{name.name}}</h2>
+      {% for steps in name.data %}
+        {{ govukSummaryList({
+            rows: [
+                {
+                key: {
+                    text: steps.step
+                },
+                value: {
+                    html: steps.value.join("")
+                },
+                actions: {
+                    items: [
+                    {
+                        href: "/acquirer/"+assetId+"/"+steps.step,
+                        text: "Change",
+                        visuallyHiddenText: "name"
+                    }
+                    ]
+      }
+    }
+  ]
+}) }}
+{% endfor%}
+{% endfor%}
+ <div class="govuk-button-group">
+        {{ govukButton({
+            text: "Save and continue",
+            name: "continueButton",
+            value: "continue"
+        }) }}
+        {{ govukButton({
+            text: "Save and return",
+            classes: "govuk-button--secondary",
+            name: "returnButton",
+            value: "return"
+        }) }}
+        </div>
+          </div>
+  </div>
+{% endblock %}
