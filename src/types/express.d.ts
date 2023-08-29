@@ -12,6 +12,7 @@ interface FormData {
   assetTitle: string;
   dataAsset: string;
   ownedBy: string;
+  completedSections: number;
   status: string;
   sections: Record<string, Section>;
   steps: Record<string, Step>;
@@ -167,7 +168,7 @@ interface Step {
   name: string;
   status: string;
   value: StepValue;
-  nextStep?: string;
+  nextStep: string;
   blockedBy?: string[];
   errorMessage?: string;
   skipped?: boolean;

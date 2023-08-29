@@ -5,13 +5,15 @@
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-l">Request ID: {{requestId}}</span>
     <form method="post">
       {{ govukTextarea({
             id: "data-required",
             name: "data-required",
             label: {
                 text: "What data from " + assetTitle + " do you need?",
-                classes: "govuk-label--m"
+                isPageHeading: true,
+                classes: "govuk-label--l"
             },
             rows: 5,
             value: savedValue
