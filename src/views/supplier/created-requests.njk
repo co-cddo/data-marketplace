@@ -30,7 +30,7 @@
                 { text: formData.assetTitle },
                 { text: formData.ownedBy },
                 { text: formData.date },
-                { html: govukTag({ text: formData.status, classes: "app-task-list__tag" }) }
+                { html: govukTag({ text: formData.status, classes: "app-task-list__tag " + getStatusClass(formData.status) }) }
             ] -%}
             {%- set tableRows = (tableRows.push(row), tableRows) -%}
         {%- endfor -%}
