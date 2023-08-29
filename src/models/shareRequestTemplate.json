@@ -248,7 +248,7 @@
     },
     "confirmation": {
       "id": "check",
-      "name": "Declaration",
+      "name": "Confirmation",
       "status": "CANNOT START YET",
       "nextStep": "start"
     }
