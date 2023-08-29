@@ -239,6 +239,18 @@
       "status": "CANNOT START YET",
       "blockedBy": ["legal-review", "protection-review", "security-review"],
       "nextStep": "declaration"
+    },
+    "declaration": {
+      "id": "check",
+      "name": "Declaration",
+      "status": "CANNOT START YET",
+      "nextStep": "confirmation"
+    },
+    "confirmation": {
+      "id": "check",
+      "name": "Declaration",
+      "status": "CANNOT START YET",
+      "nextStep": "start"
     }
   }
 }

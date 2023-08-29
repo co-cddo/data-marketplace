@@ -93,8 +93,8 @@ const updateStepsStatus = (
   }
 
   if (currentStep === "data-type") {
-    let notRequiredSteps = new Set<string>();
-    let notStartedSteps = new Set<string>();
+    const notRequiredSteps = new Set<string>();
+    const notStartedSteps = new Set<string>();
     const val = stepValue as DataTypeStep;
     // If personal is not checked then lawful-basis-personal is not required
     if (!val.personal.checked) {
