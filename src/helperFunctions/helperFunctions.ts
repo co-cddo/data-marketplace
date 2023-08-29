@@ -532,7 +532,7 @@ for(const [key] of Object.entries(steps)){
       // if the value is text
       if(typeof steps[key].value === "string") {
         // data-access, legal-review and role were defined as RadioField so we need handle separatly
-        if(key ==="data-access" || key === "legal-review" || key === "role") {
+        if(key ==="data-access" || key === "legal-review" || key === "role" || key === "data-travel" || key === "protection-review" || key === "security-review") {
           const keys = steps[key].value as string
           const answer = replace[key][keys]
           dataTypeValue.push(`<p>${answer}</p>`)
@@ -588,6 +588,7 @@ titles.forEach((el) => {
 })
 
 return dataObj
+
 
 }
 
