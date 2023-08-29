@@ -538,9 +538,10 @@ for(const [key] of Object.entries(steps)){
           const keys = steps[key].value as string
           const answer = replace[key][keys]
           dataTypeValue.push(`<p>${answer}</p>`)
-        }
+        } else {
         // all the other types of text
         dataTypeValue.push(`<p>${steps[key].value}</p>`)
+        }
       } else {
         // if value is an object 
         for (const [k, v] of Object.entries(steps[key].value)) {

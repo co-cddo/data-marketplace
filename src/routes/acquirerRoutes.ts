@@ -320,7 +320,7 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   } else {
     backLink = `/acquirer/${resourceID}/start`;
   }
-
+  
   res.render(`../views/acquirer/${formStep}.njk`, {
     requestId: formdata.requestId,
     assetId: formdata.dataAsset,
@@ -329,7 +329,7 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
     stepId: formStep,
     savedValue: stepData.value,
     errorMessage: stepData.errorMessage,
-    data: checkAnswer(formdata)
+    data: formStep === "check" ? checkAnswer(formdata) : []
   });
 });
 

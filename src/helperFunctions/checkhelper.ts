@@ -114,5 +114,13 @@ export const titles = [
       "statistical-information": "Improve existing statistical information",
       "existing-research-or-statistics": "Challenge or validate existing research or statistics",
       "something-else": "Something else"
+    },
+    'protection-review': {
+        yes: "Yes",
+        no: "No"
+    },
+    "security-review": {
+        yes: "Yes",
+        no: "No"
     }
   }
