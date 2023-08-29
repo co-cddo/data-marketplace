@@ -9,9 +9,12 @@ router.get("/", async (req: Request, res: Response) => {
 });
 
 router.get("/created-requests", async (req: Request, res: Response) => {
+  const acquirerForms = req.session.acquirerForms || {};
   const backLink = req.headers.referer || "/";
+  
   res.render("../views/supplier/created-requests.njk", {
     backLink,
+    acquirerForms
   });
 });
 

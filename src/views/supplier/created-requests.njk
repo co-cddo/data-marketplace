@@ -23,6 +23,18 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
+        {%- set tableRows = [] -%}
+        {%- for resourceID, formData in acquirerForms -%}
+            {%- set row = [
+                { html: '<a href="/acquirer/' + formData.requestId + '/summary">' + formData.requestId + '</a>' },
+                { text: formData.assetTitle },
+                { text: formData.ownedBy },
+                { text: formData.date },
+                { html: govukTag({ text: formData.status, classes: "app-task-list__tag" }) }
+            ] -%}
+            {%- set tableRows = (tableRows.push(row), tableRows) -%}
+        {%- endfor -%}
+
         {{ govukTable({
             caption: "Pending requests",
             captionClasses: "govuk-table__caption--l",
@@ -43,216 +55,9 @@
                     text: "Status"
                 }
             ],
-            rows: [
-                [
-                    {
-                        html: '<a href="#" class="govuk-link">RR534 - View</a>'
-                    },
-                    {
-                        text: "employed-area-code_ARCHIVE"
-                    },
-                    {
-                        text: "Department for Work and Pensionss"
-                    },
-                    {
-                        text: "Unrequested"
-                    },
-                    {
-                        html: govukTag({
-                            classes: "govuk-tag--grey",
-                            text: "NOT STARTED"
-                    })
-                    }
-                ],
-                [
-                {
-                    html: '<a href="#" class="govuk-link">RR531 - View</a>'
-                },
-                {
-                    text: "employed-area-code_WEST"
-                },
-                {
-                    text: "Department for Work and Pensions"
-                },
-                {
-                    text: "Unrequested"
-                },
-                {
-                    html: govukTag({
-                    classes: "govuk-tag--blue",
-                    text: "IN PROGRESS"
-                    })
-                }
-            ],
-        [
-            {
-                html: '<a href="#" class="govuk-link">RR523 - View</a>'
-            },
-            {
-            text: "citizen-relationships"
-            },
-            {
-            text: "Department Y"
-            },
-            {
-            text: "13 Dec 2023"
-            },
-            {
-            html: govukTag({
-                classes: "govuk-tag--red",
-                text: "RETURNED"
-            })
-            }
-        ]
-        ]}) }}
-  </div>
-</div>
-
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-        {{ govukTable({
-            caption: "Submitted requests",
-            captionClasses: "govuk-table__caption--l",
-            head: [
-                {
-                    text: "Request ID"
-                },
-                {
-                    text: "Dataset"
-                },
-                {
-                    text: "Owner"
-                },
-                {
-                    text: "Submitted"
-                },
-                {
-                    text: "Needed by"
-                },
-                {
-                    text: "Status"
-                }
-            ],
-            rows: [
-                [
-                    {
-                    html: "RR505 - View</a>"
-                    },
-                    {
-                    text: "tax-code-impact"
-                    },
-                    {
-                    text: "Department for Work and Pensions"
-                    },
-                    {
-                    text: "2 Feb 2023"
-                    },
-                    {
-                    text: "23 Apr 2023"
-                    },
-                    {
-                    html: govukTag({
-                        classes: "govuk-tag--grey",
-                        text: "AWAITING REVIEW"
-                    })
-                    }
-                ],
-                [
-                    {
-                        html: "RR501 - View</a>"
-                    },
-                    {
-                    text: "employed-area-code_WEST"
-                    },
-                    {
-                    text: "Department for Work and Pensions"
-                    },
-                    {
-                    text: "2 Feb 2023"
-                    },
-                    {
-                    text: "23 Apr 2023"
-                    },
-                    {
-                    html: govukTag({
-                        classes: "govuk-tag--blue",
-                        text: "IN REVIEW"
-                    })
-                    }
-                ]
-            ]
-    }) }}
+            rows: tableRows
+        }) }}
     </div>
 </div>
-  
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-        {{ govukTable({
-            caption: "Submitted requests",
-            captionClasses: "govuk-table__caption--l",
-            head: [
-                {
-                    text: "Request ID"
-                },
-                {
-                    text: "Dataset"
-                },
-                {
-                    text: "Owner"
-                },
-                {
-                    text: "Needed by"
-                },
-                {
-                    text: "Completed"
-                },
-                {
-                    text: "Decision"
-                }
-            ],
-            rows: [
-                [
-                    {
-                       html: '<a href="#" class="govuk-link">RR147 - View</a>'
-                    },
-                    {
-                        text: "student-early-years_stats"
-                    },
-                    {
-                        text: "Department for Education"
-                    },
-                    {
-                        text: "18 Jun 2023"
-                    },
-                    {
-                        text: "2 Nov 2023"
-                    },
-                    {
-                        text: "Accepted"
-                    }
-                ],
-                [
-                    {
-                        html: '<a href="#" class="govuk-link">RR148 - View</a>'
-                    },
-                    {
-                        text: "	teacher-end-of-year_reporting"
-                    },
-                    {
-                        text: "Department for Education"
-                    },
-                    {
-                        text: "18 Jun 2023"
-                    },
-                    {
-                        text: "2 Nov 2023"
-                    },
-                    {
-                        text: "Rejected"
-                    }
-                ]
-            ]
-    }) }}
-  </div>
-</div>
+
 {% endblock %} 
