@@ -238,7 +238,7 @@
       "name": "Check answers",
       "status": "CANNOT START YET",
       "blockedBy": ["legal-review", "protection-review", "security-review"],
-      "nextStep": "start"
+      "nextStep": "declaration"
     }
   }
 }

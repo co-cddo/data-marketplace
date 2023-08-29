@@ -138,7 +138,6 @@ const updateStepsStatus = (
     }
   }
 
-  // Check some of 
   if (currentStep === "data-access") {
     if (stepValue === "no") {
       formdata.steps["other-orgs"].status = "NOT REQUIRED";
@@ -314,8 +313,9 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
 
   if (formdata.stepHistory && formdata.stepHistory.length > 0) {
     // Otherwise, set it to the previous step from stepHistory
-    backLink = `/acquirer/${resourceID}/${formdata.stepHistory[formdata.stepHistory.length - 1]
-      }?action=back`;
+    backLink = `/acquirer/${resourceID}/${
+      formdata.stepHistory[formdata.stepHistory.length - 1]
+    }?action=back`;
   } else {
     backLink = `/acquirer/${resourceID}/start`;
   }
