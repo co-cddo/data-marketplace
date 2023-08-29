@@ -1,0 +1,29 @@
+{% extends "page.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">Declaration</h1>
+      <p class="govuk-body">By sending this, you can confirm you have considered how the:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>technology</li>
+        <li>data security</li>
+        <li>data protection</li>
+        <li>legal</li>
+        <li>data governance</li>
+      </ul>
+      <p class="govuk-body">aspects might impact your request.</p>
+      <form method="POST" id="declarationForm">
+      <div class="govuk-button-group">
+          {{ govukButton({
+            text: "Send data share request",
+            name: "continueButton",
+            value: "continue",
+            classes: "govuk-!-static-margin-top-6"
+          }) }}
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

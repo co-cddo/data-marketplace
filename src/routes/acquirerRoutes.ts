@@ -165,6 +165,10 @@ const updateStepsStatus = (
     }
   }
 
+  if (currentStep === "declaration"){
+    formdata.steps["confirmation"].status = "NOT STARTED";
+  }
+
   if (currentStep === "lawful-basis-special") {
     if (
       (stepValue as LawfulBasisSpecialStep)["reasons-of-public-interest"]
@@ -319,7 +323,7 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   } else {
     backLink = `/acquirer/${resourceID}/start`;
   }
-
+  
   res.render(`../views/acquirer/${formStep}.njk`, {
     requestId: formdata.requestId,
     assetId: formdata.dataAsset,
@@ -372,7 +376,6 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
     }
     return res.redirect(`/acquirer/${resourceID}/other-orgs`); // Refresh the current page.
   }
-
   if (req.body.removeOrg !== undefined) {
     const orgIndexToRemove = parseInt(req.body.removeOrg, 10) - 1;
     if (
@@ -392,6 +395,9 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
     return res.redirect(`/acquirer/${resourceID}/other-orgs`);
   }
 
+  if (req.body.continueButton && formStep === "confirmation"){
+    return res.redirect(`/manage-shares`);
+  }
   // Check which button was clicked "Save and continue || Save and return"
   let redirectURL = `/acquirer/${resourceID}/start`;
   if (req.body.returnButton) {
@@ -403,7 +409,7 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
       formdata.stepHistory.push(formStep);
     }
   }
-
+  
   updateStepsStatus(formStep, stepData.value, formdata, req.body.returnButton);
 
   const nextStep = formdata.steps[formStep].nextStep;
