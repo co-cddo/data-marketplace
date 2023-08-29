@@ -124,10 +124,12 @@ const updateStepsStatus = (
       ].forEach((s) => notRequiredSteps.add(s));
     }
 
+    // Set everything that's not required to NOT REQUIRED
     for (const s of notRequiredSteps) {
       formdata.steps[s].status = "NOT REQUIRED";
     }
 
+    // Set everything that needs to be completed to NOT STARTED
     for (const s of notStartedSteps) {
       const stepStatus = formdata.steps[s].status;
       if (!["COMPLETED", "IN PROGRESS"].includes(stepStatus)) {
@@ -136,6 +138,7 @@ const updateStepsStatus = (
     }
   }
 
+  // Check some of 
   if (currentStep === "data-access") {
     if (stepValue === "no") {
       formdata.steps["other-orgs"].status = "NOT REQUIRED";
@@ -190,7 +193,7 @@ const updateStepsStatus = (
   }
 
   // Loop over all the steps in each section to check whether the
-  //  section is complete and/or the 'review' step can be enabled
+  //  section is complete and/or the 'check' step can be enabled
 
   if (everyStepCompleted(purposeSteps, formdata)) {
     completedSections.add("purpose");
@@ -199,12 +202,14 @@ const updateStepsStatus = (
   }
 
   if (everyStepCompleted(legalSteps, formdata)) {
+    // If all the legal steps AND the legal review is completed, legal is done.
     if (formdata.steps["legal-review"].status === "COMPLETED") {
       completedSections.add("legal");
     } else {
       formdata.steps["legal-review"].status = "NOT STARTED";
     }
   } else {
+    // If not all of the legal steps are Completed, legal review cannot be started
     formdata.steps["legal-review"].status = "CANNOT START YET";
     completedSections.delete("legal");
   }
@@ -241,6 +246,7 @@ const updateStepsStatus = (
     formdata.steps["check"].status = "CANNOT START YET";
   }
 
+  // Update the number of completed sections
   formdata.completedSections = completedSections.size;
 };
 
@@ -389,9 +395,10 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
   // Check which button was clicked "Save and continue || Save and return"
   let redirectURL = `/acquirer/${resourceID}/start`;
   if (req.body.returnButton) {
+    // If save and return was clicked, clear the step history
     formdata.stepHistory = [];
   } else {
-    // Add the current step to the history if it's not already there
+    // Otherwise add the current step to the history if it's not already there
     if (formdata.stepHistory.indexOf(formStep) === -1) {
       formdata.stepHistory.push(formStep);
     }
