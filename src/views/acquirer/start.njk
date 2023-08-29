@@ -9,7 +9,7 @@
         {{resource.title}}
       </h1>
       <h2 class="app-task-list__section">{{formdata.status}}</h2>
-      <p class="govuk-body govuk-!-margin-bottom-2">You have completed 0 of 5 sections.</p>
+      <p class="govuk-body govuk-!-margin-bottom-2">You have completed {{formdata.completedSections}} of 5 sections.</p>
       <p class="govuk-body govuk-!-margin-bottom-7">More sections may be added depending on your answers.</p>
       <ol class="app-task-list">
         {% for key, section in formdata.overviewSections %}
@@ -23,7 +23,7 @@
                 {% set s = formdata.steps[step] %}
                 <li class="app-task-list__item">
                   <span class="app-task-list__task-name">
-                    {% if s.status != "CANNOT START YET" %}
+                    {% if s.status not in["CANNOT START YET", "NOT REQUIRED"] %}
                       <a href="{{ s.id }}" class="govuk-link">
                         {{ s.name }}
                       </a>
@@ -31,7 +31,7 @@
                       {{ s.name }}
                     {% endif %}
                   </span>
-                  <strong class="govuk-tag govuk-tag--grey app-task-list__tag">{{ s.status }}</strong>
+                  <strong class="govuk-tag {{'govuk-tag--grey' if s.status in ['CANNOT START YET', 'NOT STARTED', 'IN PROGRESS']}} {{'govuk-tag--blue' if s.status in ['NOT REQUIRED']}} app-task-list__tag">{{ s.status }}</strong>
                 </li>
               {% endfor %}
             </ul>
