@@ -521,7 +521,9 @@ function normaliseURL(url: string): string {
 
 function checkAnswer(formdata: FormData) {
 const steps = formdata.steps; 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const res: any = [];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const dataObj: any = [];
 
 
@@ -575,6 +577,7 @@ for(const [key] of Object.entries(steps)){
 
 // create final obj with title and the array with all answers
 titles.forEach((el) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const newData: any = []
   for(let i =0; i<res.length; i++){
     if(el.steps.includes(res[i].step)){
