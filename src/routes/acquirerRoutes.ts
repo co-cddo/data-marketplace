@@ -139,7 +139,7 @@ const updateStepsStatus = (
   }
 
   if (currentStep === "data-access") {
-    if (stepValue === "no") {
+    if (!stepValue || stepValue === "no") {
       formdata.steps["other-orgs"].status = "NOT REQUIRED";
     } else {
       formdata.steps["other-orgs"].status = "NOT STARTED";
@@ -183,7 +183,7 @@ const updateStepsStatus = (
   }
 
   if (currentStep === "data-travel") {
-    if (stepValue === "no") {
+    if (!stepValue || stepValue === "no") {
       formdata.steps["data-travel-location"].status = "NOT REQUIRED";
     } else {
       formdata.steps["data-travel-location"].status = "NOT STARTED";
@@ -238,7 +238,7 @@ const updateStepsStatus = (
   // If every other step is COMPLETED or NOT REQUIRED, set the
   //  check step to NOT STARTED.
   const allSteps = new Set(Object.keys(formdata.steps));
-  allSteps.delete("check");
+  ["check", "declaration", "confirmation"].forEach((s) => allSteps.delete(s));
   if (everyStepCompleted([...allSteps], formdata)) {
     formdata.steps["check"].status = "NOT STARTED";
   } else {
