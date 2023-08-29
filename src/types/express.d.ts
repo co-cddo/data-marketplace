@@ -15,6 +15,7 @@ interface FormData {
   status: string;
   sections: Record<string, Section>;
   steps: Record<string, Step>;
+  stepHistory?: string[];
 }
 
 export interface RequestBody {
@@ -22,8 +23,17 @@ export interface RequestBody {
 }
 
 // Add id's here. Should only be able to handle single value
-type TextFieldStepID = "impact" | "data-subjects" | "data-required" | "disposal";
-type RadioFieldStepID = "data-access" | "legal-review" | "role";
+type TextFieldStepID =
+  | "impact"
+  | "data-subjects"
+  | "data-required"
+  | "disposal";
+
+type RadioFieldStepID =
+  | "data-access"
+  | "legal-review"
+  | "role"
+  | "security-review";
 
 interface Benefits {
   explanation?: string;
@@ -46,7 +56,7 @@ type DataTypeStep = {
   personal: GenericDecisions;
   special: GenericDecisions;
   none: GenericDecisions;
-}
+};
 
 type ProjectAimStep = {
   aims: string;
@@ -61,8 +71,8 @@ type GenericDecisions = {
 type DeliveryStep = {
   "third-party": GenericDecisions;
   physical: GenericDecisions;
-  something: GenericDecisions
-}
+  something: GenericDecisions;
+};
 
 type FormatStep = {
   csv: GenericDecisions;
@@ -109,8 +119,37 @@ type LawfulBasisSpecialStep = {
   "not-for-profit-bodies"?: LawfulBasis;
 };
 
+type LawfulBasisSpecialPublicInterestStep = {
+  statutory?: LawfulBasis;
+  administration?: LawfulBasis;
+  equality?: LawfulBasis;
+  "preventing-detecting"?: LawfulBasis;
+  protecting?: LawfulBasis;
+  "regulatory-requirements"?: LawfulBasis;
+  journalism?: LawfulBasis;
+  "preventing-fraud"?: LawfulBasis;
+  suspicion?: LawfulBasis;
+  support?: LawfulBasis;
+
+  counselling?: LawfulBasis;
+  "safeguarding-children"?: LawfulBasis;
+  "safeguarding-economic"?: LawfulBasis;
+  insurance?: LawfulBasis;
+  "occupational-pensions"?: LawfulBasis;
+  "political-parties"?: LawfulBasis;
+  elected?: LawfulBasis;
+  disclosure?: LawfulBasis;
+  informing?: LawfulBasis;
+  "legal-judgments"?: LawfulBasis;
+  "anti-doping"?: LawfulBasis;
+  standards?: LawfulBasis;
+};
+
+type MoreOrganisationStep = string[];
+
 export type StepValue =
   | string
+  | MoreOrganisationStep
   | DataTypeStep
   | ProjectAimStep
   | BenefitsStep
@@ -119,6 +158,7 @@ export type StepValue =
   | DateStep
   | LawfulBasisPersonalStep
   | LawfulBasisSpecialStep
+  | LawfulBasisSpecialPublicInterestStep
   | DeliveryStep
   | FormatStep;
 
