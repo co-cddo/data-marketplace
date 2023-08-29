@@ -29,7 +29,7 @@
                 { html: '<a href="/acquirer/' + formData.requestId + '/summary">' + formData.requestId + '</a>' },
                 { text: formData.assetTitle },
                 { text: formData.ownedBy },
-                { text: formData.date },
+                { text: formData.date if formData.date else "Unrequested" },
                 { html: govukTag({ text: formData.status, classes: "app-task-list__tag " + getStatusClass(formData.status) }) }
             ] -%}
             {%- set tableRows = (tableRows.push(row), tableRows) -%}
