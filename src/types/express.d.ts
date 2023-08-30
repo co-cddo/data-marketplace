@@ -12,9 +12,11 @@ interface FormData {
   assetTitle: string;
   dataAsset: string;
   ownedBy: string;
+  completedSections: number;
   status: string;
   sections: Record<string, Section>;
   steps: Record<string, Step>;
+  stepHistory?: string[];
 }
 
 export interface RequestBody {
@@ -22,8 +24,17 @@ export interface RequestBody {
 }
 
 // Add id's here. Should only be able to handle single value
-type TextFieldStepID = "impact" | "data-subjects" | "data-required" | "disposal";
-type RadioFieldStepID = "data-access" | "legal-review" | "role";
+type TextFieldStepID =
+  | "impact"
+  | "data-subjects"
+  | "data-required"
+  | "disposal";
+
+type RadioFieldStepID =
+  | "data-access"
+  | "legal-review"
+  | "role"
+  | "security-review";
 
 interface Benefits {
   explanation?: string;
@@ -46,7 +57,7 @@ type DataTypeStep = {
   personal: GenericDecisions;
   special: GenericDecisions;
   none: GenericDecisions;
-}
+};
 
 type ProjectAimStep = {
   aims: string;
@@ -61,8 +72,8 @@ type GenericDecisions = {
 type DeliveryStep = {
   "third-party": GenericDecisions;
   physical: GenericDecisions;
-  something: GenericDecisions
-}
+  something: GenericDecisions;
+};
 
 type FormatStep = {
   csv: GenericDecisions;
@@ -135,8 +146,11 @@ type LawfulBasisSpecialPublicInterestStep = {
   standards?: LawfulBasis;
 };
 
+type MoreOrganisationStep = string[];
+
 export type StepValue =
   | string
+  | MoreOrganisationStep
   | DataTypeStep
   | ProjectAimStep
   | BenefitsStep
@@ -154,7 +168,7 @@ interface Step {
   name: string;
   status: string;
   value: StepValue;
-  nextStep?: string;
+  nextStep: string;
   blockedBy?: string[];
   errorMessage?: string;
   skipped?: boolean;

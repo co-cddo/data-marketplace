@@ -1,0 +1,51 @@
+{% extends "page.njk" %}
+{%- from "govuk/components/radios/macro.njk" import govukRadios -%}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-l">Request ID: {{requestId}}</span>
+      <form method="POST" id="securityReviewForm">
+            {{ govukRadios({
+            name: "security-review",
+            fieldset: {
+                legend: {
+                text: "Have your answers been reviewed by someone with knowledge of data governance and security?",
+                isPageHeading: true,
+                classes: "govuk-fieldset__legend--l"
+                }
+            },
+            hint: {
+                text: "It's important to confirm that someone with specialist knowledge has checked your answers. If you're unable to do this, it may slow down the process of getting this data share request accepted."
+                },
+            items: [
+                {
+                value: "yes",
+                text: "Yes",
+                checked: savedValue === 'yes'
+                },
+                {
+                value: "no",
+                text: "No",
+                checked: savedValue === 'no'
+                }
+            ]
+            }) }}
+            <div class="govuk-button-group">
+            {{ govukButton({
+                text: "Save and continue",
+                name: "continueButton",
+                value: "continue"
+            }) }}
+            {{ govukButton({
+                text: "Save and return",
+                classes: "govuk-button--secondary",
+                name: "returnButton",
+                value: "return"
+            }) }}
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

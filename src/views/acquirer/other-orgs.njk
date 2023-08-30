@@ -1,0 +1,80 @@
+{% extends "page.njk" %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-l">Request ID: {{requestId}}</span>
+      <form method="POST" id="otherOrgsForm">
+        <h1 class="govuk-heading-l govuk-fieldset__legend govuk-fieldset__legend--l">What other organisations will access the data?</h1>
+        <div class="govuk-hint">List all the organisations you will be sharing the data with.</div>
+
+        {% for org in savedValue %}
+          <div class="govuk-grid-row">
+            
+            <div class="govuk-grid-column-two-thirds">
+              {% call govukFieldset({
+              classes: "add-another__organisation" ,
+              legend: {
+                classes: 'govuk-fieldset__legend--m',
+                isPageHeading: false
+              }
+              }) %}
+                    {{ govukInput({
+                      id: "org-name-" + loop.index,
+                      name: "org-name-" + loop.index,
+                      value: org,
+                      classes: "govuk-input--width-20",
+                      attributes: {
+                        'data-name': 'orgs[' + loop.index + ']',
+                        'data-id': 'orgs[' + loop.index + ']'
+                      }
+                    }) }}
+                  {% endcall %}
+                </div>
+                
+                {# Only show the remove button if it's not the first input #}
+                {% if loop.index > 1 %}
+                  <div class="govuk-grid-column-one-third">
+                    <p class="govuk-body">
+                      {{ govukButton({
+                        text: "Remove",
+                        name: "removeOrg",
+                        classes: "govuk-button govuk-button--secondary",
+                        value: loop.index
+                      }) }}
+                    </p>
+                  </div>
+                {% endif %}
+                
+              </div>
+            {% endfor %}
+
+            <p class="govuk-body">
+              {{ govukButton({
+                text: "Add another organisation",
+                name: "addMoreOrgs",
+                classes: "govuk-button--secondary",
+                value: "true"
+              }) }}
+            </p>
+
+            <div class="govuk-button-group">
+              {{ govukButton({
+                text: "Save and continue",
+                name: "continueButton",
+                value: "continue"
+              }) }}
+              {{ govukButton({
+                text: "Save and return",
+                classes: "govuk-button--secondary",
+                name: "returnButton",
+                value: "return"
+              }) }}
+            </div>
+        </form>
+    </div>
+  </div>
+{% endblock %}
