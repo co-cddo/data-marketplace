@@ -14,15 +14,10 @@
     <p class="govuk-body">Department Y will review your request.</p>
     <p class="govuk-body">It can take up to X working days for them to reply. You can track the status of your request when you <a href="/manage-shares/" class="govuk-link">manage data share requests</a>.</p>
     <p class="govuk-body">If you have any problems, you can also contact the data asset owner, <a href="#" class="govuk-link">data-team@department-y.gov.uk</a>.</p>
+    
+
+    <h2 class="govuk-heading-m">If you want to view another share request</h2>
+    <p class="govuk-body"><a class="govuk-link" href="{{assetpath}}/manage-shares">View and manage data shares</a></p>
     </div>
-     <form method="POST" id="checkForm">
-      <div class="govuk-button-group">
-        {{ govukButton({
-          text: "Close this page",
-          name: "continueButton",
-          value: "continue"
-        }) }}
-      </div>
-    </form>
   </div>
 {% endblock %}
