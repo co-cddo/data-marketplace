@@ -24,7 +24,6 @@ function parseJwt(token: string) {
 const generateFormTemplate = (
   req: Request,
   resourceID: string,
-  assetTitle: string,
   contactPoint: { contactName: string; email: string; telephone?: string | null; address?: string | null }
 ) => {
   const userInfo = req.user ? parseJwt(req.user.idToken) : null;
@@ -34,7 +33,6 @@ const generateFormTemplate = (
   template.dataAsset = resourceID;
   template.requestId = randomUUID();
   template.contactPoint = contactPoint;
-  template.assetTitle = assetTitle;
   console.log(contactPoint)
   return template;
 };
@@ -259,25 +257,24 @@ router.get("/:resourceID/start", async (req: Request, res: Response) => {
 
   try {
     const resource = await fetchResourceById(resourceID);
+    const contactPoint = resource.contactPoint;
 
     if (!resource) {
       res.status(404).send("Resource not found");
       return;
     }
-    const assetTitle = resource.title;
-    const contactPoint = resource.contactPoint;
+
     // Generate a new set of form data if there wasn't one already in the session
     req.session.acquirerForms = req.session.acquirerForms || {};
     req.session.acquirerForms[resourceID] =
       req.session.acquirerForms?.[resourceID] ||
-      generateFormTemplate(req, resourceID, assetTitle, contactPoint);
+      generateFormTemplate(req, resourceID, contactPoint);
 
     res.render("../views/acquirer/start.njk", {
       route: req.params.page,
       heading: "Acquirer Start",
       backLink: backLink,
       resource: resource,
-      assetTitle,
       contactPoint: contactPoint,
       resourceID: resourceID,
       formdata: req.session.acquirerForms[resourceID]
@@ -296,9 +293,10 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
     return res.redirect(`/share/${resourceID}/acquirer`);
   }
 
+
   const formdata = req.session.acquirerForms[resourceID];
   const stepData = formdata.steps[formStep];
-  const assetTitle = formdata.assetTitle;
+  const contactPoint = formdata.contactPoint;
 
   if (req.query.action === "back" && formdata.stepHistory) {
     formdata.stepHistory.pop();
@@ -329,7 +327,7 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   res.render(`../views/acquirer/${formStep}.njk`, {
     requestId: formdata.requestId,
     assetId: formdata.dataAsset,
-    assetTitle,
+    contactPoint: contactPoint,
     backLink,
     stepId: formStep,
     savedValue: stepData.value,

@@ -16,7 +16,7 @@ interface Creator {
   web_url: string;
 }
 
-interface ContactPoint {
+export interface ContactPoint {
   contactName: string;
   email: string;
 }

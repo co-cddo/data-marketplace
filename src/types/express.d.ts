@@ -9,7 +9,7 @@ interface UserData {
 
 interface FormData {
   requestId: string;
-  assetTitle: string;
+  contactPoint: ContactPoint;
   dataAsset: string;
   ownedBy: string;
   completedSections: number;
