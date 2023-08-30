@@ -5,6 +5,7 @@
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-l">Request ID: {{requestId}}</span>
     <form method="post">
       {{ govukTextarea({
         name: "aims",
@@ -13,9 +14,6 @@
           text: "What are the aims of your project?",
           classes: "govuk-label--l",
           isPageHeading: true
-        },
-        hint: {
-          text: "Request ID: " + requestId
         },
         rows: 5,
         value: savedValue.aims
