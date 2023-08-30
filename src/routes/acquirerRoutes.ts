@@ -419,6 +419,10 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
     }
   }
 
+  if (req.body.continueButton && formStep === "confirmation") {
+    return res.redirect(`/manage-shares/created-requests`);
+  }
+
   updateStepsStatus(formStep, stepData.value, formdata, req.body.returnButton);
 
   const nextStep = formdata.steps[formStep].nextStep;
