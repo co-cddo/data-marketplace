@@ -26,6 +26,7 @@
         {{ govukTable({
             caption: "Pending requests",
             captionClasses: "govuk-table__caption--l",
+            classes: "request-tables",
             head: [
                 {
                     text: "Request ID"
@@ -48,4 +49,60 @@
     </div>
 </div>
 
-{% endblock %} 
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        {{ govukTable({
+            caption: "Submitted requests",
+            captionClasses: "govuk-table__caption--l",
+            classes: "request-tables",
+            head: [
+                {
+                    text: "Request ID"
+                },
+                {
+                    text: "Dataset"
+                },
+                {
+                    text: "Owner"
+                },
+                {
+                    text: "Needed by"
+                },
+                {
+                    text: "Status"
+                }
+            ],
+            rows: []
+        }) }}
+    </div>
+</div>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        {{ govukTable({
+            caption: "Completed requests",
+            captionClasses: "govuk-table__caption--l",
+            classes: "request-tables",
+            head: [
+                {
+                    text: "Request ID"
+                },
+                {
+                    text: "Dataset"
+                },
+                {
+                    text: "Needed by"
+                },
+                {
+                    text: "Completed"
+                },
+                {
+                    text: "Decision"
+                }
+            ],
+            rows: []
+        }) }}
+    </div>
+</div>
+
+{% endblock %}
