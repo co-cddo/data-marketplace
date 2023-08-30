@@ -23,26 +23,6 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-        {%- set monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"] -%}
-
-        {%- set tableRows = [] -%}
-        {%- for resourceID, formData in acquirerForms -%}
-            {%- set formattedDate = "Unrequested" -%}
-            {%- if formData.steps.date.value and formData.steps.date.value.day and formData.steps.date.value.month and formData.steps.date.value.year -%}
-                {%- set monthIndex = formData.steps.date.value.month - 1 -%}
-                {%- set monthName = monthNames[monthIndex] -%}
-                {%- set formattedDate = formData.steps.date.value.day + " " + monthName + " " + formData.steps.date.value.year -%}
-            {%- endif -%}
-            {%- set row = [
-                { html: '<a href="/acquirer/' + formData.requestId + '/summary">' + formData.requestId + '</a>' },
-                { text: formData.assetTitle },
-                { text: formData.ownedBy },
-                { text: formattedDate },
-                { html: govukTag({ text: formData.status, classes: "app-task-list__tag " + getStatusClass(formData.status) }) }
-            ] -%}
-        {%- set tableRows = (tableRows.push(row), tableRows) -%}
-        {%- endfor -%}
-
         {{ govukTable({
             caption: "Pending requests",
             captionClasses: "govuk-table__caption--l",
