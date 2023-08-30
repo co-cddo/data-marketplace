@@ -42,13 +42,12 @@ router.get("/created-requests", async (req: Request, res: Response) => {
       formattedDate = `${dateValue.day} ${monthName} ${dateValue.year}`;
     }
     const row = [
-      { html: `<a href="/acquirer/${formData.requestId}/start">${formData.requestId}</a>` },
+      { html: `<a href="/acquirer/${formData.dataAsset}/start">${formData.requestId}</a>` },
       { text: formData.assetTitle },
       { text: formData.ownedBy },
       { text: formattedDate },
       { html: `<span class="govuk-tag ${getStatusClass(formData.status)}">${formData.status}</span>` }
     ];
-
     tableRows.push(row);
   }
 
