@@ -9,8 +9,9 @@ interface UserData {
 
 interface FormData {
   requestId: string;
-  contactPoint: ContactPoint;
+  assetTitle: string;
   dataAsset: string;
+  contactPoint: ContactPoint;
   ownedBy: string;
   completedSections: number;
   status: string;

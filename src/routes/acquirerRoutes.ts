@@ -24,6 +24,7 @@ function parseJwt(token: string) {
 const generateFormTemplate = (
   req: Request,
   resourceID: string,
+  assetTitle: string,
   contactPoint: {
     contactName: string;
     email: string | null;
@@ -36,8 +37,9 @@ const generateFormTemplate = (
   template.ownedBy = username;
   template.dataAsset = resourceID;
   template.requestId = randomUUID();
+  template.assetTitle = assetTitle;
   template.contactPoint = contactPoint;
-  console.log(contactPoint);
+
   return template;
 };
 
@@ -265,8 +267,9 @@ router.get("/:resourceID/start", async (req: Request, res: Response) => {
       res.status(404).send("Resource not found");
       return;
     }
-
+    const assetTitle = resource.title;
     const contactPoint = resource.contactPoint;
+  
     if (!contactPoint) {
       res.status(404).send("Contact point not found");
       return;
@@ -276,14 +279,14 @@ router.get("/:resourceID/start", async (req: Request, res: Response) => {
     req.session.acquirerForms = req.session.acquirerForms || {};
     req.session.acquirerForms[resourceID] =
       req.session.acquirerForms?.[resourceID] ||
-      generateFormTemplate(req, resourceID, contactPoint);
+      generateFormTemplate(req, resourceID, assetTitle, contactPoint);
 
     res.render("../views/acquirer/start.njk", {
       route: req.params.page,
       heading: "Acquirer Start",
       backLink: backLink,
       resource: resource,
-      contactPoint: contactPoint,
+      assetTitle,
       resourceID: resourceID,
       formdata: req.session.acquirerForms[resourceID],
     });
@@ -296,13 +299,14 @@ router.get("/:resourceID/start", async (req: Request, res: Response) => {
 router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   const resourceID = req.params.resourceID;
   const formStep = req.params.step;
-
+  
   if (!req.session.acquirerForms?.[resourceID]) {
     return res.redirect(`/share/${resourceID}/acquirer`);
   }
 
   const formdata = req.session.acquirerForms[resourceID];
   const stepData = formdata.steps[formStep];
+  const assetTitle = formdata.assetTitle;
   const contactPoint = formdata.contactPoint;
 
   if (req.query.action === "back" && formdata.stepHistory) {
@@ -334,6 +338,7 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   res.render(`../views/acquirer/${formStep}.njk`, {
     requestId: formdata.requestId,
     assetId: formdata.dataAsset,
+    assetTitle,
     contactPoint: contactPoint,
     backLink,
     stepId: formStep,
@@ -413,7 +418,6 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
       formdata.stepHistory.push(formStep);
     }
   }
-  console.log("Session data:", req.session.acquirerForms[resourceID]);
 
   updateStepsStatus(formStep, stepData.value, formdata, req.body.returnButton);
 

@@ -1,6 +1,7 @@
 {
   "requestId": "",
   "dataAsset": "",
+  "assetTitle": "",
   "ownedBy": "",
   "status": "Request incomplete",
   "completedSections": 0,
