@@ -9,15 +9,20 @@
             titleText: "Data share request sent",
             html: "Your request number " + "<br><br>" + requestId
         }) }}
-    <p class="govuk-body">We have sent you a confirmation email.</p>
-    <h2 class="govuk-heading-m">What happens next</h2>
-    <p class="govuk-body">Department Y will review your request.</p>
-    <p class="govuk-body">It can take up to X working days for them to reply. You can track the status of your request when you <a href="/manage-shares/" class="govuk-link">manage data share requests</a>.</p>
-    <p class="govuk-body">If you have any problems, you can also contact the data asset owner, <a href="#" class="govuk-link">data-team@department-y.gov.uk</a>.</p>
-    
+    <p class="govuk-body">{{assetTitle}} has been told their request has been accepted and you will contact them to discuss further.</p>
 
-    <h2 class="govuk-heading-m">If you want to view another share request</h2>
-    <p class="govuk-body"><a class="govuk-link" href="{{assetpath}}/manage-shares">View and manage data shares</a></p>
+    <h2 class="govuk-heading-m">What happens next</h2>
+    <p class="govuk-body">Contact <a target="_blank" href="#data-team@department-x.gov.uk?">data-team@department-x.gov.uk to start a discussion</a></p>
+
+    <form method="POST" id="declarationForm">
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: "Return to manage data share requests",
+          name: "continueButton",
+          value: "continue"
+        }) }}
+      </div>
+    </form>
     </div>
   </div>
 {% endblock %}
