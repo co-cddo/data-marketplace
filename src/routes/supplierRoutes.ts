@@ -32,9 +32,9 @@ router.get("/created-requests", async (req: Request, res: Response) => {
   const tableRows = [];
 
   for (const [key, formData] of Object.entries(acquirerForms)) {
+    key === formData.requestId;
     let formattedDate = "Unrequested";
     const dateValue = formData.steps.date.value as DateStep;
-    key === formData.requestId;
 
     if (dateValue.day && dateValue.month && dateValue.year) {
       const monthIndex = dateValue.month - 1;
@@ -42,7 +42,7 @@ router.get("/created-requests", async (req: Request, res: Response) => {
       formattedDate = `${dateValue.day} ${monthName} ${dateValue.year}`;
     }
     const row = [
-      { html: `<a href="/acquirer/${formData.requestId}/summary">${formData.requestId}</a>` },
+      { html: `<a href="/acquirer/${formData.requestId}/start">${formData.requestId}</a>` },
       { text: formData.assetTitle },
       { text: formData.ownedBy },
       { text: formattedDate },
