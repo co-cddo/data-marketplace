@@ -165,9 +165,9 @@ const updateStepsStatus = (
     }
   }
 
-  if (currentStep === "declaration"){
+  if (currentStep === "declaration") {
     const declarationStep = stepValue as StepValue;
-    if(declarationStep){
+    if (declarationStep) {
       formdata.steps["confirmation"].status = "NOT STARTED";
     } else {
       formdata.steps["confirmation"].status = "CANNOT START YET";
@@ -328,7 +328,7 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   } else {
     backLink = `/acquirer/${resourceID}/start`;
   }
-  
+
   res.render(`../views/acquirer/${formStep}.njk`, {
     requestId: formdata.requestId,
     assetId: formdata.dataAsset,
@@ -400,7 +400,14 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
     return res.redirect(`/acquirer/${resourceID}/other-orgs`);
   }
 
-  if (req.body.continueButton && formStep === "confirmation"){
+  if (req.body.continueButton && formStep === "declaration") {
+    formdata.status = "AWAITING REVIEW";
+    return;
+  } else {
+    formdata.status = "IN PROGRESS";
+  }
+
+  if (req.body.continueButton && formStep === "confirmation") {
     return res.redirect(`/manage-shares`);
   }
   // Check which button was clicked "Save and continue || Save and return"
@@ -414,7 +421,7 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
       formdata.stepHistory.push(formStep);
     }
   }
-  
+
   updateStepsStatus(formStep, stepData.value, formdata, req.body.returnButton);
 
   const nextStep = formdata.steps[formStep].nextStep;
