@@ -24,7 +24,11 @@ function parseJwt(token: string) {
 const generateFormTemplate = (
   req: Request,
   resourceID: string,
-  contactPoint: { contactName: string; email: string; telephone?: string | null; address?: string | null }
+  contactPoint: {
+    contactName: string;
+    email: string | null;
+    address?: string | null;
+  },
 ) => {
   const userInfo = req.user ? parseJwt(req.user.idToken) : null;
   const username = userInfo ? userInfo.email : "anonymous";
@@ -33,7 +37,7 @@ const generateFormTemplate = (
   template.dataAsset = resourceID;
   template.requestId = randomUUID();
   template.contactPoint = contactPoint;
-  console.log(contactPoint)
+  console.log(contactPoint);
   return template;
 };
 
@@ -166,7 +170,6 @@ const updateStepsStatus = (
     }
   }
 
-
   if (currentStep === "lawful-basis-special") {
     if (
       (stepValue as LawfulBasisSpecialStep)["reasons-of-public-interest"]
@@ -257,10 +260,15 @@ router.get("/:resourceID/start", async (req: Request, res: Response) => {
 
   try {
     const resource = await fetchResourceById(resourceID);
-    const contactPoint = resource.contactPoint;
 
     if (!resource) {
       res.status(404).send("Resource not found");
+      return;
+    }
+
+    const contactPoint = resource.contactPoint;
+    if (!contactPoint) {
+      res.status(404).send("Contact point not found");
       return;
     }
 
@@ -277,7 +285,7 @@ router.get("/:resourceID/start", async (req: Request, res: Response) => {
       resource: resource,
       contactPoint: contactPoint,
       resourceID: resourceID,
-      formdata: req.session.acquirerForms[resourceID]
+      formdata: req.session.acquirerForms[resourceID],
     });
   } catch (error) {
     console.error("An error occurred while fetching data from the API:", error);
@@ -292,7 +300,6 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   if (!req.session.acquirerForms?.[resourceID]) {
     return res.redirect(`/share/${resourceID}/acquirer`);
   }
-
 
   const formdata = req.session.acquirerForms[resourceID];
   const stepData = formdata.steps[formStep];
