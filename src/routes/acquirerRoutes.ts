@@ -165,6 +165,10 @@ const updateStepsStatus = (
     }
   }
 
+  if (currentStep === "check") {
+    formdata.steps["declaration"].status = "NOT STARTED";
+  }
+
   if (currentStep === "declaration") {
     formdata.steps["confirmation"].status = "NOT STARTED";
   }
