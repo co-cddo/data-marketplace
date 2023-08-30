@@ -5,14 +5,15 @@
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-       {{ govukPanel({
-            titleText: "Data share request sent",
-            html: "Your request number " + "<br><br>" + requestId
-        }) }}
-    <p class="govuk-body">{{assetTitle}} has been told their request has been accepted and you will contact them to discuss further.</p>
-
+      {{ govukPanel({
+          titleText: "Data share request sent",
+          html: "Your request number " + "<br><br>" + requestId
+      }) }}
+    <p class="govuk-body">{{assetTitle}} has been told their request has been accepted and you will need to contact them to discuss further.</p>
+    <p class="govuk-body">It can take up to X working days for them to reply. You can track the status of your request when you <a href="/manage-shares/" class="govuk-link">manage data share requests</a>.</p>
+    <p class="govuk-body">If you have any problems, you can also contact the data asset owner.</p>
     <h2 class="govuk-heading-m">What happens next</h2>
-    <p class="govuk-body">Contact <a href="mailto:data-team@department-x.gov.uk">data-team@department-x.gov.uk to start a discussion</a></p>
+    <p class="govuk-body">Contact: <a href="mailto:{{contactPoint.email}}">{{contactPoint.email}} to start a discussion</a></p>
 
     <form method="POST" id="declarationForm">
       <div class="govuk-button-group">

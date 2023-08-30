@@ -25,6 +25,7 @@ const generateFormTemplate = (
   req: Request,
   resourceID: string,
   assetTitle: string,
+  contactPoint: { contactName: string; email: string; telephone?: string | null; address?: string | null }
 ) => {
   const userInfo = req.user ? parseJwt(req.user.idToken) : null;
   const username = userInfo ? userInfo.email : "anonymous";
@@ -32,7 +33,9 @@ const generateFormTemplate = (
   template.ownedBy = username;
   template.dataAsset = resourceID;
   template.requestId = randomUUID();
+  template.contactPoint = contactPoint;
   template.assetTitle = assetTitle;
+  console.log(contactPoint)
   return template;
 };
 
@@ -262,11 +265,12 @@ router.get("/:resourceID/start", async (req: Request, res: Response) => {
       return;
     }
     const assetTitle = resource.title;
+    const contactPoint = resource.contactPoint;
     // Generate a new set of form data if there wasn't one already in the session
     req.session.acquirerForms = req.session.acquirerForms || {};
     req.session.acquirerForms[resourceID] =
       req.session.acquirerForms?.[resourceID] ||
-      generateFormTemplate(req, resourceID, assetTitle);
+      generateFormTemplate(req, resourceID, assetTitle, contactPoint);
 
     res.render("../views/acquirer/start.njk", {
       route: req.params.page,
@@ -274,8 +278,9 @@ router.get("/:resourceID/start", async (req: Request, res: Response) => {
       backLink: backLink,
       resource: resource,
       assetTitle,
+      contactPoint: contactPoint,
       resourceID: resourceID,
-      formdata: req.session.acquirerForms[resourceID],
+      formdata: req.session.acquirerForms[resourceID]
     });
   } catch (error) {
     console.error("An error occurred while fetching data from the API:", error);
@@ -403,6 +408,7 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
       formdata.stepHistory.push(formStep);
     }
   }
+  console.log("Session data:", req.session.acquirerForms[resourceID]);
 
   updateStepsStatus(formStep, stepData.value, formdata, req.body.returnButton);
 
