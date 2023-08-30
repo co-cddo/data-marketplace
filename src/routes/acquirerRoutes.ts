@@ -402,14 +402,8 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
 
   if (req.body.continueButton && formStep === "declaration") {
     formdata.status = "AWAITING REVIEW";
-    return;
-  } else {
-    formdata.status = "IN PROGRESS";
   }
 
-  if (req.body.continueButton && formStep === "confirmation") {
-    return res.redirect(`/manage-shares`);
-  }
   // Check which button was clicked "Save and continue || Save and return"
   let redirectURL = `/acquirer/${resourceID}/start`;
   if (req.body.returnButton) {

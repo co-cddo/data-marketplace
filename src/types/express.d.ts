@@ -151,8 +151,6 @@ type MoreOrganisationStep = string[];
 type FormStatus =
   | "NOT STARTED"
   | "IN PROGRESS"
-  | "CANNOT START YET"
-  | "NOT REQUIRED"
   | "AWAITING REVIEW"
   | "RETURNED"
   | "IN REVIEW";
