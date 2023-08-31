@@ -172,6 +172,14 @@ const updateStepsStatus = (
     }
   }
 
+  if (currentStep === "check") {
+    formdata.steps["declaration"].status = "NOT STARTED";
+  }
+
+  if (currentStep === "declaration") {
+    formdata.steps["confirmation"].status = "NOT STARTED";
+  }
+
   if (currentStep === "lawful-basis-special") {
     if (
       (stepValue as LawfulBasisSpecialStep)["reasons-of-public-interest"]
@@ -405,6 +413,10 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
       }
     }
     return res.redirect(`/acquirer/${resourceID}/other-orgs`);
+  }
+
+  if (req.body.continueButton && formStep === "declaration") {
+    formdata.status = "AWAITING REVIEW";
   }
 
   // Check which button was clicked "Save and continue || Save and return"

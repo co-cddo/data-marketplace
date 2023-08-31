@@ -14,7 +14,7 @@ interface FormData {
   contactPoint: ContactPoint;
   ownedBy: string;
   completedSections: number;
-  status: string;
+  status: FormStatus;
   sections: Record<string, Section>;
   steps: Record<string, Step>;
   stepHistory?: string[];
@@ -148,6 +148,13 @@ type LawfulBasisSpecialPublicInterestStep = {
 };
 
 type MoreOrganisationStep = string[];
+
+type FormStatus =
+  | "NOT STARTED"
+  | "IN PROGRESS"
+  | "AWAITING REVIEW"
+  | "RETURNED"
+  | "IN REVIEW";
 
 export type StepValue =
   | string
