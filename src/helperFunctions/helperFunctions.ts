@@ -1,3 +1,5 @@
+/* eslint-disable no-case-declarations */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { licences } from "../mockData/licences";
 import {
   DataTypeStep,
@@ -19,7 +21,7 @@ import {
   FormData,
   MoreOrganisationStep,
 } from "../types/express";
-import { titles, replace, replaceDataKey } from "./checkhelper";
+import { titles, replace } from "./checkhelper";
 
 function validateDate(day: number, month: number, year: number): string {
   const errors = new Set<string>();
@@ -521,60 +523,46 @@ function normaliseURL(url: string): string {
 
 function checkAnswer(formdata: FormData) {
   const steps = formdata.steps; 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const res: any = [];
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const dataObj: any = [];
 
   for(const [key, value] of Object.entries(steps)){
     const dataTypeValue: string[] = [];
-    const type = replaceDataKey[key]
-
+    const type = replace[key]?.type
   switch(type) {
-    case "checked": 
-    for(const [k] of Object.entries(steps[key].value)){
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const answer = steps[key].value as any
-    if(answer[k].checked)
-    dataTypeValue.push(`<p>${replace[key][k]}</p>`)
-    }
-    break
     case "string": 
-    dataTypeValue.push(value.value as string)
-    break
-    case "object": 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    dataTypeValue.push(`<p>${(value.value as any).aims}</p><p>${(value.value as any).explanation}</p>`)
-    break
-    case "explanation": 
-    for(const [k] of Object.entries(steps[key].value)){
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const answer = steps[key].value as any
-      const explanation = answer[k]?.explanation !== undefined ? answer[k]?.explanation : ""
-      if(answer[k].checked)
-      dataTypeValue.push(`<p>${replace[key][k]}</p><p class="govuk-caption-m">${explanation}</p>`)
-      }
+      dataTypeValue.push(value.value as string)
     break
     case "radio": 
-    dataTypeValue.push(replace[key][value.value as string])
+      dataTypeValue.push(replace[key].data[value.value as string])
+    break
+    case "object": 
+    const answerProject = value.value as ProjectAimStep
+      dataTypeValue.push(`<p>${answerProject.aims}</p><p>${answerProject.explanation}</p>`)
     break
     case "date":
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any, no-case-declarations
-      const date = value.value as any
+      const date = value.value as DateStep
       if(date.year)
       dataTypeValue.push(`${date.day}/${date.month}/${date.year}`)
     break
+    case "checked": 
+      for(const [k] of Object.entries(steps[key].value)){
+        const answer = steps[key].value as any
+        const explanation = answer[k]?.explanation !== undefined ? answer[k]?.explanation : ""
+        if(answer[k].checked)
+          dataTypeValue.push(`<p>${replace[key].data[k]}</p><p class="govuk-caption-m">${explanation}</p>`)
+      }
+    break
     case "list":
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-case-declarations
-      const answer = replace[key][value.value as string]
-      if(answer === "Yes") {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        if(typeof steps[replace[key][value.value as any].attach].value === "string") {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          dataTypeValue.push(`<p>${replace[key][value.value as string].res}</p><p class="govuk-caption-m">${replace[key][value.value as string].title}</p><p class="govuk-caption-m">&bull; ${steps[replace[key][value.value as any].attach].value}</p>`)
+      const answer = replace[key].data[value.value as string]
+      const typeAnswer = steps[replace[key].data[value.value as any]?.attach]?.value; 
+      const titleAnswer = `<p>${answer?.res}</p><p class="govuk-caption-m">${answer?.title}</p>`
+      if(answer?.res === "Yes") {
+        if(typeof typeAnswer === "string") {
+          dataTypeValue.push(`${titleAnswer} <p class="govuk-caption-m">&bull; ${typeAnswer}</p>`)
         } else {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (steps[replace[key][value.value as any].attach].value as [])?.map((el, index) => index === 0 ? dataTypeValue.push(`<p>${replace[key][value.value as string].res}</p><p class="govuk-caption-m">${replace[key][value.value as string].title}</p><p class="govuk-caption-m">&bull; ${el}</p>`) : dataTypeValue.push(`<p>&bull; ${el}</p>`))
+          
+          (typeAnswer as [])?.map((el, index) => index === 0 ? dataTypeValue.push(`${titleAnswer}<p class="govuk-caption-m">&bull; ${el}</p>`) : dataTypeValue.push(`<p>&bull; ${el}</p>`))
         }
       } else {
         dataTypeValue.push(answer?.res)
@@ -583,14 +571,14 @@ function checkAnswer(formdata: FormData) {
   }
 
   res.push({
+    id:value.id,
     step: value.name,
     value: dataTypeValue
   })
 
   }
 
-    titles.forEach((el) => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  titles.forEach((el) => {
   const newData: any = []
   for(let i =0; i<res.length; i++){
     if(el.steps.includes(res[i].step)){
