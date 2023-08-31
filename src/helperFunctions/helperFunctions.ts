@@ -16,7 +16,7 @@ import {
   RadioFieldStepID,
   TextFieldStepID,
   DeliveryStep,
-  MoreOrganisationStep,
+  GenericStringArray
 } from "../types/express";
 
 function validateDate(day: number, month: number, year: number): string {
@@ -142,8 +142,7 @@ function isTextField(id: string): id is TextFieldStepID {
     "impact",
     "data-subjects",
     "data-required",
-    "disposal",
-    "data-travel-location",
+    "disposal"
   ].includes(id);
 }
 
@@ -169,7 +168,15 @@ const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
       .filter((key) => key.startsWith("org-name-"))
       .map((key) => body[key]);
 
-    return orgValues as MoreOrganisationStep;
+    return orgValues as GenericStringArray;
+  }
+
+  if (stepData.id === "data-travel-location") {
+    const countryValues = Object.keys(body)
+      .filter((key) => key.startsWith("country-name-"))
+      .map((key) => body[key]);
+
+    return countryValues as GenericStringArray;
   }
 
   if (stepData.id === "data-type") {

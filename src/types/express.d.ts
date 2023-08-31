@@ -147,7 +147,7 @@ type LawfulBasisSpecialPublicInterestStep = {
   standards?: LawfulBasis;
 };
 
-type MoreOrganisationStep = string[];
+type GenericStringArray = string[];
 
 type FormStatus =
   | "NOT STARTED"
@@ -158,7 +158,7 @@ type FormStatus =
 
 export type StepValue =
   | string
-  | MoreOrganisationStep
+  | GenericStringArray
   | DataTypeStep
   | ProjectAimStep
   | BenefitsStep
