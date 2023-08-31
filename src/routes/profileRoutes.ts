@@ -3,7 +3,7 @@ const router = express.Router();
 import { authenticateJWT } from "../middleware/authMiddleware";
 import axios from "axios";
 
-const URL = `${process.env.API_ENDPOINT}/user`
+const URL = `${process.env.API_ENDPOINT}/user`;
 
 router.get(
   "/",
@@ -13,20 +13,23 @@ router.get(
       return res.redirect("/error");
     }
 
-    let requestForms = {}
+    let requestForms = {};
     try {
-      const response = await axios.put(URL, { token: req.cookies.jwtToken })
-      requestForms = response.data["request_forms"] || {}
-      const parsedForms = Object.fromEntries(Object.entries(requestForms).map(([k, v], i) => [k, JSON.parse(v as string)]))
-      req.session.acquirerForms = parsedForms
+      const response = await axios.put(URL, { token: req.cookies.jwtToken });
+      requestForms = response.data["sharedata"] || {};
+      req.session.acquirerForms = requestForms;
     } catch (error) {
-      console.log("USER API ERROR")
-      console.log(error)
+      console.error("Error getting Share Data from backend:");
+      if (axios.isAxiosError(error)) {
+        console.error(error.response?.data.detail);
+      } else {
+        console.error(error);
+      }
     }
     res.render("profile.njk", {
       heading: "Authed",
       user: req.user,
-      requestForms: requestForms
+      requestForms: requestForms,
     });
   },
   (err: Error, req: Request, res: Response, next: NextFunction) => {

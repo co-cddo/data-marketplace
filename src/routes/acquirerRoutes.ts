@@ -314,8 +314,9 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
 
   if (formdata.stepHistory && formdata.stepHistory.length > 0) {
     // Otherwise, set it to the previous step from stepHistory
-    backLink = `/acquirer/${resourceID}/${formdata.stepHistory[formdata.stepHistory.length - 1]
-      }?action=back`;
+    backLink = `/acquirer/${resourceID}/${
+      formdata.stepHistory[formdata.stepHistory.length - 1]
+    }?action=back`;
   } else {
     backLink = `/acquirer/${resourceID}/start`;
   }
@@ -331,7 +332,7 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   });
 });
 
-const URL = `${process.env.API_ENDPOINT}/sharedata`
+const URL = `${process.env.API_ENDPOINT}/sharedata`;
 
 router.post("/:resourceID/:step", async (req: Request, res: Response) => {
   if (!req.session.acquirerForms) {
@@ -414,11 +415,18 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
     redirectURL = `/acquirer/${resourceID}/${nextStep}`;
   }
 
-  try {
-    axios.put(URL, { jwt: req.cookies.jwtToken, sharedata: formdata })
-  } catch (error) {
-    //@ts-ignore
-    console.log(error.response.data.detail)
+  // Send the formdata to the backend if logged in
+  if (req.isAuthenticated()) {
+    try {
+      await axios.put(URL, { jwt: req.cookies.jwtToken, sharedata: formdata });
+    } catch (error: unknown) {
+      console.error("Error sending formdata to backend");
+      if (axios.isAxiosError(error)) {
+        console.error(error.response?.data.detail);
+      } else {
+        console.error(error);
+      }
+    }
   }
 
   return res.redirect(redirectURL);

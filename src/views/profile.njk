@@ -9,8 +9,10 @@
         <br/>
     Share requests:
     <ul>
-            {% for requestId, requestData in requestForms %}
-                <li>{{requestId}}</li>
+            {% for assetId, requestData in requestForms %}
+                <li>
+                    <a href="/acquirer/{{assetId}}/start">{{assetId}}</a>
+                </li>
             {% endfor %}
         </ul>
         {%endif%}
