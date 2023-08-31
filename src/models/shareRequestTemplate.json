@@ -76,7 +76,7 @@
     },
     "benefits": {
       "id": "benefits",
-      "name": "Benefits",
+      "name": "Benefit to public",
       "status": "NOT STARTED",
       "value": [],
       "nextStep": "data-access"
@@ -180,7 +180,7 @@
     },
     "data-travel-location": {
       "id": "data-travel-location",
-      "name": "Data travel outside UK",
+      "name": "Data travel Location",
       "status": "NOT STARTED",
       "value": "",
       "nextStep": "role"

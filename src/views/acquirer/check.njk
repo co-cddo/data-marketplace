@@ -9,7 +9,7 @@
       <span class="govuk-caption-l">Request ID: {{requestId}}</span>
        <h1 class="govuk-heading-xl">Check your answers before sending your request</h1>
        {% for name in data %}
-       <h2 class="govuk-heading-m">{{name.name}}</h2>
+       <h2 class="govuk-heading-m check-heading">{{name.name}}</h2>
       {% for steps in name.data %}
         {{ govukSummaryList({
             rows: [
