@@ -108,32 +108,29 @@ describe("fetchResources", () => {
     expect(mockedAxios.get).toHaveBeenCalledWith(`${process.env.API_ENDPOINT}/catalogue`);
   });
 
-///
 
-
-
-it("should return filtered data when one theme filter is provided", async () => {
-  const themeFilter = "Transport";
+  it("should return filtered data when one theme filter is provided", async () => {
+    const themeFilter = "Transport";
+      
+    const expectedData = mockData.data.filter((resource) => {
+      return resource.theme.includes(themeFilter);
+    });
     
-  const expectedData = mockData.data.filter((resource) => {
-    return resource.theme.includes(themeFilter);
+    const result = await fetchResources(undefined, undefined, [themeFilter]);
+    expect(result.resources).toEqual(expectedData); 
+    expect(mockedAxios.get).toHaveBeenCalledWith(`${process.env.API_ENDPOINT}/catalogue`);
   });
-  
-  const result = await fetchResources(undefined, undefined, [themeFilter]);
-  expect(result.resources).toEqual(expectedData); 
-  expect(mockedAxios.get).toHaveBeenCalledWith(`${process.env.API_ENDPOINT}/catalogue`);
-});
 
-it("should return filtered data when two theme filters are provided", async () => {
-  const themeFilters = ["Transport", "Mapping"];
+  it("should return filtered data when two theme filters are provided", async () => {
+    const themeFilters = ["Transport", "Mapping"];
 
-  const expectedData = mockData.data.filter(resource => {
-    return themeFilters.some(themeFilter => resource.theme.includes(themeFilter));
-  });
-  
-  const result = await fetchResources(undefined, undefined, themeFilters);
-  expect(result.resources).toEqual(expectedData);
-  expect(mockedAxios.get).toHaveBeenCalledWith(`${process.env.API_ENDPOINT}/catalogue`);
+    const expectedData = mockData.data.filter(resource => {
+      return themeFilters.some(themeFilter => resource.theme.includes(themeFilter));
+    });
+    
+    const result = await fetchResources(undefined, undefined, themeFilters);
+    expect(result.resources).toEqual(expectedData);
+    expect(mockedAxios.get).toHaveBeenCalledWith(`${process.env.API_ENDPOINT}/catalogue`);
   });
 
 
@@ -195,28 +192,26 @@ it("should return filtered data when two theme filters are provided", async () =
     expect(result.resources).toEqual(expectedData);
     expect(mockedAxios.get).toHaveBeenCalledWith(`${process.env.API_ENDPOINT}/catalogue`);
   });
-  
-  it("should return filtered data when organisation filters and theme filters are provided (no query)", async () => {
-    const organisationFilters = ["department-for-test"];
-    const themeFilters = ["Transport"];
-  
+
+  it("should return no data when neither the query nor the organisation filter nor the theme filter matches", async () => {
+    const query = "nonexistentquery";
+    const organisationFilters = "non-existent-theme";
+    const themeFilters = ["nonexistent-organisation"];
     const expectedData = mockData.data.filter((resource) => {
-      const matchesOrgFilter = organisationFilters.includes(resource.organisation.slug.toLowerCase());
-      const matchesThemeFilter = resource.theme.some(theme => themeFilters.includes(theme));
-  
-      return matchesOrgFilter && matchesThemeFilter;
+        const matchesQuery = Object.values(resource).some(
+            (value) => value?.toString().toLowerCase().includes(query)
+        );
+        const matchesOrgFilter = resource.organisation.slug.toLowerCase() === organisationFilters.toLowerCase();
+        const matchesThemeFilter = resource.theme === themeFilters;
+
+        return matchesQuery || matchesThemeFilter || matchesOrgFilter;
     });
-  
-    const result = await fetchResources(undefined, organisationFilters, themeFilters);
+    expect(expectedData.length).toBe(0);
+
+    const result = await fetchResources(query, undefined, themeFilters);
     expect(result.resources).toEqual(expectedData);
     expect(mockedAxios.get).toHaveBeenCalledWith(`${process.env.API_ENDPOINT}/catalogue`);
   });
-  
-
-
-
-
-
 
   it("should throw an error when the axios request fails", async () => {
     mockedAxios.get.mockRejectedValue(new Error("An error occurred while fetching data from the API"));
