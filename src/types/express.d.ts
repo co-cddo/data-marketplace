@@ -11,6 +11,7 @@ interface FormData {
   requestId: string;
   assetTitle: string;
   dataAsset: string;
+  contactPoint: ContactPoint;
   ownedBy: string;
   completedSections: number;
   status: string;

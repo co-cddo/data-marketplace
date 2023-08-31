@@ -25,6 +25,11 @@ const generateFormTemplate = (
   req: Request,
   resourceID: string,
   assetTitle: string,
+  contactPoint: {
+    contactName: string;
+    email: string | null;
+    address?: string | null;
+  },
 ) => {
   const userInfo = req.user ? parseJwt(req.user.idToken) : null;
   const username = userInfo ? userInfo.email : "anonymous";
@@ -33,6 +38,8 @@ const generateFormTemplate = (
   template.dataAsset = resourceID;
   template.requestId = randomUUID();
   template.assetTitle = assetTitle;
+  template.contactPoint = contactPoint;
+
   return template;
 };
 
@@ -261,11 +268,18 @@ router.get("/:resourceID/start", async (req: Request, res: Response) => {
       return;
     }
     const assetTitle = resource.title;
+    const contactPoint = resource.contactPoint;
+  
+    if (!contactPoint) {
+      res.status(404).send("Contact point not found");
+      return;
+    }
+
     // Generate a new set of form data if there wasn't one already in the session
     req.session.acquirerForms = req.session.acquirerForms || {};
     req.session.acquirerForms[resourceID] =
       req.session.acquirerForms?.[resourceID] ||
-      generateFormTemplate(req, resourceID, assetTitle);
+      generateFormTemplate(req, resourceID, assetTitle, contactPoint);
 
     res.render("../views/acquirer/start.njk", {
       route: req.params.page,
@@ -285,7 +299,7 @@ router.get("/:resourceID/start", async (req: Request, res: Response) => {
 router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   const resourceID = req.params.resourceID;
   const formStep = req.params.step;
-
+  
   if (!req.session.acquirerForms?.[resourceID]) {
     return res.redirect(`/share/${resourceID}/acquirer`);
   }
@@ -293,6 +307,7 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   const formdata = req.session.acquirerForms[resourceID];
   const stepData = formdata.steps[formStep];
   const assetTitle = formdata.assetTitle;
+  const contactPoint = formdata.contactPoint;
 
   if (req.query.action === "back" && formdata.stepHistory) {
     formdata.stepHistory.pop();
@@ -324,6 +339,7 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
     requestId: formdata.requestId,
     assetId: formdata.dataAsset,
     assetTitle,
+    contactPoint: contactPoint,
     backLink,
     stepId: formStep,
     savedValue: stepData.value,
@@ -372,7 +388,6 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
     }
     return res.redirect(`/acquirer/${resourceID}/other-orgs`); // Refresh the current page.
   }
-
   if (req.body.removeOrg !== undefined) {
     const orgIndexToRemove = parseInt(req.body.removeOrg, 10) - 1;
     if (
@@ -402,6 +417,10 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
     if (formdata.stepHistory.indexOf(formStep) === -1) {
       formdata.stepHistory.push(formStep);
     }
+  }
+
+  if (req.body.continueButton && formStep === "confirmation") {
+    return res.redirect(`/manage-shares/created-requests`);
   }
 
   updateStepsStatus(formStep, stepData.value, formdata, req.body.returnButton);
