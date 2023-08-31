@@ -10,10 +10,12 @@ import { getLicenceTitleFromURL } from "../helperFunctions/helperFunctions";
 export async function fetchResources(
   query?: string,
   organisationFilters?: string[],
+  themeFilters?: string[],
   filterOptionTags?: string[],
 ): Promise<{
   resources: CatalogueItem[];
   uniqueOrganisations: Organisation[];
+  uniqueThemes: string[];
   selectedFilters?: string[];
 }> {
   const apiUrl = `${process.env.API_ENDPOINT}/catalogue`;
@@ -43,6 +45,20 @@ export async function fetchResources(
     }
   });
 
+  // Extract unique themes
+  const themesSet = new Set<string>();
+  const uniqueThemes: string[] = [];
+  resources.forEach((item) => {
+    if (item.theme && Array.isArray(item.theme)) {
+      item.theme.forEach((theme) => {
+        if (!themesSet.has(theme)) {
+          uniqueThemes.push(theme);
+          themesSet.add(theme);
+        }
+      });
+    }
+  });
+
   if (organisationFilters) {
     resources = resources.filter(
       (item) =>
@@ -51,12 +67,21 @@ export async function fetchResources(
     );
   }
 
+  if (themeFilters) {
+    resources = resources.filter(
+      (item) =>
+        item.theme && item.theme.some((theme) => themeFilters.includes(theme)),
+    );
+  }
+
   return {
     resources: resources,
     uniqueOrganisations: uniqueOrganisations,
+    uniqueThemes: uniqueThemes,
     selectedFilters: filterOptionTags,
   };
 }
+
 export async function fetchResourceById(
   resourceID: string,
 ): Promise<CatalogueItem> {
