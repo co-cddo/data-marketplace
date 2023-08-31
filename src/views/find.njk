@@ -71,7 +71,7 @@
             </div>
             {% if hasFilters %}
                 <div id="js-facet-tag-wrapper" class="facet-tags__container facet-tags__container--hidden" aria-live="assertive">
-                    <a id="clear-filters" class="govuk-link govuk-link--no-visited-state" href="{{assetpath}}/find">
+                    <a id="clear-filters" class="govuk-link govuk-link--no-visited-state" href="{{assetpath}}/find{% if query %}?q={{ query }}{% endif %}">
                         <span>Clear Filters</span>
                     </a>
                     {% for category in filterOptionTags %}
