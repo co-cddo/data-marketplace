@@ -14,7 +14,7 @@ import {
   LegalGatewayStep,
   LegalPowerStep,
   StepValue,
-  GenericStringArray
+  GenericStringArray,
 } from "../types/express";
 
 function parseJwt(token: string) {
@@ -277,7 +277,7 @@ router.get("/:resourceID/start", async (req: Request, res: Response) => {
     }
     const assetTitle = resource.title;
     const contactPoint = resource.contactPoint;
-  
+
     if (!contactPoint) {
       res.status(404).send("Contact point not found");
       return;
@@ -307,7 +307,7 @@ router.get("/:resourceID/start", async (req: Request, res: Response) => {
 router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   const resourceID = req.params.resourceID;
   const formStep = req.params.step;
-  
+
   if (!req.session.acquirerForms?.[resourceID]) {
     return res.redirect(`/share/${resourceID}/acquirer`);
   }
@@ -383,11 +383,10 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
     formdata.stepHistory = [];
   }
 
-
   if (req.body.addCountry) {
-    console.log("stepData", stepData)
+    console.log("stepData", stepData);
     if (Array.isArray(formdata.steps["data-travel-location"].value)) {
-       console.log("stepDatassss", stepData)
+      console.log("stepDatassss", stepData);
       formdata.steps["data-travel-location"].value.push(""); // Add a new empty string.
     } else {
       // handle error or other logic if value isn't an array
@@ -404,7 +403,8 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
       formdata.steps["data-travel-location"] &&
       Array.isArray(formdata.steps["data-travel-location"].value)
     ) {
-      const country = formdata.steps["data-travel-location"].value as GenericStringArray;
+      const country = formdata.steps["data-travel-location"]
+        .value as GenericStringArray;
 
       if (
         Number.isInteger(countryIndexToRemove) &&

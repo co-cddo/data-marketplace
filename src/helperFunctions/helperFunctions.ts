@@ -16,7 +16,7 @@ import {
   RadioFieldStepID,
   TextFieldStepID,
   DeliveryStep,
-  GenericStringArray
+  GenericStringArray,
 } from "../types/express";
 
 function validateDate(day: number, month: number, year: number): string {
@@ -138,12 +138,7 @@ function isRadioField(id: string): id is RadioFieldStepID {
 }
 
 function isTextField(id: string): id is TextFieldStepID {
-  return [
-    "impact",
-    "data-subjects",
-    "data-required",
-    "disposal"
-  ].includes(id);
+  return ["impact", "data-subjects", "data-required", "disposal"].includes(id);
 }
 
 const extractFormData = (stepData: Step, body: RequestBody): StepValue => {

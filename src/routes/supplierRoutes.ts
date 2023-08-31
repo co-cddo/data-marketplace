@@ -2,7 +2,6 @@ import express, { Request, Response } from "express";
 import { DateStep } from "../types/express";
 const router = express.Router();
 
-
 // Function to get the tag class based on the status value
 function getStatusClass(status: string): string {
   switch (status) {
@@ -28,7 +27,20 @@ router.get("/created-requests", async (req: Request, res: Response) => {
   const acquirerForms = req.session.acquirerForms || {};
   const backLink = req.headers.referer || "/";
 
-  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
   const tableRows = [];
 
   for (const [key, formData] of Object.entries(acquirerForms)) {
@@ -42,11 +54,17 @@ router.get("/created-requests", async (req: Request, res: Response) => {
       formattedDate = `${dateValue.day} ${monthName} ${dateValue.year}`;
     }
     const row = [
-      { html: `<a href="/acquirer/${formData.dataAsset}/start">${formData.requestId}</a>` },
+      {
+        html: `<a href="/acquirer/${formData.dataAsset}/start">${formData.requestId}</a>`,
+      },
       { text: formData.assetTitle },
       { text: formData.ownedBy },
       { text: formattedDate },
-      { html: `<span class="govuk-tag ${getStatusClass(formData.status)}">${formData.status}</span>` }
+      {
+        html: `<span class="govuk-tag ${getStatusClass(formData.status)}">${
+          formData.status
+        }</span>`,
+      },
     ];
     tableRows.push(row);
   }
@@ -55,9 +73,8 @@ router.get("/created-requests", async (req: Request, res: Response) => {
     backLink,
     acquirerForms,
     getStatusClass,
-    tableRows
+    tableRows,
   });
 });
-
 
 export default router;
