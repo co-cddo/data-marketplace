@@ -1,5 +1,5 @@
 .app-c-expander {
-  padding: 0 0 govuk-spacing(2);
+  padding: 0 0 govuk-spacing(2) 0;
   margin-bottom: govuk-spacing(2);
   border-bottom: 1px solid $govuk-border-colour;
   &:last-child {
@@ -23,7 +23,7 @@
 .js-enabled {
   .app-c-expander__heading {
     position: relative;
-    padding: 10px 8px 5px 43px;
+    padding: 10px 8px 14px 50px;
     margin: 0;
   }
 
