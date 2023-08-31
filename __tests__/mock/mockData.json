@@ -45,7 +45,7 @@
       "serviceType": "SOAP",
       "summary": "Test summary for displaying the summary",
       "theme": [
-        "https://www.test.com"
+        "Transport"
       ],
       "title": "Test Service",
       "type": "DataService",
@@ -98,7 +98,7 @@
       "serviceType": "REST",
       "summary": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam gravida sagittis arcu.",
       "theme": [
-        "https://www.tests.test.uk/search?filters%5Btopic%5D=test"
+        "Mapping"
       ],
       "title": "Test Service for Testing",
       "type": "DataService",
