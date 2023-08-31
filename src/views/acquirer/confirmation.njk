@@ -1,0 +1,29 @@
+{% extends "page.njk" %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {{ govukPanel({
+          titleText: "Data share request sent",
+          html: "Your request number " + "<br><br>" + requestId
+      }) }}
+    <p class="govuk-body">We have sent you a confirmation email.</p>
+    <h2 class="govuk-heading-m">What happens next</h2>
+    <p class="govuk-body">{{contactPoint.name}} will review your requests.</p>
+    <p class="govuk-body">It can take up to X working days for them to reply. You can track the status of your request when you <a href="/manage-shares/" class="govuk-link">manage data share requests</a>.</p>
+    <p class="govuk-body">If you have any problems, you can also contact the data asset owner, <a class="govuk-link" href="mailto:{{contactPoint.email}}">{{contactPoint.email}}.</a></p>
+
+    <form method="POST" id="declarationForm">
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: "Return to manage data share requests",
+          name: "continueButton",
+          value: "continue"
+        }) }}
+      </div>
+    </form>
+    </div>
+  </div>
+{% endblock %}
