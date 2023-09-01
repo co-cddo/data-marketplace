@@ -2,53 +2,37 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-
 {% block content %}
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
       <span class="govuk-caption-l">Request ID: {{requestId}}</span>
-       <h1 class="govuk-heading-xl">Check your answers before sending your request</h1>
-       <form method="POST">
-       {% for name in data %}
-       <h2 class="govuk-heading-m check-heading">{{name.name}}</h2>
-      {% for steps in name.data %}
-        {{ govukSummaryList({
-            rows: [
-                {
-                key: {
-                    text: steps.step
-                },
-                value: {
-                    html: steps.value.join("")
-                },
-                actions: {
-                    items: [
-                    {
-                        href: "/acquirer/"+assetId+"/"+steps.id,
-                        text: "Change",
-                        visuallyHiddenText: "name"
-                    }
-                    ]
-      }
-    }
-  ]
-}) }}
-{% endfor%}
-{% endfor%}
- <div class="govuk-button-group" style="margin-top: 50px">
-        {{ govukButton({
+      <h1 class="govuk-heading-xl">Check your answers before sending your request</h1>
+    </div>
+    <div class="govuk-grid-column-full">
+
+      <form id="checkYourAnswers" method="POST">
+        {% for section in data %}
+          <h2 class="govuk-heading-m check-heading">{{section.name}}</h2>
+          {{ govukSummaryList({
+            rows: section.rows,
+            classes: "govuk-!-margin-bottom-9"
+            }) 
+          }}
+          {% endfor%}
+          <div class="govuk-button-group" style="margin-top: 50px">
+            {{ govukButton({
             text: "Save and continue",
             name: "continueButton",
             value: "continue"
         }) }}
-        {{ govukButton({
+            {{ govukButton({
             text: "Save and return",
             classes: "govuk-button--secondary",
             name: "returnButton",
             value: "return"
         }) }}
-        </div>
-        </form>
           </div>
-  </div>
-{% endblock %}
+        </form>
+      </div>
+    </div>
+  {% endblock %}

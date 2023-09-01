@@ -40,17 +40,20 @@
                       value: "none",
                       text: "None of the above",
                       checked: savedValue["none"].checked,
+                      hint: {
+                          text: "For example, anonymised data."
+                      },
                       behaviour: "exclusive"
                       }
                   ]
                   }) }}
-          <div class="govuk-button-group">
-            {{ govukButton({
+        <div class="govuk-button-group">
+          {{ govukButton({
                 text: "Save and continue",
                 name: "continueButton",
                 value: "continue"
             }) }}
-            {{ govukButton({
+          {{ govukButton({
                 text: "Save and return",
                 classes: "govuk-button--secondary",
                 name: "returnButton",
@@ -59,8 +62,12 @@
         </div>
         <h2 class="govuk-heading-m">More information</h2>
         <ul class="govuk-list">
-          <li><a class="govuk-link" href="https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/personal-information-what-is-it/what-is-personal-data/what-is-personal-data/" target="_blank">What is personal data? (opens in new tab)</a></li>
-          <li><a class="govuk-link" href="https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/lawful-basis/special-category-data/what-is-special-category-data/" target="_blank">What is special category data? (opens in new tab)</a></li>
+          <li>
+            <a class="govuk-link" href="https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/personal-information-what-is-it/what-is-personal-data/what-is-personal-data/" target="_blank">What is personal data? (opens in new tab)</a>
+          </li>
+          <li>
+            <a class="govuk-link" href="https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/lawful-basis/special-category-data/what-is-special-category-data/" target="_blank">What is special category data? (opens in new tab)</a>
+          </li>
         </ul>
       </form>
     </div>

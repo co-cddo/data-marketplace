@@ -15,7 +15,7 @@ interface FormData {
   ownedBy: string;
   completedSections: number;
   status: FormStatus;
-  sections: Record<string, Section>;
+  overviewSections: Record<string, Section>;
   steps: Record<string, Step>;
   stepHistory?: string[];
 }
@@ -147,7 +147,7 @@ type LawfulBasisSpecialPublicInterestStep = {
   standards?: LawfulBasis;
 };
 
-type MoreOrganisationStep = string[];
+type GenericStringArray = string[];
 
 type FormStatus =
   | "NOT STARTED"
@@ -158,7 +158,7 @@ type FormStatus =
 
 export type StepValue =
   | string
-  | MoreOrganisationStep
+  | GenericStringArray
   | DataTypeStep
   | ProjectAimStep
   | BenefitsStep

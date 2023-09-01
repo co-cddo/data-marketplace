@@ -6,18 +6,15 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <span class="govuk-caption-l">Request ID: {{requestId}}</span>
+    <label for="data-required" class="govuk-label govuk-label--l">What data from {{ assetTitle }} do you need?</label>
+    <p class="govuk-body"><a class="govuk-link" href="#" target="_blank"> View data (opens in new tab)</a></p>
     <form method="post">
       {{ govukTextarea({
-            id: "data-required",
-            name: "data-required",
-            label: {
-                text: "What data from " + assetTitle + " do you need?",
-                isPageHeading: true,
-                classes: "govuk-label--l"
-            },
-            rows: 5,
-            value: savedValue
-            }) }}
+        id: "data-required",
+        name: "data-required",
+        rows: 5,
+        value: savedValue
+      }) }}
       <div class="govuk-button-group">
         {{ govukButton({
             text: "Save and continue",

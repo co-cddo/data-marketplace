@@ -6,8 +6,9 @@ import { randomUUID } from "crypto";
 import {
   extractFormData,
   validateRequestBody,
-  checkAnswer
+  checkAnswer,
 } from "../helperFunctions/helperFunctions";
+import axios from "axios";
 import {
   DataTypeStep,
   FormData,
@@ -15,7 +16,7 @@ import {
   LegalGatewayStep,
   LegalPowerStep,
   StepValue,
-  MoreOrganisationStep,
+  GenericStringArray,
 } from "../types/express";
 
 function parseJwt(token: string) {
@@ -255,10 +256,15 @@ const updateStepsStatus = (
   //  check step to NOT STARTED.
   const allSteps = new Set(Object.keys(formdata.steps));
   ["check", "declaration", "confirmation"].forEach((s) => allSteps.delete(s));
-  if (everyStepCompleted([...allSteps], formdata)) {
-    formdata.steps["check"].status = "NOT STARTED";
+  if (!["check", "declaration", "confirmation"].includes(currentStep)) {
+    completedSections.delete("check");
+    if (everyStepCompleted([...allSteps], formdata)) {
+      formdata.steps["check"].status = "NOT STARTED";
+    } else {
+      formdata.steps["check"].status = "CANNOT START YET";
+    }
   } else {
-    formdata.steps["check"].status = "CANNOT START YET";
+    completedSections.add("check");
   }
 
   // Update the number of completed sections
@@ -278,7 +284,7 @@ router.get("/:resourceID/start", async (req: Request, res: Response) => {
     }
     const assetTitle = resource.title;
     const contactPoint = resource.contactPoint;
-  
+
     if (!contactPoint) {
       res.status(404).send("Contact point not found");
       return;
@@ -308,7 +314,7 @@ router.get("/:resourceID/start", async (req: Request, res: Response) => {
 router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   const resourceID = req.params.resourceID;
   const formStep = req.params.step;
-  
+
   if (!req.session.acquirerForms?.[resourceID]) {
     return res.redirect(`/share/${resourceID}/acquirer`);
   }
@@ -343,7 +349,6 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   } else {
     backLink = `/acquirer/${resourceID}/start`;
   }
-  
   res.render(`../views/acquirer/${formStep}.njk`, {
     requestId: formdata.requestId,
     assetId: formdata.dataAsset,
@@ -353,9 +358,11 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
     stepId: formStep,
     savedValue: stepData.value,
     errorMessage: stepData.errorMessage,
-    data: formStep === "check" ? checkAnswer(formdata) : []
+    data: formStep === "check" ? checkAnswer(formdata) : [],
   });
 });
+
+const URL = `${process.env.API_ENDPOINT}/sharedata`;
 
 router.post("/:resourceID/:step", async (req: Request, res: Response) => {
   if (!req.session.acquirerForms) {
@@ -386,6 +393,38 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
     formdata.stepHistory = [];
   }
 
+  if (req.body.addCountry) {
+    if (Array.isArray(formdata.steps["data-travel-location"].value)) {
+      formdata.steps["data-travel-location"].value.push(""); // Add a new empty string.
+    } else {
+      // handle error or other logic if value isn't an array
+      console.error(
+        "Expected 'data-travel-location' value to be an array but it wasn't.",
+      );
+    }
+    return res.redirect(`/acquirer/${resourceID}/data-travel-location`);
+  }
+
+  if (req.body.removeCountry !== undefined) {
+    const countryIndexToRemove = parseInt(req.body.removeCountry, 10) - 1;
+    if (
+      formdata.steps["data-travel-location"] &&
+      Array.isArray(formdata.steps["data-travel-location"].value)
+    ) {
+      const country = formdata.steps["data-travel-location"]
+        .value as GenericStringArray;
+
+      if (
+        Number.isInteger(countryIndexToRemove) &&
+        countryIndexToRemove >= 0 &&
+        countryIndexToRemove < country.length
+      ) {
+        country.splice(countryIndexToRemove, 1);
+      }
+    }
+    return res.redirect(`/acquirer/${resourceID}/data-travel-location`);
+  }
+
   if (req.body.addMoreOrgs) {
     // If "Add another organisation" is clicked.
     if (Array.isArray(formdata.steps["other-orgs"].value)) {
@@ -398,13 +437,14 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
     }
     return res.redirect(`/acquirer/${resourceID}/other-orgs`); // Refresh the current page.
   }
+
   if (req.body.removeOrg !== undefined) {
     const orgIndexToRemove = parseInt(req.body.removeOrg, 10) - 1;
     if (
       formdata.steps["other-orgs"] &&
       Array.isArray(formdata.steps["other-orgs"].value)
     ) {
-      const orgs = formdata.steps["other-orgs"].value as MoreOrganisationStep;
+      const orgs = formdata.steps["other-orgs"].value as GenericStringArray;
 
       if (
         Number.isInteger(orgIndexToRemove) &&
@@ -443,6 +483,20 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
 
   if (req.body.continueButton && nextStep) {
     redirectURL = `/acquirer/${resourceID}/${nextStep}`;
+  }
+
+  // Send the formdata to the backend if logged in
+  if (req.isAuthenticated()) {
+    try {
+      await axios.put(URL, { jwt: req.cookies.jwtToken, sharedata: formdata });
+    } catch (error: unknown) {
+      console.error("Error sending formdata to backend");
+      if (axios.isAxiosError(error)) {
+        console.error(error.response?.data.detail);
+      } else {
+        console.error(error);
+      }
+    }
   }
 
   return res.redirect(redirectURL);

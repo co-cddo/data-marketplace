@@ -3,11 +3,11 @@
   "dataAsset": "",
   "assetTitle": "",
   "ownedBy": "",
-  "status": "Request incomplete",
+  "status": "IN PROGRESS",
   "completedSections": 0,
   "overviewSections": {
     "purpose": {
-      "name": "Purpose of the data share section",
+      "name": "Purpose of the data share",
       "steps": [
         "data-type",
         "data-subjects",
@@ -83,7 +83,7 @@
     },
     "data-access": {
       "id": "data-access",
-      "name": "Data access",
+      "name": "Other organisations accessing data",
       "status": "NOT STARTED",
       "value": "",
       "nextStep": "other-orgs"
@@ -182,7 +182,7 @@
       "id": "data-travel-location",
       "name": "Data travel Location",
       "status": "NOT STARTED",
-      "value": "",
+      "value": [""],
       "nextStep": "role"
     },
     "role": {
@@ -209,7 +209,8 @@
       "id": "delivery",
       "name": "Data delivery",
       "status": "NOT STARTED",
-      "nextStep": "format"
+      "nextStep": "format",
+      "value": ""
     },
     "format": {
       "id": "format",
@@ -238,19 +239,22 @@
       "name": "Check answers",
       "status": "CANNOT START YET",
       "blockedBy": ["legal-review", "protection-review", "security-review"],
-      "nextStep": "declaration"
+      "nextStep": "declaration",
+      "value": ""
     },
     "declaration": {
       "id": "check",
       "name": "Declaration",
       "status": "CANNOT START YET",
-      "nextStep": "confirmation"
+      "nextStep": "confirmation",
+      "value": ""
     },
     "confirmation": {
       "id": "check",
       "name": "Confirmation",
       "status": "CANNOT START YET",
-      "nextStep": "start"
+      "nextStep": "start",
+      "value": ""
     }
   }
 }

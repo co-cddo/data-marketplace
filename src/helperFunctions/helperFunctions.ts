@@ -19,9 +19,9 @@ import {
   TextFieldStepID,
   DeliveryStep,
   FormData,
-  MoreOrganisationStep,
+  GenericStringArray,
 } from "../types/express";
-import { titles, replace } from "./checkhelper";
+import { replace } from "./checkhelper";
 
 function validateDate(day: number, month: number, year: number): string {
   const errors = new Set<string>();
@@ -142,13 +142,7 @@ function isRadioField(id: string): id is RadioFieldStepID {
 }
 
 function isTextField(id: string): id is TextFieldStepID {
-  return [
-    "impact",
-    "data-subjects",
-    "data-required",
-    "disposal",
-    "data-travel-location",
-  ].includes(id);
+  return ["impact", "data-subjects", "data-required", "disposal"].includes(id);
 }
 
 const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
@@ -173,7 +167,15 @@ const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
       .filter((key) => key.startsWith("org-name-"))
       .map((key) => body[key]);
 
-    return orgValues as MoreOrganisationStep;
+    return orgValues as GenericStringArray;
+  }
+
+  if (stepData.id === "data-travel-location") {
+    const countryValues = Object.keys(body)
+      .filter((key) => key.startsWith("country-name-"))
+      .map((key) => body[key]);
+
+    return countryValues as GenericStringArray;
   }
 
   if (stepData.id === "data-type") {
@@ -521,78 +523,143 @@ function normaliseURL(url: string): string {
   return normalisedURL;
 }
 
+type CheckPageRow = {
+  key: {
+    text: string;
+  };
+  value: {
+    html: string;
+  };
+  actions: {
+    items: [
+      {
+        href: string;
+        text: string;
+        visuallyHiddenText: string;
+      },
+    ];
+  };
+};
+
+type CheckPageSection = {
+  name: string;
+  rows: CheckPageRow[];
+};
+
 function checkAnswer(formdata: FormData) {
-  const steps = formdata.steps; 
-  const res: any = [];
-  const dataObj: any = [];
+  const steps = formdata.steps;
+  const rows: Record<string, CheckPageRow> = {};
+  const dataObj: CheckPageSection[] = [];
 
-  for(const [key, value] of Object.entries(steps)){
+  for (const [stepId, stepData] of Object.entries(steps)) {
     const dataTypeValue: string[] = [];
-    const type = replace[key]?.type
-  switch(type) {
-    case "string": 
-      dataTypeValue.push(value.value as string)
-    break
-    case "radio": 
-      dataTypeValue.push(replace[key].data[value.value as string])
-    break
-    case "object": 
-    const answerProject = value.value as ProjectAimStep
-      dataTypeValue.push(`<p>${answerProject.aims}</p><p>${answerProject.explanation}</p>`)
-    break
-    case "date":
-      const date = value.value as DateStep
-      if(date.year)
-      dataTypeValue.push(`${date.day}/${date.month}/${date.year}`)
-    break
-    case "checked": 
-      for(const [k] of Object.entries(steps[key].value)){
-        const answer = steps[key].value as any
-        const explanation = answer[k]?.explanation !== undefined ? answer[k]?.explanation : ""
-        if(answer[k].checked)
-          dataTypeValue.push(`<p>${replace[key].data[k]}</p><p class="govuk-caption-m">${explanation}</p>`)
+    if (stepData.status === "NOT REQUIRED") {
+      dataTypeValue.push(`<span class="not-required">Not Required</span>`);
+    } else {
+      const type = replace[stepId]?.type;
+      switch (type) {
+        case "string":
+          dataTypeValue.push(stepData.value as string);
+          break;
+        case "radio":
+          dataTypeValue.push(replace[stepId].data[stepData.value as string]);
+          break;
+        case "object":
+          const answerProject = stepData.value as ProjectAimStep;
+          dataTypeValue.push(
+            `<div>${answerProject.aims}</div><br/><div>${answerProject.explanation}</div>`,
+          );
+          break;
+        case "date":
+          const date = stepData.value as DateStep;
+          if (date.year) {
+            dataTypeValue.push(`${date.day}/${date.month}/${date.year}`);
+          } else {
+            dataTypeValue.push(`<span class="not-required">Unrequested</span>`);
+          }
+          break;
+        case "checked":
+          for (const [answerId, answerVal] of Object.entries(stepData.value)) {
+            const explanation = answerVal.explanation || "";
+            if (answerVal.checked) {
+              dataTypeValue.push(replace[stepId].data[answerId]);
+            }
+            if (explanation) {
+              dataTypeValue.push(
+                `<br/><p class="govuk-body-s caption-color">${explanation}</p>`,
+              );
+            }
+            // Do something slightly different for the public interest answers
+            if (answerId === "reasons-of-public-interest") {
+              const publicInterestAnswers = steps[
+                "lawful-basis-special-public-interest"
+              ].value as LawfulBasisSpecialPublicInterestStep;
+              dataTypeValue.push(
+                `<ul class="govuk-list govuk-list--bullet govuk-body-s caption-color">`,
+              );
+              for (const [
+                publicInterestKey,
+                publicInterestAnswer,
+              ] of Object.entries(publicInterestAnswers)) {
+                if (publicInterestAnswer.checked) {
+                  dataTypeValue.push(
+                    `<li>${replace["lawful-basis-special-public-interest"].data[publicInterestKey]}</li>`,
+                  );
+                }
+              }
+              dataTypeValue.push("</ul>");
+            }
+          }
+          break;
+        case "list":
+          const answer = replace[stepId].data[stepData.value as string];
+          dataTypeValue.push(answer.res);
+          let attachedStep = steps[answer.attach]?.value as GenericStringArray;
+          if (attachedStep) {
+            if (typeof attachedStep === "string") {
+              attachedStep = [attachedStep];
+            }
+            dataTypeValue.push(
+              `<p class="govuk-body-s caption-color">${answer?.title}</p>`,
+            );
+            dataTypeValue.push(
+              `<ul class="govuk-list govuk-list--bullet govuk-body-s caption-color">`,
+            );
+            attachedStep.forEach((s) => dataTypeValue.push(`<li>${s}</li>`));
+            dataTypeValue.push("</ul>");
+          }
+          break;
       }
-    break
-    case "list":
-      const answer = replace[key].data[value.value as string]
-      const typeAnswer = steps[replace[key].data[value.value as any]?.attach]?.value; 
-      const titleAnswer = `<p>${answer?.res}</p><p class="govuk-caption-m">${answer?.title}</p>`
-      if(answer?.res === "Yes") {
-        if(typeof typeAnswer === "string") {
-          dataTypeValue.push(`${titleAnswer} <p class="govuk-caption-m">&bull; ${typeAnswer}</p>`)
-        } else {
-          
-          (typeAnswer as [])?.map((el, index) => index === 0 ? dataTypeValue.push(`${titleAnswer}<p class="govuk-caption-m">&bull; ${el}</p>`) : dataTypeValue.push(`<p>&bull; ${el}</p>`))
-        }
-      } else {
-        dataTypeValue.push(answer?.res)
-      }
-      break
-  }
-
-  res.push({
-    id:value.id,
-    step: value.name,
-    value: dataTypeValue
-  })
-
-  }
-
-  titles.forEach((el) => {
-  const newData: any = []
-  for(let i =0; i<res.length; i++){
-    if(el.steps.includes(res[i].step)){
-      newData.push(res[i])
     }
+
+    rows[stepId] = {
+      key: { text: stepData.name },
+      value: { html: dataTypeValue.join("") },
+      actions: {
+        items: [
+          {
+            href: `/acquirer/${formdata.dataAsset}/${stepId}`,
+            text: "Change",
+            visuallyHiddenText: "name",
+          },
+        ],
+      },
+    };
   }
-  dataObj.push({
-    name: el.name,
-    data: newData
-  })
-})
 
-return dataObj
-
+  // Split the rows up into the correct sections
+  for (const [sectionName, sectionData] of Object.entries(
+    formdata.overviewSections,
+  )) {
+    if (sectionName === "review") continue;
+    const sectionRows: CheckPageRow[] = [];
+    sectionData.steps.forEach((s) => sectionRows.push(rows[s]));
+    dataObj.push({
+      name: sectionData.name,
+      rows: sectionRows,
+    });
+  }
+  return dataObj;
 }
 
 export {
@@ -600,5 +667,5 @@ export {
   validateDate,
   validateRequestBody,
   getLicenceTitleFromURL,
-  checkAnswer
+  checkAnswer,
 };
