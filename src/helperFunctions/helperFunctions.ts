@@ -647,6 +647,7 @@ function checkAnswer(formdata: FormData) {
     };
   }
 
+  // Split the rows up into the correct sections
   for (const [sectionName, sectionData] of Object.entries(
     formdata.overviewSections,
   )) {
@@ -658,7 +659,6 @@ function checkAnswer(formdata: FormData) {
       rows: sectionRows,
     });
   }
-
   return dataObj;
 }
 
