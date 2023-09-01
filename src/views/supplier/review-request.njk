@@ -1,0 +1,158 @@
+{% extends "page.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-l">Request ID: RR532</span>
+    <h1 class="govuk-heading-l">
+      Review Department X's request to access citizen-relationships data
+    </h1>
+
+    <div class="request-section">
+      <h2 class="govuk-heading-m">Lawful basis for personal data</h2>
+      <ul class="govuk-list">
+        <li class="govuk-!-padding-bottom-3">Public task</li>
+        <li class="govuk-!-padding-bottom-3">Contract</li>
+      </ul>
+    </div>
+
+    <div class="request-section">
+      <h2 class="govuk-heading-m">Legal power</h2>
+      <p class="govuk-body">Common law</p>
+    </div>
+
+    <div class="request-section">
+      <h2 class="govuk-heading-m govuk-!-static-margin-bottom-1">Justification for legal gateway</h2>
+      <div class="govuk-warning-text govuk-!-static-margin-bottom-2">
+      </div>
+      <p class="govuk-body">
+        Under Regulation 3 of The Health Service (Control of Patient Information), patient data can be lawfully processed with a view to:<br>
+        <br>
+        * diagnosing communicable diseases and other risks to public health.<br>
+        * recognising trends in such diseases and risks.<br>
+        * controlling and preventing the spread of such diseases and risks.<br>
+        * monitoring and managing:<br>
+        ** outbreaks of communicable disease.<br>
+        ** incidents of exposure to communicable disease.<br>
+        ** the delivery, efficacy and safety of immunisation programmes.<br>
+        ** adverse reactions to vaccines and medicines.<br>
+        ** risks of infection acquired from food or the environment (including water supplies).<br>
+        ** the giving of information to persons about the diagnosis of communicable disease and risks of acquiring such disease.<br>
+      </p>
+    </div>
+
+    <div class="request-section">
+      <h2 class="govuk-heading-m">Data travel outside UK</h2>
+      <p class="govuk-body">No</p>
+    </div>
+
+    <div class="request-section">
+      <h2 class="govuk-heading-m">Data subjects</h2>
+      <p class="govuk-body">Clinically extremely vulnerable patients.</p>
+    </div>
+
+    <div class="request-section">
+      <h2 class="govuk-heading-m">Aim of project</h2>
+      <p class="govuk-body">To assess claims and provide the correct level of support to vulnerable people based on their declared family relationships.</p>
+    </div>
+
+    <div class="request-section">
+      <h2 class="govuk-heading-m">How data will help reach this aim</h2>
+      <p class="govuk-body">We cannot identify who needs support without access to a data set about who in the UK is clinically vulnerable.</p>
+    </div>
+
+    <div class="request-section">
+      <h2 class="govuk-heading-m">Public benefits of project</h2>
+      <h3 class="govuk-heading-s">Evidence for public service delivery</h3>
+      <p class="govuk-body">
+        This data will allow us to identify both who to help and the number of people we need to help.</p>
+      <h3 class="govuk-heading-s">Evidence for decisions which are likely to benefit people in the UK</h3>
+      <p class="govuk-body">Depending on the number of people involved, this data could be used to support similar programs in the future.</p>
+    </div>
+
+    <div class="request-section">
+      <h2 class="govuk-heading-m">Preferred format</h2>
+      <p class="govuk-body">CSV file</p>
+    </div>
+
+    <div class="request-section">
+      <h2 class="govuk-heading-m">How they want to receive it</h2>
+      <p class="govuk-body">Through secure third-party software</p>
+    </div>
+
+    <div class="request-section">
+      <h2 class="govuk-heading-m">What they think their role is</h2>
+      <p class="govuk-body">Processor</p>
+    </div>
+
+    <div class="request-section">
+      <h2 class="govuk-heading-m">Data they want</h2>
+      <p class="govuk-body">List of vulnerable people's names and contact details</p>
+    </div>
+
+    <div class="request-section">
+      <h2 class="govuk-heading-m">How it will impact the project if they don't get the data</h2>
+      <p class="govuk-body">The project will be impossible to complete. We are reliant on this data and have no alternatives.</p>
+    </div>
+
+    <div class="request-section">
+      <h2 class="govuk-heading-m">How they will dispose of the data</h2>
+      <p class="govuk-body">Store CSV files in a secure sever and delete all files at end of project.</p>
+    </div>
+
+    <div class="request-section">
+      <h2 class="govuk-heading-m">When they need it</h2>
+      <p class="govuk-body">16 March 2024</p>
+    </div>
+
+    <div class="request-section">
+      <h2 class="govuk-heading-m">Data type</h2>
+      <p class="govuk-body">Personal data</p>
+    </div>
+
+    <div class="request-section" style="border-bottom: 1px solid #ccc;">
+      <h2 class="govuk-heading-m">Data accessed by other organisations</h2>
+      <p class="govuk-body">Yes</p>
+      <p class="govuk-body">Organisations:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>NHS</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="govuk-grid-row" style="margin-top: 3em;">
+  <div class="govuk-grid-column-two-thirds">
+    <form method="post" action="/manage-shares/review-request" id="reviewRequestNotesForm">
+      <div class="govuk-form-group">
+        {{ govukTextarea({
+          name: "review-request-notes",
+          id: "review-request-notes",
+          label: {
+            text: "Notes (not shared with Department X)",
+            classes: "govuk-label--l",
+            isPageHeading: true
+          }
+        }) }}
+      <div class="govuk-button-group">
+        {{ govukButton({
+            text: "Save and continue",
+            name: "continueButton",
+            value: "continue"
+        }) }}
+        {{ govukButton({
+            text: "Save and return",
+            classes: "govuk-button--secondary",
+            name: "returnButton",
+            value: "return"
+        }) }}
+      </div>
+    </form>
+  </div>
+</div>
+
+
+{% endblock %}
