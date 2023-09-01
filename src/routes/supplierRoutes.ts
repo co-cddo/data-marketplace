@@ -59,5 +59,21 @@ router.get("/created-requests", async (req: Request, res: Response) => {
   });
 });
 
+router.get("/received-requests", async (req: Request, res: Response) => {
+  const backLink = req.headers.referer || "/";
+  res.render("../views/supplier/received-requests.njk", {
+    backLink,
+  });
+});
+
+router.get("/review-summary", async (req: Request, res: Response) => {
+  const backLink = req.headers.referer || "/";
+  const acquirerForms = req.session.acquirerForms || {};
+
+  res.render("../views/supplier/review-summary.njk", {
+    backLink,
+    acquirerForms
+  });
+});
 
 export default router;
