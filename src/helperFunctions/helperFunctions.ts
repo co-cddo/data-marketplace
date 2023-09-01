@@ -19,7 +19,7 @@ import {
   TextFieldStepID,
   DeliveryStep,
   FormData,
-  MoreOrganisationStep,
+  GenericStringArray,
 } from "../types/express";
 import { replace } from "./checkhelper";
 
@@ -142,13 +142,7 @@ function isRadioField(id: string): id is RadioFieldStepID {
 }
 
 function isTextField(id: string): id is TextFieldStepID {
-  return [
-    "impact",
-    "data-subjects",
-    "data-required",
-    "disposal",
-    "data-travel-location",
-  ].includes(id);
+  return ["impact", "data-subjects", "data-required", "disposal"].includes(id);
 }
 
 const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
@@ -173,7 +167,15 @@ const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
       .filter((key) => key.startsWith("org-name-"))
       .map((key) => body[key]);
 
-    return orgValues as MoreOrganisationStep;
+    return orgValues as GenericStringArray;
+  }
+
+  if (stepData.id === "data-travel-location") {
+    const countryValues = Object.keys(body)
+      .filter((key) => key.startsWith("country-name-"))
+      .map((key) => body[key]);
+
+    return countryValues as GenericStringArray;
   }
 
   if (stepData.id === "data-type") {
@@ -565,7 +567,7 @@ function checkAnswer(formdata: FormData) {
         case "object":
           const answerProject = stepData.value as ProjectAimStep;
           dataTypeValue.push(
-            `<p style="margin-top:5px;">${answerProject.aims}</p><p style="margin-bottom:5px;">${answerProject.explanation}</p>`,
+            `<div>${answerProject.aims}</div><br/><div>${answerProject.explanation}</div>`,
           );
           break;
         case "date":
@@ -581,13 +583,26 @@ function checkAnswer(formdata: FormData) {
             const explanation = answerVal.explanation || "";
             if (answerVal.checked) {
               dataTypeValue.push(
-                `<p style="margin-bottom:5px; margin-top:5px">${replace[stepId].data[answerId]}</p>`,
+                replace[stepId].data[answerId],
               );
             }
             if (explanation) {
               dataTypeValue.push(
-                `<p class="govuk-body-s" style="margin-bottom:20px; color:#505a5f;"> ${explanation} </p>`,
+                `<br/><p class="govuk-body-s caption-color">${explanation}</p>`,
               );
+            }
+            // Do something slightly different for the public interest answers
+            if (answerId === 'reasons-of-public-interest') {
+              const publicInterestAnswers = steps["lawful-basis-special-public-interest"].value as LawfulBasisSpecialPublicInterestStep
+              dataTypeValue.push(
+                `<ul class="govuk-list govuk-list--bullet govuk-body-s caption-color">`,
+              );
+              for (const [publicInterestKey, publicInterestAnswer] of Object.entries(publicInterestAnswers)) {
+                if (publicInterestAnswer.checked) {
+                  dataTypeValue.push(`<li>${replace['lawful-basis-special-public-interest'].data[publicInterestKey]}</li>`)
+                }
+              }
+              dataTypeValue.push("</ul>")
             }
           }
           break;
@@ -595,16 +610,16 @@ function checkAnswer(formdata: FormData) {
           const answer = replace[stepId].data[stepData.value as string];
           dataTypeValue.push(answer.res);
           let attachedStep = steps[answer.attach]
-            ?.value as MoreOrganisationStep;
+            ?.value as GenericStringArray;
           if (attachedStep) {
             if (typeof attachedStep === "string") {
               attachedStep = [attachedStep];
             }
             dataTypeValue.push(
-              `<p class="govuk-body-s" style="color:#505a5f">${answer?.title}</p>`,
+              `<p class="govuk-body-s caption-color">${answer?.title}</p>`,
             );
             dataTypeValue.push(
-              `<ul class="govuk-list govuk-list--bullet govuk-body-s" style="color:#505a5f;">`,
+              `<ul class="govuk-list govuk-list--bullet govuk-body-s caption-color">`,
             );
             attachedStep.forEach((s) => dataTypeValue.push(`<li>${s}</li>`));
             dataTypeValue.push("</ul>");
@@ -639,7 +654,6 @@ function checkAnswer(formdata: FormData) {
       rows: sectionRows,
     });
   }
-  console.log(JSON.stringify(dataObj, null, 4));
 
   return dataObj;
 }

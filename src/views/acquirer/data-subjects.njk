@@ -7,21 +7,33 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <span class="govuk-caption-l">Request ID: {{requestId}}</span>
+   
       <form action="/acquirer/{{assetId}}/{{stepId}}" method="POST" id="dataTypeForm">
+        <label class="govuk-label govuk-label--l" for="data-subjects">
+          Who are the data subjects?
+        </label>
+        <div id="data-subjects-hint" class="govuk-hint">
+          Be as specific as possible. For example, small business owners aged between 45 and 55.
+        </div>
+        {% set dataSubjectDetails %}
+          <p class="govuk-body">Data subjects are the people whose data you are requesting.</p>
+          <p class="govuk-body">For example:</p>
+          <ul class="govuk-list govuk-list--bullet">
+            <li><p>Small business owners aged between 45 and 55.</p></li>
+            <li><p>All people using Universal Credit with children.</p></li>
+          </ul>
+          <p class="govuk-body">Data subjects should be specific to the purpose of your data request.</p>
+        {% endset %}
+        {{ govukDetails({
+          summaryText: "Data subject definition and examples",
+          html: dataSubjectDetails
+        }) }}
         {{ govukTextarea({
-                    name: "data-subjects",
-                    id: "data-subjects",
-                    label: {
-                      text: "Who are the data subjects?",
-                      classes: "govuk-label--l",
-                      isPageHeading: true
-                    },
-                    rows: 4,
-                    value: savedValue,
-                    hint: {
-                      html: "Be as specific as possible. For example, small business owners aged between 45 and 55."
-                    }
-                  }) }}
+          name: "data-subjects",
+          id: "data-subjects",
+          rows: 5,
+          value: savedValue
+        }) }}
         <div class="govuk-button-group">
         {{ govukButton({
             text: "Save and continue",

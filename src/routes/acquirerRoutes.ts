@@ -16,7 +16,7 @@ import {
   LegalGatewayStep,
   LegalPowerStep,
   StepValue,
-  MoreOrganisationStep,
+  GenericStringArray,
 } from "../types/express";
 
 function parseJwt(token: string) {
@@ -344,7 +344,6 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   } else {
     backLink = `/acquirer/${resourceID}/start`;
   }
-
   res.render(`../views/acquirer/${formStep}.njk`, {
     requestId: formdata.requestId,
     assetId: formdata.dataAsset,
@@ -389,6 +388,38 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
     formdata.stepHistory = [];
   }
 
+  if (req.body.addCountry) {
+    if (Array.isArray(formdata.steps["data-travel-location"].value)) {
+      formdata.steps["data-travel-location"].value.push(""); // Add a new empty string.
+    } else {
+      // handle error or other logic if value isn't an array
+      console.error(
+        "Expected 'data-travel-location' value to be an array but it wasn't.",
+      );
+    }
+    return res.redirect(`/acquirer/${resourceID}/data-travel-location`);
+  }
+
+  if (req.body.removeCountry !== undefined) {
+    const countryIndexToRemove = parseInt(req.body.removeCountry, 10) - 1;
+    if (
+      formdata.steps["data-travel-location"] &&
+      Array.isArray(formdata.steps["data-travel-location"].value)
+    ) {
+      const country = formdata.steps["data-travel-location"]
+        .value as GenericStringArray;
+
+      if (
+        Number.isInteger(countryIndexToRemove) &&
+        countryIndexToRemove >= 0 &&
+        countryIndexToRemove < country.length
+      ) {
+        country.splice(countryIndexToRemove, 1);
+      }
+    }
+    return res.redirect(`/acquirer/${resourceID}/data-travel-location`);
+  }
+
   if (req.body.addMoreOrgs) {
     // If "Add another organisation" is clicked.
     if (Array.isArray(formdata.steps["other-orgs"].value)) {
@@ -401,13 +432,14 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
     }
     return res.redirect(`/acquirer/${resourceID}/other-orgs`); // Refresh the current page.
   }
+
   if (req.body.removeOrg !== undefined) {
     const orgIndexToRemove = parseInt(req.body.removeOrg, 10) - 1;
     if (
       formdata.steps["other-orgs"] &&
       Array.isArray(formdata.steps["other-orgs"].value)
     ) {
-      const orgs = formdata.steps["other-orgs"].value as MoreOrganisationStep;
+      const orgs = formdata.steps["other-orgs"].value as GenericStringArray;
 
       if (
         Number.isInteger(orgIndexToRemove) &&

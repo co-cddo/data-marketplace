@@ -13,7 +13,7 @@
 
 //overrides
 .govuk-list {
-  li > .govuk-link {
+  li>.govuk-link {
     cursor: pointer;
     color: $govuk-link-colour;
 
@@ -27,7 +27,8 @@
   }
 }
 
-.add-another__organisation:first-of-type {
+.add-another__organisation:first-of-type,
+.add-another__country:first-of-type {
   margin-bottom: govuk-spacing(5);
 }
 
@@ -48,18 +49,18 @@ aside {
   margin-bottom: govuk-spacing(9);
 }
 
-.govuk-table > tbody > tr {
-  td:first-of-type {
-    width: 10%;
-  }
-}
-
-#declarationForm {
+#declarationForm,
+#legalPowerAdviceForm,
+#legalGatewayAdviceForm {
   margin-top: govuk-spacing(8);
 }
 
 #checkYourAnswers {
   .not-required {
     color: govuk-colour("mid-grey");
+  }
+
+  .caption-color {
+    color: $govuk-secondary-text-colour;
   }
 }
