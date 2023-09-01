@@ -106,7 +106,14 @@ router.get("/review-request", async (req: Request, res: Response) => {
 
   res.render("../views/supplier/review-request.njk", {
     backLink,
-    acquirerForms,
+    acquirerForms,,
+  });
+});
+
+router.get("/decision", async (req: Request, res: Response) => {
+  const backLink = req.headers.referer || "/";
+  res.render("../views/supplier/decision.njk", {
+    backLink,
   });
 });
 

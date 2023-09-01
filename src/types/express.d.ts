@@ -15,7 +15,7 @@ interface FormData {
   ownedBy: string;
   completedSections: number;
   status: FormStatus;
-  sections: Record<string, Section>;
+  overviewSections: Record<string, Section>;
   steps: Record<string, Step>;
   stepHistory?: string[];
 }
