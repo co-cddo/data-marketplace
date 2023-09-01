@@ -55,6 +55,16 @@ aside {
   margin-top: govuk-spacing(8);
 }
 
+#decisionForm{
+  #decision-hint{
+    margin-bottom: govuk-spacing(6);
+  }
+  .govuk-label {
+    &.govuk-radios__label {
+      font-weight: bold;
+    }
+  }
+}
 #checkYourAnswers {
   .not-required {
     color: govuk-colour("mid-grey");
