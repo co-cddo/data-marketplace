@@ -7,7 +7,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <span class="govuk-caption-l">Request ID: RR325</span>
-    <form method="POST" id="decisionForm">
+    <form method="POST" action="/manage-shares/decision" id="decisionForm">
         {% set ReturnWithComments %}
         {{ govukTextarea({
           id: "return-with-comments",
@@ -40,15 +40,15 @@
             }
             },
             {
-            value: "approve-with-physical",
-            text: "Physical delivery",
+            value: "approve-with-comments",
+            text: "Accept data share request",
               hint: {
               text: "Approve and arrange a meeting to discuss the next steps."
             },
             checked: ""
             },
             {
-            value: "reject",
+            value: "reject-with-comments",
             text: "Reject data share request",
             hint: {
               text: "There are fundamental problems with this request that cannot be solved. Use the comments box to tell the department why you have rejected their request."
