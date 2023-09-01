@@ -90,7 +90,7 @@ router.get("/review-summary", async (req: Request, res: Response) => {
 
   res.render("../views/supplier/review-summary.njk", {
     backLink,
-    acquirerForms
+    acquirerForms,
   });
 });
 

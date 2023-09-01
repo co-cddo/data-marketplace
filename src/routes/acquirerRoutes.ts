@@ -6,6 +6,7 @@ import { randomUUID } from "crypto";
 import {
   extractFormData,
   validateRequestBody,
+  checkAnswer,
 } from "../helperFunctions/helperFunctions";
 import axios from "axios";
 import {
@@ -255,10 +256,15 @@ const updateStepsStatus = (
   //  check step to NOT STARTED.
   const allSteps = new Set(Object.keys(formdata.steps));
   ["check", "declaration", "confirmation"].forEach((s) => allSteps.delete(s));
-  if (everyStepCompleted([...allSteps], formdata)) {
-    formdata.steps["check"].status = "NOT STARTED";
+  if (!["check", "declaration", "confirmation"].includes(currentStep)) {
+    completedSections.delete("check");
+    if (everyStepCompleted([...allSteps], formdata)) {
+      formdata.steps["check"].status = "NOT STARTED";
+    } else {
+      formdata.steps["check"].status = "CANNOT START YET";
+    }
   } else {
-    formdata.steps["check"].status = "CANNOT START YET";
+    completedSections.add("check");
   }
 
   // Update the number of completed sections
@@ -352,6 +358,7 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
     stepId: formStep,
     savedValue: stepData.value,
     errorMessage: stepData.errorMessage,
+    data: formStep === "check" ? checkAnswer(formdata) : [],
   });
 });
 
