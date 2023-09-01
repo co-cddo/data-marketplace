@@ -3,7 +3,7 @@
   "dataAsset": "",
   "assetTitle": "",
   "ownedBy": "",
-  "status": "Request incomplete",
+  "status": "IN PROGRESS",
   "completedSections": 0,
   "overviewSections": {
     "purpose": {
@@ -209,7 +209,8 @@
       "id": "delivery",
       "name": "Data delivery",
       "status": "NOT STARTED",
-      "nextStep": "format"
+      "nextStep": "format",
+      "value": ""
     },
     "format": {
       "id": "format",
@@ -238,19 +239,22 @@
       "name": "Check answers",
       "status": "CANNOT START YET",
       "blockedBy": ["legal-review", "protection-review", "security-review"],
-      "nextStep": "declaration"
+      "nextStep": "declaration",
+      "value": ""
     },
     "declaration": {
       "id": "check",
       "name": "Declaration",
       "status": "CANNOT START YET",
-      "nextStep": "confirmation"
+      "nextStep": "confirmation",
+      "value": ""
     },
     "confirmation": {
       "id": "check",
       "name": "Confirmation",
       "status": "CANNOT START YET",
-      "nextStep": "start"
+      "nextStep": "start",
+      "value": ""
     }
   }
 }

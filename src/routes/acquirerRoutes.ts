@@ -7,6 +7,7 @@ import {
   extractFormData,
   validateRequestBody,
 } from "../helperFunctions/helperFunctions";
+import axios from "axios";
 import {
   DataTypeStep,
   FormData,
@@ -354,6 +355,8 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   });
 });
 
+const URL = `${process.env.API_ENDPOINT}/sharedata`;
+
 router.post("/:resourceID/:step", async (req: Request, res: Response) => {
   if (!req.session.acquirerForms) {
     return res.status(400).send("Acquirer forms not found in session");
@@ -473,6 +476,20 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
 
   if (req.body.continueButton && nextStep) {
     redirectURL = `/acquirer/${resourceID}/${nextStep}`;
+  }
+
+  // Send the formdata to the backend if logged in
+  if (req.isAuthenticated()) {
+    try {
+      await axios.put(URL, { jwt: req.cookies.jwtToken, sharedata: formdata });
+    } catch (error: unknown) {
+      console.error("Error sending formdata to backend");
+      if (axios.isAxiosError(error)) {
+        console.error(error.response?.data.detail);
+      } else {
+        console.error(error);
+      }
+    }
   }
 
   return res.redirect(redirectURL);
