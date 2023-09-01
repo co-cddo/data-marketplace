@@ -49,3 +49,11 @@ aside {
 #legalGatewayAdviceForm {
   margin-top: govuk-spacing(8);
 }
+
+#decisionForm{
+  .govuk-label {
+    &.govuk-radios__label {
+      font-weight: bold;
+    }
+  }
+}
