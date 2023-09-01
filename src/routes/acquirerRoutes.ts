@@ -384,9 +384,7 @@ router.post("/:resourceID/:step", async (req: Request, res: Response) => {
   }
 
   if (req.body.addCountry) {
-    console.log("stepData", stepData);
     if (Array.isArray(formdata.steps["data-travel-location"].value)) {
-      console.log("stepDatassss", stepData);
       formdata.steps["data-travel-location"].value.push(""); // Add a new empty string.
     } else {
       // handle error or other logic if value isn't an array
