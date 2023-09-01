@@ -582,9 +582,7 @@ function checkAnswer(formdata: FormData) {
           for (const [answerId, answerVal] of Object.entries(stepData.value)) {
             const explanation = answerVal.explanation || "";
             if (answerVal.checked) {
-              dataTypeValue.push(
-                replace[stepId].data[answerId],
-              );
+              dataTypeValue.push(replace[stepId].data[answerId]);
             }
             if (explanation) {
               dataTypeValue.push(
@@ -592,25 +590,31 @@ function checkAnswer(formdata: FormData) {
               );
             }
             // Do something slightly different for the public interest answers
-            if (answerId === 'reasons-of-public-interest') {
-              const publicInterestAnswers = steps["lawful-basis-special-public-interest"].value as LawfulBasisSpecialPublicInterestStep
+            if (answerId === "reasons-of-public-interest") {
+              const publicInterestAnswers = steps[
+                "lawful-basis-special-public-interest"
+              ].value as LawfulBasisSpecialPublicInterestStep;
               dataTypeValue.push(
                 `<ul class="govuk-list govuk-list--bullet govuk-body-s caption-color">`,
               );
-              for (const [publicInterestKey, publicInterestAnswer] of Object.entries(publicInterestAnswers)) {
+              for (const [
+                publicInterestKey,
+                publicInterestAnswer,
+              ] of Object.entries(publicInterestAnswers)) {
                 if (publicInterestAnswer.checked) {
-                  dataTypeValue.push(`<li>${replace['lawful-basis-special-public-interest'].data[publicInterestKey]}</li>`)
+                  dataTypeValue.push(
+                    `<li>${replace["lawful-basis-special-public-interest"].data[publicInterestKey]}</li>`,
+                  );
                 }
               }
-              dataTypeValue.push("</ul>")
+              dataTypeValue.push("</ul>");
             }
           }
           break;
         case "list":
           const answer = replace[stepId].data[stepData.value as string];
           dataTypeValue.push(answer.res);
-          let attachedStep = steps[answer.attach]
-            ?.value as GenericStringArray;
+          let attachedStep = steps[answer.attach]?.value as GenericStringArray;
           if (attachedStep) {
             if (typeof attachedStep === "string") {
               attachedStep = [attachedStep];
