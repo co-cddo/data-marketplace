@@ -8,52 +8,72 @@
   <div class="govuk-grid-column-two-thirds">
     <span class="govuk-caption-l">Request ID: RR325</span>
     <form method="POST" id="decisionForm">
-        {% set ReturnWithComments %}
+      {% set ReturnWithCommentsHtml %}
         {{ govukTextarea({
-          id: "return-with-comments",
-          name: "return-comments",
+          id: "return-with-comments-textarea",
+          name: "return-with-comments",
+          value: []
+        }) }}
+      {% endset -%}
+      {% set ApproveHtml %}
+        {{ govukTextarea({
+          id: "approve-textarea",
+          name: "approve",
+          value: []
+        }) }}
+      {% endset -%}
+      {% set RejectHtml %}
+        {{ govukTextarea({
+          id: "reject-textarea",
+          name: "reject",
           value: []
         }) }}
       {% endset -%}
       {{ govukRadios({
         name: "decision",
         fieldset: {
-            legend: {
-            text: "What is your decision?",
-            isPageHeading: true,
-            classes: "govuk-fieldset__legend--l"
-            }
+          legend: {
+          text: "What is your decision?",
+          isPageHeading: true,
+          classes: "govuk-fieldset__legend--l"
+          }
         },
         hint: {
           text: "Choose your decision and add your comments. This will be sent to the person or team making the request."
         },
         items: [
             {
-            value: "approve-with-comments",
+            value: "return-with-comments",
             text: "Return with comments",
             checked: "",
-              hint: {
+            hint: {
               text: "Some details are missing. A decision cannot be made without them. If they provide this information, you will progress the request."
             },
             conditional: {
-              html: ReturnWithComments
+              html: ReturnWithCommentsHtml
             }
             },
             {
-            value: "approve-with-physical",
-            text: "Physical delivery",
-              hint: {
+            value: "approve",
+            text: "Accept data share request",
+            checked: "",
+            hint: {
               text: "Approve and arrange a meeting to discuss the next steps."
             },
-            checked: ""
+            conditional: {
+              html: ApproveHtml
+            }
             },
             {
             value: "reject",
             text: "Reject data share request",
+            checked: "",
             hint: {
               text: "There are fundamental problems with this request that cannot be solved. Use the comments box to tell the department why you have rejected their request."
             },
-            checked: ""
+            conditional: {
+              html: RejectHtml
+            }
           }
         ]
       }) }}
