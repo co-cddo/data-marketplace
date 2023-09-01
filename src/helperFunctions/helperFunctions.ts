@@ -521,78 +521,118 @@ function normaliseURL(url: string): string {
   return normalisedURL;
 }
 
+type CheckPageRow = {
+  key: {
+    text: string;
+  };
+  value: {
+    html: string;
+  };
+  actions: {
+    items: [
+      {
+        href: string;
+        text: string;
+        visuallyHiddenText: string;
+      },
+    ];
+  };
+};
+
+type CheckPageSection = {
+  name: string
+  rows: CheckPageRow[]
+}
+
 function checkAnswer(formdata: FormData) {
-  const steps = formdata.steps; 
-  const res: any = [];
-  const dataObj: any = [];
+  const steps = formdata.steps;
+  const rows: Record<string, CheckPageRow> = {};
+  const dataObj: CheckPageSection[] = [];
 
-  for(const [key, value] of Object.entries(steps)){
+  for (const [stepId, stepData] of Object.entries(steps)) {
     const dataTypeValue: string[] = [];
-    const type = replace[key]?.type
-  switch(type) {
-    case "string": 
-      dataTypeValue.push(value.value as string)
-    break
-    case "radio": 
-      dataTypeValue.push(replace[key].data[value.value as string])
-    break
-    case "object": 
-    const answerProject = value.value as ProjectAimStep
-      dataTypeValue.push(`<p>${answerProject.aims}</p><p>${answerProject.explanation}</p>`)
-    break
-    case "date":
-      const date = value.value as DateStep
-      if(date.year)
-      dataTypeValue.push(`${date.day}/${date.month}/${date.year}`)
-    break
-    case "checked": 
-      for(const [k] of Object.entries(steps[key].value)){
-        const answer = steps[key].value as any
-        const explanation = answer[k]?.explanation !== undefined ? answer[k]?.explanation : ""
-        if(answer[k].checked)
-          dataTypeValue.push(`<p>${replace[key].data[k]}</p><p class="govuk-caption-m">${explanation}</p>`)
-      }
-    break
-    case "list":
-      const answer = replace[key].data[value.value as string]
-      const typeAnswer = steps[replace[key].data[value.value as any]?.attach]?.value; 
-      const titleAnswer = `<p>${answer?.res}</p><p class="govuk-caption-m">${answer?.title}</p>`
-      if(answer?.res === "Yes") {
-        if(typeof typeAnswer === "string") {
-          dataTypeValue.push(`${titleAnswer} <p class="govuk-caption-m">&bull; ${typeAnswer}</p>`)
-        } else {
-          
-          (typeAnswer as [])?.map((el, index) => index === 0 ? dataTypeValue.push(`${titleAnswer}<p class="govuk-caption-m">&bull; ${el}</p>`) : dataTypeValue.push(`<p>&bull; ${el}</p>`))
+    const type = replace[stepId]?.type;
+    switch (type) {
+      case "string":
+        dataTypeValue.push(stepData.value as string);
+        break;
+      case "radio":
+        dataTypeValue.push(replace[stepId].data[stepData.value as string]);
+        break;
+      case "object":
+        const answerProject = stepData.value as ProjectAimStep;
+        dataTypeValue.push(
+          `<p>${answerProject.aims}</p><p>${answerProject.explanation}</p>`,
+        );
+        break;
+      case "date":
+        const date = stepData.value as DateStep;
+        if (date.year)
+          dataTypeValue.push(`${date.day}/${date.month}/${date.year}`);
+        break;
+      case "checked":
+        for (const [k] of Object.entries(steps[stepId].value)) {
+          const answer = steps[stepId].value as any;
+          const explanation =
+            answer[k]?.explanation !== undefined ? answer[k]?.explanation : "";
+          if (answer[k].checked)
+            dataTypeValue.push(
+              `<p>${replace[stepId].data[k]}</p><p class="govuk-caption-m">${explanation}</p>`,
+            );
         }
-      } else {
-        dataTypeValue.push(answer?.res)
-      }
-      break
-  }
-
-  res.push({
-    id:value.id,
-    step: value.name,
-    value: dataTypeValue
-  })
-
-  }
-
-  titles.forEach((el) => {
-  const newData: any = []
-  for(let i =0; i<res.length; i++){
-    if(el.steps.includes(res[i].step)){
-      newData.push(res[i])
+        break;
+      case "list":
+        const answer = replace[stepId].data[stepData.value as string];
+        const typeAnswer =
+          steps[replace[stepId].data[stepData.value as any]?.attach]?.value;
+        const titleAnswer = `<p>${answer?.res}</p><p class="govuk-caption-m">${answer?.title}</p>`;
+        if (answer?.res === "Yes") {
+          if (typeof typeAnswer === "string") {
+            dataTypeValue.push(
+              `${titleAnswer} <p class="govuk-caption-m">&bull; ${typeAnswer}</p>`,
+            );
+          } else {
+            (typeAnswer as [])?.map((el, index) =>
+              index === 0
+                ? dataTypeValue.push(
+                  `${titleAnswer}<p class="govuk-caption-m">&bull; ${el}</p>`,
+                )
+                : dataTypeValue.push(`<p>&bull; ${el}</p>`),
+            );
+          }
+        } else {
+          dataTypeValue.push(answer?.res);
+        }
+        break;
     }
+
+    rows[stepId] = {
+      key: { text: stepData.name },
+      value: { html: dataTypeValue.join("") },
+      actions: {
+        items: [
+          {
+            href: `/acquirer/${formdata.dataAsset}/${stepId}`,
+            text: "Change",
+            visuallyHiddenText: "name",
+          },
+        ],
+      },
+    };
   }
-  dataObj.push({
-    name: el.name,
-    data: newData
-  })
-})
 
-return dataObj
+  for (const [sectionName, sectionData] of Object.entries(formdata.overviewSections)) {
+    if (sectionName === 'review') continue;
+    let sectionRows: CheckPageRow[] = []
+    sectionData.steps.forEach(s => sectionRows.push(rows[s]))
+    dataObj.push({
+      name: sectionData.name,
+      rows: sectionRows
+    })
+  }
+  console.log(JSON.stringify(dataObj, null, 4));
 
+  return dataObj;
 }
 
 export {
@@ -600,5 +640,5 @@ export {
   validateDate,
   validateRequestBody,
   getLicenceTitleFromURL,
-  checkAnswer
+  checkAnswer,
 };

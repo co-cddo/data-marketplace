@@ -6,7 +6,7 @@ import { randomUUID } from "crypto";
 import {
   extractFormData,
   validateRequestBody,
-  checkAnswer
+  checkAnswer,
 } from "../helperFunctions/helperFunctions";
 import {
   DataTypeStep,
@@ -278,7 +278,7 @@ router.get("/:resourceID/start", async (req: Request, res: Response) => {
     }
     const assetTitle = resource.title;
     const contactPoint = resource.contactPoint;
-  
+
     if (!contactPoint) {
       res.status(404).send("Contact point not found");
       return;
@@ -308,7 +308,7 @@ router.get("/:resourceID/start", async (req: Request, res: Response) => {
 router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   const resourceID = req.params.resourceID;
   const formStep = req.params.step;
-  
+
   if (!req.session.acquirerForms?.[resourceID]) {
     return res.redirect(`/share/${resourceID}/acquirer`);
   }
@@ -343,7 +343,7 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   } else {
     backLink = `/acquirer/${resourceID}/start`;
   }
-  
+
   res.render(`../views/acquirer/${formStep}.njk`, {
     requestId: formdata.requestId,
     assetId: formdata.dataAsset,
@@ -353,7 +353,7 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
     stepId: formStep,
     savedValue: stepData.value,
     errorMessage: stepData.errorMessage,
-    data: formStep === "check" ? checkAnswer(formdata) : []
+    data: formStep === "check" ? checkAnswer(formdata) : [],
   });
 });
 
