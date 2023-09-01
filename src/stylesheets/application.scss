@@ -64,3 +64,17 @@ aside {
     color: $govuk-secondary-text-colour;
   }
 }
+
+#reviewSummaryForm {
+  margin-top: govuk-spacing(6);
+}
+
+.govuk-warning-text__icon {
+  color: #666;
+  background-color: #ffff;
+  border-color: #666;
+}
+
+.govuk-warning-text {
+  margin-bottom: govuk-spacing(2);
+}
