@@ -582,11 +582,11 @@ function checkAnswer(formdata: FormData) {
           for (const [answerId, answerVal] of Object.entries(stepData.value)) {
             const explanation = answerVal.explanation || "";
             if (answerVal.checked) {
-              dataTypeValue.push(replace[stepId].data[answerId]);
+              dataTypeValue.push(`${replace[stepId].data[answerId]}<br/>`);
             }
             if (explanation) {
               dataTypeValue.push(
-                `<br/><p class="govuk-body-s caption-color">${explanation}</p>`,
+                `<p class="govuk-body-s caption-color">${explanation}</p>`,
               );
             }
             // Do something slightly different for the public interest answers
