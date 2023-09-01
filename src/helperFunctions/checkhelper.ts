@@ -39,7 +39,7 @@ export const titles = [
     data: {  
       personal: "Personal data",
       special: "Special category data",
-      none: "Anonymised data"
+      none: "None of the above"
     },
     type: "checked"
   },
@@ -155,7 +155,7 @@ export const titles = [
   },
     role: {
       data:{
-        controller: "Controler",
+        controller: "Controller",
         joint: "Joint controller",
         processor: "Processor",
         "don't know": "I don't know"
