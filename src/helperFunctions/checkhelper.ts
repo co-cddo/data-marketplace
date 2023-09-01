@@ -4,7 +4,7 @@ export const replace: any = {
     data: {
       personal: "Personal data",
       special: "Special category data",
-      none: "Anonymised data",
+      none: "Neither personal or special category data",
     },
     type: "checked",
   },
@@ -129,7 +129,7 @@ export const replace: any = {
   },
   role: {
     data: {
-      controller: "Controler",
+      controller: "Controller",
       joint: "Joint controller",
       processor: "Processor",
       "don't know": "I don't know",

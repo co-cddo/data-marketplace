@@ -4,15 +4,20 @@
 
 {% block content %}
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
       <span class="govuk-caption-l">Request ID: {{requestId}}</span>
       <h1 class="govuk-heading-xl">Check your answers before sending your request</h1>
-      <form method="POST">
+    </div>
+    <div class="govuk-grid-column-full">
+
+      <form id="checkYourAnswers" method="POST">
         {% for section in data %}
           <h2 class="govuk-heading-m check-heading">{{section.name}}</h2>
           {{ govukSummaryList({
-            rows: section.rows
-}) }}
+            rows: section.rows,
+            classes: "govuk-!-margin-bottom-9"
+            }) 
+          }}
           {% endfor%}
           <div class="govuk-button-group" style="margin-top: 50px">
             {{ govukButton({

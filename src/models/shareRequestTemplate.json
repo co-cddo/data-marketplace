@@ -7,7 +7,7 @@
   "completedSections": 0,
   "overviewSections": {
     "purpose": {
-      "name": "Purpose of the data share section",
+      "name": "Purpose of the data share",
       "steps": [
         "data-type",
         "data-subjects",
@@ -83,7 +83,7 @@
     },
     "data-access": {
       "id": "data-access",
-      "name": "Data access",
+      "name": "Other organisations accessing data",
       "status": "NOT STARTED",
       "value": "",
       "nextStep": "other-orgs"
