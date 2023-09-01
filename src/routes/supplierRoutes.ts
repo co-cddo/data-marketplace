@@ -128,7 +128,7 @@ router.get("/decision", async (req: Request, res: Response) => {
 router.post('/decision', async (req: Request, res: Response) => {
   const decision = req.body.decision;
 
-  if (decision === 'approve-with-comments') {
+  if (decision === 'approve') {
     return res.redirect('/manage-shares/declaration');
   }
 
