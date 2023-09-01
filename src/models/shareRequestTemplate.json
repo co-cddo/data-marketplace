@@ -182,7 +182,7 @@
       "id": "data-travel-location",
       "name": "Data travel outside UK",
       "status": "NOT STARTED",
-      "value": "",
+      "value": [""],
       "nextStep": "role"
     },
     "role": {

@@ -84,14 +84,25 @@ router.get("/received-requests", async (req: Request, res: Response) => {
   });
 });
 
-router.get("/review-request/", async (req: Request, res: Response) => {
+router.get("/review-summary", async (req: Request, res: Response) => {
+  const backLink = req.headers.referer || "/";
+  const acquirerForms = req.session.acquirerForms || {};
+
+  res.render("../views/supplier/review-summary.njk", {
+    backLink,
+    acquirerForms
+  });
+});
+
+router.get("/review-request", async (req: Request, res: Response) => {
   const backLink = req.headers.referer || "/";
   const acquirerForms = req.session.acquirerForms || {};
 
   res.render("../views/supplier/review-request.njk", {
     backLink,
-    acquirerForms,
+    acquirerForms
   });
 });
+
 
 export default router;
