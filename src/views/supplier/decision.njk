@@ -1,0 +1,71 @@
+{% extends "page.njk" %}
+{%- from "govuk/components/radios/macro.njk" import govukRadios -%}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-l">Request ID: RR325</span>
+    <form method="POST" id="decisionForm">
+        {% set ReturnWithComments %}
+        {{ govukTextarea({
+          id: "return-with-comments",
+          name: "return-comments",
+          value: []
+        }) }}
+      {% endset -%}
+      {{ govukRadios({
+        name: "decision",
+        fieldset: {
+            legend: {
+            text: "What is your decision?",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+            }
+        },
+        hint: {
+          text: "Choose your decision and add your comments. This will be sent to the person or team making the request."
+        },
+        items: [
+            {
+            value: "approve-with-comments",
+            text: "Return with comments",
+            checked: "",
+              hint: {
+              text: "Some details are missing. A decision cannot be made without them. If they provide this information, you will progress the request."
+            },
+            conditional: {
+              html: ReturnWithComments
+            }
+            },
+            {
+            value: "approve-with-physical",
+            text: "Physical delivery",
+              hint: {
+              text: "Approve and arrange a meeting to discuss the next steps."
+            },
+            checked: ""
+            },
+            {
+            value: "reject",
+            text: "Reject data share request",
+            hint: {
+              text: "There are fundamental problems with this request that cannot be solved. Use the comments box to tell the department why you have rejected their request."
+            },
+            checked: ""
+          }
+        ]
+      }) }}
+      <div class="govuk-button-group">
+        {{ govukButton({
+            text: "Submit",
+            name: "submitButton",
+            value: "submit"
+        }) }}
+        <a href="/manage-shares/received-requests" class="govuk-link">Returned to received requests</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

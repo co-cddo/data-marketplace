@@ -77,4 +77,11 @@ router.get("/created-requests", async (req: Request, res: Response) => {
   });
 });
 
+router.get("/decision", async (req: Request, res: Response) => {
+  const backLink = req.headers.referer || "/";
+  res.render("../views/supplier/decision.njk", {
+    backLink,
+  });
+});
+
 export default router;
