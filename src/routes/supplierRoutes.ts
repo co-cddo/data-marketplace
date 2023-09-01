@@ -106,14 +106,7 @@ router.get("/review-request", async (req: Request, res: Response) => {
 
   res.render("../views/supplier/review-request.njk", {
     backLink,
-    acquirerForms,,
-  });
-});
-
-router.get("/decision", async (req: Request, res: Response) => {
-  const backLink = req.headers.referer || "/";
-  res.render("../views/supplier/decision.njk", {
-    backLink,
+    acquirerForms,
   });
 });
 
@@ -124,5 +117,13 @@ router.post("/review-request", async (req: Request, res: Response) => {
     return res.redirect("/manage-shares/review-summary");
   }
 });
+
+router.get("/decision", async (req: Request, res: Response) => {
+  const backLink = req.headers.referer || "/";
+  res.render("../views/supplier/decision.njk", {
+    backLink,
+  });
+});
+
 
 export default router;
