@@ -128,6 +128,10 @@ router.get("/decision", async (req: Request, res: Response) => {
 router.post("/decision", async (req: Request, res: Response) => {
   const decision = req.body.decision;
 
+  if (decision === "return") {
+    return res.redirect("/manage-shares/return-request");
+  }
+
   if (decision === "approve") {
     return res.redirect("/manage-shares/declaration");
   }
@@ -150,6 +154,17 @@ router.post("/reject-request", async (req: Request, res: Response) => {
   return res.redirect("/manage-shares/received-requests");
 });
 
+router.get("/return-request", async (req: Request, res: Response) => {
+  const backLink = req.headers.referer || "/";
+  res.render("../views/supplier/return-request.njk", {
+    backLink,
+  });
+});
+
+router.post("/return-request", async (req: Request, res: Response) => {
+  return res.redirect("/manage-shares/received-requests");
+});
+
 router.get("/declaration", async (req: Request, res: Response) => {
   const backLink = req.headers.referer || "/";
   res.render("../views/supplier/declaration.njk", {
@@ -158,6 +173,20 @@ router.get("/declaration", async (req: Request, res: Response) => {
 });
 
 router.post("/declaration", async (req: Request, res: Response) => {
+  if (req.body.acceptButton) {
+    return res.redirect("/manage-shares/accept-request");
+  }
+  return res.redirect("/manage-shares/received-requests");
+});
+
+router.get("/accept-request", async (req: Request, res: Response) => {
+  const backLink = req.headers.referer || "/";
+  res.render("../views/supplier/accept-request.njk", {
+    backLink,
+  });
+});
+
+router.post("/accept-request", async (req: Request, res: Response) => {
   return res.redirect("/manage-shares/received-requests");
 });
 
