@@ -50,11 +50,11 @@ export async function fetchResources(
   resources.forEach((item) => {
     if (item.theme && Array.isArray(item.theme)) {
       item.theme.forEach((theme) => {
-          themesSet.add(theme);
+        themesSet.add(theme);
       });
     }
   });
-  const uniqueThemes = Array.from(themesSet)
+  const uniqueThemes = Array.from(themesSet);
   if (organisationFilters) {
     resources = resources.filter(
       (item) =>
