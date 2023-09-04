@@ -132,6 +132,21 @@ router.post("/decision", async (req: Request, res: Response) => {
     return res.redirect("/manage-shares/declaration");
   }
 
+  if (decision === "reject") {
+    return res.redirect("/manage-shares/reject-request");
+  }
+
+  return res.redirect("/manage-shares/received-requests");
+});
+
+router.get("/reject-request", async (req: Request, res: Response) => {
+  const backLink = req.headers.referer || "/";
+  res.render("../views/supplier/return-request.njk", {
+    backLink,
+  });
+});
+
+router.post("/reject-request", async (req: Request, res: Response) => {
   return res.redirect("/manage-shares/received-requests");
 });
 
