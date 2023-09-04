@@ -30,7 +30,6 @@ export const updateStepsStatus = (
   returnToStart: boolean,
 ) => {
   const completedSections = new Set();
-
   // Group up the steps so we can work out which sections have been completed later
   const purposeSteps = [
     "data-type",
@@ -107,14 +106,18 @@ export const updateStepsStatus = (
 
     // Set everything that's not required to NOT REQUIRED
     for (const s of notRequiredSteps) {
-      formdata.steps[s].status = "NOT REQUIRED";
+      if (formdata.steps.hasOwnProperty(s)) {
+        formdata.steps[s].status = "NOT REQUIRED";
+      }
     }
 
     // Set everything that needs to be completed to NOT STARTED
     for (const s of notStartedSteps) {
-      const stepStatus = formdata.steps[s].status;
-      if (!["COMPLETED", "IN PROGRESS"].includes(stepStatus)) {
-        formdata.steps[s].status = "NOT STARTED";
+      if (formdata.steps.hasOwnProperty(s)) {
+        const stepStatus = formdata.steps[s].status;
+        if (!["COMPLETED", "IN PROGRESS"].includes(stepStatus)) {
+          formdata.steps[s].status = "NOT STARTED";
+        }
       }
     }
   }
@@ -197,7 +200,9 @@ export const updateStepsStatus = (
     }
   } else {
     // If not all of the legal steps are Completed, legal review cannot be started
-    formdata.steps["legal-review"].status = "CANNOT START YET";
+    if (formdata.steps.hasOwnProperty("legal-review")) {
+      formdata.steps["legal-review"].status = "CANNOT START YET";
+    }
     completedSections.delete("legal");
   }
 
@@ -208,7 +213,9 @@ export const updateStepsStatus = (
       formdata.steps["protection-review"].status = "NOT STARTED";
     }
   } else {
-    formdata.steps["protection-review"].status = "CANNOT START YET";
+    if (formdata.steps.hasOwnProperty("protection-review")) {
+      formdata.steps["protection-review"].status = "CANNOT START YET";
+    }
     completedSections.delete("data-protection");
   }
 
@@ -219,7 +226,9 @@ export const updateStepsStatus = (
       formdata.steps["security-review"].status = "NOT STARTED";
     }
   } else {
-    formdata.steps["security-review"].status = "CANNOT START YET";
+    if (formdata.steps.hasOwnProperty("security-review")) {
+      formdata.steps["security-review"].status = "CANNOT START YET";
+    }
     completedSections.delete("security");
   }
 
@@ -231,7 +240,7 @@ export const updateStepsStatus = (
     completedSections.delete("check");
     if (everyStepCompleted([...allSteps], formdata)) {
       formdata.steps["check"].status = "NOT STARTED";
-    } else {
+    } else if (formdata.steps.hasOwnProperty("check")) {
       formdata.steps["check"].status = "CANNOT START YET";
     }
   } else {
@@ -243,8 +252,10 @@ export const updateStepsStatus = (
 };
 
 const everyStepCompleted = (steps: string[], formdata: FormData) => {
-  return steps.every((step) =>
-    ["COMPLETED", "NOT REQUIRED"].includes(formdata.steps[step].status),
+  return steps.every(
+    (step) =>
+      formdata.steps.hasOwnProperty(step) &&
+      ["COMPLETED", "NOT REQUIRED"].includes(formdata.steps[step].status),
   );
 };
 
