@@ -94,6 +94,15 @@ router.get("/review-summary", async (req: Request, res: Response) => {
   });
 });
 
+router.get("/request-accepted", async (req: Request, res: Response) => {
+  const backLink = req.headers.referer || "/";
+  const acquirerForms = req.session.acquirerForms || {};
+  res.render("../views/supplier/request-accepted.njk", {
+    backLink,
+    acquirerForms,
+  });
+});
+
 router.post("/review-summary", async (req: Request, res: Response) => {
   if (req.body.continueButton) {
     return res.redirect("/manage-shares/review-request");
