@@ -5,21 +5,27 @@ import {
   fetchResourceById,
   fetchOrganisations,
 } from "../services/findService";
+import { themes } from "../mockData/themes";
 
 router.get("/", async (req: Request, res: Response, next: NextFunction) => {
   const backLink = req.session.backLink || "/";
   req.session.backLink = req.originalUrl;
-  // Extract the 'q' query parameter from the request, convert it to a string,
-  // change it to lowercase for case insensitive search, and assign it to the 'query' variable.
-  // If 'q' doesn't exist, assign 'undefined' to the 'query' variable.
   const query: string | undefined = (req.query.q as string)?.toLowerCase();
   const organisationFilters: string[] | undefined = req.query
     .organisationFilters as string[] | undefined;
+  const themeFilters: string[] | undefined = req.query.themeFilters as
+    | string[]
+    | undefined;
 
   try {
     // Fetch the data from the API
-    const { resources } = await fetchResources(query, organisationFilters);
+    const { resources } = await fetchResources(
+      query,
+      organisationFilters,
+      themeFilters,
+    );
     const organisations = await fetchOrganisations();
+    const themesList = themes;
     const filterOptions = [
       // Define the shape of "filterOptions", add more as needed
       {
@@ -40,10 +46,24 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
               : "",
         })),
       },
+      {
+        id: "themeFilters",
+        name: "themeFilters",
+        title: "Themes",
+        items: themesList.map((theme) => ({
+          value: theme,
+          text: theme,
+          checked:
+            (Array.isArray(themeFilters) && themeFilters.includes(theme)) ||
+            (typeof themeFilters === "string" && themeFilters === theme)
+              ? "checked"
+              : "",
+        })),
+      },
       // more filters here
     ];
 
-    // Create filterOptionTags based on the selected filters in organisationFilters
+    // Create filterOptionTags based on the selected filters in organisationFilters and themeFilters
     const filterOptionTags = [
       {
         id: "organisationFilters",
@@ -53,6 +73,17 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
           .map((org) => ({
             value: org.slug,
             text: org.title,
+            checked: "checked",
+          })),
+      },
+      {
+        id: "themeFilters",
+        title: "Themes",
+        items: themesList
+          .filter((theme) => themeFilters?.includes(theme))
+          .map((theme) => ({
+            value: theme,
+            text: theme,
             checked: "checked",
           })),
       },

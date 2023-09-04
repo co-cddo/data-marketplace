@@ -45,7 +45,7 @@
       "serviceType": "SOAP",
       "summary": "Test summary for displaying the summary",
       "theme": [
-        "https://www.test.com"
+        "Transport"
       ],
       "title": "Test Service",
       "type": "DataService",
