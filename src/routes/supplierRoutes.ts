@@ -143,6 +143,20 @@ router.get("/declaration", async (req: Request, res: Response) => {
 });
 
 router.post("/declaration", async (req: Request, res: Response) => {
+  if (req.body.acceptButton) {
+    return res.redirect("/manage-shares/accept-request");
+  }
+  return res.redirect("/manage-shares/received-requests");
+});
+
+router.get("/accept-request", async (req: Request, res: Response) => {
+  const backLink = req.headers.referer || "/";
+  res.render("../views/supplier/accept-request.njk", {
+    backLink,
+  });
+});
+
+router.post("/accept-request", async (req: Request, res: Response) => {
   return res.redirect("/manage-shares/received-requests");
 });
 
