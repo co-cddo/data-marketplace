@@ -52,6 +52,7 @@ aside {
 #declarationForm,
 #legalPowerAdviceForm,
 #legalGatewayAdviceForm,
+#requestReturnedForm,
 #requestAcceptForm {
   margin-top: govuk-spacing(8);
 }
@@ -66,6 +67,7 @@ aside {
     }
   }
 }
+
 #checkYourAnswers {
   .not-required {
     color: govuk-colour("mid-grey");
