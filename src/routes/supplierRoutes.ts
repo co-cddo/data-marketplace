@@ -128,11 +128,22 @@ router.get("/decision", async (req: Request, res: Response) => {
 router.post("/decision", async (req: Request, res: Response) => {
   const decision = req.body.decision;
 
+  if (decision === "return") {
+    return res.redirect("/manage-shares/return-request");
+  }
+
   if (decision === "approve") {
     return res.redirect("/manage-shares/declaration");
   }
 
   return res.redirect("/manage-shares/received-requests");
+});
+
+router.get("/return-request", async (req: Request, res: Response) => {
+  const backLink = req.headers.referer || "/";
+  res.render("../views/supplier/return-request.njk", {
+    backLink,
+  });
 });
 
 router.get("/declaration", async (req: Request, res: Response) => {
