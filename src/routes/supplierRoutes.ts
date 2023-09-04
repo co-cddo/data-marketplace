@@ -111,7 +111,7 @@ router.get("/review-request", async (req: Request, res: Response) => {
 });
 
 router.post("/review-request", async (req: Request, res: Response) => {
-  if (req.body.continueButton === "continue") {
+  if (req.body.continueButton) {
     return res.redirect("/manage-shares/decision");
   } else if (req.body.returnButton) {
     return res.redirect("/manage-shares/review-summary");
@@ -123,6 +123,27 @@ router.get("/decision", async (req: Request, res: Response) => {
   res.render("../views/supplier/decision.njk", {
     backLink,
   });
+});
+
+router.post("/decision", async (req: Request, res: Response) => {
+  const decision = req.body.decision;
+
+  if (decision === "approve") {
+    return res.redirect("/manage-shares/declaration");
+  }
+
+  return res.redirect("/manage-shares/received-requests");
+});
+
+router.get("/declaration", async (req: Request, res: Response) => {
+  const backLink = req.headers.referer || "/";
+  res.render("../views/supplier/declaration.njk", {
+    backLink,
+  });
+});
+
+router.post("/declaration", async (req: Request, res: Response) => {
+  return res.redirect("/manage-shares/received-requests");
 });
 
 export default router;
