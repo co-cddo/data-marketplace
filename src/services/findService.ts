@@ -47,18 +47,14 @@ export async function fetchResources(
 
   // Extract unique themes
   const themesSet = new Set<string>();
-  const uniqueThemes: string[] = [];
   resources.forEach((item) => {
     if (item.theme && Array.isArray(item.theme)) {
       item.theme.forEach((theme) => {
-        if (!themesSet.has(theme)) {
-          uniqueThemes.push(theme);
           themesSet.add(theme);
-        }
       });
     }
   });
-
+  const uniqueThemes = Array.from(themesSet)
   if (organisationFilters) {
     resources = resources.filter(
       (item) =>
