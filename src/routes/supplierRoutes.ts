@@ -52,11 +52,10 @@ router.get("/created-requests", async (req: Request, res: Response) => {
     completed: [[{ text: "You have not completed any data share requests.", colspan: 5 }]]
   };
   
-  if (Object.keys(acquirerForms).length === 0) {
+  if (Object.values(acquirerForms).length === 0) {
     allTableRows.pending.push([{ text: "There are no pending data share requests.", colspan: 5}]);
   } else {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    for (const [_, formData] of Object.entries(acquirerForms)) {
+    for (const [, formData] of Object.entries(acquirerForms)) {
       let formattedDate = "Unrequested";
       const dateValue = formData.steps.date.value as DateStep;
   
