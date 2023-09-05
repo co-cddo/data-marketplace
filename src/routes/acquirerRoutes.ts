@@ -10,7 +10,7 @@ import {
   updateStepsStatus,
 } from "../helperFunctions/formHelper";
 import axios from "axios";
-import { GenericStringArray } from "../types/express";
+import { FormData, GenericStringArray } from "../types/express";
 
 function parseJwt(token: string) {
   return JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
@@ -28,7 +28,7 @@ const generateFormTemplate = (
 ) => {
   const userInfo = req.user ? parseJwt(req.user.idToken) : null;
   const username = userInfo ? userInfo.email : "anonymous";
-  const template = JSON.parse(JSON.stringify(formTemplate));
+  const template: FormData = JSON.parse(JSON.stringify(formTemplate));
   template.ownedBy = username;
   template.dataAsset = resourceID;
   template.requestId = randomUUID();
