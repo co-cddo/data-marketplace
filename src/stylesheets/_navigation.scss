@@ -47,7 +47,7 @@ a:hover,
   &.app-navigation__list-item--right {
     float: right;
     padding-right: 0;
-    margin-right: -15px;
+    margin-right: 15px;
   }
   @include govuk-media-query($from: tablet) {
     @include govuk-font(19, $weight: bold, $line-height: $navigation-height);
