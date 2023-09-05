@@ -106,14 +106,14 @@ export const updateStepsStatus = (
 
     // Set everything that's not required to NOT REQUIRED
     for (const s of notRequiredSteps) {
-      if (formdata.steps.hasOwnProperty(s)) {
+      if (Object.prototype.hasOwnProperty.call(formdata.steps, s)) {
         formdata.steps[s].status = "NOT REQUIRED";
       }
     }
 
     // Set everything that needs to be completed to NOT STARTED
     for (const s of notStartedSteps) {
-      if (formdata.steps.hasOwnProperty(s)) {
+      if (Object.prototype.hasOwnProperty.call(formdata.steps, s)) {
         const stepStatus = formdata.steps[s].status;
         if (!["COMPLETED", "IN PROGRESS"].includes(stepStatus)) {
           formdata.steps[s].status = "NOT STARTED";
@@ -200,7 +200,7 @@ export const updateStepsStatus = (
     }
   } else {
     // If not all of the legal steps are Completed, legal review cannot be started
-    if (formdata.steps.hasOwnProperty("legal-review")) {
+    if (Object.prototype.hasOwnProperty.call(formdata.steps, "legal-review")) {
       formdata.steps["legal-review"].status = "CANNOT START YET";
     }
     completedSections.delete("legal");
@@ -213,7 +213,9 @@ export const updateStepsStatus = (
       formdata.steps["protection-review"].status = "NOT STARTED";
     }
   } else {
-    if (formdata.steps.hasOwnProperty("protection-review")) {
+    if (
+      Object.prototype.hasOwnProperty.call(formdata.steps, "protection-review")
+    ) {
       formdata.steps["protection-review"].status = "CANNOT START YET";
     }
     completedSections.delete("data-protection");
@@ -226,7 +228,9 @@ export const updateStepsStatus = (
       formdata.steps["security-review"].status = "NOT STARTED";
     }
   } else {
-    if (formdata.steps.hasOwnProperty("security-review")) {
+    if (
+      Object.prototype.hasOwnProperty.call(formdata.steps, "security-review")
+    ) {
       formdata.steps["security-review"].status = "CANNOT START YET";
     }
     completedSections.delete("security");
@@ -240,7 +244,7 @@ export const updateStepsStatus = (
     completedSections.delete("check");
     if (everyStepCompleted([...allSteps], formdata)) {
       formdata.steps["check"].status = "NOT STARTED";
-    } else if (formdata.steps.hasOwnProperty("check")) {
+    } else if (Object.prototype.hasOwnProperty.call(formdata.steps, "check")) {
       formdata.steps["check"].status = "CANNOT START YET";
     }
   } else {
@@ -254,7 +258,7 @@ export const updateStepsStatus = (
 const everyStepCompleted = (steps: string[], formdata: FormData) => {
   return steps.every(
     (step) =>
-      formdata.steps.hasOwnProperty(step) &&
+      Object.prototype.hasOwnProperty.call(formdata.steps, step) &&
       ["COMPLETED", "NOT REQUIRED"].includes(formdata.steps[step].status),
   );
 };
