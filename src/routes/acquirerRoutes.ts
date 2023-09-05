@@ -1,11 +1,11 @@
 import express, { Request, Response } from "express";
 import { fetchResourceById } from "../services/findService";
+import { validationResult } from 'express-validator';
 const router = express.Router();
 import formTemplate from "../models/shareRequestTemplate.json";
 import { randomUUID } from "crypto";
 import {
   extractFormData,
-  validateRequestBody,
   checkAnswer,
 } from "../helperFunctions/helperFunctions";
 import axios from "axios";
@@ -18,6 +18,7 @@ import {
   StepValue,
   GenericStringArray,
 } from "../types/express";
+import { dateValidationRules } from "../helperFunctions/validateRequest";
 
 function parseJwt(token: string) {
   return JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
@@ -318,11 +319,16 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   if (!req.session.acquirerForms?.[resourceID]) {
     return res.redirect(`/share/${resourceID}/acquirer`);
   }
-
+  
+ 
   const formdata = req.session.acquirerForms[resourceID];
   const stepData = formdata.steps[formStep];
   const assetTitle = formdata.assetTitle;
   const contactPoint = formdata.contactPoint;
+
+  if (stepData.errorMessage) { // I wanna see this log
+    console.error(`Step Error: ${stepData.errorMessage}`);
+  }
 
   if (req.query.action === "back" && formdata.stepHistory) {
     formdata.stepHistory.pop();
@@ -364,23 +370,28 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
 
 const URL = `${process.env.API_ENDPOINT}/sharedata`;
 
-router.post("/:resourceID/:step", async (req: Request, res: Response) => {
+router.post("/:resourceID/:step", dateValidationRules(), async (req: Request, res: Response) => {
+  const errors = validationResult(req);
+  const errorMessage = ""; 
+  
   if (!req.session.acquirerForms) {
     return res.status(400).send("Acquirer forms not found in session");
   }
-
+  
   const resourceID = req.params.resourceID;
   const formStep = req.params.step;
   const formdata = req.session.acquirerForms[resourceID];
   const stepData = formdata.steps[formStep];
-  const errorMessage = validateRequestBody(formStep, req.body);
+  console.log("stepData", stepData)
+  // console.log("formdata", formdata)
 
   if (!formdata || !formdata.steps[formStep]) {
     return res.status(400).send("Form data or step not found");
   }
 
-  if (!stepData) {
-    return res.status(400).send("Step data not found");
+  if (!errors.isEmpty()) {
+    stepData.errorMessage = errors.array().map(err => err.msg).join(", ");
+    return res.redirect(`/acquirer/${resourceID}/${formStep}`);
   }
 
   stepData.errorMessage = errorMessage;
