@@ -6,7 +6,7 @@ export const dateValidationRules = () => {
 
   return [
     body('day')
-    .optional({ nullable: true })
+    .optional({ checkFalsy: true })
     .isInt({ min: 1, max: 31 })
     .withMessage('Day is invalid')
       .custom((day, { req }) => {
@@ -22,17 +22,16 @@ export const dateValidationRules = () => {
         return true;
       }),
     body('month')
-      .optional({ nullable: true })
+    .optional({ checkFalsy: true })
       .isInt({ min: 0, max: 12 })
       .withMessage('Month is invalid'),
     body('year')
-      .optional({ nullable: true })
+      .optional({ checkFalsy: true })
       .isInt({ min: currentYear - 200, max: currentYear + 200 })
-
       .withMessage('Year is invalid')
       .custom((year) => {
         if (year && year < currentYear) {
-          throw new Error('Year is in the past.');
+          throw new Error('Year cannot be in the past.');
         }
         return true;
       })
