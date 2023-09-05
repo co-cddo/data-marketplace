@@ -205,3 +205,9 @@ declare module "express-session" {
     backLink: string;
   }
 }
+
+/**
+* Supplier Journey Types & Interfaces start
+*/
+
+export type ManageShareTableRow = { html?: string, text?: string; colspan?: number; classes?: string; } 
