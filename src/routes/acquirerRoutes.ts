@@ -1,6 +1,7 @@
-import express, { Request, Response, NextFunction } from "express";
+import express, { Request, Response } from "express";
 import { fetchResourceById } from "../services/findService";
 import { validationResult } from 'express-validator';
+import { validateMiddleware } from "../middleware/validateMiddleware";
 const router = express.Router();
 import formTemplate from "../models/shareRequestTemplate.json";
 import { randomUUID } from "crypto";
@@ -18,7 +19,6 @@ import {
   StepValue,
   GenericStringArray,
 } from "../types/express";
-import { getValidationRules } from "../helperFunctions/validateRequest";
 
 function parseJwt(token: string) {
   return JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
@@ -370,23 +370,7 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
 
 const URL = `${process.env.API_ENDPOINT}/sharedata`;
 
-router.post("/:resourceID/:step", (req: Request, res: Response, next: NextFunction) => {
-  const formStep = req.params.step;
-  const validationRules = getValidationRules(formStep);
-
-  if (validationRules.length > 0) {
-    const runValidation = (index: number) => {
-      if (index >= validationRules.length) {
-        next();
-        return;
-      }
-      validationRules[index](req, res, () => runValidation(index + 1));
-    };
-    runValidation(0);
-  } else {
-    next();
-  }
-}, async (req: Request, res: Response) => {
+router.post("/:resourceID/:step", validateMiddleware, async (req: Request, res: Response) => {
   const errors = validationResult(req);
   const errorMessage = ""; 
   
