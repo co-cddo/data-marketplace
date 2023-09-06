@@ -1,5 +1,15 @@
 import { body } from 'express-validator';
 
+export const getValidationRules = (step: string) => {
+  switch (step) {
+    case 'date':
+      console.log('Validation step rule: ', step)
+      return dateValidationRules();
+    default:
+      return [];
+  }
+};
+
 export const dateValidationRules = () => {
   const currentYear = new Date().getFullYear();
   const isLeapYear = (year: number) => year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
