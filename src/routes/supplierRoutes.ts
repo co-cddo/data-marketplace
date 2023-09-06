@@ -102,10 +102,10 @@ router.get("/review-summary", async (req: Request, res: Response) => {
   });
 });
 
-router.get("/request-accepted", async (req: Request, res: Response) => {
+router.get("/received-request-accepted", async (req: Request, res: Response) => {
   const backLink = req.headers.referer || "/";
   const acquirerForms = req.session.acquirerForms || {};
-  res.render("../views/supplier/request-accepted.njk", {
+  res.render("../views/supplier/received-request-accepted.njk", {
     backLink,
     acquirerForms,
   });
@@ -146,7 +146,7 @@ router.post("/decision", async (req: Request, res: Response) => {
   const decision = req.body.decision;
 
   if (decision === "return") {
-    return res.redirect("/manage-shares/return-request");
+    return res.redirect("/manage-shares/return-decision");
   }
 
   if (decision === "approve") {
@@ -154,32 +154,40 @@ router.post("/decision", async (req: Request, res: Response) => {
   }
 
   if (decision === "reject") {
-    return res.redirect("/manage-shares/reject-request");
+    return res.redirect("/manage-shares/reject-decision");
   }
 
-  return res.redirect("/manage-shares/received-requests");
+  return res.redirect("/manage-shares/received-decision");
 });
 
-router.get("/reject-request", async (req: Request, res: Response) => {
+router.get("/reject-decision", async (req: Request, res: Response) => {
   const backLink = req.headers.referer || "/";
-  res.render("../views/supplier/return-request.njk", {
+  res.render("../views/supplier/reject-decision.njk", {
     backLink,
   });
 });
 
-router.post("/reject-request", async (req: Request, res: Response) => {
-  return res.redirect("/manage-shares/received-requests");
+router.post("/reject-decision", async (req: Request, res: Response) => {
+  if (req.body.returnButton) {
+    return res.redirect("/manage-shares");
+  }
+  return res.redirect("/manage-shares/reject-decision");
 });
 
-router.get("/return-request", async (req: Request, res: Response) => {
+
+router.get("/return-decision", async (req: Request, res: Response) => {
   const backLink = req.headers.referer || "/";
-  res.render("../views/supplier/return-request.njk", {
+
+  res.render("../views/supplier/return-decision", {
     backLink,
   });
 });
 
-router.post("/return-request", async (req: Request, res: Response) => {
-  return res.redirect("/manage-shares/received-requests");
+router.post("/return-decision", async (req: Request, res: Response) => {
+  if (req.body.returnButton) {
+    return res.redirect("/manage-shares");
+  }
+  return res.redirect("/manage-shares/return-decision");
 });
 
 router.get("/declaration", async (req: Request, res: Response) => {
@@ -191,19 +199,22 @@ router.get("/declaration", async (req: Request, res: Response) => {
 
 router.post("/declaration", async (req: Request, res: Response) => {
   if (req.body.acceptButton) {
-    return res.redirect("/manage-shares/accept-request");
+    return res.redirect("/manage-shares/accept-decision");
   }
   return res.redirect("/manage-shares/received-requests");
 });
 
-router.get("/accept-request", async (req: Request, res: Response) => {
+router.get("/accept-decision", async (req: Request, res: Response) => {
   const backLink = req.headers.referer || "/";
-  res.render("../views/supplier/accept-request.njk", {
+  res.render("../views/supplier/accept-decision.njk", {
     backLink,
   });
 });
 
-router.post("/accept-request", async (req: Request, res: Response) => {
+router.post("/accept-decision", async (req: Request, res: Response) => {
+    if (req.body.returnButton) {
+    return res.redirect("/manage-shares");
+  }
   return res.redirect("/manage-shares/received-requests");
 });
 
