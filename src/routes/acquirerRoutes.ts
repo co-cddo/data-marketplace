@@ -396,7 +396,20 @@ router.post("/:resourceID/:step", validateMiddleware, async (req: Request, res: 
   }
 
   stepData.errorMessage = errorMessage;
-  stepData.value = extractFormData(stepData, req.body) || "";
+  
+  let defaultValue: StepValue;
+
+  if (stepData.id === "date") {
+    defaultValue = {
+      day: null,
+      month: null,
+      year: null,
+    };
+  } else {
+    defaultValue = "";
+  }
+
+  stepData.value = extractFormData(stepData, req.body) || defaultValue;
 
   if (errorMessage) {
     return res.redirect(`/acquirer/${resourceID}/${formStep}`);

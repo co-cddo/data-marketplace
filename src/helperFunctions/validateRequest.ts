@@ -1,4 +1,5 @@
 import { body } from 'express-validator';
+import { DateStep } from '../types/express';
 
 export const getValidationRules = (step: string) => {
   switch (step) {
@@ -16,10 +17,10 @@ export const dateValidationRules = () => {
 
   return [
     body('day')
-    .optional({ checkFalsy: true })
+    .optional({ nullable: true })
     .isInt({ min: 1, max: 31 })
     .withMessage('Day is invalid')
-      .custom((day, { req }) => {
+    .custom((day, { req }) => {
         const month = req.body.month;
         const year = req.body.year;
         if (month === 2 && year) {
@@ -31,17 +32,33 @@ export const dateValidationRules = () => {
         }
         return true;
       }),
-    body('month')
-    .optional({ checkFalsy: true })
-      .isInt({ min: 0, max: 12 })
+      
+      body('month')
+      .optional({ nullable: true })
+      .isInt({ min: 1, max: 12 }) 
       .withMessage('Month is invalid'),
-    body('year')
-      .optional({ checkFalsy: true })
+       body('year')
+      .optional({ nullable: true })
       .isInt({ min: currentYear - 200, max: currentYear + 200 })
       .withMessage('Year is invalid')
       .custom((year) => {
         if (year && year < currentYear) {
           throw new Error('Year cannot be in the past.');
+        }
+        return true;
+      }),
+
+      body().custom((_,{ req }) => {
+        const { day, month, year } = req.body as DateStep;
+        console.log("Types:", typeof day, typeof month, typeof year);  //Why is this a string?
+        console.log("Values:", day, month, year);              
+        const fields = [day, month, year];
+        const filledFields = fields.filter((field) => field !== null && field !== undefined);
+
+        console.log("filledFields", filledFields)
+
+        if (filledFields.length > 0 && filledFields.length !== fields.length) {
+          throw new Error('Date is invalid.');
         }
         return true;
       })
