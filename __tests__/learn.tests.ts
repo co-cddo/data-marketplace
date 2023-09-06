@@ -7,4 +7,10 @@ describe("GET /learn", () => {
     expect(response.status).toBe(200);
     expect(response.text).toContain("Data Marketplace");
   });
+
+  it('should respond as expected when accessing data-sharing-arrangements"', async () => {
+    const response = await request(app).get("/learn/data-sharing-arrangements");
+    expect(response.status).toBe(200);
+    expect(response.text).toContain("data share request");
+  });
 });
