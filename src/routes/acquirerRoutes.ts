@@ -167,19 +167,8 @@ router.post(
 
     stepData.errorMessage = errorMessage;
 
-    let defaultValue: StepValue;
-
-    if (stepData.id === "date") {
-      defaultValue = {
-        day: null,
-        month: null,
-        year: null,
-      };
-    } else {
-      defaultValue = "";
-    }
-
-    stepData.value = extractFormData(stepData, req.body) || defaultValue;
+    
+    stepData.value = extractFormData(stepData, req.body) || "";
 
     if (errorMessage) {
       return res.redirect(`/acquirer/${resourceID}/${formStep}`);
