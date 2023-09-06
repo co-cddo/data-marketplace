@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import { fetchResourceById } from "../services/findService";
-import { validationResult } from 'express-validator';
-import { validateMiddleware } from "../middleware/validateMiddleware";
+import { validateFormaMiddleware } from "../middleware/validateFormaMiddleware";
+import { validationResult } from "express-validator";
 const router = express.Router();
 import formTemplate from "../models/shareRequestTemplate.json";
 import { randomUUID } from "crypto";
@@ -319,14 +319,14 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   if (!req.session.acquirerForms?.[resourceID]) {
     return res.redirect(`/share/${resourceID}/acquirer`);
   }
-  
- 
+
   const formdata = req.session.acquirerForms[resourceID];
   const stepData = formdata.steps[formStep];
   const assetTitle = formdata.assetTitle;
   const contactPoint = formdata.contactPoint;
 
-  if (stepData.errorMessage) { // I wanna see this log
+  if (stepData.errorMessage) {
+    // I wanna see this log
     console.error(`Step Error: ${stepData.errorMessage}`);
   }
 
@@ -370,161 +370,176 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
 
 const URL = `${process.env.API_ENDPOINT}/sharedata`;
 
-router.post("/:resourceID/:step", validateMiddleware, async (req: Request, res: Response) => {
-  const errors = validationResult(req);
-  const errorMessage = ""; 
-  
-  if (!req.session.acquirerForms) {
-    return res.status(400).send("Acquirer forms not found in session");
-  }
-  
-  const resourceID = req.params.resourceID;
-  const formStep = req.params.step;
-  const formdata = req.session.acquirerForms[resourceID];
-  const stepData = formdata.steps[formStep];
-  console.log("stepData", stepData)
-  // console.log("formdata", formdata)
+router.post(
+  "/:resourceID/:step",
+  validateFormaMiddleware,
+  async (req: Request, res: Response) => {
+    const errors = validationResult(req);
+    const errorMessage = "";
 
-  if (!formdata || !formdata.steps[formStep]) {
-    return res.status(400).send("Form data or step not found");
-  }
+    if (!req.session.acquirerForms) {
+      return res.status(400).send("Acquirer forms not found in session");
+    }
 
-  if (!errors.isEmpty()) {
-    stepData.errorMessage = errors.array().map(err => err.msg).join(", ");
-    console.log('stepData.errorMessage', )
-    return res.redirect(`/acquirer/${resourceID}/${formStep}`);
-  }
+    const resourceID = req.params.resourceID;
+    const formStep = req.params.step;
+    const formdata = req.session.acquirerForms[resourceID];
+    const stepData = formdata.steps[formStep];
+    console.log("stepData", stepData);
+    // console.log("formdata", formdata)
 
-  stepData.errorMessage = errorMessage;
-  
-  let defaultValue: StepValue;
+    if (!formdata || !formdata.steps[formStep]) {
+      return res.status(400).send("Form data or step not found");
+    }
 
-  if (stepData.id === "date") {
-    defaultValue = {
-      day: null,
-      month: null,
-      year: null,
-    };
-  } else {
-    defaultValue = "";
-  }
+    if (!errors.isEmpty()) {
+      stepData.errorMessage = errors
+        .array()
+        .map((err) => err.msg)
+        .join(", ");
+      console.log("stepData.errorMessage");
+      return res.redirect(`/acquirer/${resourceID}/${formStep}`);
+    }
 
-  stepData.value = extractFormData(stepData, req.body) || defaultValue;
+    stepData.errorMessage = errorMessage;
 
-  if (errorMessage) {
-    return res.redirect(`/acquirer/${resourceID}/${formStep}`);
-  }
-  if (!formdata.stepHistory) {
-    formdata.stepHistory = [];
-  }
+    let defaultValue: StepValue;
 
-  if (req.body.addCountry) {
-    if (Array.isArray(formdata.steps["data-travel-location"].value)) {
-      formdata.steps["data-travel-location"].value.push(""); // Add a new empty string.
+    if (stepData.id === "date") {
+      defaultValue = {
+        day: null,
+        month: null,
+        year: null,
+      };
     } else {
-      // handle error or other logic if value isn't an array
-      console.error(
-        "Expected 'data-travel-location' value to be an array but it wasn't.",
-      );
+      defaultValue = "";
     }
-    return res.redirect(`/acquirer/${resourceID}/data-travel-location`);
-  }
 
-  if (req.body.removeCountry !== undefined) {
-    const countryIndexToRemove = parseInt(req.body.removeCountry, 10) - 1;
-    if (
-      formdata.steps["data-travel-location"] &&
-      Array.isArray(formdata.steps["data-travel-location"].value)
-    ) {
-      const country = formdata.steps["data-travel-location"]
-        .value as GenericStringArray;
+    stepData.value = extractFormData(stepData, req.body) || defaultValue;
 
-      if (
-        Number.isInteger(countryIndexToRemove) &&
-        countryIndexToRemove >= 0 &&
-        countryIndexToRemove < country.length
-      ) {
-        country.splice(countryIndexToRemove, 1);
-      }
+    if (errorMessage) {
+      return res.redirect(`/acquirer/${resourceID}/${formStep}`);
     }
-    return res.redirect(`/acquirer/${resourceID}/data-travel-location`);
-  }
-
-  if (req.body.addMoreOrgs) {
-    // If "Add another organisation" is clicked.
-    if (Array.isArray(formdata.steps["other-orgs"].value)) {
-      formdata.steps["other-orgs"].value.push(""); // Add a new empty string.
-    } else {
-      // handle error or other logic if value isn't an array
-      console.error(
-        "Expected 'other-orgs' value to be an array but it wasn't.",
-      );
+    if (!formdata.stepHistory) {
+      formdata.stepHistory = [];
     }
-    return res.redirect(`/acquirer/${resourceID}/other-orgs`); // Refresh the current page.
-  }
 
-  if (req.body.removeOrg !== undefined) {
-    const orgIndexToRemove = parseInt(req.body.removeOrg, 10) - 1;
-    if (
-      formdata.steps["other-orgs"] &&
-      Array.isArray(formdata.steps["other-orgs"].value)
-    ) {
-      const orgs = formdata.steps["other-orgs"].value as GenericStringArray;
-
-      if (
-        Number.isInteger(orgIndexToRemove) &&
-        orgIndexToRemove >= 0 &&
-        orgIndexToRemove < orgs.length
-      ) {
-        orgs.splice(orgIndexToRemove, 1);
-      }
-    }
-    return res.redirect(`/acquirer/${resourceID}/other-orgs`);
-  }
-
-  if (req.body.continueButton && formStep === "declaration") {
-    formdata.status = "AWAITING REVIEW";
-  }
-
-  // Check which button was clicked "Save and continue || Save and return"
-  let redirectURL = `/acquirer/${resourceID}/start`;
-  if (req.body.returnButton) {
-    // If save and return was clicked, clear the step history
-    formdata.stepHistory = [];
-  } else {
-    // Otherwise add the current step to the history if it's not already there
-    if (formdata.stepHistory.indexOf(formStep) === -1) {
-      formdata.stepHistory.push(formStep);
-    }
-  }
-
-  if (req.body.continueButton && formStep === "confirmation") {
-    return res.redirect(`/manage-shares/created-requests`);
-  }
-
-  updateStepsStatus(formStep, stepData.value, formdata, req.body.returnButton);
-
-  const nextStep = formdata.steps[formStep].nextStep;
-
-  if (req.body.continueButton && nextStep) {
-    redirectURL = `/acquirer/${resourceID}/${nextStep}`;
-  }
-
-  // Send the formdata to the backend if logged in
-  if (req.isAuthenticated()) {
-    try {
-      await axios.put(URL, { jwt: req.cookies.jwtToken, sharedata: formdata });
-    } catch (error: unknown) {
-      console.error("Error sending formdata to backend");
-      if (axios.isAxiosError(error)) {
-        console.error(error.response?.data.detail);
+    if (req.body.addCountry) {
+      if (Array.isArray(formdata.steps["data-travel-location"].value)) {
+        formdata.steps["data-travel-location"].value.push(""); // Add a new empty string.
       } else {
-        console.error(error);
+        // handle error or other logic if value isn't an array
+        console.error(
+          "Expected 'data-travel-location' value to be an array but it wasn't.",
+        );
+      }
+      return res.redirect(`/acquirer/${resourceID}/data-travel-location`);
+    }
+
+    if (req.body.removeCountry !== undefined) {
+      const countryIndexToRemove = parseInt(req.body.removeCountry, 10) - 1;
+      if (
+        formdata.steps["data-travel-location"] &&
+        Array.isArray(formdata.steps["data-travel-location"].value)
+      ) {
+        const country = formdata.steps["data-travel-location"]
+          .value as GenericStringArray;
+
+        if (
+          Number.isInteger(countryIndexToRemove) &&
+          countryIndexToRemove >= 0 &&
+          countryIndexToRemove < country.length
+        ) {
+          country.splice(countryIndexToRemove, 1);
+        }
+      }
+      return res.redirect(`/acquirer/${resourceID}/data-travel-location`);
+    }
+
+    if (req.body.addMoreOrgs) {
+      // If "Add another organisation" is clicked.
+      if (Array.isArray(formdata.steps["other-orgs"].value)) {
+        formdata.steps["other-orgs"].value.push(""); // Add a new empty string.
+      } else {
+        // handle error or other logic if value isn't an array
+        console.error(
+          "Expected 'other-orgs' value to be an array but it wasn't.",
+        );
+      }
+      return res.redirect(`/acquirer/${resourceID}/other-orgs`); // Refresh the current page.
+    }
+
+    if (req.body.removeOrg !== undefined) {
+      const orgIndexToRemove = parseInt(req.body.removeOrg, 10) - 1;
+      if (
+        formdata.steps["other-orgs"] &&
+        Array.isArray(formdata.steps["other-orgs"].value)
+      ) {
+        const orgs = formdata.steps["other-orgs"].value as GenericStringArray;
+
+        if (
+          Number.isInteger(orgIndexToRemove) &&
+          orgIndexToRemove >= 0 &&
+          orgIndexToRemove < orgs.length
+        ) {
+          orgs.splice(orgIndexToRemove, 1);
+        }
+      }
+      return res.redirect(`/acquirer/${resourceID}/other-orgs`);
+    }
+
+    if (req.body.continueButton && formStep === "declaration") {
+      formdata.status = "AWAITING REVIEW";
+    }
+
+    // Check which button was clicked "Save and continue || Save and return"
+    let redirectURL = `/acquirer/${resourceID}/start`;
+    if (req.body.returnButton) {
+      // If save and return was clicked, clear the step history
+      formdata.stepHistory = [];
+    } else {
+      // Otherwise add the current step to the history if it's not already there
+      if (formdata.stepHistory.indexOf(formStep) === -1) {
+        formdata.stepHistory.push(formStep);
       }
     }
-  }
 
-  return res.redirect(redirectURL);
-});
+    if (req.body.continueButton && formStep === "confirmation") {
+      return res.redirect(`/manage-shares/created-requests`);
+    }
+
+    updateStepsStatus(
+      formStep,
+      stepData.value,
+      formdata,
+      req.body.returnButton,
+    );
+
+    const nextStep = formdata.steps[formStep].nextStep;
+
+    if (req.body.continueButton && nextStep) {
+      redirectURL = `/acquirer/${resourceID}/${nextStep}`;
+    }
+
+    // Send the formdata to the backend if logged in
+    if (req.isAuthenticated()) {
+      try {
+        await axios.put(URL, {
+          jwt: req.cookies.jwtToken,
+          sharedata: formdata,
+        });
+      } catch (error: unknown) {
+        console.error("Error sending formdata to backend");
+        if (axios.isAxiosError(error)) {
+          console.error(error.response?.data.detail);
+        } else {
+          console.error(error);
+        }
+      }
+    }
+
+    return res.redirect(redirectURL);
+  },
+);
 
 export default router;
