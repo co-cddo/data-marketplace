@@ -1,6 +1,5 @@
 /* eslint-disable no-case-declarations */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { licences } from "../mockData/licences";
 import {
   DataTypeStep,
   BenefitsStep,
@@ -21,114 +20,355 @@ import {
   FormData,
   GenericStringArray,
 } from "../types/express";
+import { licences } from "../mockData/licences";
 import { replace } from "./checkhelper";
 
-// function validateDate(day: number, month: number, year: number): string {
-//   const errors = new Set<string>();
+export const updateStepsStatus = (
+  currentStep: string,
+  stepValue: StepValue,
+  formdata: FormData,
+  returnToStart: boolean,
+) => {
+  const completedSections = new Set();
+  // Group up the steps so we can work out which sections have been completed later
+  const purposeSteps = [
+    "data-type",
+    "data-subjects",
+    "project-aims",
+    "data-required",
+    "benefits",
+    "data-access",
+    "other-orgs",
+    "impact",
+    "date",
+  ];
 
-//   if (!day && !month && !year) {
-//     return ""; // allows date to be null
-//   }
+  const legalSteps = [
+    "legal-power",
+    "legal-power-advice",
+    "legal-gateway",
+    "legal-gateway-advice",
+  ];
 
-//   const isLeapYear = (year: number) =>
-//     year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+  const dataProtectionSteps = [
+    "lawful-basis-personal",
+    "lawful-basis-special",
+    "lawful-basis-special-public-interest",
+    "data-travel",
+    "data-travel-location",
+    "role",
+  ];
 
-//   if (!day || day < 1 || day > 31) {
-//     errors.add("invalid_day");
-//   }
+  const securitySteps = ["delivery", "format", "disposal"];
 
-//   if (!month || month < 1 || month > 12) {
-//     errors.add("invalid_month");
-//   } else if (month === 2) {
-//     if ((isLeapYear(year) && day > 29) || (!isLeapYear(year) && day > 28)) {
-//       errors.add("invalid_day");
-//     }
-//   } else if ([4, 6, 9, 11].includes(month) && day > 30) {
-//     errors.add("invalid_day");
-//   }
+  // If "Save and return" was clicked, set to "IN PROGRESS" if needed and return
+  if (returnToStart) {
+    if (formdata.steps[currentStep].status !== "COMPLETED") {
+      formdata.steps[currentStep].status = "IN PROGRESS";
+    }
+    return;
+  } else {
+    // If "Save and Continue" was clicked, set this step to "COMPLETED"
+    formdata.steps[currentStep].status = "COMPLETED";
+  }
 
-//   if (
-//     !year ||
-//     year < new Date().getFullYear() - 200 ||
-//     year > new Date().getFullYear() + 200
-//   ) {
-//     errors.add("invalid_year");
-//   }
+  if (currentStep === "data-type") {
+    const notRequiredSteps = new Set<string>();
+    const notStartedSteps = new Set<string>();
+    const val = stepValue as DataTypeStep;
+    // If personal is not checked then lawful-basis-personal is not required
+    if (!val.personal.checked) {
+      notRequiredSteps.add("lawful-basis-personal");
+    } else {
+      notStartedSteps.add("data-subjects");
+      notStartedSteps.add("lawful-basis-personal");
+      notStartedSteps.add("role");
+    }
+    // If special is not checked then lawful-basis-special is not required
+    if (!val.special.checked) {
+      notRequiredSteps.add("lawful-basis-special");
+      notRequiredSteps.add("lawful-basis-special-public-interest");
+    } else {
+      notStartedSteps.add("data-subjects");
+      notStartedSteps.add("lawful-basis-special");
+      notStartedSteps.add("role");
+    }
+    // If none is checked, a few other steps are not required
+    if (val.none.checked) {
+      [
+        "data-subjects",
+        "lawful-basis-personal",
+        "lawful-basis-special",
+        "lawful-basis-special-public-interest",
+        "role",
+      ].forEach((s) => notRequiredSteps.add(s));
+    }
 
-//   // If day, month, and year are present and valid, check for past date
-//   if (
-//     !errors.has("invalid_day") &&
-//     !errors.has("invalid_month") &&
-//     !errors.has("invalid_year")
-//   ) {
-//     const today = new Date();
-//     today.setHours(0, 0, 0, 0);
-//     const inputDate = new Date(Number(year), Number(month) - 1, Number(day));
+    // Set everything that's not required to NOT REQUIRED
+    for (const s of notRequiredSteps) {
+      if (Object.prototype.hasOwnProperty.call(formdata.steps, s)) {
+        formdata.steps[s].status = "NOT REQUIRED";
+      }
+    }
 
-//     if (inputDate <= today) {
-//       errors.add("past_date");
-//     }
+    // Set everything that needs to be completed to NOT STARTED
+    for (const s of notStartedSteps) {
+      if (Object.prototype.hasOwnProperty.call(formdata.steps, s)) {
+        const stepStatus = formdata.steps[s].status;
+        if (!["COMPLETED", "IN PROGRESS"].includes(stepStatus)) {
+          formdata.steps[s].status = "NOT STARTED";
+        }
+      }
+    }
+  }
 
-//     if (inputDate.toString() === "Invalid Date") {
-//       errors.add("invalid_date");
-//     }
-//   }
+  if (currentStep === "data-access") {
+    if (!stepValue || stepValue === "no") {
+      formdata.steps["other-orgs"].status = "NOT REQUIRED";
+    } else {
+      formdata.steps["other-orgs"].status = "NOT STARTED";
+    }
+  }
 
-//   if (errors.size) {
-//     // Return the most relevant error message
-//     if (
-//       errors.has("invalid_day") &&
-//       errors.has("invalid_month") &&
-//       errors.has("invalid_year")
-//     ) {
-//       return "Date is invalid.";
-//     }
-//     if (errors.has("past_date")) {
-//       return "Date should be in the future.";
-//     }
-//     if (errors.has("invalid_day") && errors.has("invalid_month")) {
-//       return "Day and month are invalid.";
-//     }
-//     if (errors.has("invalid_day") && errors.has("invalid_year")) {
-//       return "Day and year are invalid.";
-//     }
-//     if (errors.has("invalid_month") && errors.has("invalid_year")) {
-//       return "Month and year are invalid.";
-//     }
-//     if (errors.has("invalid_day")) {
-//       return "Day is invalid.";
-//     }
-//     if (errors.has("invalid_month")) {
-//       return "Month is invalid.";
-//     }
-//     if (errors.has("invalid_year")) {
-//       return "Year is invalid.";
-//     }
-//   }
+  if (currentStep === "legal-power") {
+    if ((stepValue as LegalPowerStep).yes.checked) {
+      formdata.steps["legal-power-advice"].status = "NOT REQUIRED";
+    } else {
+      formdata.steps["legal-power-advice"].status = "NOT STARTED";
+      formdata.steps[currentStep].status = "IN PROGRESS";
+    }
+  }
 
-//   return ""; // If no errors
-// }
+  if (currentStep === "legal-gateway") {
+    const legalGatewayStep = stepValue as LegalGatewayStep;
+    if (legalGatewayStep.yes.checked || legalGatewayStep.other.checked) {
+      formdata.steps["legal-gateway-advice"].status = "NOT REQUIRED";
+    } else {
+      formdata.steps["legal-gateway-advice"].status = "NOT STARTED";
+      formdata.steps[currentStep].status = "IN PROGRESS";
+    }
+  }
 
-// const validateRequestBody = (step: string, body: RequestBody): string => {
-//   let errorMessage = "";
+  if (currentStep === "check") {
+    formdata.steps["declaration"].status = "NOT STARTED";
+  }
 
-//   switch (step) {
-//     case "date": {
-//       const dateStep: DateStep = body as DateStep;
-//       errorMessage = validateDate(
-//         dateStep.day ?? 0,
-//         dateStep.month ?? 0,
-//         dateStep.year ?? 0,
-//       );
-//       break;
-//     }
+  if (currentStep === "declaration") {
+    formdata.steps["confirmation"].status = "NOT STARTED";
+  }
 
-//     default:
-//       errorMessage = "";
-//   }
+  if (currentStep === "lawful-basis-special") {
+    if (
+      (stepValue as LawfulBasisSpecialStep)["reasons-of-public-interest"]
+        ?.checked
+    ) {
+      formdata.steps["lawful-basis-special-public-interest"].status =
+        "NOT STARTED";
+    } else {
+      formdata.steps["lawful-basis-special-public-interest"].status =
+        "NOT REQUIRED";
+    }
+  }
 
-//   return errorMessage;
-// };
+  if (currentStep === "data-travel-location") {
+    formdata.steps["data-travel"].status = "COMPLETED";
+  }
+
+  if (currentStep === "data-travel") {
+    if (!stepValue || stepValue === "no") {
+      formdata.steps["data-travel-location"].status = "NOT REQUIRED";
+    } else {
+      formdata.steps["data-travel-location"].status = "NOT STARTED";
+      formdata.steps[currentStep].status = "IN PROGRESS";
+    }
+  }
+
+  // Loop over all the steps in each section to check whether the
+  //  section is complete and/or the 'check' step can be enabled
+  if (everyStepCompleted(purposeSteps, formdata)) {
+    completedSections.add("purpose");
+  } else {
+    completedSections.delete("purpose");
+  }
+
+  if (everyStepCompleted(legalSteps, formdata)) {
+    // If all the legal steps AND the legal review is completed, legal is done.
+    if (formdata.steps["legal-review"].status === "COMPLETED") {
+      completedSections.add("legal");
+    } else {
+      formdata.steps["legal-review"].status = "NOT STARTED";
+    }
+  } else {
+    // If not all of the legal steps are Completed, legal review cannot be started
+    if (Object.prototype.hasOwnProperty.call(formdata.steps, "legal-review")) {
+      formdata.steps["legal-review"].status = "CANNOT START YET";
+    }
+    completedSections.delete("legal");
+  }
+
+  if (everyStepCompleted(dataProtectionSteps, formdata)) {
+    if (formdata.steps["protection-review"].status === "COMPLETED") {
+      completedSections.add("data-protection");
+    } else {
+      formdata.steps["protection-review"].status = "NOT STARTED";
+    }
+  } else {
+    if (
+      Object.prototype.hasOwnProperty.call(formdata.steps, "protection-review")
+    ) {
+      formdata.steps["protection-review"].status = "CANNOT START YET";
+    }
+    completedSections.delete("data-protection");
+  }
+
+  if (everyStepCompleted(securitySteps, formdata)) {
+    if (formdata.steps["security-review"].status === "COMPLETED") {
+      completedSections.add("security");
+    } else {
+      formdata.steps["security-review"].status = "NOT STARTED";
+    }
+  } else {
+    if (
+      Object.prototype.hasOwnProperty.call(formdata.steps, "security-review")
+    ) {
+      formdata.steps["security-review"].status = "CANNOT START YET";
+    }
+    completedSections.delete("security");
+  }
+
+  // If every other step is COMPLETED or NOT REQUIRED, set the
+  //  check step to NOT STARTED.
+  const allSteps = new Set(Object.keys(formdata.steps));
+  ["check", "declaration", "confirmation"].forEach((s) => allSteps.delete(s));
+  if (!["check", "declaration", "confirmation"].includes(currentStep)) {
+    completedSections.delete("check");
+    if (everyStepCompleted([...allSteps], formdata)) {
+      formdata.steps["check"].status = "NOT STARTED";
+    } else if (Object.prototype.hasOwnProperty.call(formdata.steps, "check")) {
+      formdata.steps["check"].status = "CANNOT START YET";
+    }
+  } else {
+    completedSections.add("check");
+  }
+
+  // Update the number of completed sections
+  formdata.completedSections = completedSections.size;
+};
+
+const everyStepCompleted = (steps: string[], formdata: FormData) => {
+  return steps.every(
+    (step) =>
+      Object.prototype.hasOwnProperty.call(formdata.steps, step) &&
+      ["COMPLETED", "NOT REQUIRED"].includes(formdata.steps[step].status),
+  );
+};
+
+function validateDate(day: number, month: number, year: number): string {
+  const errors = new Set<string>();
+
+  if (!day && !month && !year) {
+    return ""; // allows date to be null
+  }
+
+  const isLeapYear = (year: number) =>
+    year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+
+  if (!day || day < 1 || day > 31) {
+    errors.add("invalid_day");
+  }
+
+  if (!month || month < 1 || month > 12) {
+    errors.add("invalid_month");
+  } else if (month === 2) {
+    if ((isLeapYear(year) && day > 29) || (!isLeapYear(year) && day > 28)) {
+      errors.add("invalid_day");
+    }
+  } else if ([4, 6, 9, 11].includes(month) && day > 30) {
+    errors.add("invalid_day");
+  }
+
+  if (
+    !year ||
+    year < new Date().getFullYear() - 200 ||
+    year > new Date().getFullYear() + 200
+  ) {
+    errors.add("invalid_year");
+  }
+
+  // If day, month, and year are present and valid, check for past date
+  if (
+    !errors.has("invalid_day") &&
+    !errors.has("invalid_month") &&
+    !errors.has("invalid_year")
+  ) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const inputDate = new Date(Number(year), Number(month) - 1, Number(day));
+
+    if (inputDate <= today) {
+      errors.add("past_date");
+    }
+
+    if (inputDate.toString() === "Invalid Date") {
+      errors.add("invalid_date");
+    }
+  }
+
+  if (errors.size) {
+    // Return the most relevant error message
+    if (
+      errors.has("invalid_day") &&
+      errors.has("invalid_month") &&
+      errors.has("invalid_year")
+    ) {
+      return "Date is invalid.";
+    }
+    if (errors.has("past_date")) {
+      return "Date should be in the future.";
+    }
+    if (errors.has("invalid_day") && errors.has("invalid_month")) {
+      return "Day and month are invalid.";
+    }
+    if (errors.has("invalid_day") && errors.has("invalid_year")) {
+      return "Day and year are invalid.";
+    }
+    if (errors.has("invalid_month") && errors.has("invalid_year")) {
+      return "Month and year are invalid.";
+    }
+    if (errors.has("invalid_day")) {
+      return "Day is invalid.";
+    }
+    if (errors.has("invalid_month")) {
+      return "Month is invalid.";
+    }
+    if (errors.has("invalid_year")) {
+      return "Year is invalid.";
+    }
+  }
+
+  return ""; // If no errors
+}
+
+const validateRequestBody = (step: string, body: RequestBody): string => {
+  let errorMessage = "";
+
+  switch (step) {
+    case "date": {
+      const dateStep: DateStep = body as DateStep;
+      errorMessage = validateDate(
+        dateStep.day ?? 0,
+        dateStep.month ?? 0,
+        dateStep.year ?? 0,
+      );
+      break;
+    }
+
+    default:
+      errorMessage = "";
+  }
+
+  return errorMessage;
+};
 
 function isRadioField(id: string): id is RadioFieldStepID {
   return [
@@ -664,8 +904,8 @@ function checkAnswer(formdata: FormData) {
 
 export {
   extractFormData,
-  // validateDate,
-  // validateRequestBody,
+  validateDate,
+  validateRequestBody,
   getLicenceTitleFromURL,
   checkAnswer,
 };

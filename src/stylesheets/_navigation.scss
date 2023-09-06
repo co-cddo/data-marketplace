@@ -44,11 +44,21 @@ a:hover,
       text-underline-offset: 0.2em;
     }
   }
+
   &.app-navigation__list-item--right {
     float: right;
     padding-right: 0;
-    margin-right: -15px;
+
+    &.not-authenticated {
+      margin-right: -15px;
+    }
+
+    &.authenticated {
+      margin-left: 15px; /* Add spacing to the left when authenticated */
+      margin-right: -15px;
+    }
   }
+
   @include govuk-media-query($from: tablet) {
     @include govuk-font(19, $weight: bold, $line-height: $navigation-height);
     box-sizing: border-box;
