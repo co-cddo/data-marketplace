@@ -200,7 +200,6 @@ const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
   }
 
   if (stepData.id === "date") {
-    console.log("stepdata and bvody", stepData, body)
     return {
       day: body.day || null,
       month: body.month || null,
@@ -662,7 +661,6 @@ function checkAnswer(formdata: FormData) {
   }
   return dataObj;
 }
-
 
 export {
   extractFormData,

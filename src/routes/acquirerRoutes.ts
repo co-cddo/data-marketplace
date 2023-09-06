@@ -385,19 +385,16 @@ router.post(
     const formStep = req.params.step;
     const formdata = req.session.acquirerForms[resourceID];
     const stepData = formdata.steps[formStep];
-    console.log("stepData", stepData);
-    // console.log("formdata", formdata)
 
     if (!formdata || !formdata.steps[formStep]) {
       return res.status(400).send("Form data or step not found");
     }
 
     if (!errors.isEmpty()) {
-      stepData.errorMessage = errors
-        .array()
-        .map((err) => err.msg)
-        .join(", ");
-      console.log("stepData.errorMessage");
+      const errorSet = new Set();
+      errors.array().forEach((err) => errorSet.add(err.msg));
+      stepData.errorMessage = Array.from(errorSet).join(", ");
+
       return res.redirect(`/acquirer/${resourceID}/${formStep}`);
     }
 
