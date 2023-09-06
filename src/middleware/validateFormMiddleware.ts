@@ -1,6 +1,6 @@
 import { body } from "express-validator";
 
-export const validateFormaMiddleware = [
+export const validateFormMiddleware = [
   body("day")
     .optional({ checkFalsy: true })
     .isInt({ min: 1, max: 31 })

@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import { fetchResourceById } from "../services/findService";
-import { validateFormaMiddleware } from "../middleware/validateFormaMiddleware";
+import { validateFormMiddleware } from "../middleware/validateFormMiddleware";
 import { validationResult } from "express-validator";
 const router = express.Router();
 import formTemplate from "../models/shareRequestTemplate.json";
@@ -372,7 +372,7 @@ const URL = `${process.env.API_ENDPOINT}/sharedata`;
 
 router.post(
   "/:resourceID/:step",
-  validateFormaMiddleware,
+  validateFormMiddleware,
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     const errorMessage = "";
