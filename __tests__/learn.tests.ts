@@ -13,4 +13,10 @@ describe("GET /learn", () => {
     expect(response.status).toBe(200);
     expect(response.text).toContain("data share request");
   });
+
+  it('should respond as expected when accessing data-sharing-questions"', async () => {
+    const response = await request(app).get("/learn/data-sharing-questions");
+    expect(response.status).toBe(200);
+    expect(response.text).toContain("questions for a data share request");
+  });
 });
