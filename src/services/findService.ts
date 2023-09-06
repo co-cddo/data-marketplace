@@ -5,7 +5,7 @@ import {
   CatalogueItem,
   Organisation,
 } from "../models/dataModels";
-import { getLicenceTitleFromURL } from "../helperFunctions/helperFunctions";
+import { getLicenceTitleFromURL } from "../helperFunctions/formHelper";
 
 export async function fetchResources(
   query?: string,
