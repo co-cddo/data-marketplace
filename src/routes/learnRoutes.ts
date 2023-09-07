@@ -16,4 +16,11 @@ router.get("/data-sharing-questions", async (req: Request, res: Response) => {
   res.render("../views/learn/data-sharing-questions.njk");
 });
 
+router.get(
+  "/publish-data-descriptions-questions",
+  async (req: Request, res: Response) => {
+    res.render("../views/learn/publish-data-descriptions-questions.njk");
+  },
+);
+
 export default router;
