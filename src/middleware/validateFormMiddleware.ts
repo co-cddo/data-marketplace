@@ -116,6 +116,11 @@ export const validateFormMiddleware = (
   next: NextFunction,
 ) => {
   const formStep = req.params.step;
+
+  if (req.body.returnButton) {
+    return next();
+  }
+
   const validationRules = getValidationRules(formStep);
 
   if (validationRules.length > 0) {
