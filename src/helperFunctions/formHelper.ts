@@ -263,7 +263,6 @@ const everyStepCompleted = (steps: string[], formdata: FormData) => {
   );
 };
 
-
 function isRadioField(id: string): id is RadioFieldStepID {
   return [
     "data-access",
@@ -796,8 +795,4 @@ function checkAnswer(formdata: FormData) {
   return dataObj;
 }
 
-export {
-  extractFormData,
-  getLicenceTitleFromURL,
-  checkAnswer,
-};
+export { extractFormData, getLicenceTitleFromURL, checkAnswer };

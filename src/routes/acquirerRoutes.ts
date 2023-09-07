@@ -162,7 +162,6 @@ router.post(
 
     stepData.errorMessage = errorMessage;
 
-    
     stepData.value = extractFormData(stepData, req.body) || "";
 
     if (errorMessage) {

@@ -29,7 +29,7 @@ const dateValidator: CustomValidator = (value, { req }) => {
   if (day && year && !month) {
     throw new Error("Month is invalid");
   }
-  
+
   if (year && month && !day) {
     throw new Error("Day is invalid");
   }
@@ -52,7 +52,10 @@ export const validateFormMiddleware = [
     .escape(),
   body("year")
     .optional({ checkFalsy: true })
-    .isInt({ min: new Date().getFullYear() - 200, max: new Date().getFullYear() + 10 })
+    .isInt({
+      min: new Date().getFullYear() - 200,
+      max: new Date().getFullYear() + 10,
+    })
     .withMessage("Year is invalid")
     .custom(dateValidator)
     .escape(),
