@@ -41,24 +41,30 @@ router.get("/created-requests", async (req: Request, res: Response) => {
     "Nov",
     "Dec",
   ];
-    
+
   const allTableRows: {
-    pending: ManageShareTableRow[][],
-    submitted: ManageShareTableRow[][],
-    completed: ManageShareTableRow[][]
+    pending: ManageShareTableRow[][];
+    submitted: ManageShareTableRow[][];
+    completed: ManageShareTableRow[][];
   } = {
     pending: [],
-    submitted: [[{ text: "There are no submitted data share requests.", colspan: 5 }]],
-    completed: [[{ text: "You have not completed any data share requests.", colspan: 5 }]]
+    submitted: [
+      [{ text: "There are no submitted data share requests.", colspan: 5 }],
+    ],
+    completed: [
+      [{ text: "You have not completed any data share requests.", colspan: 5 }],
+    ],
   };
-  
+
   if (Object.values(acquirerForms).length === 0) {
-    allTableRows.pending.push([{ text: "There are no pending data share requests.", colspan: 5}]);
+    allTableRows.pending.push([
+      { text: "There are no pending data share requests.", colspan: 5 },
+    ]);
   } else {
     for (const [, formData] of Object.entries(acquirerForms)) {
       let formattedDate = "Unrequested";
       const dateValue = formData.steps.date.value as DateStep;
-  
+
       if (dateValue.day && dateValue.month && dateValue.year) {
         const monthIndex = dateValue.month - 1;
         const monthName = monthNames[monthIndex];
@@ -66,14 +72,20 @@ router.get("/created-requests", async (req: Request, res: Response) => {
       }
 
       const row: ManageShareTableRow[] = [
-        { html: `<a href="/acquirer/${formData.dataAsset}/start">${formData.requestId}</a>` },
+        {
+          html: `<a href="/acquirer/${formData.dataAsset}/start">${formData.requestId}</a>`,
+        },
         { text: formData.assetTitle },
         { text: formData.ownedBy },
         { text: formattedDate },
-        { html: `<span class="govuk-tag ${getStatusClass(formData.status)}">${formData.status}</span>` },
-    ];
-  
-    allTableRows.pending.push(row);
+        {
+          html: `<span class="govuk-tag ${getStatusClass(formData.status)}">${
+            formData.status
+          }</span>`,
+        },
+      ];
+
+      allTableRows.pending.push(row);
     }
   }
 
@@ -81,7 +93,7 @@ router.get("/created-requests", async (req: Request, res: Response) => {
     backLink,
     acquirerForms,
     getStatusClass,
-    allTableRows: allTableRows
+    allTableRows: allTableRows,
   });
 });
 
