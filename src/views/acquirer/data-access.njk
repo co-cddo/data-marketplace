@@ -2,6 +2,10 @@
 {%- from "govuk/components/radios/macro.njk" import govukRadios -%}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
+{% if errorMessage %}
+    {% set errorText = {text: errorMessage} %}
+{% endif %}
+
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -30,7 +34,8 @@
                       text: "Yes, we are collaborating with other organisations",
                       checked: savedValue === 'yes'
                       }
-                  ]
+                  ],
+                  errorMessage: errorText if errorText else undefined
                   }) }}
           <div class="govuk-button-group">
             {{ govukButton({

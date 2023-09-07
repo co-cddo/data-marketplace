@@ -2,6 +2,10 @@
 {%- from "govuk/components/radios/macro.njk" import govukRadios -%}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
+{% if errorMessage %}
+    {% set errorText = {text: errorMessage} %}
+{% endif %}
+
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -33,7 +37,7 @@
                           text: "We want to share responsibility with another department"
                       }
                       },
-                       {
+                      {
                       value: "processor",
                       text: "Processor",
                       checked: savedValue === 'processor',
@@ -49,7 +53,8 @@
                       text: "I don't know",
                       checked: savedValue === "don't know"
                       }
-                  ]
+                  ],
+                  errorMessage: errorText if errorText else undefined
                   }) }}
           <div class="govuk-button-group">
             {{ govukButton({
