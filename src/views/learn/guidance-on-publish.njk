@@ -1,0 +1,57 @@
+{% extends "page.njk" %}
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">Publishing data descriptions</h1>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds govuk-!-margin-bottom-6">
+
+    <p class="govuk-body">The Data Marketplace allows government organisations to publish descriptions of data (known as metadata) so they can be found by anyone in government. Once found, a <a class="govuk-link" href="/learn/data-sharing-arrangements">data share request</a> can be made to facilitate access to the data under the agreed terms. The Data Marketplace does not host the data itself or provide access to the data. Your data description will be published to the Data Marketplace and will be available to be found by other government organisations who are looking for data.</p>
+    <p class="govuk-body">All data descriptions should be findable, accessible, interoperable and reusable (FAIR). With data being published to the Data Marketplace, it should be easy to find, labelled with correct access rights, described to support interoperability with other data, and well described to support reuse. The descriptions of data should have their own identifiers and remain in the marketplace even if the data is no longer available.</p>
+    <p class="govuk-body">The Data Marketplace supports descriptions of datasets and data services. A dataset is a collection of data, published or curated by a single agent and available for access or download in one or more representations. A data service is a collection of operations that provides access to one or more datasets or data processing functions.</p>
+
+    <p class="govuk-body">Data descriptions can be added in a number of ways including:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>Manually through a web form</li>
+      <li>Upload via our CSV template</li>
+      <li>Catalogue connection to synchronise the descriptions in your organisation data catalogue with the Data Marketplace (using a data harvester)</li>
+    </ul>
+    <p class="govuk-body">To publish data descriptions you must have a Data Marketplace account with publish permission for your organisation. See <a class="govuk-link" href="#">guidance</a> for how to get an account with publish permissions. The publisher dashboard will give you an overview of the data your organisation has published in the Data Marketplace and how it is being used.</p>
+
+    <h2 class="govuk-heading-l">Updating data descriptions</h2>
+    <p class="govuk-body">Currently, updating data descriptions is not possible. We plan to add this feature in the near future.</p>
+
+    <h2 class="govuk-heading-l">Unpublishing data</h2>
+    <p class="govuk-body">The Data Marketplace adheres to the FAIR Data Principles. As such, data descriptions are not removed from the marketplace when they are deleted. They will no longer be available in search results, but will still be retrievable from their permanent URL. This supports long-term referencing of data descriptions within data share requests and other places where the description of the data continues to be needed after the data is no longer available.</p>
+    <p class="govuk-body">To have a data description unpublished, contact the Data Marketplace support team who will update the status of the data description.</p>
+
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full govuk-!-margin-top-8">
+    <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
+  </div>
+
+  <div class="govuk-grid-column-one-half-from-desktop">
+    <h2 id="community" class="govuk-heading-m">Learn</h2>
+    <p class="govuk-body">
+      <a class="govuk-link" href="/learn">Find information to help you</a> with the data marketplace.
+      <br>
+      For example: a glossary, or the UK Cross-Government Metadata Exchange model.
+    </p>
+  </div>
+
+  <div class="govuk-grid-column-one-half-from-desktop">
+    <h2 id="support" class="govuk-heading-m">Contact Data Marketplace Team</h2>
+    <p class="govuk-body">
+      <a class="govuk-link" href="#1">Contact the team</a> if you have a question, suggestion or idea. We’d love to hear from you.
+    </p>
+  </div>
+</div>
+
+{% endblock %}
