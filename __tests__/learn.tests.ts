@@ -23,6 +23,6 @@ describe("GET /learn", () => {
   it('should respond as expected when accessing guidance-on-publish"', async () => {
     const response = await request(app).get("/learn/guidance-on-publish");
     expect(response.status).toBe(200);
-    expect(response.text).toContain("publishing data descriptions");
+    expect(response.text).toContain("publish descriptions of data");
   });
 });
