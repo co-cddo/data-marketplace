@@ -92,11 +92,6 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   const assetTitle = formdata.assetTitle;
   const contactPoint = formdata.contactPoint;
 
-  if (stepData.errorMessage) {
-    // I wanna see this log
-    console.error(`Step Error: ${stepData.errorMessage}`);
-  }
-
   if (req.query.action === "back" && formdata.stepHistory) {
     formdata.stepHistory.pop();
   }
