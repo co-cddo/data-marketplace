@@ -123,6 +123,13 @@ router.get("/request-accepted", async (req: Request, res: Response) => {
   });
 });
 
+router.get("/request-rejected", async (req: Request, res: Response) => {
+  const backLink = req.headers.referer || "/";
+  res.render("../views/supplier/request-rejected.njk", {
+    backLink,
+  });
+});
+
 router.post("/review-summary", async (req: Request, res: Response) => {
   if (req.body.continueButton) {
     return res.redirect("/manage-shares/review-request");
@@ -218,5 +225,6 @@ router.get("/accept-request", async (req: Request, res: Response) => {
 router.post("/accept-request", async (req: Request, res: Response) => {
   return res.redirect("/manage-shares/received-requests");
 });
+
 
 export default router;
