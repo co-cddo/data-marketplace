@@ -1,6 +1,13 @@
 {% extends "govuk/template.njk" %}
 
+
 {% block pageTitle %}Data Marketplace{% endblock %}
+
+{% if errorMessage %}
+    {% set errorText = {text: errorMessage} %}
+{% else %}
+    {% set errorText = undefined %}
+{% endif %}
 
 {% block head %}
     <link href="/govuk-frontend/all.css" rel="text/stylesheet">
