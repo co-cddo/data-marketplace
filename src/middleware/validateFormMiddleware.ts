@@ -1,6 +1,6 @@
 import { NextFunction } from "connect";
 import { Request, Response } from "express-serve-static-core";
-import { CustomValidator, body} from "express-validator";
+import { CustomValidator, body } from "express-validator";
 
 const dateValidator: CustomValidator = (value, { req }) => {
   const day = req.body.day;
@@ -39,7 +39,6 @@ const dateValidator: CustomValidator = (value, { req }) => {
   return true;
 };
 
-
 function getDateValidation() {
   return [
     body("day")
@@ -67,48 +66,26 @@ function getDateValidation() {
 }
 
 function getDataAccessValidation() {
-  return [
-    body("data-access")
-      .exists()
-      .withMessage("Please select an option.")
-  ];
+  return [body("data-access").exists().withMessage("Please select an option.")];
 }
 
 function getDataTravelValidation() {
-  return [
-    body("data-travel")
-      .exists()
-      .withMessage("Please select an option.")
-  ];
+  return [body("data-travel").exists().withMessage("Please select an option.")];
 }
 
 function getRoleValidation() {
-  return [
-    body("role")
-      .exists()
-      .withMessage("Please select an option.")
-  ];
+  return [body("role").exists().withMessage("Please select an option.")];
 }
 function getFormatValidation() {
-  return [
-    body("format")
-      .exists()
-      .withMessage("Please select an option.")
-  ];
+  return [body("format").exists().withMessage("Please select an option.")];
 }
 function getDeliveryValidation() {
-  return [
-    body("delivery")
-      .exists()
-      .withMessage("Please select an option.")
-  ];
+  return [body("delivery").exists().withMessage("Please select an option.")];
 }
 
 function getSecurityReviewValidation() {
   return [
-    body("security-review")
-      .exists()
-      .withMessage("Please select an option.")
+    body("security-review").exists().withMessage("Please select an option."),
   ];
 }
 
@@ -133,7 +110,11 @@ function getValidationRules(step: string) {
   }
 }
 
-export const validateFormMiddleware = (req: Request, res: Response, next: NextFunction) => {
+export const validateFormMiddleware = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const formStep = req.params.step;
   const validationRules = getValidationRules(formStep);
 
@@ -156,4 +137,3 @@ export const validateFormMiddleware = (req: Request, res: Response, next: NextFu
     next();
   }
 };
-
