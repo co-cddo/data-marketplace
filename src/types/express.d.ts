@@ -207,7 +207,12 @@ declare module "express-session" {
 }
 
 /**
-* Supplier Journey Types & Interfaces start
-*/
+ * Supplier Journey Types & Interfaces start
+ */
 
-export type ManageShareTableRow = { html?: string, text?: string; colspan?: number; classes?: string; } 
+export type ManageShareTableRow = {
+  html?: string;
+  text?: string;
+  colspan?: number;
+  classes?: string;
+};
