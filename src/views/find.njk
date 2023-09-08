@@ -79,9 +79,9 @@
                             <div class="moj-override--selected-tags" id="tags-container-{{ category.id }}" >
                                 <h3 class="govuk-heading-s govuk-!-margin-bottom-0 category-filter-title">{{ category.title }}</h3>
                                 <div class="moj-filter-tags">
-                                    {% for filter in category.items %}
-                                        <span class="moj-filter__tag">{{ filter.text }}</span>
-                                    {% endfor %}
+                                {% for filter in category.items %}
+                                    <button class="moj-filter__tag" data-filter-value="{{ filter.value }}" data-filter-category="{{ category.id }}">{{ filter.text }}</button>
+                                {% endfor %}
                                 </div>
                             </div>
                         {% endif %}

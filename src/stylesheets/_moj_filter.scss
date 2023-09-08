@@ -42,7 +42,9 @@ div.app-c-expander {
   margin-right: 0.6rem;
   padding: 5px;
   text-decoration: none;
+  cursor: pointer;
 }
+
 .moj-filter__tag:after {
   background-image: url("/images/icon-tag-remove-cross.svg");
   content: "";
