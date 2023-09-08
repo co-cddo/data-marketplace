@@ -71,7 +71,7 @@
             </div>
             {% if hasFilters %}
                 <div id="js-facet-tag-wrapper" class="facet-tags__container facet-tags__container--hidden" aria-live="assertive">
-                    <a id="clear-filters" class="govuk-link govuk-link--no-visited-state" href="{{assetpath}}/find">
+                    <a id="clear-filters" class="govuk-link govuk-link--no-visited-state" href="{{assetpath}}/find{% if query %}?q={{ query }}{% endif %}">
                         <span>Clear Filters</span>
                     </a>
                     {% for category in filterOptionTags %}
@@ -79,9 +79,9 @@
                             <div class="moj-override--selected-tags" id="tags-container-{{ category.id }}" >
                                 <h3 class="govuk-heading-s govuk-!-margin-bottom-0 category-filter-title">{{ category.title }}</h3>
                                 <div class="moj-filter-tags">
-                                    {% for filter in category.items %}
-                                        <span class="moj-filter__tag">{{ filter.text }}</span>
-                                    {% endfor %}
+                                {% for filter in category.items %}
+                                    <button class="moj-filter__tag" data-filter-value="{{ filter.value }}" data-filter-category="{{ category.id }}">{{ filter.text }}</button>
+                                {% endfor %}
                                 </div>
                             </div>
                         {% endif %}

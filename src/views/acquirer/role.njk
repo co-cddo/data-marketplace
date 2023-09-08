@@ -33,7 +33,7 @@
                           text: "We want to share responsibility with another department"
                       }
                       },
-                       {
+                      {
                       value: "processor",
                       text: "Processor",
                       checked: savedValue === 'processor',
@@ -49,7 +49,8 @@
                       text: "I don't know",
                       checked: savedValue === "don't know"
                       }
-                  ]
+                  ],
+                  errorMessage: errorText
                   }) }}
           <div class="govuk-button-group">
             {{ govukButton({
