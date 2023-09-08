@@ -7,6 +7,7 @@ import marked from "marked";
 import helmet from "helmet";
 import homeRoute from "./routes/homeRoute";
 import learnRoutes from "./routes/learnRoutes";
+import adminRoutes from "./routes/adminRoutes";
 import findRoutes from "./routes/findRoutes";
 import shareRoutes from "./routes/shareRoutes";
 import acquirerRoutes from "./routes/acquirerRoutes";
@@ -127,6 +128,7 @@ app.use("/acquirer", acquirerRoutes);
 app.use("/manage-shares", manageRoutes);
 app.use("/cookie-settings", cookieRoutes);
 app.use("/learn", learnRoutes);
+app.use("/admin", adminRoutes);
 
 // Error handling
 // Catch all route to handle errors
