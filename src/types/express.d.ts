@@ -154,7 +154,9 @@ type FormStatus =
   | "IN PROGRESS"
   | "AWAITING REVIEW"
   | "RETURNED"
-  | "IN REVIEW";
+  | "IN REVIEW"
+  | "ACCEPTED"
+  | "REJECTED"
 
 export type StepValue =
   | string

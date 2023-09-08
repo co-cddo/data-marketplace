@@ -1,0 +1,29 @@
+@API = http://localhost:8000
+@ops-api-key = <copy from API .env>
+@jwt = Bearer <copy from browser>
+@user = <first.last>@digital.cabinet-office.gov.uk
+
+
+### List all users (ops only):
+GET {{API}}/users
+x-api-key: {{ops-api-key}}
+
+### Set user organisation (ops only):
+PUT {{API}}/users/{{user}}/org
+x-api-key: {{ops-api-key}}
+
+{
+    "org": "department-for-work-pensions"
+}
+
+### Get user (JWT):
+GET {{API}}/users/me
+Authorization: {{jwt}}
+
+### GET Share requests received by org (JWT):
+GET {{API}}/manage-shares/received-requests
+Authorization: {{jwt}}
+
+### GET Share request by ID (JWT)
+GET {{API}}/manage-shares/received-requests/eb9267c8-5f5d-468a-bc46-b5201d56b991
+Authorization: {{jwt}}
