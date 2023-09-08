@@ -20,9 +20,22 @@ describe("GET /learn", () => {
     expect(response.text).toContain("questions for a data share request");
   });
 
+  it('should respond as expected when accessing publish-data-descriptions-questions"', async () => {
+    const response = await request(app).get("/learn/publish-data-descriptions-questions");
+    expect(response.status).toBe(200);
+    expect(response.text).toContain("Questions you will be asked");
+  });
+
+  it('should respond as expected when accessing adding-a-single-data-asset"', async () => {
+    const response = await request(app).get("/learn/adding-a-single-data-asset");
+    expect(response.status).toBe(200);
+    expect(response.text).toContain("add a data description");
+  });
+
   it('should respond as expected when accessing guidance-on-publish"', async () => {
     const response = await request(app).get("/learn/guidance-on-publish");
     expect(response.status).toBe(200);
     expect(response.text).toContain("publish descriptions of data");
   });
+  
 });
