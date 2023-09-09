@@ -63,17 +63,21 @@ export const JwtStrategy = new JwtStrategyPassport(
   },
 );
 
-export function authenticateJWT(
+export async function authenticateJWT(
   req: Request,
   res: Response,
   next: NextFunction,
 ) {
+  res.clearCookie("returnTo");
+
   passport.authenticate(
     "jwt",
     { session: false },
     (err: Error, user: UserData) => {
       if (err || !user) {
-        return res.redirect("/");
+        const returnTo = req.originalUrl || "/";
+        res.cookie("returnTo", returnTo);
+        return res.redirect("/login");
       }
       req.user = user;
       next();

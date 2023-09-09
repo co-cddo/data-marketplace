@@ -13,10 +13,11 @@ router.get(
         if (loginErr) {
           res.redirect("/");
         }
+        const returnTo = req.cookies.returnTo || "/profile";
+        res.clearCookie("returnTo");
 
         res.cookie("jwtToken", req.user.idToken, { httpOnly: true });
-
-        res.redirect("/profile");
+        res.redirect(returnTo);
       });
     }
   },

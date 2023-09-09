@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
 dotenv.config();
 import nunjucks from "nunjucks";
+import { authenticateJWT } from "./middleware/authMiddleware";
 import markdown from "nunjucks-markdown";
 import marked from "marked";
 import helmet from "helmet";
@@ -120,11 +121,11 @@ app.use((req, res, next) => {
 app.use("/", loginRoutes);
 app.use("/auth", authRoutes);
 app.use("/", homeRoute);
-app.use("/profile", profileRoutes);
+app.use("/profile", authenticateJWT, profileRoutes);
 app.use("/find", findRoutes);
-app.use("/share", shareRoutes);
-app.use("/acquirer", acquirerRoutes);
-app.use("/manage-shares", manageRoutes);
+app.use("/share", authenticateJWT, shareRoutes);
+app.use("/acquirer", authenticateJWT, acquirerRoutes);
+app.use("/manage-shares", authenticateJWT, manageRoutes);
 app.use("/cookie-settings", cookieRoutes);
 app.use("/learn", learnRoutes);
 
