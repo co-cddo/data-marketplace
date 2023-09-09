@@ -11,7 +11,6 @@ export async function fetchResources(
   query?: string,
   organisationFilters?: string[],
   themeFilters?: string[],
-  filterOptionTags?: string[],
 ): Promise<{
   resources: CatalogueItem[];
 }> {
