@@ -24,7 +24,7 @@ export async function fetchResources(
     query ? query : ""
   }${orgSearch}${topicSearch}`;
   console.log(apiUrl);
-  if (!apiUrl) {
+  if (!process.env.API_ENDPOINT) {
     throw new Error(
       "API endpoint is undefined. Please set the API_ENDPOINT environment variable.",
     );
@@ -41,7 +41,7 @@ export async function fetchResourceById(
   resourceID: string,
 ): Promise<CatalogueItem> {
   const apiUrl = `${process.env.API_ENDPOINT}/catalogue/${resourceID}`;
-  if (!apiUrl) {
+  if (!process.env.API_ENDPOINT) {
     throw new Error(
       "API endpoint is undefined. Please set the API_ENDPOINT environment variable.",
     );
