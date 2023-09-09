@@ -15,7 +15,6 @@ export async function fetchResources(
 ): Promise<{
   resources: CatalogueItem[];
 }> {
-  console.log(query, organisationFilters, themeFilters, filterOptionTags);
   const orgSearch = organisationFilters
     ? `&organisation=${organisationFilters}`
     : "";
@@ -23,7 +22,6 @@ export async function fetchResources(
   const apiUrl = `${process.env.API_ENDPOINT}/catalogue?query=${
     query ? query : ""
   }${orgSearch}${topicSearch}`;
-  console.log(apiUrl);
   if (!process.env.API_ENDPOINT) {
     throw new Error(
       "API endpoint is undefined. Please set the API_ENDPOINT environment variable.",
