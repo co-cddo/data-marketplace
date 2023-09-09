@@ -14,67 +14,26 @@ export async function fetchResources(
   filterOptionTags?: string[],
 ): Promise<{
   resources: CatalogueItem[];
-  uniqueOrganisations: Organisation[];
-  uniqueThemes: string[];
-  selectedFilters?: string[];
 }> {
-  const apiUrl = `${process.env.API_ENDPOINT}/catalogue`;
+  console.log(query, organisationFilters, themeFilters, filterOptionTags);
+  const orgSearch = organisationFilters
+    ? `&organisation=${organisationFilters}`
+    : "";
+  const topicSearch = themeFilters ? `&topic=${themeFilters}` : "";
+  const apiUrl = `${process.env.API_ENDPOINT}/catalogue?query=${
+    query ? query : ""
+  }${orgSearch}${topicSearch}`;
+  console.log(apiUrl);
   if (!apiUrl) {
     throw new Error(
       "API endpoint is undefined. Please set the API_ENDPOINT environment variable.",
     );
   }
   const response = await axios.get<ApiResponse>(apiUrl as string);
-  let resources = response.data.data;
-  // Search the data if query is present
-  if (query) {
-    resources = resources.filter((catalogueItem) => {
-      return Object.values(catalogueItem).some(
-        (value) => value?.toString().toLowerCase().includes(query),
-      );
-    });
-  }
-
-  // Extract unique organisations
-  const organisationsSet = new Set();
-  const uniqueOrganisations: Organisation[] = [];
-  resources.forEach((item) => {
-    if (item.organisation && !organisationsSet.has(item.organisation.slug)) {
-      uniqueOrganisations.push(item.organisation);
-      organisationsSet.add(item.organisation.slug);
-    }
-  });
-
-  // Extract unique themes
-  const themesSet = new Set<string>();
-  resources.forEach((item) => {
-    if (item.theme && Array.isArray(item.theme)) {
-      item.theme.forEach((theme) => {
-        themesSet.add(theme);
-      });
-    }
-  });
-  const uniqueThemes = Array.from(themesSet);
-  if (organisationFilters) {
-    resources = resources.filter(
-      (item) =>
-        item.organisation &&
-        organisationFilters.includes(item.organisation.slug),
-    );
-  }
-
-  if (themeFilters) {
-    resources = resources.filter(
-      (item) =>
-        item.theme && item.theme.some((theme) => themeFilters.includes(theme)),
-    );
-  }
+  const resources = response.data.data;
 
   return {
-    resources: resources,
-    uniqueOrganisations: uniqueOrganisations,
-    uniqueThemes: uniqueThemes,
-    selectedFilters: filterOptionTags,
+    resources,
   };
 }
 
