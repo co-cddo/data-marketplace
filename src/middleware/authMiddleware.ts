@@ -90,10 +90,14 @@ export const loadJwtFromCookie = (
   res: Response,
   next: NextFunction,
 ) => {
-  const jwtToken = req.cookies.jwtToken;
+  if (req.isAuthenticated()) {
+    const jwtToken = req.cookies.jwtToken;
 
-  if (jwtToken) {
-    req.headers.authorization = `JWT ${jwtToken}`;
+    if (jwtToken) {
+      req.headers.authorization = `JWT ${jwtToken}`;
+    }
+  } else {
+    res.clearCookie("jwtToken");
   }
   next();
 };

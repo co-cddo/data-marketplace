@@ -45,8 +45,6 @@ app.use(
 );
 app.use(cookieParser());
 
-app.use(loadJwtFromCookie);
-
 app.use(
   "/assets",
   express.static(
@@ -82,6 +80,10 @@ passport.serializeUser((user: Express.User, done) => {
 passport.deserializeUser((user: Express.User, done) => {
   done(null, user);
 });
+app.use((req, res, next) => {
+  modifyApplicationMiddleware(req, res, next);
+});
+app.use(loadJwtFromCookie);
 
 app.use(express.static("public"));
 
@@ -113,10 +115,6 @@ env.addFilter("formatDate", function (date: string | number | Date) {
 
 // Set Nunjucks as the Express view engine
 app.set("view engine", "njk");
-
-app.use((req, res, next) => {
-  modifyApplicationMiddleware(req, res, next);
-});
 
 app.use("/", loginRoutes);
 app.use("/auth", authRoutes);
