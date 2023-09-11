@@ -13,6 +13,14 @@ jest.mock("../src/middleware/authMiddleware", () => ({
   ...jest.requireActual("../src/middleware/authMiddleware"),
   authenticateJWT: jest.fn(
     (req: Request, res: Response, next: NextFunction) => {
+      req.user = {
+        email: "test@test.com",
+        nickname: "testuser",
+        display_name: "Test User",
+        idToken: "someToken",
+        name: "test user",
+        email_verified: true,
+      };
       next();
     },
   ),
