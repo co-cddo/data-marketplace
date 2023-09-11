@@ -14,10 +14,9 @@ export async function fetchResources(
 ): Promise<{
   resources: CatalogueItem[];
 }> {
-  const orgSearch = organisationFilters
-    ? `&organisation=${organisationFilters}`
-    : "";
-  const topicSearch = themeFilters ? `&topic=${themeFilters}` : "";
+  const orgSearch =
+    organisationFilters?.map((o) => `&organisation=${o}`).join("") || "";
+  const topicSearch = themeFilters?.map((t) => `&topic=${t}`).join("") || "";
   const apiUrl = `${process.env.API_ENDPOINT}/catalogue?query=${
     query ? query : ""
   }${orgSearch}${topicSearch}`;
@@ -26,6 +25,7 @@ export async function fetchResources(
       "API endpoint is undefined. Please set the API_ENDPOINT environment variable.",
     );
   }
+
   const response = await axios.get<ApiResponse>(apiUrl as string);
   const resources = response.data.data;
 
