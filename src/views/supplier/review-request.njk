@@ -3,156 +3,169 @@
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 
 {% block content %}
-
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-    <span class="govuk-caption-l">Request ID: RR532</span>
+    <span class="govuk-caption-l">Request ID: {{ request.requestId }}</span>
     <h1 class="govuk-heading-l">
-      Review Department X's request to access citizen-relationships data
+      Review {{ request.requestingOrg }}'s request to access {{ request.assetTitle }} data
     </h1>
 
     <div class="request-section">
       <h2 class="govuk-heading-m">Lawful basis for personal data</h2>
       <ul class="govuk-list">
-        <li class="govuk-!-padding-bottom-3">Public task</li>
-        <li class="govuk-!-padding-bottom-3">Contract</li>
+        {% for basis, details in request.sharedata.steps['lawful-basis-personal'].value %}
+          {% if details.checked %}
+            <li class="govuk-!-padding-bottom-3">{{ basis | replace("-", " ") | capitalize }}</li>
+          {% endif %}
+        {% endfor %}
       </ul>
     </div>
 
     <div class="request-section">
       <h2 class="govuk-heading-m">Legal power</h2>
-      <p class="govuk-body">Common law</p>
+      <p class="govuk-body">{{ request.sharedata.steps['legal-power'].value.yes.explanation }}</p>
     </div>
 
     <div class="request-section">
       <h2 class="govuk-heading-m govuk-!-static-margin-bottom-1">Justification for legal gateway</h2>
       <div class="govuk-warning-text govuk-!-static-margin-bottom-2">
       </div>
-      <p class="govuk-body">
-        Under Regulation 3 of The Health Service (Control of Patient Information), patient data can be lawfully processed with a view to:<br>
-        <br>
-        * diagnosing communicable diseases and other risks to public health.<br>
-        * recognising trends in such diseases and risks.<br>
-        * controlling and preventing the spread of such diseases and risks.<br>
-        * monitoring and managing:<br>
-        ** outbreaks of communicable disease.<br>
-        ** incidents of exposure to communicable disease.<br>
-        ** the delivery, efficacy and safety of immunisation programmes.<br>
-        ** adverse reactions to vaccines and medicines.<br>
-        ** risks of infection acquired from food or the environment (including water supplies).<br>
-        ** the giving of information to persons about the diagnosis of communicable disease and risks of acquiring such disease.<br>
-      </p>
+      <p class="govuk-body">{{ request.sharedata.steps['legal-gateway'].value.yes.explanation }}</p>
     </div>
 
     <div class="request-section">
       <h2 class="govuk-heading-m">Data travel outside UK</h2>
-      <p class="govuk-body">No</p>
+      <p class="govuk-body">{{ request.sharedata.steps['data-travel'].value }}</p>
     </div>
 
     <div class="request-section">
       <h2 class="govuk-heading-m">Data subjects</h2>
-      <p class="govuk-body">Clinically extremely vulnerable patients.</p>
+      <p class="govuk-body">{{ request.sharedata.steps['data-subjects'].value }}</p>
     </div>
 
     <div class="request-section">
       <h2 class="govuk-heading-m">Aim of project</h2>
-      <p class="govuk-body">To assess claims and provide the correct level of support to vulnerable people based on their declared family relationships.</p>
+      <p class="govuk-body">{{ request.sharedata.steps['project-aims'].value.aims }}</p>
     </div>
 
     <div class="request-section">
       <h2 class="govuk-heading-m">How data will help reach this aim</h2>
-      <p class="govuk-body">We cannot identify who needs support without access to a data set about who in the UK is clinically vulnerable.</p>
+      <p class="govuk-body">{{ request.sharedata.steps['project-aims'].value.explanation }}</p>
     </div>
 
     <div class="request-section">
       <h2 class="govuk-heading-m">Public benefits of project</h2>
       <h3 class="govuk-heading-s">Evidence for public service delivery</h3>
-      <p class="govuk-body">
-        This data will allow us to identify both who to help and the number of people we need to help.</p>
+      <p class="govuk-body">{{ request.sharedata.steps.benefits.value['service-delivery'].explanation }}</p>
       <h3 class="govuk-heading-s">Evidence for decisions which are likely to benefit people in the UK</h3>
-      <p class="govuk-body">Depending on the number of people involved, this data could be used to support similar programs in the future.</p>
+      <p class="govuk-body">{{ request.sharedata.steps.benefits.value['benefit-people'].explanation }}</p>
     </div>
 
     <div class="request-section">
       <h2 class="govuk-heading-m">Preferred format</h2>
-      <p class="govuk-body">CSV file</p>
+      <ul class="govuk-list">
+        {% for format, details in request.sharedata.steps.format.value %}
+          {% if details.checked %}
+            <li class="govuk-!-padding-bottom-3">{{ format |  capitalize }}</li>
+          {% endif %}
+        {% endfor %}
+      </ul>
     </div>
 
     <div class="request-section">
       <h2 class="govuk-heading-m">How they want to receive it</h2>
-      <p class="govuk-body">Through secure third-party software</p>
+      <ul class="govuk-list">
+        {% for method, details in request.sharedata.steps.delivery.value %}
+          {% if details.checked %}
+            <li class="govuk-!-padding-bottom-3">{{ method | capitalize }}</li>
+          {% endif %}
+        {% endfor %}
+      </ul>
     </div>
 
     <div class="request-section">
       <h2 class="govuk-heading-m">What they think their role is</h2>
-      <p class="govuk-body">Processor</p>
+      <p class="govuk-body">{{ request.sharedata.steps.role.value }}</p>
     </div>
 
     <div class="request-section">
       <h2 class="govuk-heading-m">Data they want</h2>
-      <p class="govuk-body">List of vulnerable people's names and contact details</p>
+      <p class="govuk-body">{{ request.sharedata.steps['data-required'].value }}</p>
     </div>
 
     <div class="request-section">
       <h2 class="govuk-heading-m">How it will impact the project if they don't get the data</h2>
-      <p class="govuk-body">The project will be impossible to complete. We are reliant on this data and have no alternatives.</p>
+      <p class="govuk-body">{{ request.sharedata.steps.impact.value }}</p>
     </div>
 
     <div class="request-section">
       <h2 class="govuk-heading-m">How they will dispose of the data</h2>
-      <p class="govuk-body">Store CSV files in a secure sever and delete all files at end of project.</p>
+      <p class="govuk-body">{{ request.sharedata.steps.disposal.value }}</p>
     </div>
 
     <div class="request-section">
       <h2 class="govuk-heading-m">When they need it</h2>
-      <p class="govuk-body">16 March 2024</p>
+      <p class="govuk-body">{{ request.sharedata.steps.date.value.day }}/{{ request.sharedata.steps.date.value.month }}/{{ request.sharedata.steps.date.value.year }}</p>
     </div>
 
     <div class="request-section">
       <h2 class="govuk-heading-m">Data type</h2>
-      <p class="govuk-body">Personal data</p>
+      <ul class="govuk-list">
+        {% for type, details in request.sharedata.steps['data-type'].value %}
+          {% if details.checked %}
+            <li class="govuk-!-padding-bottom-3">{{ type | capitalize }}</li>
+          {% endif %}
+        {% endfor %}
+      </ul>
     </div>
 
-    <div class="request-section" style="border-bottom: 1px solid #ccc;">
+    <div class="request-section">
       <h2 class="govuk-heading-m">Data accessed by other organisations</h2>
-      <p class="govuk-body">Yes</p>
+      <p class="govuk-body">{{ request.sharedata.steps['data-access'].value }}</p>
       <p class="govuk-body">Organisations:</p>
       <ul class="govuk-list govuk-list--bullet">
-        <li>NHS</li>
+        {% for org in request.sharedata.steps['other-orgs'].value %}
+          <li>{{ org }}</li>
+        {% endfor %}
       </ul>
     </div>
   </div>
 </div>
 
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    {{ govukTextarea({
+      name: "request-notes",
+      id: "request-notes",
+      label: {
+        text: "Notes (not shared with " + request.requestingOrg + ")",
+        classes: "govuk-label--l",
+        isPageHeading: true
+      },
+      hint: {
+        text: "Do not include personal or financial information, like your National Insurance number or credit card details."
+      }
+    }) }}
+  </div>
+</div>
+
+
 <div class="govuk-grid-row" style="margin-top: 3em;">
   <div class="govuk-grid-column-two-thirds">
-    <form method="post" action="/manage-shares/review-request" id="reviewRequestNotesForm">
-      <div class="govuk-form-group">
-        {{ govukTextarea({
-          name: "review-request-notes",
-          id: "review-request-notes",
-          label: {
-            text: "Notes (not shared with Department X)",
-            classes: "govuk-label--l",
-            isPageHeading: true
-          }
-        }) }}
-      <div class="govuk-button-group">
-        {{ govukButton({
-            text: "Save and continue",
-            name: "continueButton",
-            value: "continue"
-        }) }}
-        {{ govukButton({
-            text: "Save and return",
-            classes: "govuk-button--secondary",
-            name: "returnButton",
-            value: "return"
-        }) }}
-      </div>
+    <form method="post">
+      {{ govukButton({
+        text: "Continue",
+        name: "continueButton"
+      }) }}
+      {{ govukButton({
+        text: "Return to summary",
+        name: "returnButton",
+        classes: "govuk-button--secondary"
+      }) }}
     </form>
   </div>
 </div>
 
+</div>
 
 {% endblock %}
