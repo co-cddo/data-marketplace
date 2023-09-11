@@ -5,7 +5,7 @@ const router = express.Router();
 
 const API = (path: string) => `${process.env.API_ENDPOINT}/${path}`
 
-export const apiKeyMiddleware = async (
+const apiKeyMiddleware = async (
     req: Request,
     res: Response,
     next: NextFunction,
@@ -26,12 +26,13 @@ export const apiKeyMiddleware = async (
 router.use(apiKeyMiddleware);
 
 const callApiAsAdmin = async (req: Request, res: Response, path: string, verb: "GET" | "PUT" = "GET", data: any = {}) => {
+    const headers = { "x-api-key": req.apiKey }
     try {
         let response;
         if (verb === "GET") {
-            response = await axios.get(API(path), { headers: { "x-api-key": req.apiKey } })
+            response = await axios.get(API(path), { headers })
         } else {
-            response = await axios.put(API(path), { ...data }, { headers: { "x-api-key": req.apiKey } })
+            response = await axios.put(API(path), { ...data }, { headers })
         }
         return res.status(200).json(response.data)
     } catch (error: unknown) {
