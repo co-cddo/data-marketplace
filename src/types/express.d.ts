@@ -8,8 +8,16 @@ interface UserData {
   nickname: string;
   name: string;
   idToken: string;
+<<<<<<< HEAD
   organisation: string | null;
   jobTitle: string | null;
+=======
+  email: string;
+  email_verified: boolean;
+  nickname: string;
+  name: string;
+  display_name: string;
+>>>>>>> main
 }
 
 interface FormData {
@@ -159,7 +167,9 @@ type FormStatus =
   | "IN PROGRESS"
   | "AWAITING REVIEW"
   | "RETURNED"
-  | "IN REVIEW";
+  | "IN REVIEW"
+  | "ACCEPTED"
+  | "REJECTED";
 
 export type StepValue =
   | string
