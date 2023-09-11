@@ -3,21 +3,13 @@ import { Request } from "express-serve-static-core";
 import session from "express-session";
 
 interface UserData {
-  email: string;
   display_name: string;
-  nickname: string;
-  name: string;
   idToken: string;
-<<<<<<< HEAD
-  organisation: string | null;
-  jobTitle: string | null;
-=======
   email: string;
   email_verified: boolean;
   nickname: string;
   name: string;
   display_name: string;
->>>>>>> main
 }
 
 interface FormData {
