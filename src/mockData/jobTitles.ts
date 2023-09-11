@@ -1,11 +1,11 @@
-interface SampleRole {
+interface SampleJobTitle {
     value: string
     text: string
 }
 
-type SampleRoles = Record<string, SampleRole>
+type SampleJobTitles = Record<string, SampleJobTitle>
 
-export const sampleRoles: SampleRoles = {
+export const sampleJobTitles: SampleJobTitles = {
     lawyer: { value: "lawyer", text: "Lawyer" },
 
     "data-protection-officer": {

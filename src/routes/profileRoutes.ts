@@ -3,7 +3,7 @@ import { ApiUser } from "../models/apiUser";
 const router = express.Router();
 import axios from "axios";
 import { Organisation } from "../models/dataModels";
-import { sampleRoles } from "../mockData/roles";
+import { sampleJobTitles } from "../mockData/jobTitles";
 const API = `${process.env.API_ENDPOINT}`;
 
 router.get(
@@ -16,15 +16,15 @@ router.get(
       headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
     });
     const apiUser: ApiUser = apiUserResponse.data;
-    let role = apiUser.role
-    if (role) {
-      role = sampleRoles[role].text
+    let jobTitle = apiUser.jobTitle
+    if (jobTitle) {
+      jobTitle = sampleJobTitles[jobTitle].text
     }
     res.render("profile.njk", {
       heading: "Authed",
       user: req.user,
       organisation: apiUser.org?.title,
-      role: role
+      jobTitle: jobTitle
     });
   },
   (err: Error, req: Request, res: Response, next: NextFunction) => {
@@ -58,7 +58,7 @@ router.get("/complete", async (req: Request, res: Response) => {
 
   res.render("completeProfile.njk", {
     organisations: templateOrgs,
-    roles: Object.values(sampleRoles),
+    jobTitles: Object.values(sampleJobTitles),
   });
 });
 
@@ -71,7 +71,7 @@ router.post("/complete", async (req: Request, res: Response) => {
       { headers: { Authorization: `Bearer ${req.cookies.jwtToken}` } },
     );
     const user: ApiUser = response.data
-    if (user.org?.slug === req.body.organisation && user.role === req.body.role) {
+    if (user.org?.slug === req.body.organisation && user.jobTitle === req.body.jobTitle) {
       return res.redirect("/profile")
     } else {
       console.error("Complete profile failed")

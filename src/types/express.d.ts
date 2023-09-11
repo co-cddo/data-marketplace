@@ -9,7 +9,7 @@ interface UserData {
   name: string;
   idToken: string;
   organisation: string | null;
-  role: string | null;
+  jobTitle: string | null;
 }
 
 interface FormData {
