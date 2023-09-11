@@ -3,10 +3,21 @@ import request from "supertest";
 import app from "../src/app";
 import { fetchResourceById } from "../src/services/findService";
 import mockData from "./mock/mockData.json";
+import { NextFunction, Request, Response } from "express";
+import { authenticateJWT } from "../src/middleware/authMiddleware";
 
 // Mock axios get function
 jest.mock("axios");
 jest.mock("../src/services/findService");
+jest.mock("../src/services/findService");
+jest.mock("../src/middleware/authMiddleware", () => ({
+  ...jest.requireActual("../src/middleware/authMiddleware"),
+  authenticateJWT: jest.fn(
+    (req: Request, res: Response, next: NextFunction) => {
+      next();
+    },
+  ),
+}));
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe("GET /:resourceID/start", () => {
@@ -18,12 +29,14 @@ describe("GET /:resourceID/start", () => {
 
   afterEach(() => {
     // Clear the mock after each test
-    mockedAxios.get.mockClear();
+    jest.clearAllMocks();
     delete process.env.API_ENDPOINT;
   });
 
   const resourceId = mockData.data[0].identifier;
-  const expectedResource = mockData.data.find(resource => resource.identifier === resourceId);
+  const expectedResource = mockData.data.find(
+    (resource) => resource.identifier === resourceId,
+  );
   if (!expectedResource) {
     throw new Error("Resource not found in mock data");
   }
@@ -33,6 +46,7 @@ describe("GET /:resourceID/start", () => {
   it("should return the correct resource data when valid ID is provided", async () => {
     const response = await request(app).get(`/acquirer/${resourceId}/start`);
     expect(response.status).toBe(200);
+    expect(authenticateJWT).toHaveBeenCalledTimes(1);
     // We test the render of the first section
     expect(response.text).toContain("Purpose of the data share");
     // We test the render of the first question of first section
@@ -43,37 +57,47 @@ describe("GET /:resourceID/start", () => {
   it("should return a 404 status when resource ID does not exist", async () => {
     (fetchResourceById as jest.Mock).mockResolvedValue(null);
     const response = await request(app).get(`/acquirer/non-existing-id/start`);
+    expect(authenticateJWT).toHaveBeenCalledTimes(1);
     expect(response.status).toBe(404);
     expect(response.text).toContain("Resource not found");
   });
   // Handling case when fetchResourceById throws an error
   it("should return a 500 status when an error occurs fetching resource data", async () => {
-    (fetchResourceById as jest.Mock).mockRejectedValue(new Error("An error occurred while fetching data from the API"));
-    const spy = jest.spyOn(console, 'error').mockImplementation();
+    (fetchResourceById as jest.Mock).mockRejectedValue(
+      new Error("An error occurred while fetching data from the API"),
+    );
+    const spy = jest.spyOn(console, "error").mockImplementation();
     const response = await request(app).get(`/acquirer/${resourceId}/start`);
     expect(response.status).toBe(500);
-    expect(response.text).toContain("An error occurred while fetching data from the API");
-    expect(spy).toHaveBeenCalledWith("An error occurred while fetching data from the API:", expect.any(Error));
+    expect(authenticateJWT).toHaveBeenCalledTimes(1);
+    expect(response.text).toContain(
+      "An error occurred while fetching data from the API",
+    );
+    expect(spy).toHaveBeenCalledWith(
+      "An error occurred while fetching data from the API:",
+      expect.any(Error),
+    );
     spy.mockRestore();
   });
-
 });
 
 describe("GET//:resourceID/:steps", () => {
-
   const resourceId = mockData.data[0].identifier;
-  const expectedResource = mockData.data.find(resource => resource.identifier === resourceId);
+  const expectedResource = mockData.data.find(
+    (resource) => resource.identifier === resourceId,
+  );
   if (!expectedResource) {
     throw new Error("Resource not found in mock data");
   }
-    // Handling data-subjects
-    it("should return a 302 status when select data-subjects", async () => {
-
-      const response = await request(app).get(`/acquirer/${resourceId}/data-subjects`)
-      expect(response.status).toBe(302);
-      expect(response.header.location).toBe('/share/fcbc4d3f-0c05-4857-b0h7-eeec6bfcd3a1/acquirer')
-
-    });
-    
+  // Handling data-subjects
+  it("should return a 302 status when select data-subjects", async () => {
+    const response = await request(app).get(
+      `/acquirer/${resourceId}/data-subjects`,
+    );
+    expect(authenticateJWT).toHaveBeenCalledTimes(1);
+    expect(response.status).toBe(302);
+    expect(response.header.location).toBe(
+      "/share/fcbc4d3f-0c05-4857-b0h7-eeec6bfcd3a1/acquirer",
+    );
   });
-  
+});

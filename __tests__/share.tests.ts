@@ -1,15 +1,18 @@
-import request, { Response } from "supertest";
+import request from "supertest";
 import app from "../src/app";
 import { fetchResourceById } from "../src/services/findService";
 import mockData from "./mock/mockData.json";
-import { NextFunction, Request } from "express";
+import { NextFunction, Request, Response } from "express";
+import { authenticateJWT } from "../src/middleware/authMiddleware";
 
 jest.mock("../src/services/findService");
 jest.mock("../src/middleware/authMiddleware", () => ({
   ...jest.requireActual("../src/middleware/authMiddleware"),
-  authenticateJWT: (req: Request, res: Response, next: NextFunction) => {
-    next(); // this basically always passes auth
-  },
+  authenticateJWT: jest.fn(
+    (req: Request, res: Response, next: NextFunction) => {
+      next();
+    },
+  ),
 }));
 
 describe("GET /share/:resourceID/acquirer", () => {
@@ -25,12 +28,9 @@ describe("GET /share/:resourceID/acquirer", () => {
 
   (fetchResourceById as jest.Mock).mockResolvedValue(expectedResource);
 
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
   it("should return the correct resource data when valid ID is provided", async () => {
     const response = await request(app).get(`/share/${resourceId}/acquirer`);
+    expect(authenticateJWT).toHaveBeenCalledTimes(1);
     expect(response.status).toBe(200);
     expect(response.text).toContain(resourceTitle);
   });
