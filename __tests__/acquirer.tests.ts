@@ -9,7 +9,6 @@ import { authenticateJWT } from "../src/middleware/authMiddleware";
 // Mock axios get function
 jest.mock("axios");
 jest.mock("../src/services/findService");
-jest.mock("../src/services/findService");
 jest.mock("../src/middleware/authMiddleware", () => ({
   ...jest.requireActual("../src/middleware/authMiddleware"),
   authenticateJWT: jest.fn(
