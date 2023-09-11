@@ -111,9 +111,8 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
 
   if (formdata.stepHistory && formdata.stepHistory.length > 0) {
     // Otherwise, set it to the previous step from stepHistory
-    backLink = `/acquirer/${resourceID}/${
-      formdata.stepHistory[formdata.stepHistory.length - 1]
-    }?action=back`;
+    backLink = `/acquirer/${resourceID}/${formdata.stepHistory[formdata.stepHistory.length - 1]
+      }?action=back`;
   } else {
     backLink = `/acquirer/${resourceID}/start`;
   }
@@ -271,10 +270,7 @@ router.post(
     // Send the formdata to the backend if logged in
     if (req.isAuthenticated()) {
       try {
-        await axios.put(URL, {
-          jwt: req.cookies.jwtToken,
-          sharedata: formdata,
-        });
+        await axios.put(URL, { sharedata: formdata }, { headers: { Authorization: `Bearer ${req.cookies.jwtToken}` } });
       } catch (error: unknown) {
         console.error("Error sending formdata to backend");
         if (axios.isAxiosError(error)) {

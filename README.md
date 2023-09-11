@@ -19,3 +19,7 @@ To use dcoker:
 ## SSO
 
 The project uses single sign on for authentication. The parameters can be grabbed from AWS parameter store if required locally. If you dont need to SSO locally, just put dummy strings into the ENV variales.
+
+### Request templates
+
+In `/requests` is a requests.http.template file which can be renamed to requests.http and used with the REST Client VSCode extension to test some of the new API endpoints. The ops-api-key, jwt and user variables need to be set to real values.

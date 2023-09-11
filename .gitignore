@@ -4,3 +4,4 @@ build/*
 /public/stycssles/
 .env
 .DS_Store
+requests.http
