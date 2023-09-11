@@ -5,7 +5,7 @@
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <form method="post">
+     
         <h1 class="govuk-heading-l">
           <span class="govuk-caption-l">Request ID: {{requestId}}</span>
           <label class="govuk-label govuk-label--l" for="more-detail">
@@ -16,6 +16,7 @@
           Providing a date can help prioritise requests. Unreasonable dates may be rejected.
         </p>
         <div class="govuk-row">
+           <form method="post">
         {{ govukDateInput({
             id: "date",
             name: "date",
@@ -29,7 +30,6 @@
             hint: {
                 text: "For example, 02 03 2024"
             },
-            errorMessage: errorText,
             items: [{
                 name: "day",
                 value: savedValue.day,
@@ -42,7 +42,8 @@
                 name: "year",
                 value: savedValue.year,
                 classes: "govuk-input--width-4"
-            }]
+            }],
+            errorMessage: errorMessage
         }) }}
         </div>
         <div class="govuk-button-group">

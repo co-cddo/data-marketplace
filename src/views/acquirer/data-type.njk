@@ -8,58 +8,60 @@
       <span class="govuk-caption-l">Request ID: {{requestId}}</span>
       <form method="POST" id="dataTypeForm">
         {{ govukCheckboxes({
-                  name: "data-type",
-                  fieldset: {
-                      legend: {
-                      text: "What type of data do you need?",
-                      isPageHeading: true,
-                      classes: "govuk-fieldset__legend--l"
-                      }
-                  },
-                  items: [
-                      {
-                      value: "personal",
-                      text: "Personal data",
-                      checked: savedValue["personal"].checked,
-                      hint: {
-                          text: "For example, names or addresses."
-                      }
-                      },
-                      {
-                      value: "special",
-                      text: "Special category data",
-                      checked: savedValue["special"].checked,
-                      hint: {
-                          text: "For example, data about health or religious beliefs."
-                      }
-                      },
-                      {
-                      divider: "or"
-                      },
-                      {
-                      value: "none",
-                      text: "None of the above",
-                      checked: savedValue["none"].checked,
-                      hint: {
-                          text: "For example, anonymised data."
-                      },
-                      behaviour: "exclusive"
-                      }
-                  ]
-                  }) }}
+        name: "data-type",
+        fieldset: {
+            legend: {
+            text: "What type of data do you need?",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+            }
+        },
+        items: [
+            {
+            value: "personal",
+            text: "Personal data",
+            checked: savedValue["personal"].checked,
+            hint: {
+                text: "For example, names or addresses."
+            }
+            },
+            {
+            value: "special",
+            text: "Special category data",
+            checked: savedValue["special"].checked,
+            hint: {
+                text: "For example, data about health or religious beliefs."
+            }
+            },
+            {
+            divider: "or"
+            },
+            {
+            value: "none",
+            text: "None of the above",
+            checked: savedValue["none"].checked,
+            hint: {
+                text: "For example, anonymised data."
+            },
+            behaviour: "exclusive"
+            }
+        ],
+        errorMessage: errorMessage
+        }) }}
         <div class="govuk-button-group">
           {{ govukButton({
-                text: "Save and continue",
-                name: "continueButton",
-                value: "continue"
-            }) }}
+            text: "Save and continue",
+            name: "continueButton",
+            value: "continue"
+          }) }}
           {{ govukButton({
-                text: "Save and return",
-                classes: "govuk-button--secondary",
-                name: "returnButton",
-                value: "return"
-            }) }}
+            text: "Save and return",
+            classes: "govuk-button--secondary",
+            name: "returnButton",
+            value: "return"
+          }) }}
         </div>
+        </form>
         <h2 class="govuk-heading-m">More information</h2>
         <ul class="govuk-list">
           <li>
@@ -69,7 +71,6 @@
             <a class="govuk-link" href="https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/lawful-basis/special-category-data/what-is-special-category-data/" target="_blank">What is special category data? (opens in new tab)</a>
           </li>
         </ul>
-      </form>
     </div>
   </div>
 {% endblock %}

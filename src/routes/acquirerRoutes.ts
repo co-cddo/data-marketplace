@@ -131,6 +131,7 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
 
 const URL = `${process.env.API_ENDPOINT}/sharedata`;
 
+
 router.post(
   "/:resourceID/:step",
   validateFormMiddleware,
@@ -151,15 +152,34 @@ router.post(
       return res.status(400).send("Form data or step not found");
     }
 
+    stepData.errorMessage = stepData.errorMessage || {};
+
     if (!errors.isEmpty()) {
-      const errorSet = new Set();
-      errors.array().forEach((err) => errorSet.add(err.msg));
-      stepData.errorMessage = Array.from(errorSet).join(", ");
-
-      return res.redirect(`/acquirer/${resourceID}/${formStep}`);
-    }
-
-    stepData.errorMessage = errorMessage;
+      stepData.errorMessage = {};
+  
+      if (formStep === "project-aims") {
+        errors.array().forEach((err) => {
+          if ("path" in err) {
+            (stepData.errorMessage as Record<string, string>)[err.path] = err.msg;
+            console.log("err on err.path", err.path);
+            console.log("stepData.errorMessage", stepData.errorMessage);
+          }
+        });
+      } else if (formStep === "date") {
+        const errorSet = new Set();
+        errors.array().forEach((err) => errorSet.add(err.msg));
+        stepData.errorMessage = Array.from(errorSet).join(", ");
+      } else {
+        // Default handling for forms that accept a single value
+        const errorSet = new Set();
+        errors.array().forEach((err) => errorSet.add(err.msg));
+        stepData.errorMessage = errorSet.values().next().value || "";
+        console.log(stepData.errorMessage);
+        return res.redirect(`/acquirer/${resourceID}/${formStep}`);
+      }
+    } 
+    
+    // stepData.errorMessage = errorMessage;
 
     stepData.value = extractFormData(stepData, req.body) || "";
 
@@ -282,7 +302,7 @@ router.post(
     }
 
     return res.redirect(redirectURL);
-  },
+  }
 );
 
 export default router;

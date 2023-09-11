@@ -180,7 +180,7 @@ interface Step {
   value: StepValue;
   nextStep: string;
   blockedBy?: string[];
-  errorMessage?: string;
+  errorMessage: string | Record<string, string>;
   skipped?: boolean;
 }
 

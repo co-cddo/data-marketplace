@@ -4,9 +4,9 @@
 {% block pageTitle %}Data Marketplace{% endblock %}
 
 {% if errorMessage %}
-    {% set errorText = {text: errorMessage} %}
+    {% set errorMessage = {text: errorMessage} %}
 {% else %}
-    {% set errorText = undefined %}
+    {% set errorMessage = undefined %}
 {% endif %}
 
 {% block head %}
