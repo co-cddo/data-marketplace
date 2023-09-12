@@ -1,10 +1,11 @@
 import express, { NextFunction, Request, Response } from "express";
 import { ApiUser } from "../models/apiUser";
-const router = express.Router();
 import axios from "axios";
 import { Organisation } from "../models/dataModels";
 import { sampleJobTitles } from "../mockData/jobTitles";
 import { apiUser } from "../middleware/apiMiddleware";
+
+const router = express.Router();
 const API = `${process.env.API_ENDPOINT}`;
 
 router.get(
