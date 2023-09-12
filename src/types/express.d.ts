@@ -1,7 +1,7 @@
 /* eslint-disable  @typescript-eslint/no-unused-vars */
 import { Request } from "express-serve-static-core";
 import session from "express-session";
-import { ApiUser } from "../models/apiUser";
+import { Organisation } from "../models/dataModels";
 
 interface UserData {
   display_name: string;
@@ -10,7 +10,10 @@ interface UserData {
   email_verified: boolean;
   nickname: string;
   name: string;
-  display_name: string;
+  // These are added by apiMiddleware.apiUser:
+  user_id: string | null;
+  organisation: Organisation | null;
+  jobTitle: string | null;
 }
 
 interface FormData {
@@ -204,7 +207,6 @@ interface Section {
 declare module "express-serve-static-core" {
   interface Request {
     user: UserData;
-    apiUser: ApiUser;
   }
 }
 

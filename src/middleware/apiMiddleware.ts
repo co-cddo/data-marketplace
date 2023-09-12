@@ -14,7 +14,9 @@ export const apiUser = async (
       headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
     });
     const apiUser: ApiUser = apiUserResponse.data;
-    req.apiUser = apiUser;
+    req.user.user_id = apiUser.user_id;
+    req.user.organisation = apiUser.org;
+    req.user.jobTitle = apiUser.jobTitle;
     next();
   } catch (error) {
     if (axios.isAxiosError(error)) {

@@ -14,14 +14,14 @@ router.get(
     if (!req.isAuthenticated()) {
       return res.redirect("/error");
     }
-    let jobTitle = req.apiUser.jobTitle;
+    let jobTitle = req.user.jobTitle;
     if (jobTitle) {
       jobTitle = sampleJobTitles[jobTitle].text;
     }
     res.render("profile.njk", {
       heading: "Authed",
       user: req.user,
-      organisation: req.apiUser.org?.title,
+      organisation: req.user.organisation?.title,
       jobTitle: jobTitle,
     });
   },
@@ -38,7 +38,7 @@ router.get(
 
 router.get("/complete", apiUser, async (req: Request, res: Response) => {
   // If the authenticated user already has an organisation they can't set it again
-  if (req.apiUser.org) {
+  if (req.user.organisation) {
     return res.redirect("/profile");
   }
 
