@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 const router = express.Router();
 import passport from "passport";
 import axios from "axios";
@@ -7,7 +7,7 @@ const apiLoginUrl = `${process.env.API_ENDPOINT}/login`;
 router.get(
   "/callback",
   passport.authenticate("custom-sso", { session: false }),
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     if (!req.isAuthenticated()) {
       res.redirect("/");
     } else {
@@ -35,6 +35,7 @@ router.get(
           } else {
             console.error(error);
           }
+          next(error)
         }
 
         if (response?.data.new_user) {
