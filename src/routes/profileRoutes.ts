@@ -1,13 +1,11 @@
 import express, { NextFunction, Request, Response } from "express";
 const router = express.Router();
-import { authenticateJWT } from "../middleware/authMiddleware";
 import axios from "axios";
 
 const URL = `${process.env.API_ENDPOINT}/login`;
 
 router.get(
   "/",
-  authenticateJWT,
   async (req: Request, res: Response) => {
     if (!req.isAuthenticated()) {
       return res.redirect("/error");

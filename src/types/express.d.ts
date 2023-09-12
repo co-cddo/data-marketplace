@@ -5,6 +5,11 @@ import session from "express-session";
 interface UserData {
   display_name: string;
   idToken: string;
+  email: string;
+  email_verified: boolean;
+  nickname: string;
+  name: string;
+  display_name: string;
 }
 
 interface FormData {
@@ -156,7 +161,7 @@ type FormStatus =
   | "RETURNED"
   | "IN REVIEW"
   | "ACCEPTED"
-  | "REJECTED"
+  | "REJECTED";
 
 export type StepValue =
   | string
