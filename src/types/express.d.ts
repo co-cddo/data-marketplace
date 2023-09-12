@@ -156,7 +156,7 @@ type FormStatus =
   | "RETURNED"
   | "IN REVIEW"
   | "ACCEPTED"
-  | "REJECTED"
+  | "REJECTED";
 
 export type StepValue =
   | string
@@ -205,6 +205,7 @@ declare module "express-session" {
   interface SessionData {
     acquirerForms?: Record<string, FormData>;
     backLink: string;
+    formErrors: { [key: string]: string };
   }
 }
 

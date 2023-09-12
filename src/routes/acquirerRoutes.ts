@@ -1,7 +1,9 @@
 import express, { Request, Response } from "express";
 import { fetchResourceById } from "../services/findService";
-import { validateFormMiddleware } from "../middleware/validateFormMiddleware";
-import { validationResult } from "express-validator";
+import {
+  validateFormMiddleware,
+  handleValidationErrors,
+} from "../middleware/validateFormMiddleware";
 const router = express.Router();
 import formTemplate from "../models/shareRequestTemplate.json";
 import { randomUUID } from "crypto";
@@ -92,6 +94,9 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   const assetTitle = formdata.assetTitle;
   const contactPoint = formdata.contactPoint;
 
+  stepData.errorMessage = req.session.formErrors || "";
+  delete req.session.formErrors;
+
   if (req.query.action === "back" && formdata.stepHistory) {
     formdata.stepHistory.pop();
   }
@@ -111,8 +116,9 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
 
   if (formdata.stepHistory && formdata.stepHistory.length > 0) {
     // Otherwise, set it to the previous step from stepHistory
-    backLink = `/acquirer/${resourceID}/${formdata.stepHistory[formdata.stepHistory.length - 1]
-      }?action=back`;
+    backLink = `/acquirer/${resourceID}/${
+      formdata.stepHistory[formdata.stepHistory.length - 1]
+    }?action=back`;
   } else {
     backLink = `/acquirer/${resourceID}/start`;
   }
@@ -131,14 +137,11 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
 
 const URL = `${process.env.API_ENDPOINT}/sharedata`;
 
-
 router.post(
   "/:resourceID/:step",
   validateFormMiddleware,
+  handleValidationErrors,
   async (req: Request, res: Response) => {
-    const errors = validationResult(req);
-    const errorMessage = "";
-
     if (!req.session.acquirerForms) {
       return res.status(400).send("Acquirer forms not found in session");
     }
@@ -152,40 +155,8 @@ router.post(
       return res.status(400).send("Form data or step not found");
     }
 
-    stepData.errorMessage = stepData.errorMessage || {};
-
-    if (!errors.isEmpty()) {
-      stepData.errorMessage = {};
-  
-      if (formStep === "project-aims") {
-        errors.array().forEach((err) => {
-          if ("path" in err) {
-            (stepData.errorMessage as Record<string, string>)[err.path] = err.msg;
-            console.log("err on err.path", err.path);
-            console.log("stepData.errorMessage", stepData.errorMessage);
-          }
-        });
-      } else if (formStep === "date") {
-        const errorSet = new Set();
-        errors.array().forEach((err) => errorSet.add(err.msg));
-        stepData.errorMessage = Array.from(errorSet).join(", ");
-      } else {
-        // Default handling for forms that accept a single value
-        const errorSet = new Set();
-        errors.array().forEach((err) => errorSet.add(err.msg));
-        stepData.errorMessage = errorSet.values().next().value || "";
-        console.log(stepData.errorMessage);
-        return res.redirect(`/acquirer/${resourceID}/${formStep}`);
-      }
-    } 
-    
-    // stepData.errorMessage = errorMessage;
-
     stepData.value = extractFormData(stepData, req.body) || "";
 
-    if (errorMessage) {
-      return res.redirect(`/acquirer/${resourceID}/${formStep}`);
-    }
     if (!formdata.stepHistory) {
       formdata.stepHistory = [];
     }
@@ -290,7 +261,11 @@ router.post(
     // Send the formdata to the backend if logged in
     if (req.isAuthenticated()) {
       try {
-        await axios.put(URL, { sharedata: formdata }, { headers: { Authorization: `Bearer ${req.cookies.jwtToken}` } });
+        await axios.put(
+          URL,
+          { sharedata: formdata },
+          { headers: { Authorization: `Bearer ${req.cookies.jwtToken}` } },
+        );
       } catch (error: unknown) {
         console.error("Error sending formdata to backend");
         if (axios.isAxiosError(error)) {
@@ -300,9 +275,8 @@ router.post(
         }
       }
     }
-
     return res.redirect(redirectURL);
-  }
+  },
 );
 
 export default router;

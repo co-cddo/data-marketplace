@@ -3,11 +3,6 @@
 
 {% block pageTitle %}Data Marketplace{% endblock %}
 
-{% if errorMessage %}
-    {% set errorMessage = {text: errorMessage} %}
-{% else %}
-    {% set errorMessage = undefined %}
-{% endif %}
 
 {% block head %}
     <link href="/govuk-frontend/all.css" rel="text/stylesheet">
