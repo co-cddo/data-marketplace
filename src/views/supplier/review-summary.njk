@@ -16,14 +16,6 @@
     <p class="govuk-body">{{ request.received }}</p>
     <h2 class="govuk-heading-m govuk-!-static-margin-bottom-1">Contact</h2>
     <p class="govuk-body"><a href="mailto:{{ request.sharedata.ownedBy }}" target="_blank" class="govuk-link">{{ request.sharedata.ownedBy }}</a></p>
-    {{ govukWarningText({
-      text: "Request not reviewed by Legal.",
-      iconFallbackText: "Warning"
-    }) }}
-    {{ govukWarningText({
-      text: "Data will travel outside UK.",
-      iconFallbackText: "Warning"
-    }) }}
     <form method="POST" id="reviewSummaryForm">
       <div class="govuk-button-group">
         {{ govukButton({
