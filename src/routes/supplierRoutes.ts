@@ -116,9 +116,8 @@ router.get("/created-requests", async (req: Request, res: Response) => {
         { text: formData.ownedBy },
         { text: formattedDate },
         {
-          html: `<span class="govuk-tag ${getStatusClass(formData.status)}">${
-            formData.status
-          }</span>`,
+          html: `<span class="govuk-tag ${getStatusClass(formData.status)}">${formData.status
+            }</span>`,
         },
       ];
 
@@ -165,9 +164,8 @@ router.get("/received-requests", async (req: Request, res: Response) => {
         { text: request.received },
         { text: request.sharedata.steps.date.formattedValue },
         {
-          html: `<span class="govuk-tag ${getStatusClass(request.status)}">${
-            request.status
-          }</span>`,
+          html: `<span class="govuk-tag ${getStatusClass(request.status)}">${request.status
+            }</span>`,
         },
       ];
       receivedTableRows.push(row);
@@ -385,11 +383,4 @@ router.get("/request-rejected", async (req: Request, res: Response) => {
   });
 });
 
-<<<<<<< HEAD
-router.post("/accept-request", async (req: Request, res: Response) => {
-  return res.redirect("/manage-shares/received-requests");
-});
-
-=======
->>>>>>> main
 export default router;
