@@ -23,7 +23,7 @@
 
     <div class="request-section">
       <h2 class="govuk-heading-m">Legal power</h2>
-      <p class="govuk-body">{{ request.sharedata.steps['legal-power'].value.yes.explanation }}</p>
+      <p class="govuk-body">{{ request.sharedata.steps['legal-power'].value.yes.explanation | capitalize }}</p>
     </div>
 
     <div class="request-section">
@@ -35,7 +35,7 @@
 
     <div class="request-section">
       <h2 class="govuk-heading-m">Data travel outside UK</h2>
-      <p class="govuk-body">{{ request.sharedata.steps['data-travel'].value }}</p>
+      <p class="govuk-body">{{ request.sharedata.steps['data-travel'].value | capitalize }}</p>
     </div>
 
     <div class="request-section">
@@ -85,7 +85,7 @@
 
     <div class="request-section">
       <h2 class="govuk-heading-m">What they think their role is</h2>
-      <p class="govuk-body">{{ request.sharedata.steps.role.value }}</p>
+      <p class="govuk-body">{{ request.sharedata.steps.role.value | capitalize }}</p>
     </div>
 
     <div class="request-section">
@@ -121,7 +121,7 @@
 
     <div class="request-section">
       <h2 class="govuk-heading-m">Data accessed by other organisations</h2>
-      <p class="govuk-body">{{ request.sharedata.steps['data-access'].value }}</p>
+      <p class="govuk-body">{{ request.sharedata.steps['data-access'].value | capitalize }}</p>
       <p class="govuk-body">Organisations:</p>
       <ul class="govuk-list govuk-list--bullet">
         {% for org in request.sharedata.steps['other-orgs'].value %}
@@ -148,18 +148,18 @@
     }) }}
   </div>
 </div>
-
-
 <div class="govuk-grid-row" style="margin-top: 3em;">
   <div class="govuk-grid-column-two-thirds">
-    <form method="post">
+    <form method="post" action="/manage-shares/received-requests/{{ request.requestId }}/review-request">
       {{ govukButton({
         text: "Continue",
-        name: "continueButton"
+        name: "continueButton",
+        value: "continue"
       }) }}
       {{ govukButton({
         text: "Return to summary",
         name: "returnButton",
+        value: "return",
         classes: "govuk-button--secondary"
       }) }}
     </form>

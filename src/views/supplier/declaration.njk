@@ -2,7 +2,6 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% block content %}
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">Declaration</h1>
@@ -16,7 +15,7 @@
     </ul>
     <p class="govuk-body">aspects have been met.</p>
     <br>
-    <form class="form" action="/manage-shares/declaration" method="post">
+    <form class="form" action="/manage-shares/received-requests/{{resourceId}}/declaration" method="post">
       <div class="govuk-button-group">
         {{ govukButton({
             text: "Accept the data share request",
@@ -26,5 +25,4 @@
     </form>
   </div>
 </div>
-
 {% endblock %}

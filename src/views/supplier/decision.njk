@@ -6,8 +6,8 @@
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <span class="govuk-caption-l">Request ID: RR325</span>
-    <form method="POST" id="decisionForm" action="/manage-shares/decision">
+    <span class="govuk-caption-l">Request ID: {{ resourceId }} </span>
+    <form method="POST" id="decisionForm">
       {% set ReturnWithCommentsHtml %}
         {{ govukTextarea({
           id: "return-with-comments-textarea",
@@ -79,9 +79,9 @@
       }) }}
       <div class="govuk-button-group">
         {{ govukButton({
-            text: "Submit",
-            name: "submitButton",
-            value: "submit"
+          text: "Submit",
+          name: "submitButton",
+          value: "submit"
         }) }}
         <a href="/manage-shares/received-requests" class="govuk-link">Returned to received requests</a>
       </div>
