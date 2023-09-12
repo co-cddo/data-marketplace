@@ -226,5 +226,4 @@ router.post("/accept-request", async (req: Request, res: Response) => {
   return res.redirect("/manage-shares/received-requests");
 });
 
-
 export default router;
