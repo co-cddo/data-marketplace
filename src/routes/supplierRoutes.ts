@@ -125,18 +125,18 @@ router.get("/received-requests", async (req: Request, res: Response) => {
 
   const response = await axios.get(URL, { headers: { Authorization: `Bearer ${req.cookies.jwtToken}` } });
   const receivedTableRows = [];
-  // console.log(response)
   if (response.data && response.data.length > 0) {
     for (const request of response.data) {
       // Format the received date
       request.received = formatDate(request.received);
       
-      // Format the "Needed by" date
+      // Format the "Needed by" date on the 
       if (request.sharedata && request.sharedata.steps && request.sharedata.steps.date) {
         const dateObj = request.sharedata.steps.date.value;
         request.sharedata.steps.date.formattedValue = formatDateObject(dateObj);
       }
-      
+
+      console.log(request.sharedata)
       const row = [
         { html: `<a href="/manage-shares/received-requests/${request.requestId}">${request.requestId}</a>` }, 
         { text: request.requesterEmail },
@@ -168,10 +168,14 @@ router.get("/received-requests/:requestId", async (req: Request, res: Response) 
         return res.status(404).send('Request not found');
     }
 
+    // Format the received date
     requestDetail.data.received = formatDate(requestDetail.data.received);
 
+    // Format the neededBy date
+    const dateObj = requestDetail.data.sharedata.steps.date.value;
+    requestDetail.data.sharedata.steps.date.formattedValue = formatDateObject(dateObj);
 
-    req.session.acquirerForms = requestDetail.data
+    req.session.acquirerForms = requestDetail.data;
 
     res.render("../views/supplier/review-summary.njk", {
       backLink,

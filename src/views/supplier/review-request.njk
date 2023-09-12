@@ -105,7 +105,7 @@
 
     <div class="request-section">
       <h2 class="govuk-heading-m">When they need it</h2>
-      <p class="govuk-body">{{ request.sharedata.steps.date.value.day }}/{{ request.sharedata.steps.date.value.month }}/{{ request.sharedata.steps.date.value.year }}</p>
+      <p class="govuk-body">{{ request.sharedata.steps.date.formattedValue }}</p>
     </div>
 
     <div class="request-section">
@@ -122,12 +122,14 @@
     <div class="request-section">
       <h2 class="govuk-heading-m">Data accessed by other organisations</h2>
       <p class="govuk-body">{{ request.sharedata.steps['data-access'].value | capitalize }}</p>
-      <p class="govuk-body">Organisations:</p>
-      <ul class="govuk-list govuk-list--bullet">
-        {% for org in request.sharedata.steps['other-orgs'].value %}
-          <li>{{ org }}</li>
-        {% endfor %}
-      </ul>
+        {% if request.sharedata.steps['data-access'].value == "yes" %}
+        <p class="govuk-body">Organisations:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          {% for org in request.sharedata.steps['other-orgs'].value %}
+            <li>{{ org }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
     </div>
   </div>
 </div>
