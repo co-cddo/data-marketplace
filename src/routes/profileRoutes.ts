@@ -4,27 +4,25 @@ const router = express.Router();
 import axios from "axios";
 import { Organisation } from "../models/dataModels";
 import { sampleJobTitles } from "../mockData/jobTitles";
+import { apiUser } from "../middleware/apiMiddleware";
 const API = `${process.env.API_ENDPOINT}`;
 
 router.get(
   "/",
+  apiUser,
   async (req: Request, res: Response) => {
     if (!req.isAuthenticated()) {
       return res.redirect("/error");
     }
-    const apiUserResponse = await axios.get(`${API}/users/me`, {
-      headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
-    });
-    const apiUser: ApiUser = apiUserResponse.data;
-    let jobTitle = apiUser.jobTitle
+    let jobTitle = req.apiUser.jobTitle;
     if (jobTitle) {
-      jobTitle = sampleJobTitles[jobTitle].text
+      jobTitle = sampleJobTitles[jobTitle].text;
     }
     res.render("profile.njk", {
       heading: "Authed",
       user: req.user,
-      organisation: apiUser.org?.title,
-      jobTitle: jobTitle
+      organisation: req.apiUser.org?.title,
+      jobTitle: jobTitle,
     });
   },
   (err: Error, req: Request, res: Response, next: NextFunction) => {
@@ -38,14 +36,9 @@ router.get(
   },
 );
 
-router.get("/complete", async (req: Request, res: Response) => {
-  const apiUserResponse = await axios.get(`${API}/users/me`, {
-    headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
-  });
-  const apiUser: ApiUser = apiUserResponse.data;
-
+router.get("/complete", apiUser, async (req: Request, res: Response) => {
   // If the authenticated user already has an organisation they can't set it again
-  if (apiUser.org) {
+  if (req.apiUser.org) {
     return res.redirect("/profile");
   }
 
@@ -54,7 +47,7 @@ router.get("/complete", async (req: Request, res: Response) => {
   const templateOrgs = organisations.map((o) => ({
     value: o.slug,
     text: o.title,
-  }))
+  }));
 
   res.render("completeProfile.njk", {
     organisations: templateOrgs,
@@ -62,28 +55,34 @@ router.get("/complete", async (req: Request, res: Response) => {
   });
 });
 
-router.post("/complete", async (req: Request, res: Response) => {
-
-  try {
-    const response = await axios.put(
-      `${API}/users/complete-profile`,
-      { ...req.body },
-      { headers: { Authorization: `Bearer ${req.cookies.jwtToken}` } },
-    );
-    const user: ApiUser = response.data
-    if (user.org?.slug === req.body.organisation && user.jobTitle === req.body.jobTitle) {
-      return res.redirect("/profile")
-    } else {
-      console.error("Complete profile failed")
+router.post(
+  "/complete",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const response = await axios.put(
+        `${API}/users/complete-profile`,
+        { ...req.body },
+        { headers: { Authorization: `Bearer ${req.cookies.jwtToken}` } },
+      );
+      const user: ApiUser = response.data;
+      if (
+        user.org?.slug === req.body.organisation &&
+        user.jobTitle === req.body.jobTitle
+      ) {
+        return res.redirect("/profile");
+      } else {
+        throw new Error("Complete profile failed");
+      }
+    } catch (error) {
+      console.error("Error completing user profile");
+      if (axios.isAxiosError(error)) {
+        console.error(error.response?.data.detail);
+      } else {
+        console.error(error);
+      }
+      next(error);
     }
-  } catch (error) {
-    console.error("Error completing user profile");
-    if (axios.isAxiosError(error)) {
-      console.error(error.response?.data.detail);
-    } else {
-      console.error(error);
-    }
-  }
-});
+  },
+);
 
 export default router;
