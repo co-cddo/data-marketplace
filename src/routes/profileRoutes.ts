@@ -13,7 +13,9 @@ router.get(
 
     let requestForms = {};
     try {
-      const response = await axios.get(URL, { headers: { Authorization: `Bearer ${req.cookies.jwtToken}` } });
+      const response = await axios.get(URL, {
+        headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
+      });
       requestForms = response.data["sharedata"] || {};
       req.session.acquirerForms = requestForms;
     } catch (error) {
