@@ -157,12 +157,12 @@ router.get("/received-requests", async (req: Request, res: Response) => {
   });
 });
 
-router.get("/received-requests/:resourceId", async (req: Request, res: Response) => {
+router.get("/received-requests/:requestId", async (req: Request, res: Response) => {
   const backLink = req.headers.referer || "/manage-shares/received-requests/";
-  const resourceId = req.params.resourceId;
+  const requestId = req.params.requestId;
   
   try {
-    const requestDetail = await axios.get(`${URL}/${resourceId}`, { headers: { Authorization: `Bearer ${req.cookies.jwtToken}` } });
+    const requestDetail = await axios.get(`${URL}/${requestId}`, { headers: { Authorization: `Bearer ${req.cookies.jwtToken}` } });
 
     if (!requestDetail.data) {
         return res.status(404).send('Request not found');
@@ -183,11 +183,12 @@ router.get("/received-requests/:resourceId", async (req: Request, res: Response)
   }
 });
 
-router.post("/received-requests/:resourceId", async (req: Request, res: Response) => {
-  const resourceId = req.params.resourceId;
-  res.redirect(`/manage-shares/received-requests/${resourceId}/review-request`);
+router.post("/received-requests/:requestId", async (req: Request, res: Response) => {
+  const requestId = req.params.requestId;
+  res.redirect(`/manage-shares/received-requests/${requestId}/review-request`);
 });
-router.get("/received-requests/:resourceId/review-request", (req: Request, res: Response) => { 
+
+router.get("/received-requests/:requestId/review-request", (req: Request, res: Response) => { 
   const requestDetail = req.session.acquirerForms;
 
   if (!requestDetail) {
@@ -200,28 +201,28 @@ router.get("/received-requests/:resourceId/review-request", (req: Request, res: 
   });
 });
 
-router.post("/received-requests/:resourceId/review-request", async (req: Request, res: Response) => {
-  const resourceId = req.params.resourceId;
+router.post("/received-requests/:requestId/review-request", async (req: Request, res: Response) => {
+  const requestId = req.params.requestId;
 
   if (req.body.continueButton) {
-    return res.redirect(`/manage-shares/received-requests/${resourceId}/decision`);
+    return res.redirect(`/manage-shares/received-requests/${requestId}/decision`);
   } else if (req.body.returnButton) {
     return res.redirect("/manage-shares/review-summary");
   }
 });
 
-router.get("/received-requests/:resourceId/decision", async (req: Request, res: Response) => {
+router.get("/received-requests/:requestId/decision", async (req: Request, res: Response) => {
   const backLink = req.headers.referer || "/";
-  const resourceId = req.params.resourceId;
+  const requestId = req.params.requestId;
 
   res.render("../views/supplier/decision.njk", {
     backLink,
-    resourceId
+    requestId
   });
 });
 
-router.post("/received-requests/:resourceId/decision", async (req: Request, res: Response) => {
-  const resourceId = req.params.resourceId;
+router.post("/received-requests/:requestId/decision", async (req: Request, res: Response) => {
+  const requestId = req.params.requestId;
 
   const decision = req.body.decision;
 
@@ -231,7 +232,7 @@ router.post("/received-requests/:resourceId/decision", async (req: Request, res:
 
   if (decision === "approve") {
     console.log(req.body)
-    return res.redirect(`/manage-shares/received-requests/${resourceId}/declaration`);
+    return res.redirect(`/manage-shares/received-requests/${requestId}/declaration`);
   }
 
   if (decision === "reject") {
@@ -241,25 +242,25 @@ router.post("/received-requests/:resourceId/decision", async (req: Request, res:
   return res.redirect("/manage-shares/received-requests");
 });
 
-router.get("/received-requests/:resourceId/declaration", async (req: Request, res: Response) => {
-  const resourceId = req.params.resourceId;
+router.get("/received-requests/:requestId/declaration", async (req: Request, res: Response) => {
+  const requestId = req.params.requestId;
   res.render("../views/supplier/declaration.njk", {
-    resourceId,
+    requestId,
   });
 });
 
-router.post("/received-requests/:resourceId/declaration", async (req: Request, res: Response) => {
-  const resourceId = req.params.resourceId;
+router.post("/received-requests/:requestId/declaration", async (req: Request, res: Response) => {
+  const requestId = req.params.requestId;
 
   if (req.body.acceptButton) {
-    return res.redirect(`/manage-shares/received-requests/${resourceId}/accept-request`);
+    return res.redirect(`/manage-shares/received-requests/${requestId}/accept-request`);
   }
   return res.redirect("/manage-shares/received-requests");
 });
 
-router.get("/received-requests/:resourceId/accept-request", (req: Request, res: Response) => {
+router.get("/received-requests/:requestId/accept-request", (req: Request, res: Response) => {
   const backLink = req.headers.referer || "/";
-  const resourceId = req.params.resourceId;
+  const requestId = req.params.requestId;
   const requestData = req.session.acquirerForms;
 
   if (!requestData) {
@@ -268,13 +269,13 @@ router.get("/received-requests/:resourceId/accept-request", (req: Request, res: 
 
   res.render("../views/supplier/accept-request.njk", {
     backLink,
-    resourceId,
+    requestId,
     requestingOrg: requestData.requestingOrg,
     requesterEmail: requestData.requesterEmail
   });
 });
 
-router.post("/received-requests/:resourceId/accept-request", async (req: Request, res: Response) => {
+router.post("/received-requests/:requestId/accept-request", async (req: Request, res: Response) => {
   return res.redirect("/manage-shares/received-requests");
 });
 
