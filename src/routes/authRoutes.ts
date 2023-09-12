@@ -35,7 +35,7 @@ router.get(
           } else {
             console.error(error);
           }
-          next(error)
+          next(error);
         }
 
         if (response?.data.new_user) {
