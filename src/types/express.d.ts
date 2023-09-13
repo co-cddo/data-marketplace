@@ -180,7 +180,7 @@ interface Step {
   value: StepValue;
   nextStep: string;
   blockedBy?: string[];
-  errorMessage: string | Record<string, string>;
+  errorMessage: { [key: string]: { text: string } } | string;
   skipped?: boolean;
 }
 
@@ -205,7 +205,7 @@ declare module "express-session" {
   interface SessionData {
     acquirerForms?: Record<string, FormData>;
     backLink: string;
-    formErrors: { [key: string]: string };
+    formErrors: { [key: string]: { text: string } };
   }
 }
 

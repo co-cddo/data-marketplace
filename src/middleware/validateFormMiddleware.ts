@@ -177,15 +177,27 @@ function getLegalReviewValidation() {
 }
 
 function getLawfulPersonalValidation() {
-  return [body("lawful-basis-personal").exists().withMessage("Please select an option.")];
+  return [
+    body("lawful-basis-personal")
+      .exists()
+      .withMessage("Please select an option."),
+  ];
 }
 
 function getLawfulSpecialValidation() {
-  return [body("lawful-basis-special").exists().withMessage("Please select an option.")];
+  return [
+    body("lawful-basis-special")
+      .exists()
+      .withMessage("Please select an option."),
+  ];
 }
 
 function getLawfulBasisSpecialPublicInterestValidation() {
-  return [body("lawful-basis-special-public-interest").exists().withMessage("Please select an option.")];
+  return [
+    body("lawful-basis-special-public-interest")
+      .exists()
+      .withMessage("Please select an option."),
+  ];
 }
 
 function getDataTravelValidation() {
@@ -234,7 +246,7 @@ function getValidationRules(step: string) {
       return getBenefitsValidation();
     case "data-access":
       return getDataAccessValidation();
-    case "impact":          
+    case "impact":
       return getImpactValidation(); // Doesnt seem to work
     case "data-required":
       return getDataRequiredValidation();
@@ -309,10 +321,10 @@ export const handleValidationErrors = (
   const errors = validationResult(req).array();
 
   if (errors.length > 0) {
-    const errorMessages: { [key: string]: string } = {};
+    const errorMessages: { [key: string]: { text: string } } = {};
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     errors.forEach((error: any) => {
-      errorMessages[error.path] = error.msg;
+      errorMessages[error.path] = { text: error.msg };
     });
     req.session.formErrors = errorMessages;
     console.log("Form errors", req.session.formErrors); //leaving this in for ease of debugging
