@@ -9,11 +9,6 @@
     <div class="govuk-grid-column-two-thirds">
       <span class="govuk-caption-l">Request ID: {{requestId}}</span>
       
-      {% set errorText = undefined %}
-        {% if errorMessage['benefits'] %}
-          {% set errorText = { text: errorMessage['benefits'] } %}
-        {% endif %}
-    
       <form method="POST" id="benefitsForm">
         {% set publicBenefit1Html %}
             {{ govukTextarea({
@@ -209,7 +204,7 @@
                 }
                 }
                 ],
-                errorMessage: errorText
+                errorMessage: errorMessage['benefits']
                 }) }}
           <div class="govuk-button-group">
             {{ govukButton({

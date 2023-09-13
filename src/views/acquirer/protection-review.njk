@@ -6,12 +6,6 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <span class="govuk-caption-l">Request ID: {{requestId}}</span>
-      
-      {% set errorText = undefined %}
-        {% if errorMessage['protection-review'] %}
-          {% set errorText = { text: errorMessage['protection-review'] } %}
-        {% endif %}
-      
       <form method="POST" id="protectionReviewForm">
         {{ govukRadios({
           name: "protection-review",
@@ -37,7 +31,7 @@
             checked: savedValue === 'no'
             }
           ],
-          errorMessage: errorText
+          errorMessage: errorMessage['protection-review']
           }) }}
           <div class="govuk-button-group">
             {{ govukButton({

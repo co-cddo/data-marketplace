@@ -6,12 +6,6 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <span class="govuk-caption-l">Request ID: {{requestId}}</span>
-      
-      {% set errorText = undefined %}
-        {% if errorMessage['lawful-basis-special'] %}
-          {% set errorText = { text: errorMessage['lawful-basis-special'] } %}
-        {% endif %}
-
       {% set basisHint %}
         <div>
           <p class="govuk-body">Find out more about having a 
@@ -86,7 +80,7 @@
         checked: savedValue["not-for-profit-bodies"].checked
         }
       ],
-      errorMessage: errorText
+      errorMessage: errorMessage['lawful-basis-special']
       }) }}
         <div class="govuk-button-group">
           {{ govukButton({

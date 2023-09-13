@@ -7,12 +7,6 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <span class="govuk-caption-l">Request ID: {{requestId}}</span>
-      
-       {% set errorText = undefined %}
-        {% if errorMessage['impact'] %}
-          {% set errorText = { text: errorMessage['impact'] } %}
-        {% endif %}
-      
       <form method="POST" id="dataTypeForm">
         {{ govukTextarea({
           name: "impact",
@@ -24,20 +18,19 @@
           },
           rows: 5,
           value: savedValue,
-          errorMessage: errorText
-
+          errorMessage: errorMessage['impact']
         }) }}
         <div class="govuk-button-group">
         {{ govukButton({
-            text: "Save and continue",
-            name: "continueButton",
-            value: "continue"
+          text: "Save and continue",
+          name: "continueButton",
+          value: "continue"
         }) }}
         {{ govukButton({
-            text: "Save and return",
-            classes: "govuk-button--secondary",
-            name: "returnButton",
-            value: "return"
+          text: "Save and return",
+          classes: "govuk-button--secondary",
+          name: "returnButton",
+          value: "return"
         }) }}
       </div>
       </form>

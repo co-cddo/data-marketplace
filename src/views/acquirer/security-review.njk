@@ -5,13 +5,7 @@
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <span class="govuk-caption-l">Request ID: {{requestId}}</span>
-      
-      {% set errorText = undefined %}
-        {% if errorMessage['security-review'] %}
-          {% set errorText = { text: errorMessage['security-review'] } %}
-        {% endif %}
-      
+      <span class="govuk-caption-l">Request ID: {{requestId}}</span>      
       <form method="POST" id="securityReviewForm">
         {{ govukRadios({
         name: "security-review",
@@ -37,7 +31,7 @@
             checked: savedValue === 'no'
             }
         ],
-        errorMessage: errorText
+        errorMessage: errorMessage['security-review']
         }) }}
         <div class="govuk-button-group">
           {{ govukButton({

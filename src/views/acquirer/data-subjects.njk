@@ -7,14 +7,8 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <span class="govuk-caption-l">Request ID: {{requestId}}</span>
-   
-      {% set errorText = undefined %}
-        {% if errorMessage['data-subjects'] %}
-          {% set errorText = { text: errorMessage['data-subjects'] } %}
-        {% endif %}
 
       <form method="POST" id="dataTypeForm">
-      
         {% set dataSubjectDetails %}
           <p class="govuk-body">Data subjects are the people whose data you are requesting.</p>
           <p class="govuk-body">For example:</p>
@@ -45,7 +39,7 @@
             html: "Be as specific as possible. For example, small business owners aged between 45 and 55." + detailsComponent
           },
           value: savedValue,
-          errorMessage: errorText
+          errorMessage: errorMessage['data-subjects']
         }) }}
         <div class="govuk-button-group">
         {{ govukButton({

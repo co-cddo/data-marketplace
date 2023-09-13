@@ -7,25 +7,20 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <span class="govuk-caption-l">Request ID: {{requestId}}</span>
-      
-       {% set errorText = undefined %}
-          {% if errorMessage['legal-power'] %}
-            {% set errorText = { text: errorMessage['legal-power'] } %}
-          {% endif %}
-          
-    <form method="POST" id="legalPowerForm">
-        {% set legalPowerDecision %}
-            {{ govukInput({
-                id: "legal-power-input",
-                name: "legal-power-input",
-                label: {
-                    text: "What legal power will you use?"
-                },
-                classes: "govuk-!-width-one-half",
-                value: savedValue['yes']['explanation'],
-                errorMessage: errorMessage
-            }) }}
-        {% endset -%}
+ 
+        <form method="POST" id="legalPowerForm">
+            {% set legalPowerDecision %}
+                {{ govukInput({
+                    id: "legal-power-input",
+                    name: "legal-power-input",
+                    label: {
+                        text: "What legal power will you use?"
+                    },
+                    classes: "govuk-!-width-one-half",
+                    value: savedValue['yes']['explanation'],
+                    errorMessage: errorMessage
+                }) }}
+            {% endset -%}
         {{ govukRadios({
             name: "legal-power",
             fieldset: {
@@ -58,10 +53,9 @@
                 text: "We don't know",
                 checked: savedValue['we-dont-know']['checked']
             }
-            ],
-          errorMessage: errorText
-          }) 
-        }}
+        ],
+        errorMessage: errorMessage['legal-power']
+        }) }}
         <div class="govuk-button-group">
             {{ govukButton({
                 text: "Save and continue",

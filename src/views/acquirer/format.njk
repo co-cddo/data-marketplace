@@ -7,12 +7,6 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <span class="govuk-caption-l">Request ID: {{requestId}}</span>
-    
-    {% set errorText = undefined %}
-        {% if errorMessage['format'] %}
-          {% set errorText = { text: errorMessage['format'] } %}
-        {% endif %}
-    
     <form method="POST" id="dataFormatForm">
         {% set somethingHTML %}
           {{ govukInput({
@@ -51,8 +45,8 @@
             }
           }
         ],
-        errorMessage: errorText
-        }) }}
+      errorMessage: errorMessage['format']
+      }) }}
       <div class="govuk-button-group">
         {{ govukButton({
           text: "Save and continue",

@@ -8,11 +8,6 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
     <span class="govuk-caption-l">Request ID: {{requestId}}</span>
-        
-        {% set errorText = undefined %}
-          {% if errorMessage['legal-gateway'] %}
-            {% set errorText = { text: errorMessage['legal-gateway'] } %}
-          {% endif %}
           
         <form method="POST" id="legalGatewayForm">       
         {% set legalGatewayDecision1 %}
@@ -78,7 +73,7 @@
             checked: savedValue['we-dont-know']['checked']
             }
         ],
-        errorMessage: errorText
+        errorMessage: errorMessage['legal-gateway']
         }) }}
 
         <div class="govuk-button-group">
