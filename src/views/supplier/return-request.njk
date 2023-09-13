@@ -1,16 +1,17 @@
 {% extends "page.njk" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
+
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
       {{ govukPanel({
           titleText: "Request returned with comments",
-          html: "Request ID: RR523"
+          html: requestId
       }) }}
-      <p class="govuk-body">You've told Department X that you need more information before you can make a decision</p>
+      <p class="govuk-body">You've told {{ requestingOrg }} that you need more information before you can make a decision</p>
       <h2 class="govuk-heading-m">What happens next</h2>
-      <p class="govuk-body">If Department X supplies the information you need, you will reconsider their request.</p>
+      <p class="govuk-body">If {{ requestingOrg }} supplies the information you need, you will reconsider their request.</p>
       <form method="POST" id="requestReturnedForm">
         <div class="govuk-button-group">
           {{ govukButton({
