@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { CustomValidator, body } from "express-validator";
+import { CustomValidator, body, validationResult } from "express-validator";
 
 const dateValidator: CustomValidator = (value, { req }) => {
   const day = req.body.day;
@@ -47,15 +47,12 @@ function getDataTypeValidation() {
   ];
 }
 
-// function getDataSubjectValidation() {
-//   return [body("data-subjects-textbox").exists().withMessage("Enter a description of the data subjects")];
-// }     // doesnt work its either data-type, data-subject or impact. if i remove any two the last will work... strange
-
 function getProjectAimsValidation() {
   return [
     body("aims")
+      .trim() // Remove leading and trailing whitespace
       .not()
-      .isEmpty()
+      .isEmpty({ ignore_whitespace: true }) // Allow empty strings with only whitespace
       .withMessage("Please provide the aims of your project."),
 
     body("explanation")
@@ -70,6 +67,15 @@ function getProjectAimsValidation() {
 function getDataRequiredValidation() {
   return [
     body("data-required")
+      .not()
+      .isEmpty()
+      .withMessage("Enter description of data needed"),
+  ];
+}
+
+function getDataSubjectValidation() {
+  return [
+    body("data-subjects")
       .not()
       .isEmpty()
       .withMessage("Enter description of data needed"),
@@ -203,8 +209,8 @@ function getValidationRules(step: string) {
   switch (step) {
     case "data-type":
       return getDataTypeValidation();
-    // case "data-subjects":
-    //   return getDataSubjectValidation(); Does not work, same with impact -> makes me think formHelper -> extractFormData
+    case "data-subjects":
+      return getDataSubjectValidation();
     case "project-aims":
       return getProjectAimsValidation();
     case "date":
@@ -254,7 +260,6 @@ export const validateFormMiddleware = (
   }
 
   const validationRules = getValidationRules(formStep);
-  console.log("formStep", formStep);
   if (validationRules.length > 0) {
     const runValidation = (index: number) => {
       if (index >= validationRules.length) {
@@ -273,4 +278,25 @@ export const validateFormMiddleware = (
   } else {
     next();
   }
+};
+
+export const handleValidationErrors = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const errors = validationResult(req).array();
+
+  if (errors.length > 0) {
+    const errorMessages: { [key: string]: string } = {};
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    errors.forEach((error: any) => {
+      errorMessages[error.path] = error.msg;
+    });
+    req.session.formErrors = errorMessages;
+    console.log("Form errors", req.session.formErrors); //leaving this in for ease of debugging
+    return res.redirect(req.originalUrl);
+  }
+
+  next();
 };
