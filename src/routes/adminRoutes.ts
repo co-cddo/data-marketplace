@@ -70,4 +70,11 @@ router.put("/users/:userId/org", async (req: Request, res: Response) => {
   });
 });
 
+router.put("/users/:userId/permissions", async (req: Request, res: Response) => {
+  const userId = req.params.userId;
+  return await callApiAsAdmin(req, res, `users/${userId}/permissions`, "PUT", {
+    ...req.body,
+  });
+});
+
 export default router;
