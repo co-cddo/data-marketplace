@@ -7,7 +7,13 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <span class="govuk-caption-l">Request ID: {{requestId}}</span>
-      <form method="POST" id="legalPowerForm">
+      
+       {% set errorText = undefined %}
+          {% if errorMessage['legal-power'] %}
+            {% set errorText = { text: errorMessage['legal-power'] } %}
+          {% endif %}
+          
+    <form method="POST" id="legalPowerForm">
         {% set legalPowerDecision %}
             {{ govukInput({
                 id: "legal-power-input",
@@ -53,7 +59,7 @@
                 checked: savedValue['we-dont-know']['checked']
             }
             ],
-          errorMessage: errorMessage
+          errorMessage: errorText
           }) 
         }}
         <div class="govuk-button-group">

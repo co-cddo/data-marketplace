@@ -93,7 +93,7 @@ function getImpactValidation() {
       .withMessage(
         "Enter the impact of project if you do not receive the data",
       ),
-  ]; // doesnt seem to work either with impact, same issue as data-subjects
+  ];
 }
 
 function getDateValidation() {
@@ -176,6 +176,18 @@ function getLegalReviewValidation() {
   ];
 }
 
+function getLawfulPersonalValidation() {
+  return [body("lawful-basis-personal").exists().withMessage("Please select an option.")];
+}
+
+function getLawfulSpecialValidation() {
+  return [body("lawful-basis-special").exists().withMessage("Please select an option.")];
+}
+
+function getLawfulBasisSpecialPublicInterestValidation() {
+  return [body("lawful-basis-special-public-interest").exists().withMessage("Please select an option.")];
+}
+
 function getDataTravelValidation() {
   return [body("data-travel").exists().withMessage("Select No or Yes")];
 }
@@ -193,12 +205,15 @@ function getProtectionReviewValidation() {
 function getFormatValidation() {
   return [body("format").exists().withMessage("Please select an option.")];
 }
+
 function getDeliveryValidation() {
   return [body("delivery").exists().withMessage("Please select an option.")];
 }
+
 function getDisposalValidation() {
   return [body("disposal").exists().withMessage("Please select an option.")];
 }
+
 function getSecurityReviewValidation() {
   return [
     body("security-review").exists().withMessage("Please select an option."),
@@ -219,8 +234,8 @@ function getValidationRules(step: string) {
       return getBenefitsValidation();
     case "data-access":
       return getDataAccessValidation();
-    case "impact":
-      return getImpactValidation();
+    case "impact":          
+      return getImpactValidation(); // Doesnt seem to work
     case "data-required":
       return getDataRequiredValidation();
     case "legal-power":
@@ -229,6 +244,12 @@ function getValidationRules(step: string) {
       return getLegalGatewayValidation();
     case "legal-review":
       return getLegalReviewValidation();
+    case "lawful-basis-personal":
+      return getLawfulPersonalValidation();
+    case "lawful-basis-special":
+      return getLawfulSpecialValidation();
+    case "lawful-basis-special-public-interest":
+      return getLawfulBasisSpecialPublicInterestValidation();
     case "data-travel":
       return getDataTravelValidation();
     case "role":

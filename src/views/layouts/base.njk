@@ -1,13 +1,19 @@
 {% extends "govuk/template.njk" %}
 
-
 {% block pageTitle %}Data Marketplace{% endblock %}
-
 
 {% block head %}
     <link href="/govuk-frontend/all.css" rel="text/stylesheet">
     <link href="{{ assetPath }}/stycssles/style.css" rel="stylesheet" />
 {% endblock %}
+
+{%- macro setError(fieldName) -%}
+  {% set errorText = undefined %}
+  {% if errorMessage[fieldName] %}
+    {% set errorText = { text: errorMessage[fieldName] } %}
+  {% endif %}
+  {{ errorText }}
+{%- endmacro %}
 
 {% block header %}
   {% include "../partials/cookieBanner.njk" %}

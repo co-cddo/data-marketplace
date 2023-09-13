@@ -6,52 +6,58 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <span class="govuk-caption-l">Request ID: {{requestId}}</span>
+      
+      {% set errorText = undefined %}
+        {% if errorMessage['role'] %}
+          {% set errorText = { text: errorMessage['role'] } %}
+        {% endif %}
+      
       <form method="POST" id="dataRoleOfOrganisationForm">
         {{ govukRadios({
-                  name: "role",
-                  fieldset: {
-                      legend: {
-                      text: "What do you think the role of your organisation under UK GDPR will be",
-                      isPageHeading: true,
-                      classes: "govuk-fieldset__legend--l"
-                      }
-                  },
-                  items: [
-                      {
-                      value: "controller",
-                      text: "Controller",
-                      checked: savedValue === 'controller',
-                      hint: {
-                          text: "We want to exercise overall control over why and how this data is processed"
-                      }
-                      },
-                      {
-                      value: "joint",
-                      text: "Joint controller",
-                      checked: savedValue === 'joint',
-                      hint: {
-                          text: "We want to share responsibility with another department"
-                      }
-                      },
-                      {
-                      value: "processor",
-                      text: "Processor",
-                      checked: savedValue === 'processor',
-                      hint: {
-                          text: "We will follow instructions from another department about using this data."
-                      }
-                      },
-                      {
-                      divider: "or"
-                      },
-                      {
-                      value: "don't know",
-                      text: "I don't know",
-                      checked: savedValue === "don't know"
-                      }
-                  ],
-                  errorMessage: errorMessage
-                  }) }}
+          name: "role",
+          fieldset: {
+            legend: {
+            text: "What do you think the role of your organisation under UK GDPR will be",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+            }
+          },
+          items: [
+            {
+            value: "controller",
+            text: "Controller",
+            checked: savedValue === 'controller',
+            hint: {
+                text: "We want to exercise overall control over why and how this data is processed"
+            }
+            },
+            {
+            value: "joint",
+            text: "Joint controller",
+            checked: savedValue === 'joint',
+            hint: {
+                text: "We want to share responsibility with another department"
+            }
+            },
+            {
+            value: "processor",
+            text: "Processor",
+            checked: savedValue === 'processor',
+            hint: {
+                text: "We will follow instructions from another department about using this data."
+            }
+            },
+            {
+            divider: "or"
+            },
+            {
+            value: "don't know",
+            text: "I don't know",
+            checked: savedValue === "don't know"
+            }
+          ],
+          errorMessage: errorText
+        }) }}
           <div class="govuk-button-group">
             {{ govukButton({
                 text: "Save and continue",

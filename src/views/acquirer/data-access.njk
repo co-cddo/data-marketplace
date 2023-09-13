@@ -6,33 +6,39 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <span class="govuk-caption-l">Request ID: {{requestId}}</span>
+      
+       {% set errorText = undefined %}
+        {% if errorMessage['data-access'] %}
+          {% set errorText = { text: errorMessage['data-access'] } %}
+        {% endif %}
+
       <form method="POST" id="dataAccessForm">
         {{ govukRadios({
-                 name: "data-access",
-                  fieldset: {
-                      legend: {
-                      text: "Will other organisations need access to this data?",
-                      isPageHeading: true,
-                      classes: "govuk-fieldset__legend--l"
-                      }
-                  },
-                  hint: {
-                        text: "For example: this is a joint project with another government department."
-                      },
-                  items: [
-                      {
-                      value: "no",
-                      text: "No, only my organisation needs access",
-                      checked: savedValue === 'no'
-                      },
-                      {
-                      value: "yes",
-                      text: "Yes, we are collaborating with other organisations",
-                      checked: savedValue === 'yes'
-                      }
-                  ],
-                  errorMessage: errorMessage
-                  }) }}
+          name: "data-access",
+          fieldset: {
+              legend: {
+              text: "Will other organisations need access to this data?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--l"
+              }
+          },
+          hint: {
+                text: "For example: this is a joint project with another government department."
+              },
+          items: [
+              {
+              value: "no",
+              text: "No, only my organisation needs access",
+              checked: savedValue === 'no'
+              },
+              {
+              value: "yes",
+              text: "Yes, we are collaborating with other organisations",
+              checked: savedValue === 'yes'
+              }
+          ],
+          errorMessage: errorText
+          }) }}
           <div class="govuk-button-group">
             {{ govukButton({
                 text: "Save and continue",

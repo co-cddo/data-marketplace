@@ -6,45 +6,51 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <span class="govuk-caption-l">Request ID: {{requestId}}</span>
+      
+       {% set errorText = undefined %}
+        {% if errorMessage['data-travel'] %}
+          {% set errorText = { text: errorMessage['data-travel'] } %}
+        {% endif %}
+      
       <form method="POST" id="dataTravelForm">
         {{ govukRadios({
-                  name: "data-travel",
-                  fieldset: {
-                      legend: {
-                      text: "Will any of this data leave the UK?",
-                      isPageHeading: true,
-                      classes: "govuk-fieldset__legend--l"
-                      }
-                  },
-                   hint: {
-                          text: "This includes third-party software that may host or transfer the data using international servers."
-                      },
-                  items: [
-                      {
-                      value: "no",
-                      text: "No, the data will only travel through the UK.",
-                      checked: savedValue === 'no'
-                      },
-                      {
-                      value: "yes",
-                      text: "Yes, it will leave the UK",
-                      checked: savedValue === 'yes'
-                      }
-                  ],
-                  errorMessage: errorMessage
-                  }) }}
-          <div class="govuk-button-group">
-            {{ govukButton({
-                text: "Save and continue",
-                name: "continueButton",
-                value: "continue"
-            }) }}
-            {{ govukButton({
-                text: "Save and return",
-                classes: "govuk-button--secondary",
-                name: "returnButton",
-                value: "return"
-            }) }}
+          name: "data-travel",
+          fieldset: {
+              legend: {
+                text: "Will any of this data leave the UK?",
+                isPageHeading: true,
+                classes: "govuk-fieldset__legend--l"
+              }
+            },
+            hint: {
+              text: "This includes third-party software that may host or transfer the data using international servers."
+            },
+            items: [
+            {
+              value: "no",
+              text: "No, the data will only travel through the UK.",
+              checked: savedValue === 'no'
+            },
+            {
+              value: "yes",
+              text: "Yes, it will leave the UK",
+              checked: savedValue === 'yes'
+            }
+          ],
+          errorMessage: errorText
+          }) }}
+        <div class="govuk-button-group">
+          {{ govukButton({
+            text: "Save and continue",
+            name: "continueButton",
+            value: "continue"
+          }) }}
+          {{ govukButton({
+            text: "Save and return",
+            classes: "govuk-button--secondary",
+            name: "returnButton",
+            value: "return"
+          }) }}
         </div>
       </form>
     </div>

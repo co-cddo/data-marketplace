@@ -16,34 +16,40 @@
           Providing a date can help prioritise requests. Unreasonable dates may be rejected.
         </p>
         <div class="govuk-row">
-           <form method="post">
+
+        {# {% set errorText = undefined %}
+          {% if errorMessage['date'] %}
+            {% set errorText = { text: errorMessage['date'] } %}
+          {% endif %} #}
+
+      <form method="post">
         {{ govukDateInput({
-            id: "date",
-            name: "date",
-            fieldset: {
-                legend: {
-                    text: "Enter date",
-                    isPageHeading: true,
-                    classes: "govuk-fieldset__legend--m"
-                }
+          id: "date",
+          name: "date",
+          fieldset: {
+              legend: {
+                  text: "Enter date",
+                  isPageHeading: true,
+                  classes: "govuk-fieldset__legend--m"
+              }
             },
             hint: {
-                text: "For example, 02 03 2024"
+              text: "For example, 02 03 2024"
             },
             items: [{
-                name: "day",
-                value: savedValue.day,
-                classes: "govuk-input--width-2"
+              name: "day",
+              value: savedValue.day,
+              classes: "govuk-input--width-2"
             }, {
-                name: "month",
-                value: savedValue.month,
-                classes: "govuk-input--width-2"
+              name: "month",
+              value: savedValue.month,
+              classes: "govuk-input--width-2"
             }, {
-                name: "year",
-                value: savedValue.year,
-                classes: "govuk-input--width-4"
+              name: "year",
+              value: savedValue.year,
+              classes: "govuk-input--width-4"
             }],
-            errorMessage: errorMessage
+          errorMessage: errorText
         }) }}
         </div>
         <div class="govuk-button-group">

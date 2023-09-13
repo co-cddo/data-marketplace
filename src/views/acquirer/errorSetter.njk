@@ -1,0 +1,7 @@
+{% macro extractErrorMessage(field) %}
+  {% if errorMessage[field] %}
+    {{ return { text: errorMessage[field] } }}
+  {% else %}
+    {{ return undefined }}
+  {% endif %}
+{% endmacro %}

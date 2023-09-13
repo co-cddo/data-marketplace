@@ -7,6 +7,12 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <span class="govuk-caption-l">Request ID: {{requestId}}</span>
+    
+    {% set errorText = undefined %}
+        {% if errorMessage['format'] %}
+          {% set errorText = { text: errorMessage['format'] } %}
+        {% endif %}
+    
     <form method="POST" id="dataFormatForm">
         {% set somethingHTML %}
           {{ govukInput({
@@ -19,11 +25,11 @@
         {{ govukRadios({
           name: "format",
           fieldset: {
-              legend: {
-              text: "What is your preferred format for this data?",
-              isPageHeading: true,
-              classes: "govuk-fieldset__legend--l"
-              }
+            legend: {
+            text: "What is your preferred format for this data?",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+            }
           },
           items: [
               {
@@ -45,20 +51,20 @@
             }
           }
         ],
-        errorMessage: errorMessage
+        errorMessage: errorText
         }) }}
-        <div class="govuk-button-group">
-          {{ govukButton({
-              text: "Save and continue",
-              name: "continueButton",
-              value: "continue"
-          }) }}
-          {{ govukButton({
-              text: "Save and return",
-              classes: "govuk-button--secondary",
-              name: "returnButton",
-              value: "return"
-          }) }}
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: "Save and continue",
+          name: "continueButton",
+          value: "continue"
+        }) }}
+        {{ govukButton({
+          text: "Save and return",
+          classes: "govuk-button--secondary",
+          name: "returnButton",
+          value: "return"
+        }) }}
       </div>
     </form>
   </div>

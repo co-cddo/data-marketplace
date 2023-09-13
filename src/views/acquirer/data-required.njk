@@ -8,13 +8,19 @@
     <span class="govuk-caption-l">Request ID: {{requestId}}</span>
     <label for="data-required" class="govuk-label govuk-label--l">What data from {{ assetTitle }} do you need?</label>
     <p class="govuk-body"><a class="govuk-link" href="#" target="_blank"> View data (opens in new tab)</a></p>
+    
+    {% set errorText = undefined %}
+        {% if errorMessage['data-required'] %}
+          {% set errorText = { text: errorMessage['data-required'] } %}
+        {% endif %}
+    
     <form method="post">
       {{ govukTextarea({
         id: "data-required",
         name: "data-required",
         rows: 5,
         value: savedValue,
-        errorMessage: errorMessage
+        errorMessage: errorText
       }) }}
       <div class="govuk-button-group">
         {{ govukButton({

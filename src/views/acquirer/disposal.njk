@@ -6,29 +6,35 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
      <span class="govuk-caption-l">Request ID: {{requestId}}</span>
+    
+    {% set errorText = undefined %}
+        {% if errorMessage['disposal'] %}
+          {% set errorText = { text: errorMessage['disposal'] } %}
+        {% endif %}
+
     <form method="post">
       {{ govukTextarea({
-            id: "disposal",
-            name: "disposal",
-            label: {
-                text: "How will you dispose of the data when your project finishes?",
-                classes: "govuk-label--l"
-            },
-            rows: 5,
-            value: savedValue,
-            errorMessage: errorMessage
-            }) }}
+        id: "disposal",
+        name: "disposal",
+        label: {
+          text: "How will you dispose of the data when your project finishes?",
+          classes: "govuk-label--l"
+        },
+        rows: 5,
+        value: savedValue,
+        errorMessage: errorText
+        }) }}
       <div class="govuk-button-group">
         {{ govukButton({
-            text: "Save and continue",
-            name: "continueButton",
-            value: "continue"
+          text: "Save and continue",
+          name: "continueButton",
+          value: "continue"
         }) }}
         {{ govukButton({
-            text: "Save and return",
-            classes: "govuk-button--secondary",
-            name: "returnButton",
-            value: "return"
+          text: "Save and return",
+          classes: "govuk-button--secondary",
+          name: "returnButton",
+          value: "return"
         }) }}
       </div>
     </form>

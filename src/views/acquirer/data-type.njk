@@ -7,6 +7,12 @@
     <div class="govuk-grid-column-two-thirds">
       <span class="govuk-caption-l">Request ID: {{requestId}}</span>
       <form method="POST" id="dataTypeForm">
+
+        {% set errorText = undefined %}
+        {% if errorMessage['data-type'] %}
+          {% set errorText = { text: errorMessage['data-type'] } %}
+        {% endif %}
+
         {{ govukCheckboxes({
         name: "data-type",
         fieldset: {
@@ -46,8 +52,9 @@
             behaviour: "exclusive"
             }
         ],
-        errorMessage: errorMessage
+        errorMessage: errorText
         }) }}
+
         <div class="govuk-button-group">
           {{ govukButton({
             text: "Save and continue",

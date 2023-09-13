@@ -1,11 +1,17 @@
 {% extends "page.njk" %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-
+    
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <span class="govuk-caption-l">Request ID: {{requestId}}</span>
+      
+      {% set errorText = undefined %}
+        {% if errorMessage['lawful-basis-personal'] %}
+          {% set errorText = { text: errorMessage['lawful-basis-personal'] } %}
+        {% endif %}
+      
       <form method="POST" id="dataAccessForm">
         {% set basisHint %}
         <div>
@@ -84,7 +90,8 @@
             text: "The data processing is under Part 3 DPA18 and either by consent or is necessary for the performance of a task carried out for that purpose by a competent authority"
           }
         }
-      ]
+      ],
+      errorMessage: errorText
       }) }}
         <div class="govuk-button-group">
           {{ govukButton({
