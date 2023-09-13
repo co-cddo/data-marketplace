@@ -1,0 +1,72 @@
+{% extends "page.njk" %}
+
+{% set requestId = "RR147" %}
+
+{% set status = "Rejected" %} {# Change this to "Accepted" or "Rejected" as needed #}
+
+{% if status == "Accepted" %}
+  {% set request = {
+    status: "Accepted", 
+    decisionMade: "2 November 2023",
+    feedbackProvided: "We'll set up a meeting to kick off the data share arrangement and MoU.",
+    nextSteps: "Your department's contact email has been shared with the Department for Education so they can begin working with you on the data share arrangement. You are able to contact them at <a href='mailto:data-management@dfe.gov.uk'>data-management@dfe.gov.uk</a>.",
+    dataOwner: "Department for Education",
+    dataset: "student-early-years_stats",
+    neededBy: "18 June 2023"
+  } %}
+{% else %}
+  {% set request = {
+    status: "Rejected", 
+    decisionMade: "2 November 2023",
+    feedbackProvided: "We are unable to provide the addresses of regional supervisor for the reasons you've given. This would be in conflict with GDPR regulations.",
+    nextSteps: "This request has been rejected. Consider the feedback before making further data share requests.",
+    dataOwner: "Department for Education",
+    dataset: "teacher-end-of-year_reporting",
+    neededBy: "18 June 2023"
+  } %}
+{% endif %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-l">Request ID: {{requestId}}</span>
+    <h1 class="govuk-heading-xl">
+      {{ request.status }} request
+    </h1>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-m govuk-!-static-margin-bottom-1">Decision made</h2>
+    <p class="govuk-body">{{ request.decisionMade }}</p>
+
+    <h2 class="govuk-heading-m govuk-!-static-margin-bottom-1">Feedback provided</h2>
+    <p class="govuk-body">{{ request.feedbackProvided }}</p>
+
+    <h2 class="govuk-heading-m govuk-!-static-margin-bottom-1">What happens next</h2>
+    <p class="govuk-body">{{ request.nextSteps }}</p>
+  </div>
+  
+  <div class="govuk-grid-column-one-third">
+    <h2 class="govuk-heading-s govuk-!-static-margin-bottom-1">Data owner</h2>
+    <p class="govuk-body">{{ request.dataOwner }}</p>
+
+    <h2 class="govuk-heading-s govuk-!-static-margin-bottom-1">Dataset</h2>
+    <p class="govuk-body">{{ request.dataset }}</p>
+
+    <h2 class="govuk-heading-s govuk-!-static-margin-bottom-1">Needed by</h2>
+    <p class="govuk-body">{{ request.neededBy }}</p>
+  </div>
+  
+  <div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-button-group govuk-!-static-margin-top-9">
+      <a href="#1" class="govuk-button govuk-button--secondary">View full request</a>
+      <a href="created-requests" class="govuk-link">Return to created requests</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

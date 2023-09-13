@@ -91,6 +91,9 @@
                     text: "Dataset"
                 },
                 {
+                    text: "Owner"
+                },
+                {
                     text: "Needed by"
                 },
                 {
@@ -100,9 +103,31 @@
                     text: "Decision"
                 }
             ],
-            rows: allTableRows.completed
+            rows: [
+            [
+            {
+                html: '<a href="/acquirer/created-request-outcome" class="govuk-link">RR148 - View</a>'
+            },
+            {
+            text: "	teacher-end-of-year_reporting"
+            },
+            {
+            text: "Department for Education"
+            },
+            {
+            text: "18 Jun 2023"
+            },
+            {
+            text: "2 Nov 2023"
+            },
+            {
+            text: "Rejected"
+            }
+            ]
+        ]
         }) }}
     </div>
 </div>
+
 
 {% endblock %}

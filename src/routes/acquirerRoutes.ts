@@ -11,7 +11,13 @@ import {
   updateStepsStatus,
 } from "../helperFunctions/formHelper";
 import axios from "axios";
-import { FormData, GenericStringArray, UserData } from "../types/express";
+import {
+  DateStep,
+  FormData,
+  GenericStringArray,
+  ManageShareTableRow,
+  UserData,
+} from "../types/express";
 
 const generateFormTemplate = (
   req: Request,
@@ -33,6 +39,20 @@ const generateFormTemplate = (
 
   return template;
 };
+
+// Function to get the tag class based on the status value
+function getStatusClass(status: string): string {
+  switch (status) {
+    case "NOT STARTED":
+      return "govuk-tag--grey";
+    case "IN PROGRESS":
+      return "govuk-tag--blue";
+    case "RETURNED":
+      return "govuk-tag--red";
+    default:
+      return "govuk-tag--grey";
+  }
+}
 
 router.get("/:resourceID/start", async (req: Request, res: Response) => {
   const resourceID = req.params.resourceID;
@@ -245,7 +265,7 @@ router.post(
     }
 
     if (req.body.continueButton && formStep === "confirmation") {
-      return res.redirect(`/manage-shares/created-requests`);
+      return res.redirect(`/acquirer/created-requests`);
     }
 
     updateStepsStatus(
@@ -282,5 +302,86 @@ router.post(
     return res.redirect(redirectURL);
   },
 );
+
+router.get("/created-requests", async (req: Request, res: Response) => {
+  const acquirerForms = req.session.acquirerForms || {};
+  const backLink = req.headers.referer || "/";
+
+  const monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  const allTableRows: {
+    pending: ManageShareTableRow[][];
+    submitted: ManageShareTableRow[][];
+    completed: ManageShareTableRow[][];
+  } = {
+    pending: [],
+    submitted: [
+      [{ text: "There are no submitted data share requests.", colspan: 5 }],
+    ],
+    completed: [
+      [{ text: "You have not completed any data share requests.", colspan: 5 }],
+    ],
+  };
+
+  if (Object.values(acquirerForms).length === 0) {
+    allTableRows.pending.push([
+      { text: "There are no pending data share requests.", colspan: 5 },
+    ]);
+  } else {
+    for (const [, formData] of Object.entries(acquirerForms)) {
+      let formattedDate = "Unrequested";
+      const dateValue = formData.steps.date.value as DateStep;
+
+      if (dateValue.day && dateValue.month && dateValue.year) {
+        const monthIndex = dateValue.month - 1;
+        const monthName = monthNames[monthIndex];
+        formattedDate = `${dateValue.day} ${monthName} ${dateValue.year}`;
+      }
+
+      const row: ManageShareTableRow[] = [
+        {
+          html: `<a href="/acquirer/${formData.dataAsset}/start">${formData.requestId}</a>`,
+        },
+        { text: formData.assetTitle },
+        { text: formData.ownedBy },
+        { text: formattedDate },
+        {
+          html: `<span class="govuk-tag ${getStatusClass(formData.status)}">${
+            formData.status
+          }</span>`,
+        },
+      ];
+
+      allTableRows.pending.push(row);
+    }
+  }
+
+  res.render("../views/acquirer/created-requests.njk", {
+    backLink,
+    acquirerForms,
+    getStatusClass,
+    allTableRows: allTableRows,
+  });
+});
+
+router.get("/created-request-outcome", async (req: Request, res: Response) => {
+  const backLink = req.headers.referer || "/";
+  res.render("../views/acquirer/created-request-outcome.njk", {
+    backLink,
+  });
+});
 
 export default router;

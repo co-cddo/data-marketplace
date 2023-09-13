@@ -1,5 +1,4 @@
 import express, { Request, Response } from "express";
-import { DateStep, ManageShareTableRow } from "../types/express";
 import axios from "axios";
 const router = express.Router();
 const URL = `${process.env.API_ENDPOINT}/manage-shares/received-requests`;
@@ -59,80 +58,6 @@ function getStatusClass(status: string): string {
       return "govuk-tag--grey";
   }
 }
-
-router.get("/created-requests", async (req: Request, res: Response) => {
-  const acquirerForms = req.session.acquirerForms || {};
-  const backLink = req.headers.referer || "/";
-
-  const monthNames = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
-
-  const allTableRows: {
-    pending: ManageShareTableRow[][];
-    submitted: ManageShareTableRow[][];
-    completed: ManageShareTableRow[][];
-  } = {
-    pending: [],
-    submitted: [
-      [{ text: "There are no submitted data share requests.", colspan: 5 }],
-    ],
-    completed: [
-      [{ text: "You have not completed any data share requests.", colspan: 5 }],
-    ],
-  };
-
-  if (Object.values(acquirerForms).length === 0) {
-    allTableRows.pending.push([
-      { text: "There are no pending data share requests.", colspan: 5 },
-    ]);
-  } else {
-    for (const [, formData] of Object.entries(acquirerForms)) {
-      let formattedDate = "Unrequested";
-      const dateValue = formData.steps.date.value as DateStep;
-
-      if (dateValue.day && dateValue.month && dateValue.year) {
-        const monthIndex = dateValue.month - 1;
-        const monthName = monthNames[monthIndex];
-        formattedDate = `${dateValue.day} ${monthName} ${dateValue.year}`;
-      }
-
-      const row: ManageShareTableRow[] = [
-        {
-          html: `<a href="/acquirer/${formData.dataAsset}/start">${formData.requestId}</a>`,
-        },
-        { text: formData.assetTitle },
-        { text: formData.ownedBy },
-        { text: formattedDate },
-        {
-          html: `<span class="govuk-tag ${getStatusClass(formData.status)}">${
-            formData.status
-          }</span>`,
-        },
-      ];
-
-      allTableRows.pending.push(row);
-    }
-  }
-
-  res.render("../views/supplier/created-requests.njk", {
-    backLink,
-    acquirerForms,
-    getStatusClass,
-    allTableRows: allTableRows,
-  });
-});
 
 router.get("/received-requests", async (req: Request, res: Response) => {
   const backLink = req.headers.referer || "/manage-shares";
