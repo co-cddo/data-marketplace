@@ -86,6 +86,35 @@ function getDataAccessValidation() {
   return [body("data-access").exists().withMessage("Select No or Yes")];
 }
 
+
+function getOtherOrgsValidation() {
+  return [
+    body().custom((value, { req }) => {
+      const organisationKeys = Object.keys(req.body).filter(key => key.startsWith('org-name-'));
+
+      if (!organisationKeys.length) {
+        throw { text: 'Please provide at least one organisation.' };
+      }
+
+      const errorMessages: Record<string, string> = {};
+
+      for (const orgKey of organisationKeys) {
+        if (!req.body[orgKey] || req.body[orgKey].trim() === '') {
+          errorMessages[orgKey] = 'Organisation name cannot be empty.';
+        }
+      }
+
+      if (Object.keys(errorMessages).length > 0) {
+        req.session.formErrors = errorMessages;
+        throw errorMessages;
+      }
+      
+      return true;
+    })
+  ];
+}
+
+
 function getImpactValidation() {
   return [
     body("impact")
@@ -123,7 +152,37 @@ function getDateValidation() {
 }
 
 function getBenefitsValidation() {
-  return [body("benefits").exists().withMessage("Please select an option.")];
+  return [
+    body('benefits')
+      .exists().withMessage('Select one or more benefits')
+      .custom((benefitsArray, { req }) => {
+
+       if (!benefitsArray) {
+          return true;
+        }
+        
+        if (!Array.isArray(benefitsArray)) {
+          benefitsArray = [benefitsArray];
+        }
+
+        const missingExplanations = [];
+
+        for (const benefit of benefitsArray) {
+          const explanation = req.body[benefit];
+          console.log("Checked benefit:", benefit);
+          console.log("Explanation:", explanation);
+          if (!explanation || explanation.trim() === "") {
+            missingExplanations.push(benefit);
+          }
+        }
+
+        if (missingExplanations.length > 0) {
+          throw new Error("Enter how your project will provide the public benefit");
+        }
+
+        return true;
+      })
+  ];
 }
 
 function getLegalPowerValidation() {
@@ -180,7 +239,7 @@ function getLawfulPersonalValidation() {
   return [
     body("lawful-basis-personal")
       .exists()
-      .withMessage("Please select an option."),
+      .withMessage("Select one or more options"),
   ];
 }
 
@@ -188,7 +247,7 @@ function getLawfulSpecialValidation() {
   return [
     body("lawful-basis-special")
       .exists()
-      .withMessage("Please select an option."),
+      .withMessage("Select one or more options"),
   ];
 }
 
@@ -196,7 +255,7 @@ function getLawfulBasisSpecialPublicInterestValidation() {
   return [
     body("lawful-basis-special-public-interest")
       .exists()
-      .withMessage("Please select an option."),
+      .withMessage("Select one or more options"),
   ];
 }
 
@@ -205,7 +264,7 @@ function getDataTravelValidation() {
 }
 
 function getRoleValidation() {
-  return [body("role").exists().withMessage("Please select an option.")];
+  return [body("role").exists().withMessage("Select ‘Controller’, ‘Joint Controller’, ‘Processor’ or ‘I don’t know")];
 }
 
 function getProtectionReviewValidation() {
@@ -223,12 +282,12 @@ function getDeliveryValidation() {
 }
 
 function getDisposalValidation() {
-  return [body("disposal").exists().withMessage("Please select an option.")];
+  return [body("disposal").exists().withMessage("Enter how will you dispose of data")];
 }
 
 function getSecurityReviewValidation() {
   return [
-    body("security-review").exists().withMessage("Please select an option."),
+    body("security-review").exists().withMessage("Select Yes or No"),
   ];
 }
 
@@ -246,6 +305,8 @@ function getValidationRules(step: string) {
       return getBenefitsValidation();
     case "data-access":
       return getDataAccessValidation();
+    case "other-orgs":
+      return getOtherOrgsValidation();
     case "impact":
       return getImpactValidation(); // Doesnt seem to work
     case "data-required":
