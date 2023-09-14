@@ -5,6 +5,11 @@ import session from "express-session";
 interface UserData {
   display_name: string;
   idToken: string;
+  email: string;
+  email_verified: boolean;
+  nickname: string;
+  name: string;
+  display_name: string;
 }
 
 interface FormData {
@@ -154,7 +159,9 @@ type FormStatus =
   | "IN PROGRESS"
   | "AWAITING REVIEW"
   | "RETURNED"
-  | "IN REVIEW";
+  | "IN REVIEW"
+  | "ACCEPTED"
+  | "REJECTED";
 
 export type StepValue =
   | string
@@ -196,6 +203,7 @@ interface Section {
 declare module "express-serve-static-core" {
   interface Request {
     user: UserData;
+    apiKey: string;
   }
 }
 

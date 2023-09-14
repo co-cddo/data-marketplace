@@ -11,11 +11,7 @@ import {
   updateStepsStatus,
 } from "../helperFunctions/formHelper";
 import axios from "axios";
-import { FormData, GenericStringArray } from "../types/express";
-
-function parseJwt(token: string) {
-  return JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
-}
+import { FormData, GenericStringArray, UserData } from "../types/express";
 
 const generateFormTemplate = (
   req: Request,
@@ -27,10 +23,9 @@ const generateFormTemplate = (
     address?: string | null;
   },
 ) => {
-  const userInfo = req.user ? parseJwt(req.user.idToken) : null;
-  const username = userInfo ? userInfo.email : "anonymous";
+  const userInfo: UserData = req.user;
   const template: FormData = JSON.parse(JSON.stringify(formTemplate));
-  template.ownedBy = username;
+  template.ownedBy = userInfo.email;
   template.dataAsset = resourceID;
   template.requestId = randomUUID();
   template.assetTitle = assetTitle;
@@ -45,7 +40,6 @@ router.get("/:resourceID/start", async (req: Request, res: Response) => {
 
   try {
     const resource = await fetchResourceById(resourceID);
-
     if (!resource) {
       res.status(404).send("Resource not found");
       return;
@@ -63,7 +57,6 @@ router.get("/:resourceID/start", async (req: Request, res: Response) => {
     req.session.acquirerForms[resourceID] =
       req.session.acquirerForms?.[resourceID] ||
       generateFormTemplate(req, resourceID, assetTitle, contactPoint);
-
     res.render("../views/acquirer/start.njk", {
       route: req.params.page,
       heading: "Acquirer Start",
@@ -271,10 +264,11 @@ router.post(
     // Send the formdata to the backend if logged in
     if (req.isAuthenticated()) {
       try {
-        await axios.put(URL, {
-          jwt: req.cookies.jwtToken,
-          sharedata: formdata,
-        });
+        await axios.put(
+          URL,
+          { sharedata: formdata },
+          { headers: { Authorization: `Bearer ${req.cookies.jwtToken}` } },
+        );
       } catch (error: unknown) {
         console.error("Error sending formdata to backend");
         if (axios.isAxiosError(error)) {

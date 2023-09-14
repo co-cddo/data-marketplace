@@ -11,70 +11,26 @@ export async function fetchResources(
   query?: string,
   organisationFilters?: string[],
   themeFilters?: string[],
-  filterOptionTags?: string[],
 ): Promise<{
   resources: CatalogueItem[];
-  uniqueOrganisations: Organisation[];
-  uniqueThemes: string[];
-  selectedFilters?: string[];
 }> {
-  const apiUrl = `${process.env.API_ENDPOINT}/catalogue`;
-  if (!apiUrl) {
+  const orgSearch =
+    organisationFilters?.map((o) => `&organisation=${o}`).join("") || "";
+  const topicSearch = themeFilters?.map((t) => `&topic=${t}`).join("") || "";
+  const apiUrl = `${process.env.API_ENDPOINT}/catalogue?query=${
+    query ? query : ""
+  }${orgSearch}${topicSearch}`;
+  if (!process.env.API_ENDPOINT) {
     throw new Error(
       "API endpoint is undefined. Please set the API_ENDPOINT environment variable.",
     );
   }
+
   const response = await axios.get<ApiResponse>(apiUrl as string);
-  let resources = response.data.data;
-  // Search the data if query is present
-  if (query) {
-    resources = resources.filter((catalogueItem) => {
-      return Object.values(catalogueItem).some(
-        (value) => value?.toString().toLowerCase().includes(query),
-      );
-    });
-  }
-
-  // Extract unique organisations
-  const organisationsSet = new Set();
-  const uniqueOrganisations: Organisation[] = [];
-  resources.forEach((item) => {
-    if (item.organisation && !organisationsSet.has(item.organisation.slug)) {
-      uniqueOrganisations.push(item.organisation);
-      organisationsSet.add(item.organisation.slug);
-    }
-  });
-
-  // Extract unique themes
-  const themesSet = new Set<string>();
-  resources.forEach((item) => {
-    if (item.theme && Array.isArray(item.theme)) {
-      item.theme.forEach((theme) => {
-        themesSet.add(theme);
-      });
-    }
-  });
-  const uniqueThemes = Array.from(themesSet);
-  if (organisationFilters) {
-    resources = resources.filter(
-      (item) =>
-        item.organisation &&
-        organisationFilters.includes(item.organisation.slug),
-    );
-  }
-
-  if (themeFilters) {
-    resources = resources.filter(
-      (item) =>
-        item.theme && item.theme.some((theme) => themeFilters.includes(theme)),
-    );
-  }
+  const resources = response.data.data;
 
   return {
-    resources: resources,
-    uniqueOrganisations: uniqueOrganisations,
-    uniqueThemes: uniqueThemes,
-    selectedFilters: filterOptionTags,
+    resources,
   };
 }
 
@@ -82,7 +38,7 @@ export async function fetchResourceById(
   resourceID: string,
 ): Promise<CatalogueItem> {
   const apiUrl = `${process.env.API_ENDPOINT}/catalogue/${resourceID}`;
-  if (!apiUrl) {
+  if (!process.env.API_ENDPOINT) {
     throw new Error(
       "API endpoint is undefined. Please set the API_ENDPOINT environment variable.",
     );

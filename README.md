@@ -2,13 +2,37 @@
 
 This application is built using Express.js and Typescript.
 
+This repository hosts the frontend UI, using the gov design system. It's primary responsibility is to provide the functionality for Find, Request and Manage share requests and Learn.
+
+Find allows you to search and filter for data records and view the initial data information.
+
+Request and Manage Shares allows users to ask for access to data and manage any requests for that data.
+
+Learn is a set of guidance pages on how to use the Marketplace.
+
+## Technology
+
+This repository allows the user to interact with data, the data is surfaced in a different [api repository](https://github.com/co-cddo/data-marketplace-api). It consumes the data via various API's provided by the api repo.
+
+You can see a high level solution [here](./docs/high-level.jpg)
+
+### SSO
+
+The project uses "Single Sign-On - UK Government Security" for authentication. The parameters can be grabbed from AWS parameter store if required locally. If you dont need to SSO locally, just put dummy strings into the ENV variables.
+
+Authorisation is handled in the api repo and allows for users and granular control over access.
+
+### Request templates
+
+In `/requests` is a requests.http.template file which can be renamed to requests.http and used with the REST Client VSCode extension to test some of the new API endpoints. The ops-api-key, jwt and user variables need to be set to real values.
+
 ## Local development
 
-Local development requires Docker & Docker compose.
+While you can run this repo using local node, its recommended to use Docker & Docker compose to ensure you are running the same environment as production.
 
 To get started:
 
-- In the project root folder, create a .env file and copy the contents of the .env.example file. Replace the API_ENDPOINT variable value with a link to the live API endpoint.
+- In the project root folder, create a .env file and copy the contents of the .env.example file. Replace the API_ENDPOINT variable values with a link to the live API endpoint.
 - Run `npm install`
 - Run `npm run start:dev`
 
@@ -16,6 +40,12 @@ To use dcoker:
 
 - Run `docker-compose up`
 
-## SSO
+## Deployment
 
-The project uses single sign on for authentication. The parameters can be grabbed from AWS parameter store if required locally. If you dont need to SSO locally, just put dummy strings into the ENV variales.
+The project currently uses Github actions to run tests and linting. The hosting is on AWS using containers, and this build is in progress.
+The aim is to automate code delivery into the AWS environment.
+
+For the time being there is a manual step to deploy:
+
+- update package.json version number
+- message Soydaner with new version number

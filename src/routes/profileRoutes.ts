@@ -1,13 +1,11 @@
 import express, { NextFunction, Request, Response } from "express";
 const router = express.Router();
-import { authenticateJWT } from "../middleware/authMiddleware";
 import axios from "axios";
 
-const URL = `${process.env.API_ENDPOINT}/user`;
+const URL = `${process.env.API_ENDPOINT}/login`;
 
 router.get(
   "/",
-  authenticateJWT,
   async (req: Request, res: Response) => {
     if (!req.isAuthenticated()) {
       return res.redirect("/error");
@@ -15,7 +13,9 @@ router.get(
 
     let requestForms = {};
     try {
-      const response = await axios.put(URL, { token: req.cookies.jwtToken });
+      const response = await axios.get(URL, {
+        headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
+      });
       requestForms = response.data["sharedata"] || {};
       req.session.acquirerForms = requestForms;
     } catch (error) {

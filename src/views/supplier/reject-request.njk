@@ -1,14 +1,15 @@
 {% extends "page.njk" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
+
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     {{ govukPanel({
-    titleText: "Request rejected",
-    html: "Request ID: RR523"
+      titleText: "Request rejected",
+      html: requestId 
     }) }}
-    <p class="govuk-body">You've told Department X why you've rejected their request.</p>
+    <p class="govuk-body">You've told {{ requestingOrg }} why you've rejected their request.</p>
     <h2 class="govuk-heading-m">What happens next</h2>
     <p class="govuk-body">You do not need to take any further action.</p>
     <p class="govuk-body">If they address the reasons why their request was rejected, they can submit another request.</p>
