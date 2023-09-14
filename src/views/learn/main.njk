@@ -1,7 +1,6 @@
 {% extends "page.njk" %}
 
-{% block content %}
-
+{% markdown %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl">
@@ -13,7 +12,7 @@
     <h2 class="govuk-heading-m">Guidance on terminology</h2>
     <p class="govuk-body">
       <ul class="govuk-list WIP-LEARN__browse-list">
-        <li style="margin-bottom:25px;"><a href="#" class="govuk-link">Glossary</a></li>
+        <li style="margin-bottom:25px;"><a href="learn/glossary" class="govuk-link">Glossary</a></li>
         <li style="margin-bottom:45px;"><a href="https://co-cddo.github.io/data-catalogue-schemas/" class="govuk-link">UK Cross-Government Metadata Exchange Model</a></li>
       </ul>
     </p>
@@ -52,6 +51,6 @@
     </p>
   </div>
 </div>
+{% endmarkdown %}
 
-{% endblock %}
 

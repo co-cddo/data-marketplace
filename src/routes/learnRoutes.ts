@@ -6,6 +6,13 @@ router.get("/", async (req: Request, res: Response) => {
 });
 
 router.get(
+  "/glossary",
+  async (req: Request, res: Response) => {
+    res.render("../views/learn/glossary.njk");
+  },
+);
+
+router.get(
   "/data-sharing-arrangements",
   async (req: Request, res: Response) => {
     res.render("../views/learn/data-sharing-arrangements.njk");
