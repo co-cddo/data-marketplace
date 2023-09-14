@@ -1,0 +1,435 @@
+{
+  "requestId": "56475ed7-f205-47ab-a8eb-401c73bc433e",
+  "assetTitle": "Asset for Test",
+  "assetPublisher": "Department for Work and Pensions",
+  "requesterId": "5978321effad306a2875997e1024471d",
+  "requesterEmail": "jane.doe@digital.cabinet-office.gov.uk",
+  "requestingOrg": "Department for Work and Pensions",
+  "status": "REJECTED",
+  "received": "2023-09-14T11:42:01.091359",
+  "sharedata": {
+    "requestId": "6e0bb46b-c9a2-40bb-9c68-79160efc096d",
+    "assetTitle": "Asset for Test",
+    "contactPoint": {
+      "contactName": "Jane Doe",
+      "email": "",
+      "address": ""
+    },
+    "dataAsset": "fcbc4d3f-0c05-4857-b0e3-eeec6bfea3a1",
+    "ownedBy": "jane.doe@digital.cabinet-office.gov.uk",
+    "completedSections": 5,
+    "status": "REJECTED",
+    "overviewSections": {
+      "purpose": {
+        "name": "Purpose of the data share",
+        "steps": [
+          "data-type",
+          "data-subjects",
+          "project-aims",
+          "data-required",
+          "benefits",
+          "data-access",
+          "impact",
+          "date"
+        ]
+      },
+      "legal": {
+        "name": "Legal power and gateway",
+        "steps": ["legal-power", "legal-gateway", "legal-review"]
+      },
+      "dataProtection": {
+        "name": "Data protection",
+        "steps": [
+          "lawful-basis-personal",
+          "lawful-basis-special",
+          "data-travel",
+          "role",
+          "protection-review"
+        ]
+      },
+      "security": {
+        "name": "Data governance, security and technology",
+        "steps": ["delivery", "format", "disposal", "security-review"]
+      },
+      "review": {
+        "name": "Review and send",
+        "steps": ["check"]
+      }
+    },
+    "steps": {
+      "data-type": {
+        "id": "data-type",
+        "name": "Data type",
+        "status": "COMPLETED",
+        "value": {
+          "personal": {
+            "checked": true
+          },
+          "special": {
+            "checked": false
+          },
+          "none": {
+            "checked": false
+          }
+        },
+        "nextStep": "data-subjects",
+        "errorMessage": ""
+      },
+      "data-subjects": {
+        "id": "data-subjects",
+        "name": "Data subjects",
+        "status": "COMPLETED",
+        "value": "test",
+        "nextStep": "project-aims",
+        "errorMessage": ""
+      },
+      "project-aims": {
+        "id": "project-aims",
+        "name": "Project aims",
+        "status": "COMPLETED",
+        "value": {
+          "aims": "test",
+          "explanation": "test"
+        },
+        "nextStep": "data-required",
+        "errorMessage": ""
+      },
+      "data-required": {
+        "id": "data-required",
+        "name": "Data required",
+        "status": "COMPLETED",
+        "value": "test",
+        "nextStep": "benefits",
+        "errorMessage": ""
+      },
+      "benefits": {
+        "id": "benefits",
+        "name": "Benefit to public",
+        "status": "COMPLETED",
+        "value": {
+          "decision-making": {
+            "explanation": "",
+            "checked": false
+          },
+          "service-delivery": {
+            "explanation": "",
+            "checked": false
+          },
+          "benefit-people": {
+            "explanation": "",
+            "checked": false
+          },
+          "allocate-and-evaluate-funding": {
+            "explanation": "",
+            "checked": false
+          },
+          "social-economic-trends": {
+            "explanation": "test",
+            "checked": true
+          },
+          "needs-of-the-public": {
+            "explanation": "",
+            "checked": false
+          },
+          "statistical-information": {
+            "explanation": "",
+            "checked": false
+          },
+          "existing-research-or-statistics": {
+            "explanation": "",
+            "checked": false
+          },
+          "something-else": {
+            "explanation": "",
+            "checked": false
+          }
+        },
+        "nextStep": "data-access",
+        "errorMessage": ""
+      },
+      "data-access": {
+        "id": "data-access",
+        "name": "Other organisations accessing data",
+        "status": "COMPLETED",
+        "value": "no",
+        "nextStep": "other-orgs",
+        "errorMessage": ""
+      },
+      "other-orgs": {
+        "id": "other-orgs",
+        "name": "Other organisations",
+        "status": "NOT REQUIRED",
+        "value": [""],
+        "nextStep": "impact",
+        "errorMessage": null
+      },
+      "impact": {
+        "id": "impact",
+        "name": "Impact if data not given",
+        "status": "COMPLETED",
+        "value": "test",
+        "nextStep": "date",
+        "errorMessage": ""
+      },
+      "date": {
+        "id": "date",
+        "name": "Date required",
+        "status": "COMPLETED",
+        "value": {
+          "day": "11",
+          "month": "12",
+          "year": "2024"
+        },
+        "nextStep": "legal-power",
+        "errorMessage": ""
+      },
+      "legal-power": {
+        "id": "legal-power",
+        "name": "Legal power",
+        "status": "COMPLETED",
+        "value": {
+          "yes": {
+            "explanation": "test",
+            "checked": true
+          },
+          "no": {
+            "checked": false
+          },
+          "we-dont-know": {
+            "checked": false
+          }
+        },
+        "nextStep": "legal-power-advice",
+        "errorMessage": ""
+      },
+      "legal-power-advice": {
+        "id": "legal-power-advice",
+        "name": "Legal power advice",
+        "status": "NOT REQUIRED",
+        "value": "",
+        "nextStep": "legal-gateway",
+        "errorMessage": null
+      },
+      "legal-gateway": {
+        "id": "legal-gateway",
+        "name": "Legal gateway",
+        "status": "COMPLETED",
+        "value": {
+          "yes": {
+            "explanation": "test",
+            "checked": true
+          },
+          "other": {
+            "explanation": "",
+            "checked": false
+          },
+          "we-dont-know": {
+            "explanation": "",
+            "checked": false
+          }
+        },
+        "nextStep": "legal-gateway-advice",
+        "errorMessage": ""
+      },
+      "legal-gateway-advice": {
+        "id": "legal-gateway-advice",
+        "name": "Legal gateway advice",
+        "status": "NOT REQUIRED",
+        "value": "",
+        "nextStep": "legal-review",
+        "errorMessage": null
+      },
+      "legal-review": {
+        "id": "legal-review",
+        "name": "Legal review",
+        "status": "COMPLETED",
+        "value": "yes",
+        "nextStep": "lawful-basis-personal",
+        "errorMessage": ""
+      },
+      "lawful-basis-personal": {
+        "id": "lawful-basis-personal",
+        "name": "Lawful basis for personal data",
+        "status": "COMPLETED",
+        "value": {
+          "public-task": {
+            "checked": true
+          },
+          "legal-obligation": {
+            "checked": false
+          },
+          "contract": {
+            "checked": false
+          },
+          "legitimate-interests": {
+            "checked": false
+          },
+          "consent": {
+            "checked": false
+          },
+          "vital-interest": {
+            "checked": false
+          },
+          "law-enforcement": {
+            "checked": false
+          }
+        },
+        "nextStep": "lawful-basis-special",
+        "errorMessage": ""
+      },
+      "lawful-basis-special": {
+        "id": "lawful-basis-special",
+        "name": "Lawful basis for special category data",
+        "status": "NOT REQUIRED",
+        "value": [],
+        "nextStep": "lawful-basis-special-public-interest",
+        "errorMessage": null
+      },
+      "lawful-basis-special-public-interest": {
+        "id": "lawful-basis-special-public-interest",
+        "name": "Lawful basis",
+        "status": "NOT REQUIRED",
+        "value": [],
+        "nextStep": "data-travel",
+        "errorMessage": null
+      },
+      "data-travel": {
+        "id": "data-travel",
+        "name": "Data travel outside UK",
+        "status": "COMPLETED",
+        "value": "no",
+        "nextStep": "data-travel-location",
+        "errorMessage": ""
+      },
+      "data-travel-location": {
+        "id": "data-travel-location",
+        "name": "Data travel Location",
+        "status": "NOT REQUIRED",
+        "value": [""],
+        "nextStep": "role",
+        "errorMessage": null
+      },
+      "role": {
+        "id": "role",
+        "name": "Role of organisation",
+        "status": "COMPLETED",
+        "value": "joint",
+        "nextStep": "protection-review",
+        "errorMessage": ""
+      },
+      "protection-review": {
+        "id": "protection-review",
+        "name": "Data protection review",
+        "status": "COMPLETED",
+        "value": "yes",
+        "nextStep": "delivery",
+        "errorMessage": ""
+      },
+      "delivery": {
+        "id": "delivery",
+        "name": "Data delivery",
+        "status": "COMPLETED",
+        "value": {
+          "third-party": {
+            "checked": false
+          },
+          "physical": {
+            "checked": true
+          },
+          "something": {
+            "checked": false,
+            "explanation": ""
+          }
+        },
+        "nextStep": "format",
+        "errorMessage": ""
+      },
+      "format": {
+        "id": "format",
+        "name": "Data format",
+        "status": "COMPLETED",
+        "value": {
+          "csv": {
+            "checked": false
+          },
+          "sql": {
+            "checked": true
+          },
+          "something": {
+            "checked": false,
+            "explanation": ""
+          }
+        },
+        "nextStep": "disposal",
+        "errorMessage": ""
+      },
+      "disposal": {
+        "id": "disposal",
+        "name": "Disposal of data",
+        "status": "COMPLETED",
+        "value": "test",
+        "nextStep": "security-review",
+        "errorMessage": ""
+      },
+      "security-review": {
+        "id": "security-review",
+        "name": "Data security review",
+        "status": "COMPLETED",
+        "value": "yes",
+        "nextStep": "check",
+        "errorMessage": ""
+      },
+      "check": {
+        "id": "check",
+        "name": "Check answers",
+        "status": "COMPLETED",
+        "value": "",
+        "nextStep": "declaration",
+        "errorMessage": ""
+      },
+      "declaration": {
+        "id": "check",
+        "name": "Declaration",
+        "status": "COMPLETED",
+        "value": "",
+        "nextStep": "confirmation",
+        "errorMessage": ""
+      },
+      "confirmation": {
+        "id": "check",
+        "name": "Confirmation",
+        "status": "COMPLETED",
+        "value": "",
+        "nextStep": "start",
+        "errorMessage": null
+      }
+    },
+    "stepHistory": [
+      "data-type",
+      "data-subjects",
+      "project-aims",
+      "data-required",
+      "benefits",
+      "data-access",
+      "impact",
+      "date",
+      "legal-power",
+      "legal-gateway",
+      "legal-review",
+      "lawful-basis-personal",
+      "data-travel",
+      "role",
+      "protection-review",
+      "delivery",
+      "format",
+      "disposal",
+      "security-review",
+      "check",
+      "declaration"
+    ]
+  },
+  "neededBy": "2024-12-11",
+  "reviewNotes": "Is this a valid legal gateway? Does the data contain sensitive information?",
+  "decisionNotes": "This is not an acceptable request. The data is too sensitive for what you require.",
+  "decisionDate": "2023-09-14"
+}

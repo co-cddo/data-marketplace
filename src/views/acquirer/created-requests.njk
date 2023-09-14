@@ -106,22 +106,22 @@
             rows: [
             [
             {
-                html: '<a href="/acquirer/created-request-outcome" class="govuk-link">RR148 - View</a>'
+                html: '<a href="/acquirer/created-request-outcome" class="govuk-link">' + data.requestId + ' - View</a>'
             },
             {
-            text: "	teacher-end-of-year_reporting"
+            text: data.assetTitle
             },
             {
-            text: "Department for Education"
+            text: data.assetPublisher
             },
             {
-            text: "18 Jun 2023"
+            text: data.neededBy
             },
             {
-            text: "2 Nov 2023"
+            text: data.received
             },
             {
-            text: "Rejected"
+            text: data.status | capitalize
             }
             ]
         ]

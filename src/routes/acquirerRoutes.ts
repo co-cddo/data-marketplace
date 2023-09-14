@@ -4,6 +4,17 @@ import { validateFormMiddleware } from "../middleware/validateFormMiddleware";
 import { validationResult } from "express-validator";
 const router = express.Router();
 import formTemplate from "../models/shareRequestTemplate.json";
+import * as mockRequest from "../mockData/mockRejectRequest.json";
+
+const formatDate = (dateString: string): string => {
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+  return new Date(dateString).toLocaleDateString(undefined, options);
+};
+
 import { randomUUID } from "crypto";
 import {
   extractFormData,
@@ -368,8 +379,11 @@ router.get("/created-requests", async (req: Request, res: Response) => {
       allTableRows.pending.push(row);
     }
   }
-
+  const supplierResponse = { ...mockRequest };
+  supplierResponse.neededBy = formatDate(supplierResponse.neededBy);
+  supplierResponse.received = formatDate(supplierResponse.neededBy);
   res.render("../views/acquirer/created-requests.njk", {
+    data: supplierResponse,
     backLink,
     acquirerForms,
     getStatusClass,
@@ -379,7 +393,27 @@ router.get("/created-requests", async (req: Request, res: Response) => {
 
 router.get("/created-request-outcome", async (req: Request, res: Response) => {
   const backLink = req.headers.referer || "/";
+  const supplierResponse = { ...mockRequest };
+  supplierResponse.neededBy = formatDate(supplierResponse.neededBy);
+  supplierResponse.decisionDate = formatDate(supplierResponse.decisionDate);
   res.render("../views/acquirer/created-request-outcome.njk", {
+    data: supplierResponse,
+    backLink,
+  });
+});
+
+router.get("/created-request-data", async (req: Request, res: Response) => {
+  const backLink = req.headers.referer || "/";
+  const supplierResponse = { ...mockRequest };
+  const sharedata = supplierResponse.sharedata;
+
+  if (!sharedata) {
+    return res.status(400).send("sharedata is missing in supplier response");
+  }
+
+  res.render("../views/acquirer/created-request-data.njk", {
+    data: supplierResponse,
+    sharedata: checkAnswer(supplierResponse.sharedata as unknown as FormData),
     backLink,
   });
 });
