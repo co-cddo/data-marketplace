@@ -279,17 +279,20 @@ router.post(
     const decision = req.body.decision;
 
     if (decision === "return") {
-      return res.redirect("/manage-shares/return-request");
+      return res.redirect(
+        `/manage-shares/received-requests/${requestId}/return-request`
+        );
     }
 
     if (decision === "approve") {
       return res.redirect(
-        `/manage-shares/received-requests/${requestId}/declaration`,
+        `/manage-shares/received-requests/${requestId}/declaration`
       );
     }
 
     if (decision === "reject") {
-      return res.redirect("/manage-shares/reject-request");
+      return res.redirect(`/manage-shares/received-requests/${requestId}/reject-request`
+      );
     }
 
     return res.redirect("/manage-shares/received-requests");
@@ -347,25 +350,123 @@ router.post(
   },
 );
 
-router.get("/reject-request", async (req: Request, res: Response) => {
+
+router.post(
+  "/received-requests/:requestId/decision",
+  async (req: Request, res: Response) => {
+    const requestId = req.params.requestId;
+
+    const decision = req.body.decision;
+
+    if (decision === "return") {
+      return res.redirect(
+        `/manage-shares/received-requests/${requestId}/return-request`
+        );
+    }
+
+    if (decision === "approve") {
+      return res.redirect(
+        `/manage-shares/received-requests/${requestId}/declaration`
+      );
+    }
+
+    if (decision === "reject") {
+      return res.redirect(`/manage-shares/received-requests/${requestId}/reject-request`
+      );
+    }
+
+    return res.redirect("/manage-shares/received-requests");
+  },
+);
+
+router.get(
+  "/received-requests/:requestId/declaration",
+  async (req: Request, res: Response) => {
+    const requestId = req.params.requestId;
+    res.render("../views/supplier/declaration.njk", {
+      requestId,
+    });
+  },
+);
+
+router.post(
+  "/received-requests/:requestId/declaration",
+  async (req: Request, res: Response) => {
+    const requestId = req.params.requestId;
+
+    if (req.body.acceptButton) {
+      return res.redirect(
+        `/manage-shares/received-requests/${requestId}/accept-request`,
+      );
+    }
+    return res.redirect("/manage-shares/received-requests");
+  },
+);
+
+router.get(
+  "/received-requests/:requestId/accept-request",
+  (req: Request, res: Response) => {
+    const backLink = req.headers.referer || "/";
+    const requestId = req.params.requestId;
+    const requestData = req.session.acquirerForms;
+
+    if (!requestData) {
+      return res.status(404).send("Request data not found");
+    }
+
+    res.render("../views/supplier/accept-request.njk", {
+      backLink,
+      requestId,
+      requestingOrg: requestData.requestingOrg,
+      requesterEmail: requestData.requesterEmail,
+    });
+  },
+);
+
+router.post(
+  "/received-requests/:requestId/accept-request",
+  async (req: Request, res: Response) => {
+    return res.redirect("/manage-shares/received-requests");
+  },
+);
+
+router.get("/received-requests/:requestId/reject-request", async (req: Request, res: Response) => {
   const backLink = req.headers.referer || "/";
-  res.render("../views/supplier/return-request.njk", {
+  const requestId = req.params.requestId;
+  const requestData = req.session.acquirerForms;
+
+  if (!requestData) {
+    return res.status(404).send("Request data not found");
+  }
+
+  res.render("../views/supplier/reject-request.njk", {
     backLink,
+    requestId,
+    requestingOrg: requestData.requestingOrg,
   });
 });
 
-router.post("/reject-request", async (req: Request, res: Response) => {
+router.post("/received-requests/:requestId/reject-request", async (req: Request, res: Response) => {
   return res.redirect("/manage-shares/received-requests");
 });
 
-router.get("/return-request", async (req: Request, res: Response) => {
+router.get("/received-requests/:requestId/return-request", async (req: Request, res: Response) => {
   const backLink = req.headers.referer || "/";
+  const requestId = req.params.requestId;
+  const requestData = req.session.acquirerForms;
+
+  if (!requestData) {
+    return res.status(404).send("Request data not found");
+  }
+
   res.render("../views/supplier/return-request.njk", {
     backLink,
+    requestId,
+    requestingOrg: requestData.requestingOrg,
   });
 });
 
-router.post("/return-request", async (req: Request, res: Response) => {
+router.post("/received-requests/:requestId/return-request", async (req: Request, res: Response) => {
   return res.redirect("/manage-shares/received-requests");
 });
 
