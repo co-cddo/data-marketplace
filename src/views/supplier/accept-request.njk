@@ -7,11 +7,11 @@
   <div class="govuk-grid-column-two-thirds">
     {{ govukPanel({
         titleText: "Request accepted",
-        html: "Request ID: RR523"
+        html: requestId 
     }) }}
-    <p class="govuk-body">Department X has been told their request has been accepted and you will contact them to discuss further.</p>
+    <p class="govuk-body">{{ requestingOrg }} has been told their request has been accepted and you will contact them to discuss further.</p>
     <h2 class="govuk-heading-m">What happens next</h2>
-    <p class="govuk-body">Contact <a class="govuk-link" href="mailto:data-team@department-x.gov.uk">data-team@department-x.gov.uk</a> to start a discussion.</p>
+    <p class="govuk-body">Contact <a class="govuk-link" href="mailto:{{ requesterEmail }}" target="_blank">{{requesterEmail}}</a> to start a discussion.</p>
     <form method="POST" id="requestAcceptForm">
       <div class="govuk-button-group">
         {{ govukButton({
