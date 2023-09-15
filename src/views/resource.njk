@@ -186,7 +186,7 @@
         </tbody>
         </table>
     </div>
-    {% if resource.servesData or resource.accessService %}
+    {% if resource.servesDataset or resource.relatedAssets %}
     <div class="govuk-grid-column-one-third-from-desktop govuk-!-margin-bottom-8">
         <div class="gem-c-contextual-sidebar">
             <div class="gem-c-related-navigation">
@@ -194,17 +194,25 @@
                     Related Data
                 </h2>
                 <nav role="navigation" class="gem-c-related-navigation__nav-section" aria-labelledby="related-nav-related_items-ae81accd">
-                    {% if resource.servesData %}
+                    {% if resource.servesDataset %}
                     <ul class="gem-c-related-navigation__link-list">
-                        {% for data in resource.servesData %}
-                            <li class="gem-c-related-navigation__link"><a class="govuk-link govuk-link gem-c-related-navigation__section-link govuk-link gem-c-related-navigation__section-link--sidebar  govuk-link gem-c-related-navigation__section-link--other" href="#">{{data}}</a></li>
+                        {% for data in resource.servesDataset %}
+                            {% if data.identifier %}
+                                <li class="gem-c-related-navigation__link"><a class="govuk-link govuk-link gem-c-related-navigation__section-link govuk-link gem-c-related-navigation__section-link--sidebar  govuk-link gem-c-related-navigation__section-link--other" href="/find/{{data.identifier}}">{{data.title}}</a></li>
+                            {% else %}
+                                <li class="gem-c-related-navigation__link"><a class="govuk-link govuk-link gem-c-related-navigation__section-link govuk-link gem-c-related-navigation__section-link--sidebar  govuk-link gem-c-related-navigation__section-link--other" href="#">{{data}}</a></li>
+                            {% endif %}
                         {%endfor%}
                     </ul>
                     {% endif %}
-                    {% if resource.accessService %}
+                    {% if resource.relatedAssets %}
                     <ul class="gem-c-related-navigation__link-list">
-                        {% for data in resource.accessService %}
-                            <li class="gem-c-related-navigation__link"><a class="govuk-link govuk-link gem-c-related-navigation__section-link govuk-link gem-c-related-navigation__section-link--sidebar  govuk-link gem-c-related-navigation__section-link--other" href="#">{{data}}</a></li>
+                        {% for data in resource.relatedAssets %}
+                            {% if data.identifier %}
+                                <li class="gem-c-related-navigation__link"><a class="govuk-link govuk-link gem-c-related-navigation__section-link govuk-link gem-c-related-navigation__section-link--sidebar  govuk-link gem-c-related-navigation__section-link--other" href="/find/{{data.identifier}}">{{data.title}}</a></li>
+                            {% else %}
+                                <li class="gem-c-related-navigation__link"><a class="govuk-link govuk-link gem-c-related-navigation__section-link govuk-link gem-c-related-navigation__section-link--sidebar  govuk-link gem-c-related-navigation__section-link--other" href="#">{{data}}</a></li>
+                            {% endif %}
                         {%endfor%}
                     </ul>
                     {% endif %}
