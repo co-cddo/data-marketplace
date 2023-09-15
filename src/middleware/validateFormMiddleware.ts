@@ -1,42 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { CustomValidator, body, validationResult } from "express-validator";
-
-const dateValidator: CustomValidator = (value, { req }) => {
-  const day = req.body.day;
-  const month = req.body.month;
-  const year = req.body.year;
-  const currentYear = new Date().getFullYear();
-
-  if (year && year < currentYear) {
-    throw new Error("Year cannot be in the past");
-  }
-
-  if (day && (!month || !year)) {
-    throw new Error("Month and year are invalid.");
-  }
-
-  if (month && (!day || !year)) {
-    throw new Error("Day and year are invalid.");
-  }
-
-  if (year && (!day || !month)) {
-    throw new Error("Day and month are invalid");
-  }
-
-  if (day && month && !year) {
-    throw new Error("Year is invalid");
-  }
-
-  if (day && year && !month) {
-    throw new Error("Month is invalid");
-  }
-
-  if (year && month && !day) {
-    throw new Error("Day is invalid");
-  }
-
-  return true;
-};
+import { body, validationResult } from "express-validator";
 
 function getDataTypeValidation() {
   console.log("Validation triggered");
@@ -50,9 +13,9 @@ function getDataTypeValidation() {
 function getProjectAimsValidation() {
   return [
     body("aims")
-      .trim() // Remove leading and trailing whitespace
+      .trim()
       .not()
-      .isEmpty({ ignore_whitespace: true }) // Allow empty strings with only whitespace
+      .isEmpty({ ignore_whitespace: true })
       .withMessage("Please provide the aims of your project."),
 
     body("explanation")
@@ -86,21 +49,22 @@ function getDataAccessValidation() {
   return [body("data-access").exists().withMessage("Select No or Yes")];
 }
 
-
 function getOtherOrgsValidation() {
   return [
     body().custom((value, { req }) => {
-      const organisationKeys = Object.keys(req.body).filter(key => key.startsWith('org-name-'));
+      const organisationKeys = Object.keys(req.body).filter((key) =>
+        key.startsWith("org-name-"),
+      );
 
       if (!organisationKeys.length) {
-        throw { text: 'Please provide at least one organisation.' };
+        throw { text: "Please provide at least one organisation." };
       }
 
       const errorMessages: Record<string, string> = {};
 
       for (const orgKey of organisationKeys) {
-        if (!req.body[orgKey] || req.body[orgKey].trim() === '') {
-          errorMessages[orgKey] = 'Organisation name cannot be empty.';
+        if (!req.body[orgKey] || req.body[orgKey].trim() === "") {
+          errorMessages[orgKey] = "Organisation name cannot be empty.";
         }
       }
 
@@ -108,17 +72,17 @@ function getOtherOrgsValidation() {
         req.session.formErrors = errorMessages;
         throw errorMessages;
       }
-      
+
       return true;
-    })
+    }),
   ];
 }
-
 
 function getImpactValidation() {
   return [
     body("impact")
-      .exists()
+      .not()
+      .isEmpty()
       .withMessage(
         "Enter the impact of project if you do not receive the data",
       ),
@@ -128,39 +92,33 @@ function getImpactValidation() {
 function getDateValidation() {
   return [
     body("day")
-      .optional({ checkFalsy: true })
       .isInt({ min: 1, max: 31 })
       .withMessage("Day is invalid")
-      .custom(dateValidator)
       .escape(),
     body("month")
-      .optional({ checkFalsy: true })
       .isInt({ min: 1, max: 12 })
       .withMessage("Month is invalid")
-      .custom(dateValidator)
       .escape(),
     body("year")
-      .optional({ checkFalsy: true })
       .isInt({
         min: new Date().getFullYear() - 200,
         max: new Date().getFullYear() + 10,
       })
       .withMessage("Year is invalid")
-      .custom(dateValidator)
       .escape(),
   ];
 }
 
 function getBenefitsValidation() {
   return [
-    body('benefits')
-      .exists().withMessage('Select one or more benefits')
+    body("benefits")
+      .exists()
+      .withMessage("Select one or more benefits")
       .custom((benefitsArray, { req }) => {
-
-       if (!benefitsArray) {
+        if (!benefitsArray) {
           return true;
         }
-        
+
         if (!Array.isArray(benefitsArray)) {
           benefitsArray = [benefitsArray];
         }
@@ -177,11 +135,13 @@ function getBenefitsValidation() {
         }
 
         if (missingExplanations.length > 0) {
-          throw new Error("Enter how your project will provide the public benefit");
+          throw new Error(
+            "Enter how your project will provide the public benefit",
+          );
         }
 
         return true;
-      })
+      }),
   ];
 }
 
@@ -264,7 +224,13 @@ function getDataTravelValidation() {
 }
 
 function getRoleValidation() {
-  return [body("role").exists().withMessage("Select ‘Controller’, ‘Joint Controller’, ‘Processor’ or ‘I don’t know")];
+  return [
+    body("role")
+      .exists()
+      .withMessage(
+        "Select ‘Controller’, ‘Joint Controller’, ‘Processor’ or ‘I don’t know",
+      ),
+  ];
 }
 
 function getProtectionReviewValidation() {
@@ -282,13 +248,13 @@ function getDeliveryValidation() {
 }
 
 function getDisposalValidation() {
-  return [body("disposal").exists().withMessage("Enter how will you dispose of data")];
+  return [
+    body("disposal").exists().withMessage("Enter how will you dispose of data"),
+  ];
 }
 
 function getSecurityReviewValidation() {
-  return [
-    body("security-review").exists().withMessage("Select Yes or No"),
-  ];
+  return [body("security-review").exists().withMessage("Select Yes or No")];
 }
 
 function getValidationRules(step: string) {
@@ -379,14 +345,29 @@ export const handleValidationErrors = (
   res: Response,
   next: NextFunction,
 ) => {
-  const errors = validationResult(req).array();
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const errors: any = validationResult(req).array();
   if (errors.length > 0) {
     const errorMessages: { [key: string]: { text: string } } = {};
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    errors.forEach((error: any) => {
-      errorMessages[error.path] = { text: error.msg };
-    });
+    const { hasDateFields, pathsToCheck } = hasDateField(errors);
+
+    if (hasDateFields) {
+      console.log("CONTAINS", hasDateFields);
+      const validMessages = errors
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .filter((item: any) => pathsToCheck.includes(item.path))
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .map((item: any) => item.msg);
+
+      // Combine the 'msg' values into one message
+      const combinedMessage = validMessages.join(", ");
+      errorMessages["date"] = { text: combinedMessage };
+    } else {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      errors.forEach((error: any) => {
+        errorMessages[error.path] = { text: error.msg };
+      });
+    }
     req.session.formErrors = errorMessages;
     console.log("Form errors", req.session.formErrors); //leaving this in for ease of debugging
     return res.redirect(req.originalUrl);
@@ -394,3 +375,14 @@ export const handleValidationErrors = (
 
   next();
 };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function hasDateField(errors: any) {
+  const pathsToCheck = ["day", "month", "year"];
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const hasDateFields = errors.some((item: any) =>
+    pathsToCheck.includes(item.path),
+  );
+  return { hasDateFields, pathsToCheck };
+}
