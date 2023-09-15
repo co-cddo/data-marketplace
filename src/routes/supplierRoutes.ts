@@ -153,7 +153,18 @@ router.get("/received-requests", async (req: Request, res: Response) => {
         request.sharedata.steps.date
       ) {
         const dateObj = request.sharedata.steps.date.value;
-        request.sharedata.steps.date.formattedValue = formatDateObject(dateObj);
+      
+        if (
+          dateObj.day === null && dateObj.month === undefined || dateObj.year === null 
+        ) {
+          request.sharedata.steps.date.formattedValue = "Unrequested";
+        } else {
+          request.sharedata.steps.date.formattedValue = formatDateObject(dateObj);
+        }
+      } else {
+        request.sharedata.steps.date = {
+          formattedValue: "Unrequested"
+        };
       }
 
       const row = [
