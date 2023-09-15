@@ -431,7 +431,7 @@ router.post(
 
     if (decision === "approve") {
       return res.redirect(
-        `/manage-shares/received-requests/${requestId}/declaration`
+        `/manage-shares/received-requests/${requestId}/declaration`,
       );
     }
 
