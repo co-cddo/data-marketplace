@@ -37,5 +37,11 @@ describe("GET /learn", () => {
     expect(response.status).toBe(200);
     expect(response.text).toContain("publish descriptions of data");
   });
+
+  it('should respond as expected when accessing adding-a-CSV-file"', async () => {
+    const response = await request(app).get("/learn/adding-a-CSV-file");
+    expect(response.status).toBe(200);
+    expect(response.text).toContain("CSV file");
+  });
   
 });
