@@ -245,7 +245,7 @@ router.post(
     }
 
     if (req.body.continueButton && formStep === "confirmation") {
-      return res.redirect(`/acquirer/created-requests`);
+      return res.redirect(`/manage-shares/created-requests`);
     }
 
     updateStepsStatus(
