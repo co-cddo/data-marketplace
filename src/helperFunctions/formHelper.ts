@@ -63,9 +63,7 @@ export const updateStepsStatus = (
 
   // If "Save and return" was clicked, set to "IN PROGRESS" if needed and return
   if (returnToStart) {
-    if (formdata.steps[currentStep].status !== "COMPLETED") {
-      formdata.steps[currentStep].status = "IN PROGRESS";
-    }
+    formdata.steps[currentStep].status = "IN PROGRESS";
     return;
   } else {
     // If "Save and Continue" was clicked, set this step to "COMPLETED"
