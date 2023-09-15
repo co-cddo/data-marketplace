@@ -169,7 +169,7 @@ router.get("/received-requests", async (req: Request, res: Response) => {
 
       const row = [
         {
-          html: `<a href="/manage-shares/received-requests/${request.requestId}">${request.requestId}</a>`,
+          html: `<a class="govuk-link" href="/manage-shares/received-requests/${request.requestId}">${request.requestId}</a>`,
         },
         { text: request.requesterEmail },
         { text: request.assetTitle },
