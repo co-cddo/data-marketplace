@@ -66,6 +66,9 @@
                     text: "Owner"
                 },
                 {
+                    text: "Submitted"
+                },
+                {
                     text: "Needed by"
                 },
                 {
@@ -103,31 +106,9 @@
                     text: "Decision"
                 }
             ],
-            rows: [
-            [
-            {
-                html: '<a href="/acquirer/created-request-outcome" class="govuk-link">' + data.requestId + ' - View</a>'
-            },
-            {
-            text: data.assetTitle
-            },
-            {
-            text: data.assetPublisher
-            },
-            {
-            text: data.neededBy
-            },
-            {
-            text: data.received
-            },
-            {
-            text: data.status | capitalize
-            }
-            ]
-        ]
+            rows: allTableRows.completed
         }) }}
     </div>
 </div>
-
 
 {% endblock %}

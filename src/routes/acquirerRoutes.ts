@@ -4,17 +4,6 @@ import { validateFormMiddleware } from "../middleware/validateFormMiddleware";
 import { validationResult } from "express-validator";
 const router = express.Router();
 import formTemplate from "../models/shareRequestTemplate.json";
-import * as mockRequest from "../mockData/mockRejectRequest.json";
-
-const formatDate = (dateString: string): string => {
-  const options: Intl.DateTimeFormatOptions = {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  };
-  return new Date(dateString).toLocaleDateString(undefined, options);
-};
-
 import { randomUUID } from "crypto";
 import {
   extractFormData,
@@ -22,13 +11,7 @@ import {
   updateStepsStatus,
 } from "../helperFunctions/formHelper";
 import axios from "axios";
-import {
-  DateStep,
-  FormData,
-  GenericStringArray,
-  ManageShareTableRow,
-  UserData,
-} from "../types/express";
+import { FormData, GenericStringArray, UserData } from "../types/express";
 
 const generateFormTemplate = (
   req: Request,
@@ -50,20 +33,6 @@ const generateFormTemplate = (
 
   return template;
 };
-
-// Function to get the tag class based on the status value
-function getStatusClass(status: string): string {
-  switch (status) {
-    case "NOT STARTED":
-      return "govuk-tag--grey";
-    case "IN PROGRESS":
-      return "govuk-tag--blue";
-    case "RETURNED":
-      return "govuk-tag--red";
-    default:
-      return "govuk-tag--grey";
-  }
-}
 
 router.get("/:resourceID/start", async (req: Request, res: Response) => {
   const resourceID = req.params.resourceID;
@@ -313,109 +282,5 @@ router.post(
     return res.redirect(redirectURL);
   },
 );
-
-router.get("/created-requests", async (req: Request, res: Response) => {
-  const acquirerForms = req.session.acquirerForms || {};
-  const backLink = req.headers.referer || "/";
-
-  const monthNames = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
-
-  const allTableRows: {
-    pending: ManageShareTableRow[][];
-    submitted: ManageShareTableRow[][];
-    completed: ManageShareTableRow[][];
-  } = {
-    pending: [],
-    submitted: [
-      [{ text: "There are no submitted data share requests.", colspan: 5 }],
-    ],
-    completed: [
-      [{ text: "You have not completed any data share requests.", colspan: 5 }],
-    ],
-  };
-
-  if (Object.values(acquirerForms).length === 0) {
-    allTableRows.pending.push([
-      { text: "There are no pending data share requests.", colspan: 5 },
-    ]);
-  } else {
-    for (const [, formData] of Object.entries(acquirerForms)) {
-      let formattedDate = "Unrequested";
-      const dateValue = formData.steps.date.value as DateStep;
-
-      if (dateValue.day && dateValue.month && dateValue.year) {
-        const monthIndex = dateValue.month - 1;
-        const monthName = monthNames[monthIndex];
-        formattedDate = `${dateValue.day} ${monthName} ${dateValue.year}`;
-      }
-
-      const row: ManageShareTableRow[] = [
-        {
-          html: `<a href="/acquirer/${formData.dataAsset}/start">${formData.requestId}</a>`,
-        },
-        { text: formData.assetTitle },
-        { text: formData.ownedBy },
-        { text: formattedDate },
-        {
-          html: `<span class="govuk-tag ${getStatusClass(formData.status)}">${
-            formData.status
-          }</span>`,
-        },
-      ];
-
-      allTableRows.pending.push(row);
-    }
-  }
-  const supplierResponse = { ...mockRequest };
-  supplierResponse.neededBy = formatDate(supplierResponse.neededBy);
-  supplierResponse.received = formatDate(supplierResponse.neededBy);
-  res.render("../views/acquirer/created-requests.njk", {
-    data: supplierResponse,
-    backLink,
-    acquirerForms,
-    getStatusClass,
-    allTableRows: allTableRows,
-  });
-});
-
-router.get("/created-request-outcome", async (req: Request, res: Response) => {
-  const backLink = req.headers.referer || "/";
-  const supplierResponse = { ...mockRequest };
-  supplierResponse.neededBy = formatDate(supplierResponse.neededBy);
-  supplierResponse.decisionDate = formatDate(supplierResponse.decisionDate);
-  res.render("../views/acquirer/created-request-outcome.njk", {
-    data: supplierResponse,
-    backLink,
-  });
-});
-
-router.get("/created-request-data", async (req: Request, res: Response) => {
-  const backLink = req.headers.referer || "/";
-  const supplierResponse = { ...mockRequest };
-  const sharedata = supplierResponse.sharedata;
-
-  if (!sharedata) {
-    return res.status(400).send("sharedata is missing in supplier response");
-  }
-
-  res.render("../views/acquirer/created-request-data.njk", {
-    data: supplierResponse,
-    sharedata: checkAnswer(supplierResponse.sharedata as unknown as FormData),
-    backLink,
-  });
-});
 
 export default router;
