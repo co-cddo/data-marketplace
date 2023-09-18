@@ -49,19 +49,21 @@ function getDataAccessValidation() {
 }
 
 function getOtherOrgsValidation(req: Request) {
+  if (req.body.removeOrg) {
+    const orgIndexToRemove = req.body.removeOrg;
+
+    delete req.body["org-name-" + orgIndexToRemove];
+  }
+
   const validations = [];
   for (const key in req.body) {
-    if (key.startsWith("org-name") && !orgBeingRemoved(req, key)) {
+    if (key.startsWith("org-name")) {
       validations.push(
         body(key).not().isEmpty().withMessage(`Organisation cannot be empty`),
       );
     }
   }
   return validations;
-}
-
-function orgBeingRemoved(req: Request, key: string) {
-  return req.body.removeOrg !== undefined && req.body.removeOrg === key.split('-').pop();
 }
 
 function getImpactValidation() {
@@ -278,6 +280,8 @@ function getValidationRules(req: Request, step: string) {
       return getLawfulBasisSpecialPublicInterestValidation();
     case "data-travel":
       return getDataTravelValidation();
+    case "data-travel-location": 
+      return getDataTravelLocationValidation(req);
     case "role":
       return getRoleValidation();
     case "protection-review":
