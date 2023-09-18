@@ -187,6 +187,89 @@ router.get(
   },
 );
 
+router.get(
+  "/created-requests/:requestId",
+  async (req: Request, res: Response) => {
+    const backLink = req.headers.referer || "/manage-shares/created-requests/";
+    const requestId = req.params.requestId;
+
+    try {
+      const requestDetail = await axios.get(
+        `${URL}/received-requests/${requestId}`,
+        {
+          headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
+        },
+      );
+
+      if (!requestDetail.data) {
+        return res.status(404).send("Request not found");
+      }
+
+      // Format the received date
+      requestDetail.data.received = formatDate(requestDetail.data.received);
+      requestDetail.data.neededBy = formatDate(requestDetail.data.neededBy);
+      requestDetail.data.decisionDate = formatDate(
+        requestDetail.data.decisionDate,
+      );
+
+      // Format the neededBy date
+      const dateObj = requestDetail.data.sharedata.steps.date.value;
+      requestDetail.data.sharedata.steps.date.formattedValue =
+        formatDateObject(dateObj);
+
+      req.session.acquirerForms = requestDetail.data;
+
+      res.render("../views/acquirer/created-request-outcome.njk", {
+        backLink,
+        request: requestDetail.data,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Internal Server Error");
+    }
+  },
+);
+
+router.get(
+  "/created-requests/:requestId/view-answers",
+  async (req: Request, res: Response) => {
+    const requestId = req.params.requestId;
+    const backLink =
+      req.headers.referer || `/manage-shares/created-requests/${requestId}`;
+
+    try {
+      const requestDetail = await axios.get(
+        `${URL}/received-requests/${requestId}`,
+        {
+          headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
+        },
+      );
+
+      if (!requestDetail.data) {
+        return res.status(404).send("Request not found");
+      }
+
+      // Format the received date
+      requestDetail.data.received = formatDate(requestDetail.data.received);
+
+      // Format the neededBy date
+      const dateObj = requestDetail.data.sharedata.steps.date.value;
+      requestDetail.data.sharedata.steps.date.formattedValue =
+        formatDateObject(dateObj);
+
+      req.session.acquirerForms = requestDetail.data;
+      res.render("../views/acquirer/created-request-view-full-request.njk", {
+        request: requestDetail.data,
+        sharedata: checkAnswer(requestDetail.data.sharedata),
+        backLink,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Internal Server Error");
+    }
+  },
+);
+
 router.get("/received-requests", async (req: Request, res: Response) => {
   const backLink = req.headers.referer || "/manage-shares";
 
