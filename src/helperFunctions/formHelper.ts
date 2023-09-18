@@ -312,8 +312,6 @@ const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
   }
 
   if (stepData.id === "data-type") {
-    // console.log(stepData.value);
-    // console.log(stepData.errorMessage);
     return {
       personal: {
         checked: body["data-type"]?.includes("personal"),
@@ -328,8 +326,6 @@ const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
   }
 
   if (stepData.id === "project-aims") {
-    // console.log(stepData.value);
-    // console.log(stepData.errorMessage);
     return {
       aims: body["aims"] || "",
       explanation: body["explanation"] || "",

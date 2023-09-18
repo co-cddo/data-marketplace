@@ -86,7 +86,6 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   const stepData = formdata.steps[formStep];
   const assetTitle = formdata.assetTitle;
   const contactPoint = formdata.contactPoint;
-  console.log(req.session.formErrors);
 
   stepData.errorMessage = "";
   if (req.session.formErrors) {
