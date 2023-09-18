@@ -41,12 +41,15 @@ While you can run this repo using local node, its recommended to use Docker & Do
 
 To get started:
 
+You will also need to run the [api repository](https://github.com/co-cddo/data-marketplace-api) locally.
+
 - In the project root folder, create a .env file and copy the contents of the .env.example file. Replace the API_ENDPOINT variable values with a link to the live API endpoint.
 - Run `npm install`
 - Run `npm run start:dev`
 
-To use dcoker:
+To use docker:
 
+- Run the backend following its README. It will be available on `API_ENDPOINT=http://api:8000`
 - Run `docker-compose up`
 
 ## Deployment
