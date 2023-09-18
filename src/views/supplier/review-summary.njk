@@ -8,23 +8,15 @@
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <span class="govuk-caption-l">Request ID: RR523</span>
-    <h1 class="govuk-heading-l">Department X is requesting access to access citizen-relationships data</h1>
+    <span class="govuk-caption-l">Request ID: {{ request.requestId }}</span>
+    <h1 class="govuk-heading-l">{{ request.requestingOrg }} is requesting access to {{ request.sharedata.assetTitle }} data</h1>
     <h2 class="govuk-heading-m govuk-!-static-margin-bottom-1">Project aims</h2>
-    <p class="govuk-body">To assess claims and provide the correct level of support to vulnerable people based on their declared family relationships.</p>
+    <p class="govuk-body">{{ request.sharedata.steps["project-aims"].value.aims }}</p>
     <h2 class="govuk-heading-m govuk-!-static-margin-bottom-1">Received</h2>
-    <p class="govuk-body">8 July 2023</p>
+    <p class="govuk-body">{{ request.received }}</p>
     <h2 class="govuk-heading-m govuk-!-static-margin-bottom-1">Contact</h2>
-    <p class="govuk-body"><a href="#" class="govuk-link">data-team@department-x.gov.uk</a></p>
-    {{ govukWarningText({
-      text: "Request not reviewed by Legal.",
-      iconFallbackText: "Warning"
-    }) }}
-    {{ govukWarningText({
-      text: "Data will travel outside UK.",
-      iconFallbackText: "Warning"
-    }) }}
-    <form action="/manage-shares/review-summary" method="POST" id="reviewSummaryForm">
+    <p class="govuk-body"><a href="mailto:{{ request.sharedata.ownedBy }}" target="_blank" class="govuk-link">{{ request.sharedata.ownedBy }}</a></p>
+    <form method="POST" id="reviewSummaryForm">
       <div class="govuk-button-group">
         {{ govukButton({
             text: "Continue",
@@ -36,7 +28,7 @@
     </form>
     <h2 class="govuk-heading-m">More information</h2>
     {% set detailsContent %}
-    <p>You're about to review a data share request. You'll need to decide if it meets your requirements so you can draft a data sharing agreement with Department X.</p>
+    <p>You're about to review a data share request. You'll need to decide if it meets your requirements so you can draft a data sharing agreement with {{ request.requestingOrg }}</p>
     <p>When you've reviewed the request, you can choose to:</p>
     <ul>
       <li>Accept the data share request</li>

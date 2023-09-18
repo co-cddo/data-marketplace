@@ -13,7 +13,7 @@
     <aside class="app-related-items">
         <nav role="navigation" aria-labelledby="subsection-title">
           <ul class="govuk-list">
-            <li><a href="created-requests" class="govuk-link">View created requests</a></li>
+            <li><a href="{{assetPath}}/manage-shares/created-requests" class="govuk-link">View created requests</a></li>
           </ul>
         </nav>
     </aside>
@@ -45,77 +45,8 @@
                 text: "Status"
             }
             ],
-            rows: [
-            [
-                {
-                html: '<a href="/manage-shares/review-summary" class="govuk-link">RR523 - View</a>'
-                },
-                {
-                text: "Department X"
-                },
-                {
-                text: "citizen-relationships"
-                },
-                {
-                text: "8 Jul 2023"
-                },
-                {
-                text: "16 Mar 2024"
-                },
-                {
-                html: govukTag({
-                    classes: "govuk-tag--red",
-                    text: "TO REVIEW"
-                  })
-                }
-            ],
-            [
-             {
-                html: '<a href="#" class="govuk-link">RR330 - View</a>'
-                },
-            {
-            text: "Department for Work and Pensions"
-            },
-            {
-            text: "citizen-switch-input"
-            },
-            {
-            text: "	2 Jul 2023"
-            },
-            {
-            text: "16 Mar 2024"
-            },
-            {
-            html: govukTag({
-                classes: "govuk-tag--blue",
-                text: "REVIEWING"
-              })
-            }
-        ],
-        [
-            {
-                html: '<a href="#" class="govuk-link">RR221 - View</a>'
-            },
-            {
-            text: "HM Revenue and Customs"
-            },
-            {
-            text: "tax-rate-change_brackets"
-            },
-            {
-            text: "	2 Jul 2023"
-            },
-            {
-            text: "16 Mar 2024"
-            },
-            {
-            html: govukTag({
-                classes: "govuk-tag--grey",
-                text: "RETURNED"
-              })
-            }
-        ]
-        ]}) }}
+            rows: receivedTableRows
+        }) }}
   </div>
 </div>
 

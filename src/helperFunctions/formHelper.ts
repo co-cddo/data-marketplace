@@ -667,7 +667,7 @@ type CheckPageRow = {
   value: {
     html: string;
   };
-  actions: {
+  actions?: {
     items: [
       {
         href: string;
@@ -768,11 +768,13 @@ function checkAnswer(formdata: FormData) {
           break;
       }
     }
-
     rows[stepId] = {
       key: { text: stepData.name },
       value: { html: dataTypeValue.join("") },
-      actions: {
+    };
+
+    if (formdata.status !== "ACCEPTED" && formdata.status !== "REJECTED") {
+      rows[stepId].actions = {
         items: [
           {
             href: `/acquirer/${formdata.dataAsset}/${stepId}`,
@@ -780,8 +782,8 @@ function checkAnswer(formdata: FormData) {
             visuallyHiddenText: "name",
           },
         ],
-      },
-    };
+      };
+    }
   }
 
   // Split the rows up into the correct sections

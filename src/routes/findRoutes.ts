@@ -11,11 +11,18 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
   const backLink = req.session.backLink || "/";
   req.session.backLink = req.originalUrl;
   const query: string | undefined = (req.query.q as string)?.toLowerCase();
-  const organisationFilters: string[] | undefined = req.query
+  let organisationFilters: string[] | undefined = req.query
     .organisationFilters as string[] | undefined;
-  const themeFilters: string[] | undefined = req.query.themeFilters as
+  let themeFilters: string[] | undefined = req.query.themeFilters as
     | string[]
     | undefined;
+
+  if (typeof organisationFilters === "string") {
+    organisationFilters = [organisationFilters];
+  }
+  if (typeof themeFilters === "string") {
+    themeFilters = [themeFilters];
+  }
 
   try {
     // Fetch the data from the API

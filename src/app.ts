@@ -2,11 +2,13 @@ import express, { NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
 dotenv.config();
 import nunjucks from "nunjucks";
+import { authenticateJWT } from "./middleware/authMiddleware";
 import markdown from "nunjucks-markdown";
 import marked from "marked";
 import helmet from "helmet";
 import homeRoute from "./routes/homeRoute";
 import learnRoutes from "./routes/learnRoutes";
+import adminRoutes from "./routes/adminRoutes";
 import findRoutes from "./routes/findRoutes";
 import shareRoutes from "./routes/shareRoutes";
 import acquirerRoutes from "./routes/acquirerRoutes";
@@ -44,13 +46,16 @@ app.use(
 );
 app.use(cookieParser());
 
-app.use(loadJwtFromCookie);
-
 app.use(
   "/assets",
   express.static(
     path.join(__dirname, "../node_modules/govuk-frontend/govuk/assets"),
   ),
+);
+
+app.use(
+  "/javascripts",
+  express.static(path.join(__dirname, "../node_modules/govuk-frontend/govuk")),
 );
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -81,6 +86,10 @@ passport.serializeUser((user: Express.User, done) => {
 passport.deserializeUser((user: Express.User, done) => {
   done(null, user);
 });
+app.use((req, res, next) => {
+  modifyApplicationMiddleware(req, res, next);
+});
+app.use(loadJwtFromCookie);
 
 app.use(express.static("public"));
 
@@ -113,20 +122,17 @@ env.addFilter("formatDate", function (date: string | number | Date) {
 // Set Nunjucks as the Express view engine
 app.set("view engine", "njk");
 
-app.use((req, res, next) => {
-  modifyApplicationMiddleware(req, res, next);
-});
-
 app.use("/", loginRoutes);
 app.use("/auth", authRoutes);
 app.use("/", homeRoute);
-app.use("/profile", profileRoutes);
+app.use("/profile", authenticateJWT, profileRoutes);
 app.use("/find", findRoutes);
-app.use("/share", shareRoutes);
-app.use("/acquirer", acquirerRoutes);
-app.use("/manage-shares", manageRoutes);
+app.use("/share", authenticateJWT, shareRoutes);
+app.use("/acquirer", authenticateJWT, acquirerRoutes);
+app.use("/manage-shares", authenticateJWT, manageRoutes);
 app.use("/cookie-settings", cookieRoutes);
 app.use("/learn", learnRoutes);
+app.use("/admin", adminRoutes);
 
 // Error handling
 // Catch all route to handle errors
@@ -146,7 +152,6 @@ app.use("*", (req: Request, res: Response) => {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   const backLink = req.headers.referer || "/";
-  console.error(err);
   res.status(500).render("error", {
     status: 500,
     messageTitle: "Sorry, there is a problem with the service",
