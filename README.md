@@ -14,6 +14,13 @@ Learn is a set of guidance pages on how to use the Marketplace.
 
 This repository allows the user to interact with data, the data is surfaced in a different [api repository](https://github.com/co-cddo/data-marketplace-api). It consumes the data via various API's provided by the api repo.
 
+The data consumed via API is:
+
+- Data and datasets for suppliers - the data to be shared/requested.
+- Users - Users local to this service, linked to SSO (see below)
+- User permissions - ABAC user permissions
+- Requests for data - Persisted requests for data. These are tied to a user and resumable.
+
 You can see a high level solution [here](./docs/high-level.jpg)
 
 ### SSO
