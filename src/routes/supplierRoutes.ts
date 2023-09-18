@@ -102,9 +102,8 @@ router.get(
     );
     let pendingRows: ShareRequestTable = pendingRequests.map((r) => [
       {
-        html: `<a href="/acquirer/${
-          r.sharedata.dataAsset
-        }/start">${r.requestId.substring(0, 8)}...</a>`,
+        html: `<a href="/acquirer/${r.sharedata.dataAsset
+          }/start">${r.requestId.substring(0, 8)}...</a>`,
       },
       { text: r.assetTitle },
       { text: r.assetPublisher.title },
@@ -113,9 +112,8 @@ router.get(
           r.neededBy === "UNREQUESTED" ? "Unrequested" : formatDate(r.neededBy),
       },
       {
-        html: `<span class="govuk-tag ${getStatusClass(r.status)}">${
-          r.status
-        }</span>`,
+        html: `<span class="govuk-tag ${getStatusClass(r.status)}">${r.status
+          }</span>`,
       },
     ]);
     if (pendingRows.length === 0) {
@@ -129,9 +127,8 @@ router.get(
     );
     let submittedRows: ShareRequestTable = submittedRequests.map((r) => [
       {
-        html: `<a href="/acquirer/${
-          r.sharedata.dataAsset
-        }/start">${r.requestId.substring(0, 8)}...</a>`,
+        html: `<a href="/acquirer/${r.sharedata.dataAsset
+          }/start">${r.requestId.substring(0, 8)}...</a>`,
       },
       { text: r.assetTitle },
       { text: r.assetPublisher.title },
@@ -141,9 +138,8 @@ router.get(
           r.neededBy === "UNREQUESTED" ? "Unrequested" : formatDate(r.neededBy),
       },
       {
-        html: `<span class="govuk-tag ${getStatusClass(r.status)}">${
-          r.status
-        }</span>`,
+        html: `<span class="govuk-tag ${getStatusClass(r.status)}">${r.status
+          }</span>`,
       },
     ]);
     if (submittedRows.length === 0) {
@@ -157,9 +153,8 @@ router.get(
     );
     let completedRows: ShareRequestTable = completedRequests.map((r) => [
       {
-        html: `<a href="/manage-shares/created-requests/${
-          r.requestId
-        }">${r.requestId.substring(0, 8)}...</a>`,
+        html: `<a href="/acquirer/${r.sharedata.dataAsset
+          }/start">${r.requestId.substring(0, 8)}...</a>`,
       },
       { text: r.assetTitle },
       { text: r.assetPublisher.title },
@@ -169,9 +164,8 @@ router.get(
       },
       { text: formatDate(r.decisionDate as string) },
       {
-        html: `<span class="govuk-tag ${getStatusClass(r.status)}">${
-          r.status
-        }</span>`,
+        html: `<span class="govuk-tag ${getStatusClass(r.status)}">${r.status
+          }</span>`,
       },
     ]);
     if (completedRows.length === 0) {
@@ -190,89 +184,6 @@ router.get(
       backLink,
       allTableRows: allTableRows,
     });
-  },
-);
-
-router.get(
-  "/created-requests/:requestId",
-  async (req: Request, res: Response) => {
-    const backLink = req.headers.referer || "/manage-shares/created-requests/";
-    const requestId = req.params.requestId;
-
-    try {
-      const requestDetail = await axios.get(
-        `${URL}/received-requests/${requestId}`,
-        {
-          headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
-        },
-      );
-
-      if (!requestDetail.data) {
-        return res.status(404).send("Request not found");
-      }
-
-      // Format the received date
-      requestDetail.data.received = formatDate(requestDetail.data.received);
-      requestDetail.data.neededBy = formatDate(requestDetail.data.neededBy);
-      requestDetail.data.decisionDate = formatDate(
-        requestDetail.data.decisionDate,
-      );
-
-      // Format the neededBy date
-      const dateObj = requestDetail.data.sharedata.steps.date.value;
-      requestDetail.data.sharedata.steps.date.formattedValue =
-        formatDateObject(dateObj);
-
-      req.session.acquirerForms = requestDetail.data;
-
-      res.render("../views/acquirer/created-request-outcome.njk", {
-        backLink,
-        request: requestDetail.data,
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(500).send("Internal Server Error");
-    }
-  },
-);
-
-router.get(
-  "/created-requests/:requestId/view-answers",
-  async (req: Request, res: Response) => {
-    const requestId = req.params.requestId;
-    const backLink =
-      req.headers.referer || `/manage-shares/created-requests/${requestId}`;
-
-    try {
-      const requestDetail = await axios.get(
-        `${URL}/received-requests/${requestId}`,
-        {
-          headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
-        },
-      );
-
-      if (!requestDetail.data) {
-        return res.status(404).send("Request not found");
-      }
-
-      // Format the received date
-      requestDetail.data.received = formatDate(requestDetail.data.received);
-
-      // Format the neededBy date
-      const dateObj = requestDetail.data.sharedata.steps.date.value;
-      requestDetail.data.sharedata.steps.date.formattedValue =
-        formatDateObject(dateObj);
-
-      req.session.acquirerForms = requestDetail.data;
-      res.render("../views/acquirer/created-request-view-full-request.njk", {
-        request: requestDetail.data,
-        sharedata: checkAnswer(requestDetail.data.sharedata),
-        backLink,
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(500).send("Internal Server Error");
-    }
   },
 );
 
@@ -307,9 +218,8 @@ router.get("/received-requests", async (req: Request, res: Response) => {
         { text: request.received },
         { text: request.sharedata.steps.date.formattedValue },
         {
-          html: `<span class="govuk-tag ${getStatusClass(request.status)}">${
-            request.status
-          }</span>`,
+          html: `<span class="govuk-tag ${getStatusClass(request.status)}">${request.status
+            }</span>`,
         },
       ];
       receivedTableRows.push(row);
