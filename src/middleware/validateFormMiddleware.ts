@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { body, validationResult } from "express-validator";
 
 function getDataTypeValidation() {
-  console.log("Validation triggered");
   return [
     body("data-type")
       .exists()
@@ -49,33 +48,16 @@ function getDataAccessValidation() {
   return [body("data-access").exists().withMessage("Select No or Yes")];
 }
 
-function getOtherOrgsValidation() {
-  return [
-    body().custom((value, { req }) => {
-      const organisationKeys = Object.keys(req.body).filter((key) =>
-        key.startsWith("org-name-"),
+function getOtherOrgsValidation(req: Request) {
+  const validations = [];
+  for (const key in req.body) {
+    if (key.startsWith("org-name")) {
+      validations.push(
+        body(key).not().isEmpty().withMessage(`${key} must be supplied`),
       );
-
-      if (!organisationKeys.length) {
-        throw { text: "Please provide at least one organisation." };
-      }
-
-      const errorMessages: Record<string, string> = {};
-
-      for (const orgKey of organisationKeys) {
-        if (!req.body[orgKey] || req.body[orgKey].trim() === "") {
-          errorMessages[orgKey] = "Organisation name cannot be empty.";
-        }
-      }
-
-      if (Object.keys(errorMessages).length > 0) {
-        req.session.formErrors = errorMessages;
-        throw errorMessages;
-      }
-
-      return true;
-    }),
-  ];
+    }
+  }
+  return validations;
 }
 
 function getImpactValidation() {
@@ -127,8 +109,6 @@ function getBenefitsValidation() {
 
         for (const benefit of benefitsArray) {
           const explanation = req.body[benefit];
-          console.log("Checked benefit:", benefit);
-          console.log("Explanation:", explanation);
           if (!explanation || explanation.trim() === "") {
             missingExplanations.push(benefit);
           }
@@ -257,7 +237,7 @@ function getSecurityReviewValidation() {
   return [body("security-review").exists().withMessage("Select Yes or No")];
 }
 
-function getValidationRules(step: string) {
+function getValidationRules(req: Request, step: string) {
   switch (step) {
     case "data-type":
       return getDataTypeValidation();
@@ -272,7 +252,7 @@ function getValidationRules(step: string) {
     case "data-access":
       return getDataAccessValidation();
     case "other-orgs":
-      return getOtherOrgsValidation();
+      return getOtherOrgsValidation(req);
     case "impact":
       return getImpactValidation(); // Doesnt seem to work
     case "data-required":
@@ -319,7 +299,7 @@ export const validateFormMiddleware = (
     return next();
   }
 
-  const validationRules = getValidationRules(formStep);
+  const validationRules = getValidationRules(req, formStep);
   if (validationRules.length > 0) {
     const runValidation = (index: number) => {
       if (index >= validationRules.length) {
@@ -352,7 +332,6 @@ export const handleValidationErrors = (
     const { hasDateFields, pathsToCheck } = hasDateField(errors);
 
     if (hasDateFields) {
-      console.log("CONTAINS", hasDateFields);
       const validMessages = errors
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .filter((item: any) => pathsToCheck.includes(item.path))

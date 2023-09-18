@@ -4,13 +4,13 @@
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 
 {% block content %}
+
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <span class="govuk-caption-l">Request ID: {{requestId}}</span>
       <form method="POST" id="otherOrgsForm">
         <h1 class="govuk-heading-l govuk-fieldset__legend govuk-fieldset__legend--l">What other organisations will access the data?</h1>
         <div class="govuk-hint">List all the organisations you will be sharing the data with.</div>
-
         {% for org in savedValue %}
           <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
@@ -22,11 +22,7 @@
                 }
               }) %}
               {% set errorKey = "org-name-" + loop.index %}
-              {% if formErrors and formErrors[errorKey] %}
-                {% set errorMessageValue = { text: formErrors[errorKey] } %}
-                  {% else %}
-                {% set errorMessageValue = null %}
-              {% endif %}
+             
               {{ govukInput({
                 id: "org-name-" + loop.index,
                 name: "org-name-" + loop.index,
@@ -36,7 +32,7 @@
                   'data-name': 'orgs[' + loop.index + ']',
                   'data-id': 'orgs[' + loop.index + ']'
                 },
-                errorMessage: errorMessageValue
+                errorMessage: errorMessage["org-name-" + loop.index]
               }) }}
               {% endcall %}
             </div>
