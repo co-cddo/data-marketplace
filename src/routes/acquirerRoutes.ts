@@ -1,7 +1,9 @@
 import express, { Request, Response } from "express";
 import { fetchResourceById } from "../services/findService";
-import { validateFormMiddleware } from "../middleware/validateFormMiddleware";
-import { validationResult } from "express-validator";
+import {
+  validateFormMiddleware,
+  handleValidationErrors,
+} from "../middleware/validateFormMiddleware";
 const router = express.Router();
 import formTemplate from "../models/shareRequestTemplate.json";
 import { randomUUID } from "crypto";
@@ -85,6 +87,12 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   const assetTitle = formdata.assetTitle;
   const contactPoint = formdata.contactPoint;
 
+  stepData.errorMessage = "";
+  if (req.session.formErrors) {
+    stepData.errorMessage = req.session.formErrors;
+  }
+  delete req.session.formErrors;
+
   if (req.query.action === "back" && formdata.stepHistory) {
     formdata.stepHistory.pop();
   }
@@ -128,10 +136,8 @@ const URL = `${process.env.API_ENDPOINT}/sharedata`;
 router.post(
   "/:resourceID/:step",
   validateFormMiddleware,
+  handleValidationErrors,
   async (req: Request, res: Response) => {
-    const errors = validationResult(req);
-    const errorMessage = "";
-
     if (!req.session.acquirerForms) {
       return res.status(400).send("Acquirer forms not found in session");
     }
@@ -145,21 +151,8 @@ router.post(
       return res.status(400).send("Form data or step not found");
     }
 
-    if (!errors.isEmpty()) {
-      const errorSet = new Set();
-      errors.array().forEach((err) => errorSet.add(err.msg));
-      stepData.errorMessage = Array.from(errorSet).join(", ");
-
-      return res.redirect(`/acquirer/${resourceID}/${formStep}`);
-    }
-
-    stepData.errorMessage = errorMessage;
-
     stepData.value = extractFormData(stepData, req.body) || "";
 
-    if (errorMessage) {
-      return res.redirect(`/acquirer/${resourceID}/${formStep}`);
-    }
     if (!formdata.stepHistory) {
       formdata.stepHistory = [];
     }
@@ -278,7 +271,6 @@ router.post(
         }
       }
     }
-
     return res.redirect(redirectURL);
   },
 );

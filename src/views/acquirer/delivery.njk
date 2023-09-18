@@ -6,58 +6,58 @@
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <span class="govuk-caption-l">Request ID: {{requestId}}</span>
+      <span class="govuk-caption-l">Request ID: {{requestId}}</span>      
       <form method="POST" id="dataDeliveryForm">
-         {% set somethingHTML %}
-          {{ govukInput({
-            id: "something-else",
-            name: "something-else",
-            classes: "govuk-!-width-two-thirds",
-            value: savedValue['something']['explanation']
-          }) }}
+        {% set somethingHTML %}
+        {{ govukInput({
+          id: "something-else",
+          name: "something-else",
+          classes: "govuk-!-width-two-thirds",
+          value: savedValue['something']['explanation']
+        }) }}
         {% endset -%}
         {{ govukRadios({
           name: "delivery",
           fieldset: {
-              legend: {
-              text: "How would you like to receive the data?",
-              isPageHeading: true,
-              classes: "govuk-fieldset__legend--l"
-              }
+            legend: {
+            text: "How would you like to receive the data?",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+            }
           },
           items: [
-              {
-              value: "third-party",
-              text: "Through secure third-party software",
-              checked: savedValue['third-party']['checked']
-              },
-              {
-              value: "physical",
-              text: "Physical delivery",
-              checked: savedValue['physical']['checked']
-              },
-              {
-              value: "something",
-              text: "Something else",
-              checked: savedValue['something']['checked'],
-            conditional: {
-                html: somethingHTML
-              }
+            {
+            value: "third-party",
+            text: "Through secure third-party software",
+            checked: savedValue['third-party']['checked']
+            },
+            {
+            value: "physical",
+            text: "Physical delivery",
+            checked: savedValue['physical']['checked']
+            },
+            {
+            value: "something",
+            text: "Something else",
+            checked: savedValue['something']['checked'],
+          conditional: {
+              html: somethingHTML
             }
+          }
           ],
-          errorMessage: errorText
+          errorMessage: errorMessage['delivery']
           }) }}
         <div class="govuk-button-group">
           {{ govukButton({
-              text: "Save and continue",
-              name: "continueButton",
-              value: "continue"
+            text: "Save and continue",
+            name: "continueButton",
+            value: "continue"
           }) }}
           {{ govukButton({
-              text: "Save and return",
-              classes: "govuk-button--secondary",
-              name: "returnButton",
-              value: "return"
+            text: "Save and return",
+            classes: "govuk-button--secondary",
+            name: "returnButton",
+            value: "return"
           }) }}
         </div>
       </form>

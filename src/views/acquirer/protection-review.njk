@@ -8,30 +8,31 @@
       <span class="govuk-caption-l">Request ID: {{requestId}}</span>
       <form method="POST" id="protectionReviewForm">
         {{ govukRadios({
-                 name: "protection-review",
-                  fieldset: {
-                      legend: {
-                      text: "Have your answers been reviewed by someone with data protection knowledge?",
-                      isPageHeading: true,
-                      classes: "govuk-fieldset__legend--l"
-                      }
-                  },
-                  hint: {
-                        text: "It's important to confirm that someone with specialist knowledge has checked your answers. If you're unable to do this, it may slow down the process of getting this data share request accepted."
-                      },
-                  items: [
-                      {
-                      value: "yes",
-                      text: "Yes",
-                      checked: savedValue === 'yes'
-                      },
-                      {
-                      value: "no",
-                      text: "No",
-                      checked: savedValue === 'no'
-                      }
-                  ]
-                  }) }}
+          name: "protection-review",
+          fieldset: {
+          legend: {
+            text: "Have your answers been reviewed by someone with data protection knowledge?",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+            }
+          },
+          hint: {
+            text: "It's important to confirm that someone with specialist knowledge has checked your answers. If you're unable to do this, it may slow down the process of getting this data share request accepted."
+          },
+          items: [
+            {
+            value: "yes",
+            text: "Yes",
+            checked: savedValue === 'yes'
+            },
+            {
+            value: "no",
+            text: "No",
+            checked: savedValue === 'no'
+            }
+          ],
+          errorMessage: errorMessage['protection-review']
+          }) }}
           <div class="govuk-button-group">
             {{ govukButton({
                 text: "Save and continue",

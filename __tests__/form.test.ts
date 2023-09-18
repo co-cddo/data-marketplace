@@ -17,6 +17,7 @@ const mockFormData: FormData = {
       name: "Data type",
       value: {},
       nextStep: "data-subjects",
+      errorMessage: ""
     },
     "data-subjects": {
       id: "data-subjects",
@@ -24,6 +25,7 @@ const mockFormData: FormData = {
       name: "Data subjects",
       value: {},
       nextStep: "project-aims",
+      errorMessage: ""
     },
   },
   stepHistory: [],
