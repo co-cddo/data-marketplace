@@ -15,13 +15,13 @@ function getProjectAimsValidation() {
       .trim()
       .not()
       .isEmpty({ ignore_whitespace: true })
-      .withMessage("Please provide the aims of your project."),
+      .withMessage("Enter aim of your project"),
 
     body("explanation")
       .not()
       .isEmpty()
       .withMessage(
-        "Please explain how the data will help achieve the project aims.",
+        "Enter how the data will help you achieve your aims",
       ),
   ];
 }
@@ -40,7 +40,7 @@ function getDataSubjectValidation() {
     body("data-subjects")
       .not()
       .isEmpty()
-      .withMessage("Enter description of data needed"),
+      .withMessage("Enter a description of the data subjects"),
   ];
 }
 
@@ -59,25 +59,7 @@ function getOtherOrgsValidation(req: Request) {
   for (const key in req.body) {
     if (key.startsWith("org-name")) {
       validations.push(
-        body(key).not().isEmpty().withMessage(`Organisation cannot be empty`),
-      );
-    }
-  }
-  return validations;
-}
-
-function getDataTravelLocationValidation(req: Request) {
-  if (req.body.removeCountry) {
-    const countryIndexToRemove = req.body.removeCountry;
-
-    delete req.body["country-name-" + countryIndexToRemove];
-  }
-
-  const validations = [];
-  for (const key in req.body) {
-    if (key.startsWith("country-name")) {
-      validations.push(
-        body(key).not().isEmpty().withMessage(`Country cannot be empty`),
+        body(key).not().isEmpty().withMessage(`Enter the name of the other organisation that will need access to this data`),
       );
     }
   }
@@ -122,7 +104,7 @@ function getDateValidation() {
       const currentYear = new Date().getFullYear();
 
       if (year && year < currentYear) {
-        throw new Error("Year cannot be in the past");
+        throw new Error("Enter future date");
       }
 
       if (day && (!month || !year)) {
@@ -217,13 +199,13 @@ function getLegalGatewayValidation() {
           value === "yes" &&
           (!req.body["yes"] || req.body["yes"].trim() === "")
         ) {
-          throw new Error("Enter the legal gateway explanation");
+          throw new Error("Enter the legal gateway for acquiring this data");
         }
         if (
           value === "other" &&
           (!req.body["other"] || req.body["other"].trim() === "")
         ) {
-          throw new Error("Enter the other legal grounds explanation");
+          throw new Error("Enter the other legal grounds that you have for acquiring this data");
         }
         return true;
       }),
@@ -234,7 +216,7 @@ function getLegalReviewValidation() {
   return [
     body("legal-review")
       .exists()
-      .withMessage("Select Yes, No or we don’t know"),
+      .withMessage("Select Yes or No"),
   ];
 }
 
@@ -266,6 +248,24 @@ function getDataTravelValidation() {
   return [body("data-travel").exists().withMessage("Select No or Yes")];
 }
 
+function getDataTravelLocationValidation(req: Request) {
+  if (req.body.removeCountry) {
+    const countryIndexToRemove = req.body.removeCountry;
+
+    delete req.body["country-name-" + countryIndexToRemove];
+  }
+
+  const validations = [];
+  for (const key in req.body) {
+    if (key.startsWith("country-name")) {
+      validations.push(
+        body(key).not().isEmpty().withMessage(`Enter the country the data will travel through`),
+      );
+    }
+  }
+  return validations;
+}
+
 function getRoleValidation() {
   return [
     body("role")
@@ -278,16 +278,31 @@ function getRoleValidation() {
 
 function getProtectionReviewValidation() {
   return [
-    body("protection-review").exists().withMessage("Please select an option."),
+    body("protection-review").exists().withMessage("Select Yes or No"),
   ];
 }
 
-function getFormatValidation() {
-  return [body("format").exists().withMessage("Please select an option.")];
+function getDeliveryValidation() {
+  return [body("delivery").exists().withMessage("Select Through secure third-party software, Physical delivery or Something else")];
 }
 
-function getDeliveryValidation() {
-  return [body("delivery").exists().withMessage("Please select an option.")];
+function getFormatValidation() {
+  return [
+    body("format")
+    .exists()
+    .withMessage("Select one option")
+    .custom((value, { req }) => {
+      if (value === "something") {
+        if (
+          !req.body["something-else"] ||
+          req.body["something-else"].trim() === ""
+        ) {
+          throw new Error("Enter preferred format of data");
+        }
+      }
+      return true;
+    }),
+  ];
 }
 
 function getDisposalValidation() {
