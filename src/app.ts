@@ -53,6 +53,11 @@ app.use(
   ),
 );
 
+app.use(
+  "/javascripts",
+  express.static(path.join(__dirname, "../node_modules/govuk-frontend/govuk")),
+);
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 const oneDay = 1000 * 60 * 60 * 24;

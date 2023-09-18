@@ -1,0 +1,52 @@
+{% extends "page.njk" %}
+
+{% if request.status === "ACCEPTED" %}
+  {% set nextSteps = "Your department's contact email has been shared with the " + request.assetPublisher.title + " so they can begin working with you on the data share arrangement. You are able to contact them at data-management@test.co.uk" %}
+{% else %}
+  {% set nextSteps = "This request has been rejected. Consider the feedback before making further data share requests." %}
+{% endif %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-l">Request ID: {{request.requestId}}</span>
+    <h1 class="govuk-heading-xl">
+      {{ request.status | capitalize }} request
+    </h1>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-m govuk-!-static-margin-bottom-1">Decision made</h2>
+    <p class="govuk-body">{{ request.decisionDate }}</p>
+
+    <h2 class="govuk-heading-m govuk-!-static-margin-bottom-1">Feedback provided</h2>
+    <p class="govuk-body">{{ request.decisionNotes }}</p>
+
+    <h2 class="govuk-heading-m govuk-!-static-margin-bottom-1">What happens next</h2>
+    <p class="govuk-body">{{ nextSteps }}</p>
+  </div>
+
+  <div class="govuk-grid-column-one-third">
+    <h2 class="govuk-heading-s govuk-!-static-margin-bottom-1">Data owner</h2>
+    <p class="govuk-body">{{ request.assetPublisher.title }}</p>
+
+    <h2 class="govuk-heading-s govuk-!-static-margin-bottom-1">Dataset</h2>
+    <p class="govuk-body">{{ request.assetTitle }}</p>
+
+    <h2 class="govuk-heading-s govuk-!-static-margin-bottom-1">Needed by</h2>
+    <p class="govuk-body">{{ request.neededBy }}</p>
+  </div>
+
+  <div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-button-group govuk-!-static-margin-top-9">
+      <a href="{{assetPath}}/manage-shares/created-requests/{{request.sharedata.requestId}}/view-answers" class="govuk-button govuk-button--secondary">View full request</a>
+      <a href="{{assetPath}}/manage-shares/created-requests" class="govuk-link">Return to created requests</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
