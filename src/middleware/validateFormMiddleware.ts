@@ -98,20 +98,59 @@ function getImpactValidation() {
 function getDateValidation() {
   return [
     body("day")
+      .optional({ checkFalsy: true })
       .isInt({ min: 1, max: 31 })
       .withMessage("Day is invalid")
       .escape(),
     body("month")
+      .optional({ checkFalsy: true })
       .isInt({ min: 1, max: 12 })
       .withMessage("Month is invalid")
       .escape(),
     body("year")
+      .optional({ checkFalsy: true })
       .isInt({
         min: new Date().getFullYear(),
         max: new Date().getFullYear() + 10,
       })
-      .withMessage("Year cannot be in the past")
+      .withMessage("Year is invalid")
       .escape(),
+    body(["day", "month", "year"]).custom((value, { req }) => {
+      const day = req.body.day;
+      const month = req.body.month;
+      const year = req.body.year;
+      const currentYear = new Date().getFullYear();
+
+      if (year && year < currentYear) {
+        throw new Error("Year cannot be in the past");
+      }
+    
+      if (day && (!month || !year)) {
+        throw new Error("Month and year are invalid.");
+      }
+    
+      if (month && (!day || !year)) {
+        throw new Error("Day and year are invalid.");
+      }
+    
+      if (year && (!day || !month)) {
+        throw new Error("Day and month are invalid");
+      }
+    
+      if (day && month && !year) {
+        throw new Error("Year is invalid");
+      }
+    
+      if (day && year && !month) {
+        throw new Error("Month is invalid");
+      }
+    
+      if (year && month && !day) {
+        throw new Error("Day is invalid");
+      }
+
+      return true;
+    })
   ];
 }
 
@@ -368,7 +407,7 @@ export const handleValidationErrors = (
         .map((item: any) => item.msg);
 
       // Combine the 'msg' values into one message
-      const combinedMessage = validMessages.join(", ");
+      const combinedMessage = Array.from(new Set(validMessages)).join(", ");
       errorMessages["date"] = { text: combinedMessage };
     } else {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
