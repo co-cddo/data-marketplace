@@ -5,12 +5,9 @@ router.get("/", async (req: Request, res: Response) => {
   res.render("../views/learn/main.njk");
 });
 
-router.get(
-  "/glossary",
-  async (req: Request, res: Response) => {
-    res.render("../views/learn/glossary.njk");
-  },
-);
+router.get("/glossary", async (req: Request, res: Response) => {
+  res.render("../views/learn/glossary.njk");
+});
 
 router.get(
   "/data-sharing-arrangements",
@@ -41,10 +38,9 @@ router.get("/guidance-on-publish", async (req: Request, res: Response) => {
   res.render("../views/learn/guidance-on-publish.njk");
 });
 
-
 router.get("/articles/metadata-model", async (req: Request, res: Response) => {
-  res.render("../views/learn/metadata-model.njk")
-})
+  res.render("../views/learn/metadata-model.njk");
+});
 
 router.get("/adding-a-CSV-file", async (req: Request, res: Response) => {
   res.render("../views/learn/adding-a-CSV-file.njk");
