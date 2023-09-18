@@ -124,33 +124,33 @@ function getDateValidation() {
       if (year && year < currentYear) {
         throw new Error("Year cannot be in the past");
       }
-    
+
       if (day && (!month || !year)) {
         throw new Error("Month and year are invalid.");
       }
-    
+
       if (month && (!day || !year)) {
         throw new Error("Day and year are invalid.");
       }
-    
+
       if (year && (!day || !month)) {
         throw new Error("Day and month are invalid");
       }
-    
+
       if (day && month && !year) {
         throw new Error("Year is invalid");
       }
-    
+
       if (day && year && !month) {
         throw new Error("Month is invalid");
       }
-    
+
       if (year && month && !day) {
         throw new Error("Day is invalid");
       }
 
       return true;
-    })
+    }),
   ];
 }
 
