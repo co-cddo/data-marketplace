@@ -87,13 +87,10 @@ router.get(
     }
     const response = createdRequests?.data as ShareRequestResponse[];
 
-    const acquirerForms = response.reduce(
-      (acc: Record<string, FormData>, val: ShareRequestResponse) => ({
-        ...acc,
-        [val.sharedata.dataAsset]: val.sharedata,
-      }),
-      {},
-    );
+    const acquirerForms: { [key: string]: FormData } = {};
+    for (const s of response) {
+      acquirerForms[s.sharedata.dataAsset] = s.sharedata;
+    }
     req.session.acquirerForms = acquirerForms;
 
     const backLink = req.headers.referer || "/";
@@ -103,8 +100,9 @@ router.get(
     );
     let pendingRows: ShareRequestTable = pendingRequests.map((r) => [
       {
-        html: `<a href="/acquirer/${r.sharedata.dataAsset
-          }/start">${r.requestId.substring(0, 8)}...</a>`,
+        html: `<a href="/acquirer/${
+          r.sharedata.dataAsset
+        }/start">${r.requestId.substring(0, 8)}...</a>`,
       },
       { text: r.assetTitle },
       { text: r.assetPublisher.title },
@@ -113,8 +111,9 @@ router.get(
           r.neededBy === "UNREQUESTED" ? "Unrequested" : formatDate(r.neededBy),
       },
       {
-        html: `<span class="govuk-tag ${getStatusClass(r.status)}">${r.status
-          }</span>`,
+        html: `<span class="govuk-tag ${getStatusClass(r.status)}">${
+          r.status
+        }</span>`,
       },
     ]);
     if (pendingRows.length === 0) {
@@ -128,8 +127,9 @@ router.get(
     );
     let submittedRows: ShareRequestTable = submittedRequests.map((r) => [
       {
-        html: `<a href="/acquirer/${r.sharedata.dataAsset
-          }/start">${r.requestId.substring(0, 8)}...</a>`,
+        html: `<a href="/manage-shares/created-requests/${
+          r.sharedata.dataAsset
+        }">${r.requestId.substring(0, 8)}...</a>`,
       },
       { text: r.assetTitle },
       { text: r.assetPublisher.title },
@@ -139,8 +139,9 @@ router.get(
           r.neededBy === "UNREQUESTED" ? "Unrequested" : formatDate(r.neededBy),
       },
       {
-        html: `<span class="govuk-tag ${getStatusClass(r.status)}">${r.status
-          }</span>`,
+        html: `<span class="govuk-tag ${getStatusClass(r.status)}">${
+          r.status
+        }</span>`,
       },
     ]);
     if (submittedRows.length === 0) {
@@ -154,8 +155,9 @@ router.get(
     );
     let completedRows: ShareRequestTable = completedRequests.map((r) => [
       {
-        html: `<a href="/manage-shares/created-requests/${r.requestId
-          }">${r.requestId.substring(0, 8)}...</a>`,
+        html: `<a href="/manage-shares/created-requests/${
+          r.requestId
+        }">${r.requestId.substring(0, 8)}...</a>`,
       },
       { text: r.assetTitle },
       { text: r.assetPublisher.title },
@@ -165,8 +167,9 @@ router.get(
       },
       { text: formatDate(r.decisionDate as string) },
       {
-        html: `<span class="govuk-tag ${getStatusClass(r.status)}">${r.status
-          }</span>`,
+        html: `<span class="govuk-tag ${getStatusClass(r.status)}">${
+          r.status
+        }</span>`,
       },
     ]);
     if (completedRows.length === 0) {
@@ -280,63 +283,85 @@ const reviewRequestAbacMiddleware = createAbacMiddleware(
 router.get(
   "/received-requests",
   reviewRequestAbacMiddleware,
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const backLink = req.headers.referer || "/manage-shares";
 
-    const response = await axios.get(`${URL}/received-requests`, {
-      headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
-    });
-    const receivedTableRows = [];
-    if (response.data && response.data.length > 0) {
-      for (const request of response.data) {
-        // Format the received date
-        request.received = formatDate(request.received);
-
-        // Format the "Needed by" date on the
-        if (
-          request.sharedata &&
-          request.sharedata.steps &&
-          request.sharedata.steps.date
-        ) {
-          const dateObj = request.sharedata.steps.date.value;
-
-          if (
-            (dateObj.day === null && dateObj.month === undefined) ||
-            dateObj.year === null
-          ) {
-            request.sharedata.steps.date.formattedValue = "Unrequested";
-          } else {
-            request.sharedata.steps.date.formattedValue =
-              formatDateObject(dateObj);
-          }
-        } else {
-          request.sharedata.steps.date = {
-            formattedValue: "Unrequested",
-          };
-        }
-
-        const row = [
-          {
-            html: `<a class="govuk-link" href="/manage-shares/received-requests/${request.requestId}">${request.requestId}</a>`,
-          },
-          { text: request.requesterEmail },
-          { text: request.assetTitle },
-          { text: request.received },
-          { text: request.sharedata.steps.date.formattedValue },
-          {
-            html: `<span class="govuk-tag ${getStatusClass(request.status)}">${request.status
-              }</span>`,
-          },
-        ];
-        receivedTableRows.push(row);
+    let receivedRequests;
+    try {
+      receivedRequests = await axios.get(`${URL}/received-requests`, {
+        headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
+      });
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error(
+          `API ERROR - ${error.response?.status}: ${error.response?.statusText}`,
+        );
+        console.error(error.response?.data.detail);
+      } else {
+        console.error(error);
       }
-    } else {
-      receivedTableRows.push([{ text: "No received requests.", colspan: 6 }]);
+      next(error);
+    }
+    const response = receivedRequests?.data as ShareRequestResponse[];
+    const currentRequests = response.filter((r) =>
+      ["AWAITING REVIEW", "IN REVIEW", "RETURNED"].includes(r.status),
+    );
+    let currentRows: ShareRequestTable = currentRequests.map((r) => [
+      {
+        html: `<a href="/manage-shares/received-requests/${
+          r.requestId
+        }">${r.requestId.substring(0, 8)}...</a>`,
+      },
+      { text: r.requestingOrg },
+      { text: r.assetTitle },
+      { text: formatDate(r.received) },
+      {
+        text:
+          r.neededBy === "UNREQUESTED" ? "Unrequested" : formatDate(r.neededBy),
+      },
+      {
+        html: `<span class="govuk-tag ${getStatusClass(r.status)}">${
+          r.status
+        }</span>`,
+      },
+    ]);
+    if (currentRows.length === 0) {
+      currentRows = [
+        [{ text: "There are no data share requests", colspan: 6 }],
+      ];
+    }
+
+    const completedRequests = response.filter((r) =>
+      ["ACCEPTED", "REJECTED"].includes(r.status),
+    );
+    let completedRows: ShareRequestTable = completedRequests.map((r) => [
+      {
+        html: `<a href="/manage-shares/received-requests/${
+          r.requestId
+        }">${r.requestId.substring(0, 8)}...</a>`,
+      },
+      { text: r.requestingOrg },
+      { text: r.assetTitle },
+      { text: formatDate(r.received) },
+      {
+        text: r.decisionDate ? formatDate(r.decisionDate) : "",
+      },
+      {
+        html: `<span class="govuk-tag ${getStatusClass(r.status)}">${
+          r.status
+        }</span>`,
+      },
+    ]);
+    if (completedRows.length === 0) {
+      completedRows = [
+        [{ text: "There are no data completed share requests", colspan: 6 }],
+      ];
     }
 
     res.render("../views/supplier/received-requests.njk", {
       backLink,
-      receivedTableRows: receivedTableRows,
+      currentRows,
+      completedRows,
     });
   },
 );
@@ -435,91 +460,6 @@ router.get(
       backLink,
       requestId,
     });
-  },
-);
-
-router.post(
-  "/received-requests/:requestId/decision",
-  reviewRequestAbacMiddleware,
-  async (req: Request, res: Response) => {
-    const requestId = req.params.requestId;
-
-    const decision = req.body.decision;
-
-    if (decision === "return") {
-      return res.redirect(
-        `/manage-shares/received-requests/${requestId}/return-request`,
-      );
-    }
-
-    if (decision === "approve") {
-      return res.redirect(
-        `/manage-shares/received-requests/${requestId}/declaration`,
-      );
-    }
-
-    if (decision === "reject") {
-      return res.redirect(
-        `/manage-shares/received-requests/${requestId}/reject-request`,
-      );
-    }
-
-    return res.redirect("/manage-shares/received-requests");
-  },
-);
-
-router.get(
-  "/received-requests/:requestId/declaration",
-  reviewRequestAbacMiddleware,
-  async (req: Request, res: Response) => {
-    const requestId = req.params.requestId;
-    res.render("../views/supplier/declaration.njk", {
-      requestId,
-    });
-  },
-);
-
-router.post(
-  "/received-requests/:requestId/declaration",
-  reviewRequestAbacMiddleware,
-  async (req: Request, res: Response) => {
-    const requestId = req.params.requestId;
-
-    if (req.body.acceptButton) {
-      return res.redirect(
-        `/manage-shares/received-requests/${requestId}/accept-request`,
-      );
-    }
-    return res.redirect("/manage-shares/received-requests");
-  },
-);
-
-router.get(
-  "/received-requests/:requestId/accept-request",
-  reviewRequestAbacMiddleware,
-  (req: Request, res: Response) => {
-    const backLink = req.headers.referer || "/";
-    const requestId = req.params.requestId;
-    const requestData = req.session.acquirerForms;
-
-    if (!requestData) {
-      return res.status(404).send("Request data not found");
-    }
-
-    res.render("../views/supplier/accept-request.njk", {
-      backLink,
-      requestId,
-      requestingOrg: requestData.requestingOrg,
-      requesterEmail: requestData.requesterEmail,
-    });
-  },
-);
-
-router.post(
-  "/received-requests/:requestId/accept-request",
-  reviewRequestAbacMiddleware,
-  async (req: Request, res: Response) => {
-    return res.redirect("/manage-shares/received-requests");
   },
 );
 
