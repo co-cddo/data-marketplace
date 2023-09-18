@@ -10,7 +10,10 @@ interface UserData {
   email_verified: boolean;
   nickname: string;
   name: string;
-  display_name: string;
+  // These are added by apiMiddleware.apiUser:
+  user_id: string | null;
+  organisation: Organisation | null;
+  jobTitle: string | null;
 }
 
 interface FormData {

@@ -20,6 +20,9 @@ jest.mock("../src/middleware/authMiddleware", () => ({
         idToken: "someToken",
         name: "test user",
         email_verified: true,
+        organisation: null,
+        user_id: null,
+        jobTitle: null
       };
       next();
     },
