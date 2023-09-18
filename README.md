@@ -1,5 +1,7 @@
 # CDDO Digital Marketplace
 
+The purpose of this service is to make sharing of data across UK Government, and access to it, easier and more consistent.
+
 This application is built using Express.js and Typescript.
 
 This repository hosts the frontend UI, using the gov design system. It's primary responsibility is to provide the functionality for Find, Request and Manage share requests and Learn.
