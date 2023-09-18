@@ -256,7 +256,7 @@ function getDeliveryValidation() {
 
 function getDisposalValidation() {
   return [
-    body("disposal").exists().withMessage("Enter how will you dispose of data"),
+    body("disposal").not().isEmpty().withMessage("Enter how will you dispose of data"),
   ];
 }
 
