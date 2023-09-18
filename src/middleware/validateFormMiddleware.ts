@@ -78,14 +78,17 @@ function getImpactValidation() {
 function getDateValidation() {
   return [
     body("day")
+    .optional({ checkFalsy: true })
       .isInt({ min: 1, max: 31 })
       .withMessage("Day is invalid")
       .escape(),
     body("month")
+    .optional({ checkFalsy: true })
       .isInt({ min: 1, max: 12 })
       .withMessage("Month is invalid")
       .escape(),
     body("year")
+    .optional({ checkFalsy: true })
       .isInt({
         min: new Date().getFullYear() - 200,
         max: new Date().getFullYear() + 10,
