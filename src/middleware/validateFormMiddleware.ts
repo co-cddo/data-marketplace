@@ -51,13 +51,17 @@ function getDataAccessValidation() {
 function getOtherOrgsValidation(req: Request) {
   const validations = [];
   for (const key in req.body) {
-    if (key.startsWith("org-name")) {
+    if (key.startsWith("org-name") && !orgBeingRemoved(req, key)) {
       validations.push(
-        body(key).not().isEmpty().withMessage(`${key} must be supplied`),
+        body(key).not().isEmpty().withMessage(`Organisation cannot be empty`),
       );
     }
   }
   return validations;
+}
+
+function orgBeingRemoved(req: Request, key: string) {
+  return req.body.removeOrg !== undefined && req.body.removeOrg === key.split('-').pop();
 }
 
 function getImpactValidation() {
