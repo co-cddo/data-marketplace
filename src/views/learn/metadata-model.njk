@@ -1,0 +1,88 @@
+{% extends "page.njk" %}
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">Metadata sharing requirements</h1>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds govuk-!-margin-bottom-2">
+    <p class="govuk-body">This specification focuses on the metadata attributes needed to describe essential shared data assets in the context of a cross-government data share and to facilitate data discoverability in the Government Data Marketplace. For a high-level overview see <a class="govuk-link" href="#">guidance page</a> for using metadata to describe data assets in a data catalogue.</p>
+    <h2 class="govuk-heading-m">Key terms</h2>
+    <p class="govuk-body">The definitions for the key terms are taken from the Data Catalog Vocabulary <a class="govuk-link" href="https://www.w3.org/TR/vocab-dcat-3/">DCAT</a> published by the World Wide Web Consortium. The <a class="govuk-link" href="https://co-cddo.github.io/ukgov-metadata-exchange-model/">Cross-Government Metadata Exchange Model</a> is a profile defined over DCAT.</p>
+    </div>
+  </div>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <table class="govuk-table">
+            <!-- <caption class="govuk-table__caption govuk-table__caption--m">Key terms</caption> -->
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header">Term</th>
+                    <th scope="col" class="govuk-table__header">Definition</th>
+                </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header"><a class="govuk-link" href="https://www.w3.org/TR/vocab-dcat-3/#Class:Catalog">Catalogue</a></th> 
+                    <td class="govuk-table__cell">A curated collection of metadata about resources.</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header"><a class="govuk-link" href="https://www.w3.org/TR/vocab-dcat-3/#Class:Resource">Data Resource</a></th> 
+                    <td class="govuk-table__cell">Resource published or curated by a single agent.</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header"><a class="govuk-link" href="https://www.w3.org/TR/vocab-dcat-3/#Class:Data_Service">Data Service</a></th> 
+                    <td class="govuk-table__cell">A collection of operations that provides access to one or more datasets or data processing functions.</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header"><a class="govuk-link" href="https://www.w3.org/TR/vocab-dcat-3/#Class:Dataset">Dataset</a></th> 
+                    <td class="govuk-table__cell">A collection of data, published or curated by a single agent, and available for access or download in one or more representations.</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header"><a class="govuk-link" href="https://www.w3.org/TR/vocab-dcat-3/#Class:Dataset_Series">Dataset Series</a></th> 
+                    <td class="govuk-table__cell">A collection of datasets that are published separately, but share some characteristics that group them.</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header"><a class="govuk-link" href="https://www.w3.org/TR/vocab-dcat-3/#Class:Distribution">Distribution</a></th> 
+                    <td class="govuk-table__cell">A specific representation of a dataset. A dataset might be available in multiple serialisations that may differ in various ways, including natural language, media-type or format, schematic organisation, temporal and spatial resolution, level of detail or profiles (which might specify any or all of the above).</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+  
+<div class="govuk-grid-row govuk-!-margin-bottom-8">
+    <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-heading-m">Metadata Exchange Model</h2>
+    <p class="govuk-body">A metadata model for describing data assets for exchanging between UK government organisations.</p>
+    <p class="govuk-body"><a class="govuk-link" href="https://co-cddo.github.io/ukgov-metadata-exchange-model/">UK Cross-Government Metadata Exchange Model</a></p>
+    </div>
+  </div>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full govuk-!-margin-top-8">
+      <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
+    </div>
+  
+    <div class="govuk-grid-column-one-half-from-desktop">
+      <h2 id="community" class="govuk-heading-m">Learn</h2>
+      <p class="govuk-body ">
+        <a class="govuk-link" href="/learn/">Find information to help you</a> with the data marketplace.
+        For example: a glossary, or the UK Cross-Government Metadata Exchange model.
+      </p>
+    </div>
+  
+    <div class="govuk-grid-column-one-half-from-desktop">
+      <h2 id="support" class="govuk-heading-m">Contact Data Marketplace Team</h2>
+      <p class="govuk-body">
+        <a class="govuk-link" href="#1">Contact the team</a> if you have a question, suggestion or idea. We’d love to hear from you.
+      </p>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
