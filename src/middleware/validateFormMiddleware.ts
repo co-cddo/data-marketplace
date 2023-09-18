@@ -107,10 +107,10 @@ function getDateValidation() {
       .escape(),
     body("year")
       .isInt({
-        min: new Date().getFullYear() - 200,
+        min: new Date().getFullYear(),
         max: new Date().getFullYear() + 10,
       })
-      .withMessage("Year is invalid")
+      .withMessage("Year cannot be in the past")
       .escape(),
   ];
 }
