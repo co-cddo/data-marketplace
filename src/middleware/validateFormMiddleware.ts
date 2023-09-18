@@ -73,7 +73,7 @@ function getDataTravelLocationValidation(req: Request) {
     delete req.body["country-name-" + countryIndexToRemove];
   }
 
- const validations = [];
+  const validations = [];
   for (const key in req.body) {
     if (key.startsWith("country-name")) {
       validations.push(
@@ -253,7 +253,10 @@ function getDeliveryValidation() {
 
 function getDisposalValidation() {
   return [
-    body("disposal").not().isEmpty().withMessage("Enter how will you dispose of data"),
+    body("disposal")
+      .not()
+      .isEmpty()
+      .withMessage("Enter how will you dispose of data"),
   ];
 }
 
@@ -295,7 +298,7 @@ function getValidationRules(req: Request, step: string) {
       return getLawfulBasisSpecialPublicInterestValidation();
     case "data-travel":
       return getDataTravelValidation();
-    case "data-travel-location": 
+    case "data-travel-location":
       return getDataTravelLocationValidation(req);
     case "role":
       return getRoleValidation();
