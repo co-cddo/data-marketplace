@@ -66,6 +66,24 @@ function getOtherOrgsValidation(req: Request) {
   return validations;
 }
 
+function getDataTravelLocationValidation(req: Request) {
+  if (req.body.removeCountry) {
+    const countryIndexToRemove = req.body.removeCountry;
+
+    delete req.body["country-name-" + countryIndexToRemove];
+  }
+
+ const validations = [];
+  for (const key in req.body) {
+    if (key.startsWith("country-name")) {
+      validations.push(
+        body(key).not().isEmpty().withMessage(`Country cannot be empty`),
+      );
+    }
+  }
+  return validations;
+}
+
 function getImpactValidation() {
   return [
     body("impact")
