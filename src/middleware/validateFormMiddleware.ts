@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { CustomValidator, body, validationResult } from "express-validator";
+import { body, validationResult } from "express-validator";
 
 function getDataTypeValidation() {
   return [
