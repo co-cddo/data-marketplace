@@ -1,6 +1,7 @@
 /* eslint-disable  @typescript-eslint/no-unused-vars */
 import { Request } from "express-serve-static-core";
 import session from "express-session";
+import { Organisation } from "../models/dataModels";
 
 interface UserData {
   display_name: string;
@@ -9,7 +10,10 @@ interface UserData {
   email_verified: boolean;
   nickname: string;
   name: string;
-  display_name: string;
+  // These are added by apiMiddleware.apiUser:
+  user_id: string | null;
+  organisation: Organisation | null;
+  jobTitle: string | null;
 }
 
 interface FormData {
@@ -23,6 +27,21 @@ interface FormData {
   overviewSections: Record<string, Section>;
   steps: Record<string, Step>;
   stepHistory?: string[];
+}
+
+interface ShareRequestResponse {
+  requestId: string;
+  assetTitle: string;
+  requesterId: string;
+  requesterEmail: string;
+  requestingOrg: string;
+  assetPublisher: Organisation;
+  received: string;
+  status: FormStatus;
+  sharedata: FormData;
+  neededBy: string | "UNREQUESTED";
+  decisionNotes: string | null;
+  decisionDate: string | null;
 }
 
 export interface RequestBody {
@@ -217,10 +236,13 @@ declare module "express-session" {
 /**
  * Supplier Journey Types & Interfaces start
  */
-
-export type ManageShareTableRow = {
+export type ShareRequestTableColumn = {
   html?: string;
   text?: string;
   colspan?: number;
   classes?: string;
 };
+
+export type ShareRequestTableRow = ShareRequestTableColumn[];
+
+export type ShareRequestTable = ShareRequestTableRow[];
