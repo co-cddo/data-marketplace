@@ -153,8 +153,9 @@ router.get(
     );
     let completedRows: ShareRequestTable = completedRequests.map((r) => [
       {
-        html: `<a href="/acquirer/${r.sharedata.dataAsset
-          }/start">${r.requestId.substring(0, 8)}...</a>`,
+        html: `<a href="/manage-shares/created-requests/${
+          r.requestId
+        }">${r.requestId.substring(0, 8)}...</a>`,
       },
       { text: r.assetTitle },
       { text: r.assetPublisher.title },
