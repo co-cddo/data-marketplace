@@ -6,11 +6,11 @@ This application is built using Express.js and Typescript.
 
 This repository hosts the frontend UI, using the gov design system. It's primary responsibility is to provide the functionality for Find, Request and Manage share requests and Learn.
 
-Find allows you to search and filter for data records and view the initial data information.
+**Find** allows you to search and filter for data records and view the initial data information.
 
-Request and Manage Shares allows users to ask for access to data and manage any requests for that data.
+**Request and Manage Shares** allows users to ask for access to data and manage any requests for that data.
 
-Learn is a set of guidance pages on how to use the Marketplace.
+**Learn** is a set of guidance pages on how to use the Marketplace.
 
 ## Technology
 
@@ -37,20 +37,22 @@ In `/requests` is a requests.http.template file which can be renamed to requests
 
 ## Local development
 
-While you can run this repo using local node, its recommended to use Docker & Docker compose to ensure you are running the same environment as production.
+While you can run this repo using local node, its recommended to use Docker & Docker compose to ensure you are running the same environment as production and the docker containers will be correctly networked.
 
 To get started:
 
 You will also need to run the [api repository](https://github.com/co-cddo/data-marketplace-api) locally.
 
-- In the project root folder, create a .env file and copy the contents of the .env.example file. Replace the API_ENDPOINT variable values with a link to the live API endpoint.
-- Run `npm install`
-- Run `npm run start:dev`
-
 To use docker:
 
 - Run the backend following its README. It will be available on `API_ENDPOINT=http://api:8000`
+- In the project root folder, create a .env file and copy the contents of the .env.example file. Replace the API_ENDPOINT variable values with a link to the live API endpoint.
 - Run `docker-compose up`
+
+Using local node:
+
+- Run `npm install`
+- Run `npm run start:dev`
 
 ## Deployment
 
