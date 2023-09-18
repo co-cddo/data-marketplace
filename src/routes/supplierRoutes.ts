@@ -6,6 +6,7 @@ import {
 } from "../types/express";
 import axios from "axios";
 import { checkAnswer } from "../helperFunctions/formHelper";
+import { createAbacMiddleware } from "../middleware/ABACMiddleware";
 const router = express.Router();
 const URL = `${process.env.API_ENDPOINT}/manage-shares`;
 
@@ -153,9 +154,8 @@ router.get(
     );
     let completedRows: ShareRequestTable = completedRequests.map((r) => [
       {
-        html: `<a href="/manage-shares/created-requests/${
-          r.requestId
-        }">${r.requestId.substring(0, 8)}...</a>`,
+        html: `<a href="/manage-shares/created-requests/${r.requestId
+          }">${r.requestId.substring(0, 8)}...</a>`,
       },
       { text: r.assetTitle },
       { text: r.assetPublisher.title },
@@ -271,66 +271,79 @@ router.get(
   },
 );
 
-router.get("/received-requests", async (req: Request, res: Response) => {
-  const backLink = req.headers.referer || "/manage-shares";
+const reviewRequestAbacMiddleware = createAbacMiddleware(
+  "organisation",
+  "REVIEW_SHARE_REQUESTS",
+  "You are not authorised to review share requests. Please contact your organisation administrator.",
+);
 
-  const response = await axios.get(`${URL}/received-requests`, {
-    headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
-  });
-  const receivedTableRows = [];
-  if (response.data && response.data.length > 0) {
-    for (const request of response.data) {
-      // Format the received date
-      request.received = formatDate(request.received);
+router.get(
+  "/received-requests",
+  reviewRequestAbacMiddleware,
+  async (req: Request, res: Response) => {
+    const backLink = req.headers.referer || "/manage-shares";
 
-      // Format the "Needed by" date on the
-      if (
-        request.sharedata &&
-        request.sharedata.steps &&
-        request.sharedata.steps.date
-      ) {
-        const dateObj = request.sharedata.steps.date.value;
-      
+    const response = await axios.get(`${URL}/received-requests`, {
+      headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
+    });
+    const receivedTableRows = [];
+    if (response.data && response.data.length > 0) {
+      for (const request of response.data) {
+        // Format the received date
+        request.received = formatDate(request.received);
+
+        // Format the "Needed by" date on the
         if (
-          dateObj.day === null && dateObj.month === undefined || dateObj.year === null 
+          request.sharedata &&
+          request.sharedata.steps &&
+          request.sharedata.steps.date
         ) {
-          request.sharedata.steps.date.formattedValue = "Unrequested";
+          const dateObj = request.sharedata.steps.date.value;
+
+          if (
+            (dateObj.day === null && dateObj.month === undefined) ||
+            dateObj.year === null
+          ) {
+            request.sharedata.steps.date.formattedValue = "Unrequested";
+          } else {
+            request.sharedata.steps.date.formattedValue =
+              formatDateObject(dateObj);
+          }
         } else {
-          request.sharedata.steps.date.formattedValue = formatDateObject(dateObj);
+          request.sharedata.steps.date = {
+            formattedValue: "Unrequested",
+          };
         }
-      } else {
-        request.sharedata.steps.date = {
-          formattedValue: "Unrequested"
-        };
+
+        const row = [
+          {
+            html: `<a class="govuk-link" href="/manage-shares/received-requests/${request.requestId}">${request.requestId}</a>`,
+          },
+          { text: request.requesterEmail },
+          { text: request.assetTitle },
+          { text: request.received },
+          { text: request.sharedata.steps.date.formattedValue },
+          {
+            html: `<span class="govuk-tag ${getStatusClass(request.status)}">${request.status
+              }</span>`,
+          },
+        ];
+        receivedTableRows.push(row);
       }
-
-      const row = [
-        {
-          html: `<a class="govuk-link" href="/manage-shares/received-requests/${request.requestId}">${request.requestId}</a>`,
-        },
-        { text: request.requesterEmail },
-        { text: request.assetTitle },
-        { text: request.received },
-        { text: request.sharedata.steps.date.formattedValue },
-        {
-          html: `<span class="govuk-tag ${getStatusClass(request.status)}">${request.status
-            }</span>`,
-        },
-      ];
-      receivedTableRows.push(row);
+    } else {
+      receivedTableRows.push([{ text: "No received requests.", colspan: 6 }]);
     }
-  } else {
-    receivedTableRows.push([{ text: "No received requests.", colspan: 6 }]);
-  }
 
-  res.render("../views/supplier/received-requests.njk", {
-    backLink,
-    receivedTableRows: receivedTableRows,
-  });
-});
+    res.render("../views/supplier/received-requests.njk", {
+      backLink,
+      receivedTableRows: receivedTableRows,
+    });
+  },
+);
 
 router.get(
   "/received-requests/:requestId",
+  reviewRequestAbacMiddleware,
   async (req: Request, res: Response) => {
     const backLink = req.headers.referer || "/manage-shares/received-requests/";
     const requestId = req.params.requestId;
@@ -370,6 +383,7 @@ router.get(
 
 router.post(
   "/received-requests/:requestId",
+  reviewRequestAbacMiddleware,
   async (req: Request, res: Response) => {
     const requestId = req.params.requestId;
     res.redirect(
@@ -380,6 +394,7 @@ router.post(
 
 router.get(
   "/received-requests/:requestId/review-request",
+  reviewRequestAbacMiddleware,
   (req: Request, res: Response) => {
     const requestDetail = req.session.acquirerForms;
 
@@ -395,6 +410,7 @@ router.get(
 
 router.post(
   "/received-requests/:requestId/review-request",
+  reviewRequestAbacMiddleware,
   async (req: Request, res: Response) => {
     const requestId = req.params.requestId;
 
@@ -410,6 +426,7 @@ router.post(
 
 router.get(
   "/received-requests/:requestId/decision",
+  reviewRequestAbacMiddleware,
   async (req: Request, res: Response) => {
     const backLink = req.headers.referer || "/";
     const requestId = req.params.requestId;
@@ -423,6 +440,7 @@ router.get(
 
 router.post(
   "/received-requests/:requestId/decision",
+  reviewRequestAbacMiddleware,
   async (req: Request, res: Response) => {
     const requestId = req.params.requestId;
 
@@ -452,6 +470,7 @@ router.post(
 
 router.get(
   "/received-requests/:requestId/declaration",
+  reviewRequestAbacMiddleware,
   async (req: Request, res: Response) => {
     const requestId = req.params.requestId;
     res.render("../views/supplier/declaration.njk", {
@@ -462,6 +481,7 @@ router.get(
 
 router.post(
   "/received-requests/:requestId/declaration",
+  reviewRequestAbacMiddleware,
   async (req: Request, res: Response) => {
     const requestId = req.params.requestId;
 
@@ -476,6 +496,7 @@ router.post(
 
 router.get(
   "/received-requests/:requestId/accept-request",
+  reviewRequestAbacMiddleware,
   (req: Request, res: Response) => {
     const backLink = req.headers.referer || "/";
     const requestId = req.params.requestId;
@@ -496,6 +517,7 @@ router.get(
 
 router.post(
   "/received-requests/:requestId/accept-request",
+  reviewRequestAbacMiddleware,
   async (req: Request, res: Response) => {
     return res.redirect("/manage-shares/received-requests");
   },
@@ -503,6 +525,7 @@ router.post(
 
 router.post(
   "/received-requests/:requestId/decision",
+  reviewRequestAbacMiddleware,
   async (req: Request, res: Response) => {
     const requestId = req.params.requestId;
 
@@ -532,6 +555,7 @@ router.post(
 
 router.get(
   "/received-requests/:requestId/declaration",
+  reviewRequestAbacMiddleware,
   async (req: Request, res: Response) => {
     const requestId = req.params.requestId;
     res.render("../views/supplier/declaration.njk", {
@@ -542,6 +566,7 @@ router.get(
 
 router.post(
   "/received-requests/:requestId/declaration",
+  reviewRequestAbacMiddleware,
   async (req: Request, res: Response) => {
     const requestId = req.params.requestId;
 
@@ -556,6 +581,7 @@ router.post(
 
 router.get(
   "/received-requests/:requestId/accept-request",
+  reviewRequestAbacMiddleware,
   (req: Request, res: Response) => {
     const backLink = req.headers.referer || "/";
     const requestId = req.params.requestId;
@@ -576,6 +602,7 @@ router.get(
 
 router.post(
   "/received-requests/:requestId/accept-request",
+  reviewRequestAbacMiddleware,
   async (req: Request, res: Response) => {
     return res.redirect("/manage-shares/received-requests");
   },
@@ -583,6 +610,7 @@ router.post(
 
 router.get(
   "/received-requests/:requestId/reject-request",
+  reviewRequestAbacMiddleware,
   async (req: Request, res: Response) => {
     const backLink = req.headers.referer || "/";
     const requestId = req.params.requestId;
@@ -602,6 +630,7 @@ router.get(
 
 router.post(
   "/received-requests/:requestId/reject-request",
+  reviewRequestAbacMiddleware,
   async (req: Request, res: Response) => {
     return res.redirect("/manage-shares/received-requests");
   },
@@ -609,6 +638,7 @@ router.post(
 
 router.get(
   "/received-requests/:requestId/return-request",
+  reviewRequestAbacMiddleware,
   async (req: Request, res: Response) => {
     const backLink = req.headers.referer || "/";
     const requestId = req.params.requestId;
@@ -628,6 +658,7 @@ router.get(
 
 router.post(
   "/received-requests/:requestId/return-request",
+  reviewRequestAbacMiddleware,
   async (req: Request, res: Response) => {
     return res.redirect("/manage-shares/received-requests");
   },

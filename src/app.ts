@@ -29,6 +29,7 @@ import {
   JwtStrategy,
   modifyApplicationMiddleware,
 } from "./middleware/authMiddleware";
+import { apiUser } from "./middleware/apiMiddleware";
 
 export const app = express();
 // Set up security headers with Helmet
@@ -129,7 +130,7 @@ app.use("/profile", authenticateJWT, profileRoutes);
 app.use("/find", findRoutes);
 app.use("/share", authenticateJWT, shareRoutes);
 app.use("/acquirer", authenticateJWT, acquirerRoutes);
-app.use("/manage-shares", authenticateJWT, manageRoutes);
+app.use("/manage-shares", authenticateJWT, apiUser, manageRoutes);
 app.use("/cookie-settings", cookieRoutes);
 app.use("/learn", learnRoutes);
 app.use("/admin", adminRoutes);
