@@ -1,6 +1,6 @@
 {% extends "page.njk" %}
 
-{% if request.sharedata.status === "ACCEPTED" %}
+{% if request.status === "ACCEPTED" %}
   {% set nextSteps = "Your department's contact email has been shared with the " + request.assetPublisher.title + " so they can begin working with you on the data share arrangement. You are able to contact them at data-management@test.co.uk" %}
 {% else %}
   {% set nextSteps = "This request has been rejected. Consider the feedback before making further data share requests." %}
@@ -10,9 +10,9 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <span class="govuk-caption-l">Request ID: {{request.sharedata.requestId}}</span>
+    <span class="govuk-caption-l">Request ID: {{request.requestId}}</span>
     <h1 class="govuk-heading-xl">
-      {{ request.sharedata.status | capitalize }} request
+      {{ request.status | capitalize }} request
     </h1>
   </div>
 </div>
