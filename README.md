@@ -35,6 +35,12 @@ Authorisation is handled in the api repo and allows for users and granular contr
 
 In `/requests` is a requests.http.template file which can be renamed to requests.http and used with the REST Client VSCode extension to test some of the new API endpoints. The ops-api-key, jwt and user variables need to be set to real values.
 
+### Testing & linting
+
+Tests are written using **Jest** and can be run using `npm run test`.
+
+We use **Eslint** to enforce consistent code styles `npm run lint`
+
 ## Local development
 
 While you can run this repo using local node, its recommended to use Docker & Docker compose to ensure you are running the same environment as production and the docker containers will be correctly networked.
