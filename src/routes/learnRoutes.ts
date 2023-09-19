@@ -19,10 +19,13 @@ router.get(
 router.get("/articles/data-sharing-questions", async (req: Request, res: Response) => {
   const backLink = req.session.backLink || "/";
   req.session.backLink = req.originalUrl;
+  const resourceDetails = req.session.resourceDetails || {};
 
-  res.render("../views/learn/data-sharing-questions.njk", { backLink: backLink });
+  res.render("../views/learn/data-sharing-questions.njk", {
+    backLink,
+    ...resourceDetails
+  });
 });
-
 
 router.get(
   "/publish-data-descriptions-questions",

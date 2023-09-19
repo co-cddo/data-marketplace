@@ -231,6 +231,11 @@ declare module "express-session" {
     acquirerForms?: Record<string, FormData>;
     backLink: string;
     formErrors: { [key: string]: { text: string } };
+    resourceDetails?: {
+      resourceID: string;
+      resourceTitle: string;
+      organisationTitle: string;
+    };
   }
 }
 
