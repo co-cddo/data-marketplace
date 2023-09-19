@@ -20,9 +20,7 @@ function getProjectAimsValidation() {
     body("explanation")
       .not()
       .isEmpty()
-      .withMessage(
-        "Enter how the data will help you achieve your aims",
-      ),
+      .withMessage("Enter how the data will help you achieve your aims"),
   ];
 }
 
@@ -59,7 +57,12 @@ function getOtherOrgsValidation(req: Request) {
   for (const key in req.body) {
     if (key.startsWith("org-name")) {
       validations.push(
-        body(key).not().isEmpty().withMessage(`Enter the name of the other organisation that will need access to this data`),
+        body(key)
+          .not()
+          .isEmpty()
+          .withMessage(
+            `Enter the name of the other organisation that will need access to this data`,
+          ),
       );
     }
   }
@@ -136,60 +139,32 @@ function getDateValidation() {
   ];
 }
 
-function getBenefitsValidation() {
-const errorText = "Enter how your project will provide this public benefit"
-
-return [
-  body('benefits', 'Please select at least one benefit')
-    .exists()
-    .withMessage('Select one or more benefits'),
-  
-  body('decision-making')
-      .if(body('benefits').contains('decision-making'))
-      .notEmpty().withMessage(errorText).escape(),
-  
-  body('service-delivery')
-      .if(body('benefits').contains('service-delivery'))
-      .notEmpty().withMessage(errorText).escape(),
-
-  body('benefit-people')
-      .if(body('benefits').contains('benefit-people'))
-      .notEmpty().withMessage(errorText).escape(),
-
-  body('allocate-and-evaluate-funding')
-      .if(body('benefits').contains('allocate-and-evaluate-funding'))
-      .notEmpty().withMessage(errorText).escape(),
-
-  body('social-economic-trends')
-      .if(body('benefits').contains('social-economic-trends'))
-      .notEmpty().withMessage(errorText).escape(),
-
-  body('needs-of-the-public')
-      .if(body('benefits').contains('needs-of-the-public'))
-      .notEmpty().withMessage(errorText).escape(),
-
-  body('statistical-information')
-      .if(body('benefits').contains('statistical-information'))
-      .notEmpty().withMessage(errorText).escape(),
-
-  body('existing-research-or-statistics')
-      .if(body('benefits').contains('existing-research-or-statistics'))
-      .notEmpty().withMessage(errorText).escape(),
-
-  body('something-else')
-      .if(body('benefits').contains('something-else'))
-      .notEmpty().withMessage(errorText).escape()
+function getBenefitsValidation(req: Request) {
+  const errorText = "Enter how your project will provide this public benefit";
+  const benefits = req.body.benefits;
+  const benefitErrors = [
+    body("benefits", "Please select at least one benefit")
+      .exists()
+      .withMessage("Select one or more benefits"),
   ];
+  if (Array.isArray(benefits)) {
+    benefits.forEach((benefit: string) => {
+      benefitErrors.push(body(benefit).notEmpty().withMessage(`${errorText}`));
+    });
+  } else {
+    benefitErrors.push(body(benefits).notEmpty().withMessage(`${errorText}`));
+  }
+  return benefitErrors;
 }
 
 function getLegalPowerValidation() {
   return [
-    body("legal-power")
-      .exists()
-      .withMessage("Select Yes, No or we don’t know"),
-    body('legal-power-input')
-      .if(body('legal-power').contains('yes'))
-      .notEmpty().withMessage('Enter the legal power').escape(),
+    body("legal-power").exists().withMessage("Select Yes, No or we don’t know"),
+    body("legal-power-input")
+      .if(body("legal-power").contains("yes"))
+      .notEmpty()
+      .withMessage("Enter the legal power")
+      .escape(),
   ];
 }
 
@@ -198,21 +173,23 @@ function getLegalGatewayValidation() {
     body("legal-gateway")
       .exists()
       .withMessage("Select Yes, No or we don’t know"),
-    body('yes')
-      .if(body('legal-gateway').contains('yes'))
-      .notEmpty().withMessage('Enter the legal gateway for acquiring this data').escape(),
-    body('other')
-      .if(body('legal-gateway').contains('other'))
-      .notEmpty().withMessage('Enter the other legal grounds that you have for acquiring this data').escape(),
+    body("yes")
+      .if(body("legal-gateway").contains("yes"))
+      .notEmpty()
+      .withMessage("Enter the legal gateway for acquiring this data")
+      .escape(),
+    body("other")
+      .if(body("legal-gateway").contains("other"))
+      .notEmpty()
+      .withMessage(
+        "Enter the other legal grounds that you have for acquiring this data",
+      )
+      .escape(),
   ];
 }
 
 function getLegalReviewValidation() {
-  return [
-    body("legal-review")
-      .exists()
-      .withMessage("Select Yes or No"),
-  ];
+  return [body("legal-review").exists().withMessage("Select Yes or No")];
 }
 
 function getLawfulPersonalValidation() {
@@ -254,7 +231,10 @@ function getDataTravelLocationValidation(req: Request) {
   for (const key in req.body) {
     if (key.startsWith("country-name")) {
       validations.push(
-        body(key).not().isEmpty().withMessage(`Enter the country the data will travel through`),
+        body(key)
+          .not()
+          .isEmpty()
+          .withMessage(`Enter the country the data will travel through`),
       );
     }
   }
@@ -272,24 +252,28 @@ function getRoleValidation() {
 }
 
 function getProtectionReviewValidation() {
-  return [
-    body("protection-review").exists().withMessage("Select Yes or No"),
-  ];
+  return [body("protection-review").exists().withMessage("Select Yes or No")];
 }
 
 function getDeliveryValidation() {
-  return [body("delivery").exists().withMessage("Select Through secure third-party software, Physical delivery or Something else")];
+  return [
+    body("delivery")
+      .exists()
+      .withMessage(
+        "Select Through secure third-party software, Physical delivery or Something else",
+      ),
+  ];
 }
 
 function getFormatValidation() {
   return [
-    body("format")
-    .exists()
-    .withMessage("Select one option"),
+    body("format").exists().withMessage("Select one option"),
 
-    body('something-else')
-    .if(body('format').contains('something-else'))
-    .notEmpty().withMessage('Enter preferred format of data').escape(),
+    body("something-else")
+      .if(body("format").contains("something-else"))
+      .notEmpty()
+      .withMessage("Enter preferred format of data")
+      .escape(),
   ];
 }
 
@@ -317,7 +301,7 @@ function getValidationRules(req: Request, step: string) {
     case "date":
       return getDateValidation();
     case "benefits":
-      return getBenefitsValidation();
+      return getBenefitsValidation(req);
     case "data-access":
       return getDataAccessValidation();
     case "other-orgs":
@@ -419,7 +403,9 @@ export const handleValidationErrors = (
       });
     }
     req.session.formErrors = errorMessages;
+    req.session.formValuesValidationError = req.body;
     console.log("Form errors", req.session.formErrors); //leaving this in for ease of debugging
+
     return res.redirect(req.originalUrl);
   }
 
