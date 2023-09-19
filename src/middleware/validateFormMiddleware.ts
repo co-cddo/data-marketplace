@@ -403,7 +403,9 @@ export const handleValidationErrors = (
       });
     }
     req.session.formErrors = errorMessages;
+    req.session.formValuesValidationError = req.body;
     console.log("Form errors", req.session.formErrors); //leaving this in for ease of debugging
+
     return res.redirect(req.originalUrl);
   }
 
