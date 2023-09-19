@@ -7,6 +7,7 @@ import {
 import axios from "axios";
 import { checkAnswer } from "../helperFunctions/formHelper";
 import { createAbacMiddleware } from "../middleware/ABACMiddleware";
+import { shareRequestDetailMiddleware } from "../middleware/apiMiddleware";
 const router = express.Router();
 const URL = `${process.env.API_ENDPOINT}/manage-shares`;
 
@@ -420,15 +421,10 @@ router.post(
 router.get(
   "/received-requests/:requestId/review-request",
   reviewRequestAbacMiddleware,
+  shareRequestDetailMiddleware,
   (req: Request, res: Response) => {
-    const requestDetail = req.session.acquirerForms;
-
-    if (!requestDetail) {
-      return res.status(404).send("Request data not found in session");
-    }
-
     res.render("../views/supplier/review-request.njk", {
-      request: requestDetail,
+      request: req.shareRequest,
     });
   },
 );
