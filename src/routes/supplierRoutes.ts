@@ -100,9 +100,14 @@ router.get(
     );
     let pendingRows: ShareRequestTable = pendingRequests.map((r) => [
       {
-      html: r.status === "RETURNED"
-      ? `<a class="govuk-link" href="/manage-shares/created-requests/${r.requestId}/view-answers">${r.requestId.substring(0, 8)}...</a>`
-      : `<a href="/acquirer/${r.sharedata.dataAsset}/start">${r.requestId.substring(0, 8)}...</a>`,
+        html:
+          r.status === "RETURNED"
+            ? `<a class="govuk-link" href="/manage-shares/created-requests/${
+                r.requestId
+              }/view-answers">${r.requestId.substring(0, 8)}...</a>`
+            : `<a href="/acquirer/${
+                r.sharedata.dataAsset
+              }/start">${r.requestId.substring(0, 8)}...</a>`,
       },
       { text: r.assetTitle },
       { text: r.assetPublisher.title },
@@ -238,8 +243,7 @@ router.get(
   "/created-requests/:requestId/view-answers",
   async (req: Request, res: Response) => {
     const requestId = req.params.requestId;
-    const backLink =
-      req.headers.referer || `/manage-shares/created-requests/`;
+    const backLink = req.headers.referer || `/manage-shares/created-requests/`;
 
     try {
       const requestDetail = await axios.get(

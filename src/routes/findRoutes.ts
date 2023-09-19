@@ -125,7 +125,7 @@ router.get("/:resourceID", async (req: Request, res: Response) => {
   req.session.resourceDetails = {
     resourceID: resourceID,
     resourceTitle: resource.title,
-    organisationTitle: resource.organisation.title
+    organisationTitle: resource.organisation.title,
   };
 
   res.render("resource.njk", {
@@ -134,6 +134,5 @@ router.get("/:resourceID", async (req: Request, res: Response) => {
     resource: resource,
   });
 });
-
 
 export default router;
