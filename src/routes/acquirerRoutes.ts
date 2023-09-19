@@ -110,7 +110,7 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
     formdata.stepHistory = [];
   }
 
-  //handle form errors
+  // handle form errors
   if (req.session.formValuesValidationError) {
     stepData.value = extractFormData(
       stepData,
@@ -262,6 +262,9 @@ router.post(
     if (req.body.continueButton && nextStep) {
       redirectURL = `/acquirer/${resourceID}/${nextStep}`;
     }
+
+    //reset errors at this point as API doesnt need them and validation has happened
+    formdata.steps[formStep].errorMessage = "";
 
     // Send the formdata to the backend if logged in
     if (req.isAuthenticated()) {
