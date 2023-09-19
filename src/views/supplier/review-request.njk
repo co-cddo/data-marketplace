@@ -3,33 +3,57 @@
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 
 {% block content %}
-<div class="govuk-grid-row">
+  <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-    <span class="govuk-caption-l">Request ID: {{ request.requestId }}</span>
-    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l">Request ID: {{ request.requestId }}</span>
+      <h1 class="govuk-heading-l">
       Review {{ request.requestingOrg }}'s request to access {{ request.assetTitle }} data
     </h1>
+      {% if request.sharedata.steps['lawful-basis-personal'].value | length %}
+        <div class="request-section">
+          <h2 class="govuk-heading-m">Lawful basis for personal data</h2>
+          <ul class="govuk-list">
+            {% for basis, details in request.sharedata.steps['lawful-basis-personal'].value %}
+              {% if details.checked %}
+                <li>{{ replacements['lawful-basis-personal'].data[basis] }}</li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
 
-    <div class="request-section">
-      <h2 class="govuk-heading-m">Lawful basis for personal data</h2>
-      <ul class="govuk-list">
-        {% for basis, details in request.sharedata.steps['lawful-basis-personal'].value %}
-          {% if details.checked %}
-            <li class="govuk-!-padding-bottom-3">{{ basis | replace("-", " ") | capitalize }}</li>
-          {% endif %}
-        {% endfor %}
-      </ul>
-    </div>
+      {% if request.sharedata.steps['lawful-basis-special'].value | length %}
+        <div class="request-section">
+          <h2 class="govuk-heading-m">Lawful basis for special category data</h2>
+          <ul class="govuk-list">
+            {% for basis, details in request.sharedata.steps['lawful-basis-special'].value %}
+              {% if details.checked %}
+                <li>{{ replacements['lawful-basis-special'].data[basis] }}</li>
+                {% if basis == 'reasons-of-public-interest'%}
+                  <ul class="govuk-list govuk-list--bullet govuk-body-s caption-color">
+                    {% for key,val in request.sharedata.steps['lawful-basis-special-public-interest'].value %}
+                      {% if val.checked %}
+
+                        <li>{{replacements['lawful-basis-special-public-interest'].data[key]}}</li>
+                      {% endif %}
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
 
     <div class="request-section">
       <h2 class="govuk-heading-m">Legal power</h2>
+      {{request.sharedata.steps['legal-power'].value | dump}}
       <p class="govuk-body">{{ request.sharedata.steps['legal-power'].value.yes.explanation | capitalize }}</p>
     </div>
 
     <div class="request-section">
       <h2 class="govuk-heading-m govuk-!-static-margin-bottom-1">Justification for legal gateway</h2>
-      <div class="govuk-warning-text govuk-!-static-margin-bottom-2">
-      </div>
+      <div class="govuk-warning-text govuk-!-static-margin-bottom-2"></div>
       <p class="govuk-body">{{ request.sharedata.steps['legal-gateway'].value.yes.explanation }}</p>
     </div>
 
@@ -122,7 +146,7 @@
     <div class="request-section">
       <h2 class="govuk-heading-m">Data accessed by other organisations</h2>
       <p class="govuk-body">{{ request.sharedata.steps['data-access'].value | capitalize }}</p>
-        {% if request.sharedata.steps['data-access'].value == "yes" %}
+      {% if request.sharedata.steps['data-access'].value == "yes" %}
         <p class="govuk-body">Organisations:</p>
         <ul class="govuk-list govuk-list--bullet">
           {% for org in request.sharedata.steps['other-orgs'].value %}

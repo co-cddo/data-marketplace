@@ -8,6 +8,7 @@ import axios from "axios";
 import { checkAnswer } from "../helperFunctions/formHelper";
 import { createAbacMiddleware } from "../middleware/ABACMiddleware";
 import { shareRequestDetailMiddleware } from "../middleware/apiMiddleware";
+import { replace } from "../helperFunctions/checkhelper";
 const router = express.Router();
 const URL = `${process.env.API_ENDPOINT}/manage-shares`;
 
@@ -423,6 +424,7 @@ router.get(
   (req: Request, res: Response) => {
     res.render("../views/supplier/review-request.njk", {
       request: req.shareRequest,
+      replacements: replace
     });
   },
 );
