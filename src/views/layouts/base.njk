@@ -1,13 +1,6 @@
 {% extends "govuk/template.njk" %}
 
-
 {% block pageTitle %}Data Marketplace{% endblock %}
-
-{% if errorMessage %}
-    {% set errorText = {text: errorMessage} %}
-{% else %}
-    {% set errorText = undefined %}
-{% endif %}
 
 {% block head %}
     <link href="/govuk-frontend/all.css" rel="text/stylesheet">
@@ -15,15 +8,14 @@
 {% endblock %}
 
 {% block header %}
-  {% include "../partials/cookieBanner.njk" %}
+{% include "../partials/cookieBanner.njk" %}
 {{ govukHeader({
   homepageUrl: "https://www.gov.uk",
   serviceName: "Data Marketplace",
   serviceUrl: "/",
   containerClasses: "govuk-width-container"
 }) }}
-
-  {% include "partials/navigation.njk" %}
+{% include "partials/navigation.njk" %}
   {% if home %}
     <div class="x-govuk-masthead x-govuk-masthead--large">
       <div class="govuk-width-container">
@@ -32,19 +24,19 @@
           Data Marketplace
         </h1>
         <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds-from-desktop">
-          <p class="x-govuk-masthead__description govuk-!-margin-bottom-3">
-            A place for people who work in government  organisations, agencies and public bodies to share data.
-          </p>
+          <div class="govuk-grid-column-two-thirds-from-desktop">
+            <p class="x-govuk-masthead__description govuk-!-margin-bottom-3">
+              A place for people who work in government  organisations, agencies and public bodies to share data.
+            </p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
   {% else %}
-  <div class="govuk-width-container">
-    {% include "partials/phaseBanner.njk" %}
-    <a class="govuk-back-link" href="{{ backLink }}">Back</a>
-  </div>
+    <div class="govuk-width-container">
+      {% include "partials/phaseBanner.njk" %}
+      <a class="govuk-back-link" href="{{ backLink }}">Back</a>
+    </div>
   {% endif %}
 {% endblock %}
 

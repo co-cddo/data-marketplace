@@ -7,7 +7,7 @@
     <div class="govuk-grid-column-two-thirds">
       <span class="govuk-caption-l">Request ID: {{requestId}}</span>
       <form method="POST" id="specialPublicInterestForm">
-        {{ govukCheckboxes({
+          {{ govukCheckboxes({
             name: "lawful-basis-special-public-interest",
             fieldset: {
                 legend: {
@@ -132,8 +132,9 @@
                 text: "Standards of behaviour in sport",
                 checked: savedValue['standards']['checked']
                 }
-                  ]
-                  }) }}
+              ],
+            errorMessage: errorMessage['lawful-basis-special-public-interest']
+          }) }}
           <div class="govuk-button-group">
             {{ govukButton({
                 text: "Save and continue",

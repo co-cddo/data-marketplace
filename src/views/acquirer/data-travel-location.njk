@@ -4,49 +4,53 @@
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 
 {% block content %}
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <span class="govuk-caption-l">Request ID: {{requestId}}</span>
-<h1 class="govuk-heading-l govuk-fieldset__legend govuk-fieldset__legend--l">What countries will the data travel through?</h1>
-      <form method="POST" id="dataTravelLocationForm">
-        {% for country in savedValue %}
-          <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
-              {% call govukFieldset({
-              classes: "add-another__country" ,
-              legend: {
-                classes: 'govuk-fieldset__legend--m',
-                isPageHeading: false
-              }
-              }) %}
-                {{ govukInput({
-                  id: "country-name-" + loop.index,
-                  name: "country-name-" + loop.index,
-                  value: country,
-                  classes: "govuk-input--width-20",
-                  attributes: {
-                    'data-name': 'countries[' + loop.index + ']',
-                    'data-id': 'countries[' + loop.index + ']'
-                  }
-                }) }}
-              {% endcall %}
-            </div>
-            
-            {# Only show the remove button if it's not the first input #}
-            {% if loop.index > 1 %}
-              <div class="govuk-grid-column-one-third">
-                <p class="govuk-body">
-                  {{ govukButton({
-                    text: "Remove",
-                    name: "removeCountry",
-                    classes: "govuk-button govuk-button--secondary",
-                    value: loop.index
-                  }) }}
-                </p>
-              </div>
-            {% endif %}
+    <h1 class="govuk-heading-l govuk-fieldset__legend govuk-fieldset__legend--l">What countries will the data travel through?</h1>
+    <form method="POST" id="dataTravelLocationForm">
+      {% for country in savedValue %}
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-two-thirds">
+            {% call govukFieldset({
+            classes: "add-another__country" ,
+            legend: {
+              classes: 'govuk-fieldset__legend--m',
+              isPageHeading: false
+            }
+            }) %}
+              {% set errorKey = "country-name-" + loop.index %}
+
+              {{ govukInput({
+                id: "country-name-" + loop.index,
+                name: "country-name-" + loop.index,
+                value: country,
+                classes: "govuk-input--width-20",
+                attributes: {
+                  'data-name': 'countries[' + loop.index + ']',
+                  'data-id': 'countries[' + loop.index + ']'
+                },
+                errorMessage: errorMessage["country-name-" + loop.index]
+              }) }}
+            {% endcall %}
           </div>
-        {% endfor %}
+            
+          {# Only show the remove button if it's not the first input #}
+          {% if loop.index > 1 %}
+            <div class="govuk-grid-column-one-third">
+              <p class="govuk-body">
+                {{ govukButton({
+                  text: "Remove",
+                  name: "removeCountry",
+                  classes: "govuk-button govuk-button--secondary",
+                  value: loop.index
+                }) }}
+              </p>
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
 
       <p class="govuk-body">
         {{ govukButton({
@@ -56,6 +60,7 @@
           value: "true"
         }) }}
       </p>
+
       <div class="govuk-button-group">
         {{ govukButton({
           text: "Save and continue",

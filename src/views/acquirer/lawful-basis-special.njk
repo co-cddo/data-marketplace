@@ -6,79 +6,81 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <span class="govuk-caption-l">Request ID: {{requestId}}</span>
-      <form method="POST" id="dataAccessForm">
-        {% set basisHint %}
+      {% set basisHint %}
         <div>
           <p class="govuk-body">Find out more about having a 
             <a target="_blank" class="govuk-link" href="https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/lawful-basis/a-guide-to-lawful-basis/">
             lawful basis for processing special category data (opens in new tab).</a>
           <p class="govuk-body">You may need help from a data protection specialist.</p>
         </div>
-        {% endset %}
-        {{ govukCheckboxes({
+      {% endset %}
+
+      <form method="POST" id="dataAccessForm">
+      {{ govukCheckboxes({
       name: "lawful-basis-special",
       fieldset: {
-          legend: {
-          text: "What is your lawful basis for requesting special category data under UK GDPR?",
-          isPageHeading: true,
-          classes: "govuk-fieldset__legend--l squish-hints"
-          }
+        legend: {
+        text: "What is your lawful basis for requesting special category data under UK GDPR?",
+        isPageHeading: true,
+        classes: "govuk-fieldset__legend--l squish-hints"
+        }
       },
       hint: {
-          html: basisHint
+        html: basisHint
       },
       items: [
-          {
-          value: "reasons-of-public-interest",
-          text: "Reasons of substantial public interest (with a basis in law)",
-          checked: savedValue["reasons-of-public-interest"].checked
-          },
-          {
-          value: "legal-claim-or-judicial-acts",
-          text: "Legal claims or judicial acts",
-          checked: savedValue["legal-claim-or-judicial-acts"].checked
-          },
-          {
-          value: "public-health",
-          text: "Public health (with a basis in law)",
-          checked: savedValue["public-health"].checked
-          },
-          {
-          value: "health-or-social-care",
-          text: "Health or social care (with a basis in law)",
-          checked: savedValue["health-or-social-care"].checked
-          },
-          {
-          value: "social-employment-security-and-protection",
-          text: "Employment, social security and social protection (if authorised by law)",
-          checked: savedValue["social-employment-security-and-protection"].checked
-          },
-          {
-          value: "vital-interests",
-          text: "Vital interests",
-          checked: savedValue["vital-interests"].checked
-          },
-          {
-          value: "explicit-consent",
-          text: "Explicit consent",
-          checked: savedValue["explicit-consent"].checked
-          },
-          {
-          value: "public-by-data-subject",
-          text: "Made public by the data subject",
-          checked: savedValue["public-by-data-subject"].checked
-          },
-          {
-          value: "archiving-researching-statistics",
-          text: "Archiving, research and statistics (with a basis in law)",
-          checked: savedValue["archiving-researching-statistics"].checked
-          },
-          {
-          value: "not-for-profit-bodies",
-          text: "Not-for-profit bodies",
-          checked: savedValue["not-for-profit-bodies"].checked
-          }
-      ]
+        {
+        value: "reasons-of-public-interest",
+        text: "Reasons of substantial public interest (with a basis in law)",
+        checked: savedValue["reasons-of-public-interest"].checked
+        },
+        {
+        value: "legal-claim-or-judicial-acts",
+        text: "Legal claims or judicial acts",
+        checked: savedValue["legal-claim-or-judicial-acts"].checked
+        },
+        {
+        value: "public-health",
+        text: "Public health (with a basis in law)",
+        checked: savedValue["public-health"].checked
+        },
+        {
+        value: "health-or-social-care",
+        text: "Health or social care (with a basis in law)",
+        checked: savedValue["health-or-social-care"].checked
+        },
+        {
+        value: "social-employment-security-and-protection",
+        text: "Employment, social security and social protection (if authorised by law)",
+        checked: savedValue["social-employment-security-and-protection"].checked
+        },
+        {
+        value: "vital-interests",
+        text: "Vital interests",
+        checked: savedValue["vital-interests"].checked
+        },
+        {
+        value: "explicit-consent",
+        text: "Explicit consent",
+        checked: savedValue["explicit-consent"].checked
+        },
+        {
+        value: "public-by-data-subject",
+        text: "Made public by the data subject",
+        checked: savedValue["public-by-data-subject"].checked
+        },
+        {
+        value: "archiving-researching-statistics",
+        text: "Archiving, research and statistics (with a basis in law)",
+        checked: savedValue["archiving-researching-statistics"].checked
+        },
+        {
+        value: "not-for-profit-bodies",
+        text: "Not-for-profit bodies",
+        checked: savedValue["not-for-profit-bodies"].checked
+        }
+      ],
+      errorMessage: errorMessage['lawful-basis-special']
       }) }}
         <div class="govuk-button-group">
           {{ govukButton({

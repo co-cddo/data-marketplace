@@ -16,7 +16,8 @@
           isPageHeading: true
         },
         rows: 5,
-        value: savedValue.aims
+        value: savedValue.aims,
+        errorMessage:  errorMessage.aims
       }) }}
       {{ govukTextarea({
         name: "explanation",
@@ -26,7 +27,9 @@
           classes: "govuk-label--m"
         },
         rows: 5,
-        value: savedValue.explanation
+        value: savedValue.explanation,
+        errorMessage:  errorMessage.explanation
+
       }) }}
       <div class="govuk-button-group">
         {{ govukButton({

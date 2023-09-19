@@ -7,44 +7,44 @@
     <div class="govuk-grid-column-two-thirds">
       <span class="govuk-caption-l">Request ID: {{requestId}}</span>
       <form method="POST" id="dataAccessForm">
-        {{ govukRadios({
-                 name: "data-access",
-                  fieldset: {
-                      legend: {
-                      text: "Will other organisations need access to this data?",
-                      isPageHeading: true,
-                      classes: "govuk-fieldset__legend--l"
-                      }
-                  },
-                  hint: {
-                        text: "For example: this is a joint project with another government department."
-                      },
-                  items: [
-                      {
-                      value: "no",
-                      text: "No, only my organisation needs access",
-                      checked: savedValue === 'no'
-                      },
-                      {
-                      value: "yes",
-                      text: "Yes, we are collaborating with other organisations",
-                      checked: savedValue === 'yes'
-                      }
-                  ],
-                  errorMessage: errorText
-                  }) }}
-          <div class="govuk-button-group">
-            {{ govukButton({
-                text: "Save and continue",
-                name: "continueButton",
-                value: "continue"
-            }) }}
-            {{ govukButton({
-                text: "Save and return",
-                classes: "govuk-button--secondary",
-                name: "returnButton",
-                value: "return"
-            }) }}
+      {{ govukRadios({
+      name: "data-access",
+      fieldset: {
+          legend: {
+          text: "Will other organisations need access to this data?",
+          isPageHeading: true,
+          classes: "govuk-fieldset__legend--l"
+          }
+      },
+      hint: {
+            text: "For example: this is a joint project with another government department."
+          },
+      items: [
+        {
+          value: "no",
+          text: "No, only my organisation needs access",
+          checked: savedValue === 'no'
+        },
+        {
+          value: "yes",
+          text: "Yes, we are collaborating with other organisations",
+          checked: savedValue === 'yes'
+        }
+      ],
+      errorMessage: errorMessage['data-access']
+      }) }}
+        <div class="govuk-button-group">
+          {{ govukButton({
+            text: "Save and continue",
+            name: "continueButton",
+            value: "continue"
+          }) }}
+          {{ govukButton({
+            text: "Save and return",
+            classes: "govuk-button--secondary",
+            name: "returnButton",
+            value: "return"
+          }) }}
         </div>
       </form>
     </div>

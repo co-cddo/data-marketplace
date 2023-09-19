@@ -19,11 +19,11 @@
         {{ govukRadios({
           name: "format",
           fieldset: {
-              legend: {
-              text: "What is your preferred format for this data?",
-              isPageHeading: true,
-              classes: "govuk-fieldset__legend--l"
-              }
+            legend: {
+            text: "What is your preferred format for this data?",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+            }
           },
           items: [
               {
@@ -45,20 +45,20 @@
             }
           }
         ],
-        errorMessage: errorText
+      errorMessage: errorMessage['format']
+      }) }}
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: "Save and continue",
+          name: "continueButton",
+          value: "continue"
         }) }}
-        <div class="govuk-button-group">
-          {{ govukButton({
-              text: "Save and continue",
-              name: "continueButton",
-              value: "continue"
-          }) }}
-          {{ govukButton({
-              text: "Save and return",
-              classes: "govuk-button--secondary",
-              name: "returnButton",
-              value: "return"
-          }) }}
+        {{ govukButton({
+          text: "Save and return",
+          classes: "govuk-button--secondary",
+          name: "returnButton",
+          value: "return"
+        }) }}
       </div>
     </form>
   </div>
