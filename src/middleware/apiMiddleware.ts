@@ -47,7 +47,7 @@ export const shareRequestDetailMiddleware = async (
   }
   try {
     const shareRequestDetailResponse = await axios.get(
-      `${API}/received-requests/${requestId}`,
+      `${API}/manage-shares/received-requests/${requestId}`,
       {
         headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
       },
