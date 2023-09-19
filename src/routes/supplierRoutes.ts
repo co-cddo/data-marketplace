@@ -378,7 +378,7 @@ router.get(
 
     try {
       const requestDetail = await axios.get(
-        `${URL} / received - requests / ${requestId}`,
+        `${URL}/received-requests/${requestId}`,
         {
           headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
         },
@@ -415,7 +415,7 @@ router.post(
   async (req: Request, res: Response) => {
     const requestId = req.params.requestId;
     res.redirect(
-      `/ manage - shares / received - requests / ${requestId} / review - request`,
+      `/manage-shares/received-requests/${requestId}/review-request`,
     );
   },
 );
@@ -440,7 +440,7 @@ router.post(
 
     if (req.body.notes) {
       try {
-        const response = await axios.put(`${URL} / received - requests / ${requestId} / review`, { notes: req.body.notes }, {
+        await axios.put(`${URL}/received-requests/${requestId}/review`, { notes: req.body.notes }, {
           headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
         });
       } catch (error) {
@@ -459,10 +459,10 @@ router.post(
 
     if (req.body.continueButton) {
       return res.redirect(
-        `/ manage - shares / received - requests / ${requestId} / decision`,
+        `/manage-shares/received-requests/${requestId}/decision`,
       );
     } else if (req.body.returnButton) {
-      return res.redirect(`/ manage - shares / received - requests / ${requestId}`);
+      return res.redirect(`/manage-shares/received-requests/${requestId}`);
     }
   },
 );
@@ -491,13 +491,13 @@ router.post(
 
     if (decision === "return") {
       return res.redirect(
-        `/ manage - shares / received - requests / ${requestId} /return -request`,
+        `/ manage-shares/received-requests/${requestId}/return-request`,
       );
     }
 
     if (decision === "approve") {
       return res.redirect(
-        `/ manage - shares / received - requests / ${requestId} /declaration`,
+        `/manage-shares/received-requests/${requestId}/declaration`,
       );
     }
 
