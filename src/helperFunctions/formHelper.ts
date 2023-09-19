@@ -384,7 +384,7 @@ const extractFormData = (stepData: Step, body: RequestBody): StepValue => {
   if (stepData.id === "legal-power") {
     return {
       yes: {
-        explanation: body["legal-power-textarea"] || "",
+        explanation: body["legal-power-input"] || "",
         checked: body["legal-power"] === "yes",
       },
       no: {
@@ -768,7 +768,6 @@ function checkAnswer(formdata: FormData) {
       key: { text: stepData.name },
       value: { html: dataTypeValue.join("") },
     };
-
     if (formdata.status !== "ACCEPTED" && formdata.status !== "REJECTED") {
       rows[stepId].actions = {
         items: [
