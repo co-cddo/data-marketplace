@@ -42,6 +42,7 @@ interface ShareRequestResponse {
   neededBy: string | "UNREQUESTED";
   decisionNotes: string | null;
   decisionDate: string | null;
+  reviewNotes: string | null;
 }
 
 export interface RequestBody {
@@ -223,6 +224,7 @@ declare module "express-serve-static-core" {
   interface Request {
     user: UserData;
     apiKey: string;
+    shareRequest: ShareRequestResponse | null;
   }
 }
 
