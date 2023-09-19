@@ -30,10 +30,9 @@
               {% if details.checked %}
                 <li>{{ replacements['lawful-basis-special'].data[basis] }}</li>
                 {% if basis == 'reasons-of-public-interest'%}
-                  <ul class="govuk-list govuk-list--bullet govuk-body-s caption-color">
+                  <ul class="govuk-list govuk-list--bullet govuk-body-s" >
                     {% for key,val in request.sharedata.steps['lawful-basis-special-public-interest'].value %}
                       {% if val.checked %}
-
                         <li>{{replacements['lawful-basis-special-public-interest'].data[key]}}</li>
                       {% endif %}
                     {% endfor %}
@@ -52,14 +51,21 @@
     </div>
 
     <div class="request-section">
-      <h2 class="govuk-heading-m govuk-!-static-margin-bottom-1">Justification for legal gateway</h2>
-      <div class="govuk-warning-text govuk-!-static-margin-bottom-2"></div>
+      <h2 class="govuk-heading-m">Justification for legal gateway</h2>
       <p class="govuk-body">{{ request.sharedata.steps['legal-gateway'].value.yes.explanation }}</p>
     </div>
 
     <div class="request-section">
       <h2 class="govuk-heading-m">Data travel outside UK</h2>
       <p class="govuk-body">{{ request.sharedata.steps['data-travel'].value | capitalize }}</p>
+      {% if request.sharedata.steps['data-travel'].value == 'yes' %}
+        <p class="govuk-body-s">Countries:</p>
+        <ul class="govuk-list govuk-list--bullet govuk-body-s">
+          {% for country in request.sharedata.steps['data-travel-location'].value %}
+            <li>{{country}}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
     </div>
 
     <div class="request-section">
@@ -79,10 +85,12 @@
 
     <div class="request-section">
       <h2 class="govuk-heading-m">Public benefits of project</h2>
-      <h3 class="govuk-heading-s">Evidence for public service delivery</h3>
-      <p class="govuk-body">{{ request.sharedata.steps.benefits.value['service-delivery'].explanation }}</p>
-      <h3 class="govuk-heading-s">Evidence for decisions which are likely to benefit people in the UK</h3>
-      <p class="govuk-body">{{ request.sharedata.steps.benefits.value['benefit-people'].explanation }}</p>
+      {% for benefit, val in request.sharedata.steps.benefits.value %}
+        {% if val.checked %}
+          <h3 class="govuk-heading-s govuk-!-margin-bottom-1">{{replacements['benefits'].data[benefit]}}</h3>
+          <p class="govuk-body">{{ val.explanation }}</p>
+        {% endif %}
+      {% endfor %}
     </div>
 
     <div class="request-section">
@@ -90,7 +98,7 @@
       <ul class="govuk-list">
         {% for format, details in request.sharedata.steps.format.value %}
           {% if details.checked %}
-            <li class="govuk-!-padding-bottom-3">{{ format |  capitalize }}</li>
+            <li>{{ replacements['format'].data[format] }}</li>
           {% endif %}
         {% endfor %}
       </ul>
@@ -101,7 +109,7 @@
       <ul class="govuk-list">
         {% for method, details in request.sharedata.steps.delivery.value %}
           {% if details.checked %}
-            <li class="govuk-!-padding-bottom-3">{{ method | capitalize }}</li>
+            <li>{{ replacements['delivery'].data[method] }}</li>
           {% endif %}
         {% endfor %}
       </ul>
@@ -109,7 +117,7 @@
 
     <div class="request-section">
       <h2 class="govuk-heading-m">What they think their role is</h2>
-      <p class="govuk-body">{{ request.sharedata.steps.role.value | capitalize }}</p>
+      <p class="govuk-body">{{ replacements['role'].data[request.sharedata.steps.role.value]}}</p>
     </div>
 
     <div class="request-section">
@@ -129,7 +137,11 @@
 
     <div class="request-section">
       <h2 class="govuk-heading-m">When they need it</h2>
-      <p class="govuk-body">{{ request.sharedata.steps.date.formattedValue }}</p>
+      <p class="govuk-body">
+        {% if request.sharedata.steps.date.formattedValue %}
+          {{ request.sharedata.steps.date.formattedValue }}
+        {% else %}Unrequested{% endif %}
+      </p>
     </div>
 
     <div class="request-section">
@@ -137,7 +149,7 @@
       <ul class="govuk-list">
         {% for type, details in request.sharedata.steps['data-type'].value %}
           {% if details.checked %}
-            <li class="govuk-!-padding-bottom-3">{{ type | capitalize }}</li>
+            <li>{{ replacements['data-type'].data[type] }}</li>
           {% endif %}
         {% endfor %}
       </ul>
@@ -148,7 +160,7 @@
       <p class="govuk-body">{{ request.sharedata.steps['data-access'].value | capitalize }}</p>
       {% if request.sharedata.steps['data-access'].value == "yes" %}
         <p class="govuk-body">Organisations:</p>
-        <ul class="govuk-list govuk-list--bullet">
+        <ul class="govuk-list govuk-list--bullet govuk-body-s">
           {% for org in request.sharedata.steps['other-orgs'].value %}
             <li>{{ org }}</li>
           {% endfor %}
@@ -170,7 +182,8 @@
       },
       hint: {
         text: "Do not include personal or financial information, like your National Insurance number or credit card details."
-      }
+      },
+      value: request.reviewNotes
     }) }}
   </div>
 </div>
