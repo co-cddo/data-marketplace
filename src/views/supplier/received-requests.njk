@@ -3,26 +3,28 @@
 {%- from "govuk/components/tag/macro.njk" import govukTag -%}
 
 {% block content %}
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <span class="govuk-caption-l">Manage data share requests</span>
-    <h1 class="govuk-heading-xl">Received requests</h1>
-  </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <span class="govuk-caption-l">Manage data share requests</span>
+            <h1 class="govuk-heading-xl">Received requests</h1>
+        </div>
 
-  <div class="govuk-grid-column-one-third">
-    <aside class="app-related-items">
-        <nav role="navigation" aria-labelledby="subsection-title">
-          <ul class="govuk-list">
-            <li><a href="{{assetPath}}/manage-shares/created-requests" class="govuk-link">View created requests</a></li>
-          </ul>
-        </nav>
-    </aside>
-  </div>
-</div>
+        <div class="govuk-grid-column-one-third">
+            <aside class="app-related-items">
+                <nav role="navigation" aria-labelledby="subsection-title">
+                    <ul class="govuk-list">
+                        <li>
+                            <a href="{{assetPath}}/manage-shares/created-requests" class="govuk-link">View created requests</a>
+                        </li>
+                    </ul>
+                </nav>
+            </aside>
+        </div>
+    </div>
 
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-        {{ govukTable({
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            {{ govukTable({
             caption: "Current requests",
             captionClasses: "govuk-table__caption--l",
             head: [
@@ -45,14 +47,14 @@
                 text: "Status"
             }
             ],
-            rows: receivedTableRows
+            rows: currentRows
         }) }}
-  </div>
-</div>
+        </div>
+    </div>
 
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-    {{ govukTable({
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            {{ govukTable({
         caption: "Completed  requests",
         captionClasses: "govuk-table__caption--l",
         head: [
@@ -75,49 +77,8 @@
             text: "Decision"
         }
         ],
-        rows: [
-        [
-            {
-                html: '<a href="/manage-shares/request-accepted" class="govuk-link">RR147 - View</a>'
-            },
-            {
-            text: "Department for Education"
-            },
-            {
-            text: "Inline-core_reporting-and-location"
-            },
-            {
-            text: "18 Apr 2023"
-            },
-            {
-            text: "2 May 2023"
-            },
-            {
-            text: "Accepted"
-            }
-        ],
-        [
-            {
-                html: '<a href="/manage-shares/request-rejected" class="govuk-link">RR109 - View</a>'
-            },
-            {
-            text: "Department for Education"
-            },
-            {
-            text: "Input-switch_slice3"
-            },
-            {
-            text: "2 Apr 2023"
-            },
-            {
-            text: "2 May 2023"
-            },
-            {
-            text: "Rejected"
-            }
-        ]
-    ]}) }}
-  </div>
-</div>
-  
-{% endblock %} 
+        rows: completedRows}) }}
+        </div>
+    </div>
+
+{% endblock %}
