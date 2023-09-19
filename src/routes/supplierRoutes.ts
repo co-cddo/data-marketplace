@@ -9,6 +9,7 @@ import { checkAnswer } from "../helperFunctions/formHelper";
 import { createAbacMiddleware } from "../middleware/ABACMiddleware";
 import { shareRequestDetailMiddleware } from "../middleware/apiMiddleware";
 import { replace } from "../helperFunctions/checkhelper";
+import { capitalise } from "../helperFunctions/stringHelpers";
 const router = express.Router();
 const URL = `${process.env.API_ENDPOINT}/manage-shares`;
 
@@ -55,7 +56,7 @@ router.get("/", async (req: Request, res: Response) => {
 });
 
 // Function to get the tag class based on the status value
-function getStatusClass(status: string): string {
+function getCreatedRequestStatusClass(status: string): string {
   switch (status) {
     case "NOT STARTED":
       return "govuk-tag--grey";
@@ -66,6 +67,18 @@ function getStatusClass(status: string): string {
     default:
       return "govuk-tag--grey";
   }
+}
+
+const getReceivedRequestStatusClass = (status: string) => {
+  switch (status) {
+    case "AWAITING REVIEW":
+      return "govuk-tag--red";
+    case "IN REVIEW":
+      return "govuk-tag--blue";
+    default:
+      return "govuk-tag--grey";
+  }
+
 }
 
 router.get(
@@ -102,9 +115,8 @@ router.get(
     );
     let pendingRows: ShareRequestTable = pendingRequests.map((r) => [
       {
-        html: `<a href="/acquirer/${
-          r.sharedata.dataAsset
-        }/start">${r.requestId.substring(0, 8)}...</a>`,
+        html: `<a href="/acquirer/${r.sharedata.dataAsset
+          }/start">${r.requestId.substring(0, 8)}...</a>`,
       },
       { text: r.assetTitle },
       { text: r.assetPublisher.title },
@@ -113,9 +125,8 @@ router.get(
           r.neededBy === "UNREQUESTED" ? "Unrequested" : formatDate(r.neededBy),
       },
       {
-        html: `<span class="govuk-tag ${getStatusClass(r.status)}">${
-          r.status
-        }</span>`,
+        html: `<span class="govuk-tag ${getCreatedRequestStatusClass(r.status)}">${r.status
+          }</span>`,
       },
     ]);
     if (pendingRows.length === 0) {
@@ -139,9 +150,8 @@ router.get(
           r.neededBy === "UNREQUESTED" ? "Unrequested" : formatDate(r.neededBy),
       },
       {
-        html: `<span class="govuk-tag ${getStatusClass(r.status)}">${
-          r.status
-        }</span>`,
+        html: `<span class="govuk-tag ${getCreatedRequestStatusClass(r.status)}">${r.status
+          }</span>`,
       },
     ]);
     if (submittedRows.length === 0) {
@@ -155,9 +165,8 @@ router.get(
     );
     let completedRows: ShareRequestTable = completedRequests.map((r) => [
       {
-        html: `<a href="/manage-shares/created-requests/${
-          r.requestId
-        }">${r.requestId.substring(0, 8)}...</a>`,
+        html: `<a href="/manage-shares/created-requests/${r.requestId
+          }">${r.requestId.substring(0, 8)}...</a>`,
       },
       { text: r.assetTitle },
       { text: r.assetPublisher.title },
@@ -167,9 +176,8 @@ router.get(
       },
       { text: formatDate(r.decisionDate as string) },
       {
-        html: `<span class="govuk-tag ${getStatusClass(r.status)}">${
-          r.status
-        }</span>`,
+        html: `<span class="govuk-tag ${getCreatedRequestStatusClass(r.status)}">${r.status
+          }</span>`,
       },
     ]);
     if (completedRows.length === 0) {
@@ -308,9 +316,8 @@ router.get(
     );
     let currentRows: ShareRequestTable = currentRequests.map((r) => [
       {
-        html: `<a href="/manage-shares/received-requests/${
-          r.requestId
-        }">${r.requestId.substring(0, 8)}...</a>`,
+        html: `<a href="/manage-shares/received-requests/${r.requestId
+          }">${r.requestId.substring(0, 8)}...</a>`,
       },
       { text: r.requestingOrg },
       { text: r.assetTitle },
@@ -320,9 +327,8 @@ router.get(
           r.neededBy === "UNREQUESTED" ? "Unrequested" : formatDate(r.neededBy),
       },
       {
-        html: `<span class="govuk-tag ${getStatusClass(r.status)}">${
-          r.status
-        }</span>`,
+        html: `<span class="govuk-tag ${getReceivedRequestStatusClass(r.status)}">${r.status
+          }</span>`,
       },
     ]);
     if (currentRows.length === 0) {
@@ -336,9 +342,8 @@ router.get(
     );
     let completedRows: ShareRequestTable = completedRequests.map((r) => [
       {
-        html: `<a href="/manage-shares/received-requests/${
-          r.requestId
-        }">${r.requestId.substring(0, 8)}...</a>`,
+        html: `<a href="/manage-shares/received-requests/${r.requestId
+          }">${r.requestId.substring(0, 8)}...</a>`,
       },
       { text: r.requestingOrg },
       { text: r.assetTitle },
@@ -347,9 +352,7 @@ router.get(
         text: r.decisionDate ? formatDate(r.decisionDate) : "",
       },
       {
-        html: `<span class="govuk-tag ${getStatusClass(r.status)}">${
-          r.status
-        }</span>`,
+        html: `${capitalise(r.status)}`,
       },
     ]);
     if (completedRows.length === 0) {
@@ -375,7 +378,7 @@ router.get(
 
     try {
       const requestDetail = await axios.get(
-        `${URL}/received-requests/${requestId}`,
+        `${URL} / received - requests / ${requestId}`,
         {
           headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
         },
@@ -412,7 +415,7 @@ router.post(
   async (req: Request, res: Response) => {
     const requestId = req.params.requestId;
     res.redirect(
-      `/manage-shares/received-requests/${requestId}/review-request`,
+      `/ manage - shares / received - requests / ${requestId} / review - request`,
     );
   },
 );
@@ -437,7 +440,7 @@ router.post(
 
     if (req.body.notes) {
       try {
-        const response = await axios.put(`${URL}/received-requests/${requestId}/review`, { notes: req.body.notes }, {
+        const response = await axios.put(`${URL} / received - requests / ${requestId} / review`, { notes: req.body.notes }, {
           headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
         });
       } catch (error) {
@@ -456,10 +459,10 @@ router.post(
 
     if (req.body.continueButton) {
       return res.redirect(
-        `/manage-shares/received-requests/${requestId}/decision`,
+        `/ manage - shares / received - requests / ${requestId} / decision`,
       );
     } else if (req.body.returnButton) {
-      return res.redirect(`/manage-shares/received-requests/${requestId}`);
+      return res.redirect(`/ manage - shares / received - requests / ${requestId}`);
     }
   },
 );
@@ -488,13 +491,13 @@ router.post(
 
     if (decision === "return") {
       return res.redirect(
-        `/manage-shares/received-requests/${requestId}/return-request`,
+        `/ manage - shares / received - requests / ${requestId} /return -request`,
       );
     }
 
     if (decision === "approve") {
       return res.redirect(
-        `/manage-shares/received-requests/${requestId}/declaration`,
+        `/ manage - shares / received - requests / ${requestId} /declaration`,
       );
     }
 
