@@ -287,8 +287,8 @@ function getFormatValidation() {
     .exists()
     .withMessage("Select one option"),
 
-    body('something-else-input')
-    .if(body('format').contains('something-else-input'))
+    body('something-else')
+    .if(body('format').contains('something-else'))
     .notEmpty().withMessage('Enter preferred format of data').escape(),
   ];
 }
