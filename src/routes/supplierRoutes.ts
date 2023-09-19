@@ -452,7 +452,6 @@ router.post(
         } else {
           console.error(error);
         }
-
         return next(error);
       }
     }
@@ -484,27 +483,46 @@ router.get(
 router.post(
   "/received-requests/:requestId/decision",
   reviewRequestAbacMiddleware,
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const requestId = req.params.requestId;
 
     const decision = req.body.decision;
 
-    if (decision === "return") {
-      return res.redirect(
-        `/ manage-shares/received-requests/${requestId}/return-request`,
-      );
-    }
-
     if (decision === "approve") {
+      req.session.decision = { status: "ACCEPTED", notes: req.body.approve }
       return res.redirect(
         `/manage-shares/received-requests/${requestId}/declaration`,
       );
     }
 
+    let status, decisionNotes, redirectUrl;
+
+    if (decision === "return") {
+      status = "RETURNED"
+      decisionNotes = req.body['return-with-comments']
+      redirectUrl = `/manage-shares/received-requests/${requestId}/return-request`
+    }
+
     if (decision === "reject") {
-      return res.redirect(
-        `/manage-shares/received-requests/${requestId}/reject-request`,
-      );
+      status = "REJECTED"
+      decisionNotes = req.body.reject;
+      redirectUrl = `/manage-shares/received-requests/${requestId}/reject-request`;
+    }
+
+    try {
+      await axios.put(`${URL}/received-requests/${requestId}/decision`,
+        { status, decisionNotes },
+        { headers: { Authorization: `Bearer ${req.cookies.jwtToken}` }, });
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error(
+          `API ERROR - ${error.response?.status}: ${error.response?.statusText}`,
+        );
+        console.error(error.response?.data.detail);
+      } else {
+        console.error(error);
+      }
+      return next(error);
     }
 
     return res.redirect("/manage-shares/received-requests");
@@ -516,7 +534,9 @@ router.get(
   reviewRequestAbacMiddleware,
   async (req: Request, res: Response) => {
     const requestId = req.params.requestId;
+    const backLink = `/manage-shares/received-requests/${requestId}/decision`
     res.render("../views/supplier/declaration.njk", {
+      backLink,
       requestId,
     });
   },
@@ -525,8 +545,27 @@ router.get(
 router.post(
   "/received-requests/:requestId/declaration",
   reviewRequestAbacMiddleware,
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const requestId = req.params.requestId;
+
+    try {
+      await axios.put(`${URL}/received-requests/${requestId}/decision`,
+        {
+          status: req.session.decision?.status,
+          decisionNotes: req.session.decision?.notes
+        },
+        { headers: { Authorization: `Bearer ${req.cookies.jwtToken}` }, });
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error(
+          `API ERROR - ${error.response?.status}: ${error.response?.statusText}`,
+        );
+        console.error(error.response?.data.detail);
+      } else {
+        console.error(error);
+      }
+      return next(error);
+    }
 
     if (req.body.acceptButton) {
       return res.redirect(
