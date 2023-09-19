@@ -137,36 +137,48 @@ function getDateValidation() {
 }
 
 function getBenefitsValidation() {
-  return [
-    body("benefits")
-      .exists()
-      .withMessage("Select one or more benefits")
-      .custom((benefitsArray, { req }) => {
-        if (!benefitsArray) {
-          return true;
-        }
+const errorText = "Enter how your project will provide this public benefit"
 
-        if (!Array.isArray(benefitsArray)) {
-          benefitsArray = [benefitsArray];
-        }
+return [
+  body('benefits', 'Please select at least one benefit')
+    .exists()
+    .withMessage('Select one or more benefits'),
+  
+  body('decision-making')
+      .if(body('benefits').contains('decision-making'))
+      .notEmpty().withMessage(errorText).escape(),
+  
+  body('service-delivery')
+      .if(body('benefits').contains('service-delivery'))
+      .notEmpty().withMessage(errorText).escape(),
 
-        const missingExplanations = [];
+  body('benefit-people')
+      .if(body('benefits').contains('benefit-people'))
+      .notEmpty().withMessage(errorText).escape(),
 
-        for (const benefit of benefitsArray) {
-          const explanation = req.body[benefit];
-          if (!explanation || explanation.trim() === "") {
-            missingExplanations.push(benefit);
-          }
-        }
+  body('allocate-and-evaluate-funding')
+      .if(body('benefits').contains('allocate-and-evaluate-funding'))
+      .notEmpty().withMessage(errorText).escape(),
 
-        if (missingExplanations.length > 0) {
-          throw new Error(
-            "Enter how your project will provide the public benefit",
-          );
-        }
+  body('social-economic-trends')
+      .if(body('benefits').contains('social-economic-trends'))
+      .notEmpty().withMessage(errorText).escape(),
 
-        return true;
-      }),
+  body('needs-of-the-public')
+      .if(body('benefits').contains('needs-of-the-public'))
+      .notEmpty().withMessage(errorText).escape(),
+
+  body('statistical-information')
+      .if(body('benefits').contains('statistical-information'))
+      .notEmpty().withMessage(errorText).escape(),
+
+  body('existing-research-or-statistics')
+      .if(body('benefits').contains('existing-research-or-statistics'))
+      .notEmpty().withMessage(errorText).escape(),
+
+  body('something-else')
+      .if(body('benefits').contains('something-else'))
+      .notEmpty().withMessage(errorText).escape()
   ];
 }
 
@@ -174,18 +186,10 @@ function getLegalPowerValidation() {
   return [
     body("legal-power")
       .exists()
-      .withMessage("Select Yes, No or we don’t know")
-      .custom((value, { req }) => {
-        if (value === "yes") {
-          if (
-            !req.body["legal-power-input"] ||
-            req.body["legal-power-input"].trim() === ""
-          ) {
-            throw new Error("Enter the legal power");
-          }
-        }
-        return true;
-      }),
+      .withMessage("Select Yes, No or we don’t know"),
+    body('legal-power-input')
+      .if(body('legal-power').contains('yes'))
+      .notEmpty().withMessage('Enter the legal power').escape(),
   ];
 }
 
@@ -193,22 +197,13 @@ function getLegalGatewayValidation() {
   return [
     body("legal-gateway")
       .exists()
-      .withMessage("Select Yes, No or we don’t know")
-      .custom((value, { req }) => {
-        if (
-          value === "yes" &&
-          (!req.body["yes"] || req.body["yes"].trim() === "")
-        ) {
-          throw new Error("Enter the legal gateway for acquiring this data");
-        }
-        if (
-          value === "other" &&
-          (!req.body["other"] || req.body["other"].trim() === "")
-        ) {
-          throw new Error("Enter the other legal grounds that you have for acquiring this data");
-        }
-        return true;
-      }),
+      .withMessage("Select Yes, No or we don’t know"),
+    body('yes')
+      .if(body('legal-gateway').contains('yes'))
+      .notEmpty().withMessage('Enter the legal gateway for acquiring this data').escape(),
+    body('other')
+      .if(body('legal-gateway').contains('other'))
+      .notEmpty().withMessage('Enter the other legal grounds that you have for acquiring this data').escape(),
   ];
 }
 
@@ -290,18 +285,11 @@ function getFormatValidation() {
   return [
     body("format")
     .exists()
-    .withMessage("Select one option")
-    .custom((value, { req }) => {
-      if (value === "something") {
-        if (
-          !req.body["something-else"] ||
-          req.body["something-else"].trim() === ""
-        ) {
-          throw new Error("Enter preferred format of data");
-        }
-      }
-      return true;
-    }),
+    .withMessage("Select one option"),
+
+    body('something-else-input')
+    .if(body('format').contains('something-else-input'))
+    .notEmpty().withMessage('Enter preferred format of data').escape(),
   ];
 }
 
