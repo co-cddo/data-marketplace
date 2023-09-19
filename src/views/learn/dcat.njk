@@ -1,0 +1,87 @@
+{% extends "page.njk" %}
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">Using metadata to describe data assets in a data catalogue</h1>
+    <ul class="govuk-list govuk-!-margin-bottom-7">
+      <li>Collection: <a class="govuk-link" href="https://www.gov.uk/government/collections/metadata-standards-for-sharing-and-publishing-data">Metadata standards for sharing and publishing data</a></li>
+      <li>Author: Emanuel Silva</li>
+      <li>Status: Under review</li>
+    </ul>
+    <aside class="content-container" role="complementary">
+      <nav aria-label="Pages in this guide" class="contents-list" role="navigation">
+        <h2 class="contents-list__title govuk-body-s">
+          Contents
+        </h2>
+        <ol class="contents-list__list">
+          <li class="contents-list__list-item contents-list__list-item--dashed contents-list__list-item--active govuk-body-s " aria-current="true">
+            Overview
+          </li>
+          <li class="contents-list__list-item contents-list__list-item--dashed">
+            <a href="#summary-of-the-standards-use-for-government" class="contents-list__link govuk-link">1. Summary of the standard’s use for government</a>
+          </li>
+          <li class="contents-list__list-item contents-list__list-item--dashed">
+            <a href="#how-this-standard-meets-user-needs" class="contents-list__link govuk-link">2. How this standard meets user needs</a>
+          </li>
+          <li class="contents-list__list-item contents-list__list-item--dashed">
+            <a href="#how-to-use-the-standard" class="contents-list__link govuk-link">3. How to use the standard</a>
+          </li>
+          <li class="contents-list__list-item contents-list__list-item--dashed">
+            <a href="#when-not-to-use-this-standard" class="contents-list__link govuk-link">3.1 When not to use this standard</a>
+          </li>
+        </ol>
+      </nav>
+      <hr class="govuk-section-break govuk-section-break--visible">
+    </aside>
+    <h2 class="govuk-heading-l">Overview</h2>
+    <p class="govuk-body">Use the <a class="govuk-link" href="https://www.w3.org/TR/vocab-dcat-3/">Data Catalogue Vocabulary (DCAT) - Version 3</a> when you describe datasets designated as <a class="govuk-link" href="./esda">Essential Shared Data Assets (ESDAs)</a>, which will be published in the Government Data Marketplace and be discoverable through the Government Data Catalogue.</p>
+    <h2 class="govuk-heading-l" id="summary-of-the-standards-use-for-government">1. Summary of the standard’s use for government</h2>
+    <p class="govuk-body">The Data Catalogue Vocabulary (DCAT) builds upon and uses the <a class="govuk-link" href="https://www.dublincore.org/schemas/">Dublin Core schema</a> as a foundation to make datasets easier to catalogue and for these to be discovered in data catalogues. </p>
+    <p class="govuk-body">DCAT is an <a class="govuk-link" href="https://www.w3.org/2001/sw/RDFCore/Schema/200212bwm/#:~:text=RDF%20vocabularies%20can%20describe%20relationships,class%20defined%20in%20another%20namespace.">RDF vocabulary</a> specifically designed to facilitate interoperability between data catalogues published on the Web. It is already in use in UK Government data portals such as <a class="govuk-link" href="https://guidance.data.gov.uk/publish_and_manage_data/harvest_or_add_data/harvest_data/dcat/#accepted-dcat-and-data-json-fields">data.gov.uk</a> as well as data portals in other jurisdictions. Given its widespread use and international recognition and interoperability it has been endorsed by the <a class="govuk-link" href="https://www.gov.uk/government/groups/data-standards-authority">Data Standards Authority</a> to be used when connecting departmental catalogues to the central Government Data Catalogue. </p>
+    <p class="govuk-body">DCAT application profiles are used widely within domains of practice to increase interoperability by specifying an agreement on the DCAT properties to use such as the StatDCAT-AP for statistical data. DCAT can be used in conjunction with other open standards such as the <a class="govuk-link" href="https://www.w3.org/TR/vocab-dqv/">Data Quality Vocabulary (DQV)</a>.</p>
+    <p class="govuk-body">This standard supports the implementation of the <a class="govuk-link" href="https://co-cddo.github.io/ukgov-metadata-exchange-model/">Cross-Government Metadata Requirements Specification</a>.</p>
+    <h2 class="govuk-heading-l" id="how-this-standard-meets-user-needs">2. How this standard meets user needs</h2>
+    <p class="govuk-body">You should use DCAT if you’re a government worker who creates, maintains and shares <a class="govuk-link" href="./esda">Essential Shared Data Assets</a> used within government. For example, you:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>produce or publish datasets which enable the delivery of public services</li>
+      <li>use these datasets to carry out data analysis, inform policy design or build government digital services</li>
+      <li>ingest, maintain or otherwise consume the underlying metadata for these datasets in a range of data cataloguing solutions or metadata repositories</li>
+    </ul>
+    <p class="govuk-body">This standard meets the need for consistency and context when sharing data across government.</p>
+    <p class="govuk-body">Using the Data Catalogue Vocabulary will:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>help metadata users describe datasets in a consistent, standardised manner</li>
+      <li>enable data catalogue owners / maintainers ensure the right information (i.e. metadata) is recorded when publishing or acquiring datasets shared across government</li>
+      <li>make it easier for users to find the data they need</li>
+    </ul>
+    <h2 class="govuk-heading-l" id="how-to-use-the-standard">3. How to use the standard</h2>
+    <p class="govuk-body">For information about starting to use DCAT, you can read the guidance in ‘<a class="govuk-link" href="./esda">Record key information about Essential Shared Data Assets</a>’. It recommends using the DCAT attributes contained in the <a href="https://co-cddo.github.io/ukgov-metadata-exchange-model/">Cross-Government Metadata Requirements Specification</a> which are further described in the <a class="govuk-link" href="https://co-cddo.github.io/ukgov-metadata-exchange-model/">Cross-Government Metadata Exchange Model</a>. </p>
+    <p class="govuk-body">If you need further properties, classes, data types, and vocabulary encoding schemes for greater specificity and granularity when sharing within government, you can use the full <a class="govuk-link" href="https://www.w3.org/TR/vocab-dcat-3/">Data Catalogue Vocabulary</a> or refer to the <a class="govuk-link" href="https://www.dublincore.org/specifications/dublin-core/dcmi-terms/">Dublin Core Metadata Element Set</a>.</p>
+    <h3 class="govuk-heading-m" id="when-not-to-use-this-standard">3.1 When not to use this standard</h3>
+    <p class="govuk-body">You should not use DCAT if you’re:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>describing how to format data in a specific file - use the <a class="govuk-link" href="https://www.gov.uk/government/publications/recommended-open-standards-for-government/tabular-data-standard">RFC 4180</a> and <a class="govuk-link" href="https://www.gov.uk/government/publications/recommended-open-standards-for-government/using-metadata-to-describe-csv-data">CSV on the Web standards</a></li>
+      <li>creating and managing geographic data - use documentation in <a class="govuk-link" href="https://guidance.data.gov.uk/publish_and_manage_data/harvest_or_add_data/inspire/">INSPIRE</a>, specifically the section on GEMINI</li>
+    </ul>
+  </div>
+</div>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full govuk-!-margin-top-8">
+    <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
+  </div>
+  <div class="govuk-grid-column-one-half-from-desktop">
+    <h2 id="community" class="govuk-heading-m">Learn</h2>
+    <p class="govuk-body">
+      <a class="govuk-link" href="/learn">Find information to help you</a> with the data marketplace.
+      <br>
+      For example: a glossary, or the UK Cross-Government Metadata Exchange model.
+    </p>
+  </div>
+  <div class="govuk-grid-column-one-half-from-desktop">
+    <h2 id="support" class="govuk-heading-m">Contact Data Marketplace Team</h2>
+    <p class="govuk-body">
+      <a class="govuk-link" href="#1">Contact the team</a> if you have a question, suggestion or idea. We’d love to hear from you.
+    </p>
+  </div>
+</div>
+{% endblock %}

@@ -42,6 +42,10 @@ router.get("/articles/metadata-model", async (req: Request, res: Response) => {
   res.render("../views/learn/metadata-model.njk");
 });
 
+router.get("/articles/dcat", async (req: Request, res: Response) => {
+  res.render("../views/learn/dcat.njk");
+});
+
 router.get("/adding-a-CSV-file", async (req: Request, res: Response) => {
   res.render("../views/learn/adding-a-CSV-file.njk");
 });
