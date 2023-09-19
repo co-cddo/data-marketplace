@@ -29,7 +29,7 @@ PUT {{API}}/users/complete-profile
 Authorization: {{jwt}}
 
 {
-    "org": "department-for-work-pensions",
+    "org": "ofsted",
     "role": "lawyer"
 }
 
@@ -62,12 +62,12 @@ PUT {{API}}/manage-shares/received-requests/{{request_id}}/decision
 Authorization: {{jwt}}
 
 {
-    "status": "REJECTED",
+    "status": "RETURNED",
     "decisionNotes": "This is not Ok"
 }
 
 ### Add user permissions
-PUT {{API}}/users/b64c6e5a9861aa120c06caac1f2dfc3d/permissions
+PUT {{API}}/users/{{user}}/permissions
 x-api-key: {{ops-api-key}}
 
 {
