@@ -258,10 +258,14 @@ function getProtectionReviewValidation() {
 function getDeliveryValidation() {
   return [
     body("delivery")
-      .exists()
-      .withMessage(
-        "Select Through secure third-party software, Physical delivery or Something else",
-      ),
+    .exists()
+    .withMessage("Select Through secure third-party software, Physical delivery or Something else"),
+    
+    body("something-else")
+    .if(body("delivery").contains('something'))
+    .notEmpty()
+    .withMessage("How would you like to receive the data")
+    .escape(),
   ];
 }
 
@@ -270,7 +274,7 @@ function getFormatValidation() {
     body("format").exists().withMessage("Select one option"),
 
     body("something-else")
-      .if(body("format").contains("something-else"))
+      .if(body("format").contains("something"))
       .notEmpty()
       .withMessage("Enter preferred format of data")
       .escape(),
