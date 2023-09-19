@@ -432,15 +432,34 @@ router.get(
 router.post(
   "/received-requests/:requestId/review-request",
   reviewRequestAbacMiddleware,
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const requestId = req.params.requestId;
+
+    if (req.body.notes) {
+      try {
+        const response = await axios.put(`${URL}/received-requests/${requestId}/review`, { notes: req.body.notes }, {
+          headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
+        });
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          console.error(
+            `API ERROR - ${error.response?.status}: ${error.response?.statusText}`,
+          );
+          console.error(error.response?.data.detail);
+        } else {
+          console.error(error);
+        }
+
+        return next(error);
+      }
+    }
 
     if (req.body.continueButton) {
       return res.redirect(
         `/manage-shares/received-requests/${requestId}/decision`,
       );
     } else if (req.body.returnButton) {
-      return res.redirect("/manage-shares/review-summary");
+      return res.redirect(`/manage-shares/received-requests/${requestId}`);
     }
   },
 );

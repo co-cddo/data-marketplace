@@ -170,41 +170,38 @@
   </div>
 </div>
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    {{ govukTextarea({
-      name: "request-notes",
-      id: "request-notes",
+<div class="request-section ">
+  <div class="govuk-grid-row govuk-!-margin-top-4">
+    <div class="govuk-grid-column-two-thirds">
+      <form method="POST" id="reviewNotesForm">
+        {{ govukTextarea({
+      name: "notes",
+      id: "notes",
       label: {
         text: "Notes (not shared with " + request.requestingOrg + ")",
         classes: "govuk-label--l",
-        isPageHeading: true
+        isPageHeading: false
       },
       hint: {
         text: "Do not include personal or financial information, like your National Insurance number or credit card details."
       },
       value: request.reviewNotes
     }) }}
-  </div>
-</div>
-<div class="govuk-grid-row" style="margin-top: 3em;">
-  <div class="govuk-grid-column-two-thirds">
-    <form method="post" action="/manage-shares/received-requests/{{ request.requestId }}/review-request">
-      {{ govukButton({
+
+        {{ govukButton({
         text: "Continue",
         name: "continueButton",
         value: "continue"
       }) }}
-      {{ govukButton({
+        {{ govukButton({
         text: "Return to summary",
         name: "returnButton",
         value: "return",
         classes: "govuk-button--secondary"
       }) }}
-    </form>
+      </form>
+    </div>
   </div>
-</div>
-
 </div>
 
 {% endblock %}
