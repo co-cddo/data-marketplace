@@ -39,7 +39,7 @@ router.get("/metadata-model", async (req: Request, res: Response) => {
   res.render("../views/learn/metadata-model.njk");
 });
 
-router.get("/articles/dcat", async (req: Request, res: Response) => {
+router.get("/dcat", async (req: Request, res: Response) => {
   res.render("../views/learn/dcat.njk");
 });
 
