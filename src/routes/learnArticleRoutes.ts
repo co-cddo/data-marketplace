@@ -16,9 +16,23 @@ router.get(
   },
 );
 
-router.get("/data-sharing-questions", async (req: Request, res: Response) => {
-  res.render("../views/learn/data-sharing-questions.njk");
-});
+router.get(
+  "/data-sharing-questions",
+  async (req: Request, res: Response) => {
+    const backLink = req.session.backLink || "/";
+    req.session.backLink = req.originalUrl;
+
+    const resourceDetails = req.session.resourceDetails || {
+      resourceTitle: "the data asset",
+      organisationTitle: "the data asset publisher",
+    };
+
+    res.render("../views/learn/data-sharing-questions.njk", {
+      backLink,
+      ...resourceDetails,
+    });
+  },
+);
 
 router.get(
   "/publish-data-descriptions-questions",
