@@ -493,6 +493,8 @@ router.post(
     const decision = req.body.decision;
 
     if (decision === "approve") {
+      // This needs to be stored in the session so that we can access it again
+      // after the Declaration page:
       req.session.decision = { status: "ACCEPTED", notes: req.body.approve };
       return res.redirect(
         `/manage-shares/received-requests/${requestId}/declaration`,
