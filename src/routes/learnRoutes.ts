@@ -5,7 +5,7 @@ router.get("/", async (req: Request, res: Response) => {
   res.render("../views/learn/main.njk");
 });
 
-router.get("/glossary", async (req: Request, res: Response) => {
+router.get("/articles/glossary", async (req: Request, res: Response) => {
   res.render("../views/learn/glossary.njk");
 });
 

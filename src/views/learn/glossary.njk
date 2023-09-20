@@ -1,191 +1,426 @@
 {% extends "page.njk" %}
 
 {% block content %}
-    {% markdown %}
-        # Glossary
-        A
-
-        **accessRights**, A rights statement that concerns how the distribution is accessed. Information about who can access the resource or an indication of its security status.
-
-        **accessService**, A data service that gives access to the distribution of the dataset.
-
-        **Acquirer**, The person, team or department requesting access to the data asset.
-
-        **alternativeTitle**, An alternative name for a resource.
-
-        B
-
-        **byteSize**, The size of the distribution in bytes.
-
-        C
-
-        **Commercial (security status)**, Data resources marked Commercial are only available under certain conditions. You will need to check with the supplier.
-
-        **contactName**, The team name.
-
-        **contactPoint**, Relevant contact information for a cataloged resource. 
-
-        **Created requests**, View pending, submitted and completed requests to access data owned by others.
-
-        **creator**, The entity responsible for producing the resource.
-
-        D
-
-        **Data Asset**, Either a dataset or data service.
-
-        **Data Catalog**, A curated collection of metadata about resources (data assets).
-
-        **Data Governance**, How data is managed according to the organisation’s policies. It covers the lifecycle of data from how it is gathered, processed, stored, and disposed of.
-
-        **Data Marketplace**, A place for people who work in government organisations, agencies and public bodies to share data.
-
-        **Data Properties**, Information about the data. Also called Attributes.
-
-        **Data Record**, Information based on the data asset.
-
-        **Data Schema**, The structure of the data, e.g. the table names, column names, and type definitions.
-
-        **Data Service**, A collection of operations that provides access to one or more datasets or data processing functions.
-
-        **Data Subjects**, An identified or identifiable living individual.
-
-        **Dataset**, A collection of data, published or curated by a single agent and available for access or download in one or more representations.
-
-        **Dataset series**, A collection of datasets that are published separately, but share some characteristics that group them.
-
-        **DCAT (Data Catalog Vocabulary)**, A list of terms enabling a publisher to describe datasets and data services in a catalog using a standard model and vocabulary that facilitates the consumption and aggregation of metadata from multiple catalogs.
-
-        **description**, A free–text account of the resource.
-
-        **Distribution**, A specific representation of a dataset. A dataset might be available in multiple serialisations that may differ in various ways, including natural language, level of detail or profiles (which might specify any or all of the above)., media–type or format, schematic organisation, temporal and spatial resolution.
-
-        **downloadURL**, The URL of the downloadable file in a given format. For example, CSV file or RDF file. The format is indicated by the distribution's dcterms:format and/or dcat:mediaType.
-
-        E
-
-        **email**, The team email address.
-
-        **endDate**, The end of a period.
-
-        **endpointDescription**, A description of the services available via the end–points, including their operations and parameters.
-
-        **endpointURL**, The root location or primary endpoint of the service (a Web–resolvable IRI).
-        Event, A notification service.
-
-        H
-
-        homepage, A homepage of the catalog (a public web document usually available in HTML).
-
-        I
-
-        **identifier**, A unique identifier of the resource being described or cataloged.
-
-        **importedBy**, An entity responsible for importing the data.
-
-        **importedFrom**, The original source of imported information.
-
-        **importedOn**, The date a resource was imported from a source.
-
-        **Internal (security status)**, Data resources marked Internal are only available to internal government users.
-
-        **issued**, Date of formal issuance of the resource. For example, the date of listing (formal recording) of the corresponding dataset or service in the catalog.
-
-        K
-
-        **keyword**, A keyword or tag describing a resource.
-
-        L
-
-        **lastRefreshedOn**, The date of the last re–import of the resource.
-
-        **Lawful basis** (must be one of 6 reasons): 
-
-        1. Consent
-        2. Contract
-        3. Legal obligation
-        4. Vital interests
-        5. Public task
-        6. Legitimate interests 
-
-        The ICO provides an online tool to help you choose the correct lawful basis for your purpose: <https://ico.org.uk/for–organisations/uk–gdpr–guidance–and–resources/lawful–basis/lawful–basis–interactive–guidance–tool/>
-
-        **Learn**, Find information to help you get the most out the Data Marketplace.
-
-        **Legal gateway**, A method allowing specified public authorities to share data with each other. Usually outlined in jointly agreed documents such as: a memorandum of understanding (MOU), a partnership agreement, a protocol, a statement of practice, or a code of practice.
-
-        **Legal knowledge**, Someone within the team or organisation with legal knowledge or expertise.
-
-        **Legal power**, When deciding whether you may proceed with any data sharing initiative, you should identify and document the law that is relevant to you. See <https://ico.org.uk/for–organisations/uk–gdpr–guidance–and–resources/data–sharing/data–sharing–a–code–of–practice/lawfulness/#legalpower>
-
-        **Licence**, A legal document under which the resource is made available.
-
-        M
-
-        **mediaType**, The media type of the distribution as defined by IANA .
-
-        **Metadata**, A set of data that describes and gives information about other data. For example, this could be the name and description of an API that lets someone access some other data. Also known as Data description. See <https://dds-e2e.herokuapp.com/WIP/learn/articles/metadata-model> for more details.
-
-        **modified**, The most recent date the resource was changed, updated or modified.
-
-        O
-
-        **Official (security classification)**, The Official classification covers most of the day–to–day business of government, commercial activity and policy development. Resources with this classification can be added to the Data Marketplace.
-
-        **Open (security status)**, Data resources marked Open are available to any user.
-
-        **Owner**, The person, team or department responsible for the resource.
-
-        P
-
-        **Personal data**, Information relating to an identified or identifiable natural person.
-
-        **Publish data descriptions**, Publish a description of your data assets so they can be found by other government organisations.
-
-        **Publisher**, The person, team or department responsible for adding a data description (metadata) to the Data Marketplace.
-
-        R
-
-        **Received requests**, View current and completed requests which are managed by your department.
-
-        **Related Resource**, A resource with an unspecified relationship to the cataloged resource.
-
-        **Request ID**, A unique reference number given to each data asset request.
-
-        **REST** (Representational state transfer), An architecture style for implementing a web service.
-
-        S
-
-        **Secret (security classification)**, Very sensitive information that requires enhanced protective controls, including the use of secure networks on secured dedicated physical infrastructure and appropriately defined and implemented boundary security controls, suitable to defend against highly capable and determined threat actors, whereby a compromise could threaten life (an individual or group), seriously damage the UK’s security and/or international relations, its financial security/stability or impede its ability to investigate serious and organised crime. Resources with this classification are not expected to be shared in the Data Marketplace.
-
-        **securityClassification**, An information security designation that identifies the minimum level of protection assigned to an information resource.
-
-        **servesData**, A collection of data that a data service can distribute.
-
-        **serviceStatus**, The status of the resource in the context of a particular workflow process.
-
-        **serviceType**, The nature or genre of a resource.
-
-        **SOAP** (Simple Object Access Protocol), an XML based protocol for sending messages between Web Services.
-
-        **Special category data**, More sensitive than personal data giving them extra protection, for example biometric and health data.
-
-        **startDate**, The start of a period.
-
-        **summary**, A description of the subject resource.
-
-        **Supplier**, The person, team or department providing the data asset.
-
-        T
-
-        **theme**, A main category of a resource. A resource can have multiple themes.
-
-        **Top secret (security classification)**, Exceptionally sensitive information assets that directly support or inform the national security of the UK or its allies AND require an extremely high assurance of protection from all threats with the use of secure networks on highly secured dedicated physical infrastructure, and robustly defined and implemented boundary security controls. Resources with this classification are not expected to be shared in the Data Marketplace.
-
-        V
-
-        **version**, The version indicator (name or identifier) of a resource.
-        Glossary.txt
-        Displaying Glossary.txt.
-        
-    {% endmarkdown %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">Glossary</h1>
+    </div>
+    </div>
+    <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds govuk-!-margin-bottom-6"> <!-- Add class if using gov.uk guide elements govuk-!-margin-top-6 --> 
+        <table class="govuk-table">
+        <caption class="govuk-table__caption govuk-table__caption--l">A</caption>
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">accessRights</th>
+            <td class="govuk-table__cell">A rights statement that concerns how the distribution is accessed. Information about who can access the resource or an indication of its security status.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">accessService</th>
+            <td class="govuk-table__cell">A data service that gives access to the distribution of the dataset.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Acquirer</th>
+            <td class="govuk-table__cell">The person, team or department requesting access to the data asset.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">alternativeTitle</th>
+            <td class="govuk-table__cell">An alternative name for a resource.</td>
+            </tr> 
+        </tbody>
+        </table>
+        <br>
+        <table class="govuk-table">
+        <caption class="govuk-table__caption govuk-table__caption--l">B</caption>
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">byteSize</th>
+            <td class="govuk-table__cell">The size of the distribution in bytes.</td>
+            </tr>
+        </tbody>
+        </table>
+        <br>
+        <table class="govuk-table">
+        <caption class="govuk-table__caption govuk-table__caption--l">C</caption>
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Commercial (security status)</th>
+            <td class="govuk-table__cell">Data resources marked Commercial are only available under certain conditions. You will need to check with the supplier.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">contactName</th>
+            <td class="govuk-table__cell">The team name.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">contactPoint</th>
+            <td class="govuk-table__cell">Relevant contact information for a cataloged resource. </td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Created requests</th>
+            <td class="govuk-table__cell">View pending, submitted and completed requests to access data owned by others.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">creator</th>
+            <td class="govuk-table__cell">The entity responsible for producing the resource.</td>
+            </tr>
+        </tbody>
+        </table>
+        <br>
+        <table class="govuk-table">
+        <caption class="govuk-table__caption govuk-table__caption--l">D</caption>
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Data Asset</th>
+            <td class="govuk-table__cell">Either a dataset or data service.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Data Catalog</th>
+            <td class="govuk-table__cell">A curated collection of metadata about resources (data assets).</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Data Governance</th>
+            <td class="govuk-table__cell">How data is managed according to the organisation’s policies. It covers the lifecycle of data from how it is gathered, processed, stored, and disposed of.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Data Marketplace</th>
+            <td class="govuk-table__cell">A place for people who work in government organisations, agencies and public bodies to share data.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Data Properties</th>
+            <td class="govuk-table__cell">Information about the data. Also called Attributes.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Data Record</th>
+            <td class="govuk-table__cell">Information based on the data asset.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Data Schema</th>
+            <td class="govuk-table__cell">The structure of the data, e.g. the table names, column names, and type definitions.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Data Service</th>
+            <td class="govuk-table__cell">A collection of operations that provides access to one or more datasets or data processing functions.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Data Subjects</th>
+            <td class="govuk-table__cell">An identified or identifiable living individual.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Dataset</th>
+            <td class="govuk-table__cell">A collection of data, published or curated by a single agent and available for access or download in one or more representations.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Dataset series</th>
+            <td class="govuk-table__cell">A collection of datasets that are published separately, but share some characteristics that group them.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">DCAT (Data Catalog Vocabulary)</th>
+            <td class="govuk-table__cell">A list of terms enabling a publisher to describe datasets and data services in a catalog using a standard model and vocabulary that facilitates the consumption and aggregation of metadata from multiple catalogs.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">description</th>
+            <td class="govuk-table__cell">A free–text account of the resource.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Distribution</th>
+            <td class="govuk-table__cell">A specific representation of a dataset. A dataset might be available in multiple serialisations that may differ in various ways, including natural language, level of detail or profiles (which might specify any or all of the above)., media–type or format, schematic organisation, temporal and spatial resolution.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">downloadURL</th>
+            <td class="govuk-table__cell">The URL of the downloadable file in a given format. For example, CSV file or RDF file. The format is indicated by the distribution's dcterms:format and/or dcat:mediaType.</td>
+            </tr>
+        </tbody>
+        </table>
+        <br>
+        <table class="govuk-table">
+        <caption class="govuk-table__caption govuk-table__caption--l">E</caption>
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">email</th>
+            <td class="govuk-table__cell">The team email address.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">endDate</th>
+            <td class="govuk-table__cell">The end of a period.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">endpointDescription</th>
+            <td class="govuk-table__cell">A description of the services available via the end–points, including their operations and parameters.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">endpointURL</th>
+            <td class="govuk-table__cell">The root location or primary endpoint of the service (a Web–resolvable IRI).</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Event</th>
+            <td class="govuk-table__cell">A notification service.</td>
+            </tr>
+        </tbody>
+        </table>
+        <br>
+        <table class="govuk-table">
+        <caption class="govuk-table__caption govuk-table__caption--l">H</caption>
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">homepage</th>
+            <td class="govuk-table__cell">A homepage of the catalog (a public web document usually available in HTML).</td>
+            </tr>
+        </tbody>
+        </table>
+        <br>
+        <table class="govuk-table">
+        <caption class="govuk-table__caption govuk-table__caption--l">I</caption>
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">identifier</th>
+            <td class="govuk-table__cell">A unique identifier of the resource being described or cataloged.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">importedBy</th>
+            <td class="govuk-table__cell">An entity responsible for importing the data.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">importedFrom</th>
+            <td class="govuk-table__cell">The original source of imported information.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">importedOn</th>
+            <td class="govuk-table__cell">The date a resource was imported from a source.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Internal (security status)</th>
+            <td class="govuk-table__cell">Data resources marked Internal are only available to internal government users.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">issued</th>
+            <td class="govuk-table__cell">Date of formal issuance of the resource. For example, the date of listing (formal recording) of the corresponding dataset or service in the catalog.</td>
+            </tr>
+        </tbody>
+        </table>
+        <br>
+        <table class="govuk-table">
+        <caption class="govuk-table__caption govuk-table__caption--l">K</caption>
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">keyword</th>
+            <td class="govuk-table__cell">A keyword or tag describing a resource.</td>
+            </tr>
+        </tbody>
+        </table>
+        <br>
+        <table class="govuk-table">
+        <caption class="govuk-table__caption govuk-table__caption--l">L</caption>
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">lastRefreshedOn</th>
+            <td class="govuk-table__cell">The date of the last re–import of the resource.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Lawful basis</th>
+            <td class="govuk-table__cell">
+                <p>Must be one of 6 reasons:</p>
+                <ol>
+                <li>Consent</li>
+                <li>Contract</li>
+                <li>Legal obligation</li>
+                <li>Vital interests</li>
+                <li>Public task</li>
+                <li>Legitimate interests </li>
+                </ol>
+                <p class="govuk-body govuk-!-margin-bottom-0">The ICO provides <a class="govuk-link" href="https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/lawful-basis/lawful-basis-interactive-guidance-tool/">an online tool</a> to help you choose the correct lawful basis for your purpose.</p>
+            </td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Learn</th>
+            <td class="govuk-table__cell">Find information to help you get the most out the Data Marketplace.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Legal gateway</th>
+            <td class="govuk-table__cell">A method allowing specified public authorities to share data with each other. Usually outlined in jointly agreed documents such as: a memorandum of understanding (MOU), a partnership agreement, a protocol, a statement of practice, or a code of practice.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Legal knowledge</th>
+            <td class="govuk-table__cell">Someone within the team or organisation with legal knowledge or expertise.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Legal power</th>
+            <td class="govuk-table__cell">
+                <p>When deciding whether you may proceed with any data sharing initiative, you should identify and document the law that is relevant to you.</p>
+                <p class="govuk-body govuk-!-margin-bottom-0">See <a class="govuk-link" href="https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/data-sharing/data-sharing-a-code-of-practice/lawfulness/">the guide to lawfulness</a> on the ICO website.</p></td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Licence</th>
+            <td class="govuk-table__cell">A legal document under which the resource is made available.</td>
+            </tr>
+        </tbody>
+        </table>
+        <br>
+        <table class="govuk-table">
+        <caption class="govuk-table__caption govuk-table__caption--l">M</caption>
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">mediaType</th>
+            <td class="govuk-table__cell">The media type of the distribution as defined by IANA.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Metadata</th>
+            <td class="govuk-table__cell">
+                <p>A set of data that describes and gives information about other data. For example, this could be the name and description of an API that lets someone access some other data. Also known as Data description.</p><p>
+                </p><p class="govuk-body govuk-!-margin-bottom-0"><a class="govuk-link" href="https://dds-e2e.herokuapp.com/WIP/learn/articles/metadata-model">See the Metadata sharing requirements</a> for more information.</p></td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">modified</th>
+            <td class="govuk-table__cell">The most recent date the resource was changed, updated or modified.</td>
+            </tr>
+        </tbody>
+        </table>
+        <br>
+        <table class="govuk-table">
+        <caption class="govuk-table__caption govuk-table__caption--l">O</caption>
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Official (security classification)</th>
+            <td class="govuk-table__cell">The Official classification covers most of the day–to–day business of government, commercial activity and policy development. Resources with this classification can be added to the Data Marketplace.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Open (security status)</th>
+            <td class="govuk-table__cell">Data resources marked Open are available to any user.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Owner</th>
+            <td class="govuk-table__cell">The person, team or department responsible for the resource.</td>
+            </tr>
+        </tbody>
+        </table>
+        <br>
+        <table class="govuk-table">
+        <caption class="govuk-table__caption govuk-table__caption--l">P</caption>
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Personal data</th>
+            <td class="govuk-table__cell">Information relating to an identified or identifiable natural person.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Publish data descriptions</th>
+            <td class="govuk-table__cell">Publish a description of your data assets so they can be found by other government organisations.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Publisher</th>
+            <td class="govuk-table__cell">The person, team or department responsible for adding a data description (metadata) to the Data Marketplace.</td>
+            </tr>
+        </tbody>
+        </table>
+        <br>
+        <table class="govuk-table">
+        <caption class="govuk-table__caption govuk-table__caption--l">R</caption>
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Received requests</th>
+            <td class="govuk-table__cell">View current and completed requests which are managed by your department.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Related Resource</th>
+            <td class="govuk-table__cell">A resource with an unspecified relationship to the cataloged resource.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Request ID</th>
+            <td class="govuk-table__cell">A unique reference number given to each data asset request.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">REST</th>
+            <td class="govuk-table__cell">(Representational state transfer), An architecture style for implementing a web service.</td>
+            </tr>
+        </tbody>
+        </table>
+        <br>
+        <table class="govuk-table">
+        <caption class="govuk-table__caption govuk-table__caption--l">S</caption>
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Secret (security classification)</th>
+            <td class="govuk-table__cell">Very sensitive information that requires enhanced protective controls, including the use of secure networks on secured dedicated physical infrastructure and appropriately defined and implemented boundary security controls, suitable to defend against highly capable and determined threat actors, whereby a compromise could threaten life (an individual or group), seriously damage the UK’s security and/or international relations, its financial security/stability or impede its ability to investigate serious and organised crime. Resources with this classification are not expected to be shared in the Data Marketplace.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">securityClassification</th>
+            <td class="govuk-table__cell">An information security designation that identifies the minimum level of protection assigned to an information resource.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">servesData</th>
+            <td class="govuk-table__cell">A collection of data that a data service can distribute.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">serviceStatus</th>
+            <td class="govuk-table__cell">The status of the resource in the context of a particular workflow process.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">serviceType</th>
+            <td class="govuk-table__cell">The nature or genre of a resource.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">SOAP</th>
+            <td class="govuk-table__cell">(Simple Object Access Protocol), an XML based protocol for sending messages between Web Services.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Special category data</th>
+            <td class="govuk-table__cell">More sensitive than personal data giving them extra protection, for example biometric and health data.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">startDate</th>
+            <td class="govuk-table__cell">The start of a period.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">summary</th>
+            <td class="govuk-table__cell">A description of the subject resource.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Supplier</th>
+            <td class="govuk-table__cell">The person, team or department providing the data asset.</td>
+            </tr>
+        </tbody>
+        </table>
+        <br>
+        <table class="govuk-table">
+        <caption class="govuk-table__caption govuk-table__caption--l">T</caption>
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">theme</th>
+            <td class="govuk-table__cell">A main category of a resource. A resource can have multiple themes.</td>
+            </tr>
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Top secret (security classification)</th>
+            <td class="govuk-table__cell">Exceptionally sensitive information assets that directly support or inform the national security of the UK or its allies AND require an extremely high assurance of protection from all threats with the use of secure networks on highly secured dedicated physical infrastructure, and robustly defined and implemented boundary security controls. Resources with this classification are not expected to be shared in the Data Marketplace.</td>
+            </tr>
+        </tbody>
+        </table>
+        <br>
+        <table class="govuk-table">
+        <caption class="govuk-table__caption govuk-table__caption--l">V</caption>
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">version</th>
+            <td class="govuk-table__cell">The version indicator (name or identifier) of a resource.</td>
+            </tr>
+        </tbody>
+        </table>
+        <br>
+    </div>
+    </div>
+    <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full govuk-!-margin-top-8">
+        <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
+    </div>
+    <div class="govuk-grid-column-one-half-from-desktop">
+        <h2 id="community" class="govuk-heading-m">Learn</h2>
+        <p class="govuk-body">
+        <a class="govuk-link" href="/WIP/learn/">Find information to help you</a> with the data marketplace.
+        <br>
+        For example: a glossary, or the UK Cross-Government Metadata Exchange model.
+        </p>
+    </div>
+    <div class="govuk-grid-column-one-half-from-desktop">
+        <h2 id="support" class="govuk-heading-m">Get help and support</h2>
+        <p class="govuk-body"><a class="govuk-link" href="https://forms.gle/rpy2BMchHGDNVFfAA">Tell us what you need help with</a>.</p>
+        <p class="govuk-body">If you have any questions about the data asset description (metadata), you should contact the data asset supplier directly.</p>
+    </div>
+</div>
 {% endblock %}
