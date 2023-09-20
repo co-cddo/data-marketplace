@@ -116,14 +116,7 @@ router.get(
     );
     let pendingRows: ShareRequestTable = pendingRequests.map((r) => [
       {
-        html:
-          r.status === "RETURNED"
-            ? `<a class="govuk-link" href="/manage-shares/created-requests/${
-                r.requestId
-              }/view-answers">${r.requestId.substring(0, 8)}...</a>`
-            : `<a href="/acquirer/${
-                r.sharedata.dataAsset
-              }/start">${r.requestId.substring(0, 8)}...</a>`,
+        html: `<a href="/acquirer/${r.sharedata.dataAsset}/check">${r.requestId.substring(0, 8)}...</a>`,
       },
       { text: r.assetTitle },
       { text: r.assetPublisher.title },

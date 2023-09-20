@@ -1,7 +1,7 @@
 {% extends "page.njk" %}
 
 {% if request.status === "ACCEPTED" %}
-  {% set nextSteps = "Your department's contact email has been shared with the " + request.assetPublisher.title + " so they can begin working with you on the data share arrangement. You are able to contact them at data-management@test.co.uk" %}
+  {% set nextSteps = "Your department's contact email has been shared with the " + request.assetPublisher.title + " so they can begin working with you on the data share arrangement. You are able to contact them at " + request.publisherContactEmail + "."  %}
 {% elif request.status === "REJECTED" %}
   {% set nextSteps = "This request has been rejected. Consider the feedback before making further data share requests." %}
 {% else %}
