@@ -5,7 +5,6 @@ import {
   ShareRequestTable,
 } from "../types/express";
 import axios from "axios";
-import { checkAnswer } from "../helperFunctions/formHelper";
 import { createAbacMiddleware } from "../middleware/ABACMiddleware";
 import { shareRequestDetailMiddleware } from "../middleware/apiMiddleware";
 import { replace } from "../helperFunctions/checkhelper";
@@ -116,7 +115,14 @@ router.get(
     );
     let pendingRows: ShareRequestTable = pendingRequests.map((r) => [
       {
-        html: `<a href="/acquirer/${r.sharedata.dataAsset}/check">${r.requestId.substring(0, 8)}...</a>`,
+        html:
+          r.status === "RETURNED"
+            ? `<a class="govuk-link" href="/acquirer/${
+                r.sharedata.dataAsset
+              }/check">${r.requestId.substring(0, 8)}...</a>`
+            : `<a href="/acquirer/${
+                r.sharedata.dataAsset
+              }/start">${r.requestId.substring(0, 8)}...</a>`,
       },
       { text: r.assetTitle },
       { text: r.assetPublisher.title },
@@ -235,45 +241,6 @@ router.get(
       res.render("../views/acquirer/created-request-outcome.njk", {
         backLink,
         request: requestDetail.data,
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(500).send("Internal Server Error");
-    }
-  },
-);
-
-router.get(
-  "/created-requests/:requestId/view-answers",
-  async (req: Request, res: Response) => {
-    const requestId = req.params.requestId;
-    const backLink = req.headers.referer || `/manage-shares/created-requests/`;
-
-    try {
-      const requestDetail = await axios.get(
-        `${URL}/received-requests/${requestId}`,
-        {
-          headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
-        },
-      );
-
-      if (!requestDetail.data) {
-        return res.status(404).send("Request not found");
-      }
-
-      // Format the received date
-      requestDetail.data.received = formatDate(requestDetail.data.received);
-
-      // Format the neededBy date
-      const dateObj = requestDetail.data.sharedata.steps.date.value;
-      requestDetail.data.sharedata.steps.date.formattedValue =
-        formatDateObject(dateObj);
-
-      req.session.acquirerForms = requestDetail.data;
-      res.render("../views/acquirer/created-request-view-full-request.njk", {
-        request: requestDetail.data,
-        sharedata: checkAnswer(requestDetail.data.sharedata),
-        backLink,
       });
     } catch (error) {
       console.error(error);
