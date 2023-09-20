@@ -7,7 +7,8 @@ import markdown from "nunjucks-markdown";
 import marked from "marked";
 import helmet from "helmet";
 import homeRoute from "./routes/homeRoute";
-import learnRoutes from "./routes/learnRoutes";
+import learnRoute from "./routes/learnRoute";
+import learnArticleRoutes from "./routes/learnArticleRoutes";
 import adminRoutes from "./routes/adminRoutes";
 import findRoutes from "./routes/findRoutes";
 import shareRoutes from "./routes/shareRoutes";
@@ -132,7 +133,8 @@ app.use("/share", authenticateJWT, shareRoutes);
 app.use("/acquirer", authenticateJWT, acquirerRoutes);
 app.use("/manage-shares", authenticateJWT, apiUser, manageRoutes);
 app.use("/cookie-settings", cookieRoutes);
-app.use("/learn", learnRoutes);
+app.use("/learn", learnRoute);
+app.use("/learn/articles", learnArticleRoutes);
 app.use("/admin", adminRoutes);
 
 // Error handling
