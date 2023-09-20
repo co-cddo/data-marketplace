@@ -21,7 +21,12 @@ router.get(
   async (req: Request, res: Response) => {
     const backLink = req.session.backLink || "/";
     req.session.backLink = req.originalUrl;
-    const resourceDetails = req.session.resourceDetails || {};
+
+    const resourceDetails = req.session.resourceDetails || {
+      resourceID: "Default RequestID",
+      resourceTitle: "((data-resource-name))",
+      organisationTitle: "((department-name))"
+    };
 
     res.render("../views/learn/data-sharing-questions.njk", {
       backLink,
