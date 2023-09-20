@@ -769,7 +769,11 @@ function checkAnswer(formdata: FormData) {
       value: { html: dataTypeValue.join("") },
     };
 
-    if (formdata.status !== "ACCEPTED" && formdata.status !== "REJECTED") {
+    if (
+      formdata.status !== "ACCEPTED" &&
+      formdata.status !== "REJECTED" &&
+      formdata.status !== "RETURNED"
+    ) {
       rows[stepId].actions = {
         items: [
           {

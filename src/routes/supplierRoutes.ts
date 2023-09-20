@@ -115,8 +115,14 @@ router.get(
     );
     let pendingRows: ShareRequestTable = pendingRequests.map((r) => [
       {
-        html: `<a href="/acquirer/${r.sharedata.dataAsset
-          }/start">${r.requestId.substring(0, 8)}...</a>`,
+        html:
+          r.status === "RETURNED"
+            ? `<a class="govuk-link" href="/manage-shares/created-requests/${
+                r.requestId
+              }/view-answers">${r.requestId.substring(0, 8)}...</a>`
+            : `<a href="/acquirer/${
+                r.sharedata.dataAsset
+              }/start">${r.requestId.substring(0, 8)}...</a>`,
       },
       { text: r.assetTitle },
       { text: r.assetPublisher.title },
@@ -246,8 +252,7 @@ router.get(
   "/created-requests/:requestId/view-answers",
   async (req: Request, res: Response) => {
     const requestId = req.params.requestId;
-    const backLink =
-      req.headers.referer || `/manage-shares/created-requests/${requestId}`;
+    const backLink = req.headers.referer || `/manage-shares/created-requests/`;
 
     try {
       const requestDetail = await axios.get(
@@ -316,8 +321,14 @@ router.get(
     );
     let currentRows: ShareRequestTable = currentRequests.map((r) => [
       {
-        html: `<a href="/manage-shares/received-requests/${r.requestId
-          }">${r.requestId.substring(0, 8)}...</a>`,
+        html:
+          r.status === "RETURNED"
+            ? `<a href="/manage-shares/received-requests/${
+                r.requestId
+              }/outcome">${r.requestId.substring(0, 8)}...</a>`
+            : `<a href="/manage-shares/received-requests/${
+                r.requestId
+              }">${r.requestId.substring(0, 8)}...</a>`,
       },
       { text: r.requestingOrg },
       { text: r.assetTitle },
@@ -342,8 +353,9 @@ router.get(
     );
     let completedRows: ShareRequestTable = completedRequests.map((r) => [
       {
-        html: `<a href="/manage-shares/received-requests/${r.requestId
-          }">${r.requestId.substring(0, 8)}...</a>`,
+        html: `<a href="/manage-shares/received-requests/${
+          r.requestId
+        }/outcome">${r.requestId.substring(0, 8)}...</a>`,
       },
       { text: r.requestingOrg },
       { text: r.assetTitle },
@@ -661,20 +673,86 @@ router.post(
   },
 );
 
-// Routes for request outcomes
+router.get(
+  "/received-requests/:requestId/outcome",
+  async (req: Request, res: Response) => {
+    const backLink = req.headers.referer || "/manage-shares/received-requests/";
+    const requestId = req.params.requestId;
 
-router.get("/request-accepted", async (req: Request, res: Response) => {
-  const backLink = req.headers.referer || "/";
-  res.render("../views/supplier/request-accepted.njk", {
-    backLink,
-  });
-});
+    try {
+      const requestDetail = await axios.get(
+        `${URL}/received-requests/${requestId}`,
+        {
+          headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
+        },
+      );
 
-router.get("/request-rejected", async (req: Request, res: Response) => {
-  const backLink = req.headers.referer || "/";
-  res.render("../views/supplier/request-rejected.njk", {
-    backLink,
-  });
-});
+      if (!requestDetail.data) {
+        return res.status(404).send("Request not found");
+      }
+
+      // Format the received date
+      requestDetail.data.received = formatDate(requestDetail.data.received);
+      requestDetail.data.neededBy = formatDate(requestDetail.data.neededBy);
+      requestDetail.data.decisionDate = formatDate(
+        requestDetail.data.decisionDate,
+      );
+
+      // Format the neededBy date
+      const dateObj = requestDetail.data.sharedata.steps.date.value;
+      requestDetail.data.sharedata.steps.date.formattedValue =
+        formatDateObject(dateObj);
+
+      req.session.acquirerForms = requestDetail.data;
+
+      res.render("../views/supplier/received-request-outcome.njk", {
+        backLink,
+        request: requestDetail.data,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Internal Server Error");
+    }
+  },
+);
+
+router.get(
+  "/received-requests/:requestId/view-answers",
+  async (req: Request, res: Response) => {
+    const requestId = req.params.requestId;
+    const backLink =
+      req.headers.referer || `/manage-shares/received-requests/${requestId}`;
+
+    try {
+      const requestDetail = await axios.get(
+        `${URL}/received-requests/${requestId}`,
+        {
+          headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
+        },
+      );
+
+      if (!requestDetail.data) {
+        return res.status(404).send("Request not found");
+      }
+
+      // Format the received date
+      requestDetail.data.received = formatDate(requestDetail.data.received);
+
+      // Format the neededBy date
+      const dateObj = requestDetail.data.sharedata.steps.date.value;
+      requestDetail.data.sharedata.steps.date.formattedValue =
+        formatDateObject(dateObj);
+
+      req.session.acquirerForms = requestDetail.data;
+      res.render("../views/supplier/received-request-view-full-request.njk", {
+        request: requestDetail.data,
+        backLink,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Internal Server Error");
+    }
+  },
+);
 
 export default router;
