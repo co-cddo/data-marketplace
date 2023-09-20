@@ -56,10 +56,12 @@
     {% endif %}
 </div>
 
+{% if request.sharedata.steps['data-subjects'].value %}
 <div class="request-section">
     <h2 class="govuk-heading-m">Data subjects</h2>
     <p class="govuk-body">{{ request.sharedata.steps['data-subjects'].value }}</p>
 </div>
+{% endif %}
 
 <div class="request-section">
     <h2 class="govuk-heading-m">Aim of project</h2>
@@ -103,10 +105,12 @@
     </ul>
 </div>
 
+{% if request.sharedata.steps.role.value %}
 <div class="request-section">
     <h2 class="govuk-heading-m">What they think their role is</h2>
     <p class="govuk-body">{{ replacements['role'].data[request.sharedata.steps.role.value]}}</p>
 </div>
+{% endif %}
 
 <div class="request-section">
     <h2 class="govuk-heading-m">Data they want</h2>
