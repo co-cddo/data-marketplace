@@ -14,7 +14,7 @@ router.get(
 );
 
 router.get(
-  "/articles/data-sharing-questions",
+  "/data-sharing-questions",
   async (req: Request, res: Response) => {
     const backLink = req.session.backLink || "/";
     req.session.backLink = req.originalUrl;

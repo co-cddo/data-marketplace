@@ -123,7 +123,6 @@ router.get("/:resourceID", async (req: Request, res: Response) => {
   const resource = await fetchResourceById(resourceID);
 
   req.session.resourceDetails = {
-    resourceID: resourceID,
     resourceTitle: resource.title,
     organisationTitle: resource.organisation.title,
   };
