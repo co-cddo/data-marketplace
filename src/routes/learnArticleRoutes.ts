@@ -20,9 +20,8 @@ router.get(
     req.session.backLink = req.originalUrl;
 
     const resourceDetails = req.session.resourceDetails || {
-      resourceID: "Default RequestID",
-      resourceTitle: "((data-resource-name))",
-      organisationTitle: "((department-name))",
+      resourceTitle: "the data asset",
+      organisationTitle: "the data asset publisher",
     };
 
     res.render("../views/learn/data-sharing-questions.njk", {

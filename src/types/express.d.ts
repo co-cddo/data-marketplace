@@ -236,7 +236,6 @@ declare module "express-session" {
     decision: { status: string; notes: string };
     formValuesValidationError: RequestBody;
     resourceDetails?: {
-      resourceID: string;
       resourceTitle: string;
       organisationTitle: string;
     };
