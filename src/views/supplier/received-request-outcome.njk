@@ -28,8 +28,7 @@
     <p class="govuk-body">{{ request.decisionNotes }}</p>
 
     <h2 class="govuk-heading-m govuk-!-static-margin-bottom-1">Notes</h2>
-    <p class="govuk-body">{{ request.notes if request.notes else "No notes provided." }}</p>
-
+    <p class="govuk-body">{{ request.reviewNotes if request.reviewNotes else "No notes provided." }}</p>
 
     <h2 class="govuk-heading-m govuk-!-static-margin-bottom-1">What happens next</h2>
     <p class="govuk-body">{{ nextSteps }}</p>
