@@ -23,7 +23,7 @@ The data consumed via API is:
 - User permissions - ABAC user permissions
 - Requests for data - Persisted requests for data. These are tied to a user and resumable.
 
-You can see a high level solution [here](./docs/high-level.jpg)
+You can see a high level solution [here](./docs/high-level-w.jpg)
 
 ### SSO
 
