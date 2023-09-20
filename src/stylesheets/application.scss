@@ -32,7 +32,7 @@
   margin-bottom: govuk-spacing(5);
 }
 
-aside {
+.app-related-items {
   border-top: govuk-colour("blue") solid 2px;
 }
 
@@ -102,4 +102,44 @@ aside {
   max-width: 100%;
   height: auto;
   border: 1px solid grey;
+}
+
+
+
+.contents-list {
+  // padding-bottom: govuk-spacing(6);
+  .contents-list__title{
+    margin:0;
+    padding-bottom: govuk-spacing(2);
+  }
+
+  &__list {
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0;
+
+    &-item {
+      position: relative;
+      padding: .4em 25px;
+
+      &:first-child {
+        margin: 0;
+      }
+
+      &--dashed::before {
+        content: "—";
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 20px;
+        text-align: right;
+        overflow: hidden;
+      }
+
+      &--active {
+        font-weight: bold;
+      }
+    }
+  }
 }
