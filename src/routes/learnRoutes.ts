@@ -25,7 +25,7 @@ router.get(
     const resourceDetails = req.session.resourceDetails || {
       resourceID: "Default RequestID",
       resourceTitle: "((data-resource-name))",
-      organisationTitle: "((department-name))"
+      organisationTitle: "((department-name))",
     };
 
     res.render("../views/learn/data-sharing-questions.njk", {
