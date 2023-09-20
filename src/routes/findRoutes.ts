@@ -128,6 +128,7 @@ router.get("/:resourceID", async (req: Request, res: Response) => {
     organisationTitle: resource.organisation.title,
   };
 
+  console.log(resource)
   res.render("resource.njk", {
     route: req.params.page,
     backLink: backLink,
