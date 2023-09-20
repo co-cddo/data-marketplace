@@ -2,10 +2,11 @@ import request from "supertest";
 import app from "../src/app";
 
 describe("GET /learn/articles", () => {
+
   it('should respond as expected"', async () => {
-    const response = await request(app).get("/learn");
+    const response = await request(app).get("/learn/articles/sign-in-process");
     expect(response.status).toBe(200);
-    expect(response.text).toContain("Data Marketplace");
+    expect(response.text).toContain("Sign-in process");
   });
 
   it('should respond as expected when accessing data-sharing-arrangements"', async () => {
