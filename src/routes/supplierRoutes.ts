@@ -14,12 +14,13 @@ const router = express.Router();
 const URL = `${process.env.API_ENDPOINT}/manage-shares`;
 
 const formatDate = (dateString: string): string => {
+  if (dateString === "UNREQUESTED") { return "Unrequested" }
   const options: Intl.DateTimeFormatOptions = {
     year: "numeric",
     month: "long",
     day: "numeric",
   };
-  return new Date(dateString).toLocaleDateString(undefined, options);
+  return new Date(dateString).toLocaleDateString("en-GB", options);
 };
 
 function formatDateObject(dateObj: {
@@ -106,7 +107,6 @@ router.get(
     for (const s of response) {
       acquirerForms[s.sharedata.dataAsset] = s.sharedata;
     }
-    req.session.acquirerForms = acquirerForms;
 
     const backLink = req.headers.referer || "/";
 
@@ -117,12 +117,10 @@ router.get(
       {
         html:
           r.status === "RETURNED"
-            ? `<a class="govuk-link" href="/manage-shares/created-requests/${
-                r.requestId
-              }/view-answers">${r.requestId.substring(0, 8)}...</a>`
-            : `<a href="/acquirer/${
-                r.sharedata.dataAsset
-              }/start">${r.requestId.substring(0, 8)}...</a>`,
+            ? `<a class="govuk-link" href="/manage-shares/created-requests/${r.requestId
+            }/view-answers">${r.requestId.substring(0, 8)}...</a>`
+            : `<a href="/acquirer/${r.sharedata.dataAsset
+            }/start">${r.requestId.substring(0, 8)}...</a>`,
       },
       { text: r.assetTitle },
       { text: r.assetPublisher.title },
@@ -151,10 +149,7 @@ router.get(
       { text: r.assetTitle },
       { text: r.assetPublisher.title },
       { text: formatDate(r.received) },
-      {
-        text:
-          r.neededBy === "UNREQUESTED" ? "Unrequested" : formatDate(r.neededBy),
-      },
+      { text: formatDate(r.neededBy) },
       {
         html: `<span class="govuk-tag ${getCreatedRequestStatusClass(r.status)}">${r.status
           }</span>`,
@@ -319,24 +314,20 @@ router.get(
     const currentRequests = response.filter((r) =>
       ["AWAITING REVIEW", "IN REVIEW", "RETURNED"].includes(r.status),
     );
+
     let currentRows: ShareRequestTable = currentRequests.map((r) => [
       {
         html:
           r.status === "RETURNED"
-            ? `<a href="/manage-shares/received-requests/${
-                r.requestId
-              }/outcome">${r.requestId.substring(0, 8)}...</a>`
-            : `<a href="/manage-shares/received-requests/${
-                r.requestId
-              }">${r.requestId.substring(0, 8)}...</a>`,
+            ? `<a href="/manage-shares/received-requests/${r.requestId
+            }/outcome">${r.requestId.substring(0, 8)}...</a>`
+            : `<a href="/manage-shares/received-requests/${r.requestId
+            }">${r.requestId.substring(0, 8)}...</a>`,
       },
       { text: r.requestingOrg },
       { text: r.assetTitle },
       { text: formatDate(r.received) },
-      {
-        text:
-          r.neededBy === "UNREQUESTED" ? "Unrequested" : formatDate(r.neededBy),
-      },
+      { text: formatDate(r.neededBy) },
       {
         html: `<span class="govuk-tag ${getReceivedRequestStatusClass(r.status)}">${r.status
           }</span>`,
@@ -353,9 +344,8 @@ router.get(
     );
     let completedRows: ShareRequestTable = completedRequests.map((r) => [
       {
-        html: `<a href="/manage-shares/received-requests/${
-          r.requestId
-        }/outcome">${r.requestId.substring(0, 8)}...</a>`,
+        html: `<a href="/manage-shares/received-requests/${r.requestId
+          }/outcome">${r.requestId.substring(0, 8)}...</a>`,
       },
       { text: r.requestingOrg },
       { text: r.assetTitle },
@@ -384,35 +374,19 @@ router.get(
 router.get(
   "/received-requests/:requestId",
   reviewRequestAbacMiddleware,
+  shareRequestDetailMiddleware,
   async (req: Request, res: Response) => {
     const backLink = req.headers.referer || "/manage-shares/received-requests/";
-    const requestId = req.params.requestId;
 
     try {
-      const requestDetail = await axios.get(
-        `${URL}/received-requests/${requestId}`,
-        {
-          headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
-        },
-      );
-
-      if (!requestDetail.data) {
-        return res.status(404).send("Request not found");
-      }
-
-      // Format the received date
-      requestDetail.data.received = formatDate(requestDetail.data.received);
-
-      // Format the neededBy date
-      const dateObj = requestDetail.data.sharedata.steps.date.value;
-      requestDetail.data.sharedata.steps.date.formattedValue =
-        formatDateObject(dateObj);
-
-      req.session.acquirerForms = requestDetail.data;
+      const requestDetail = req.shareRequest!
+      // Format the dates
+      requestDetail.received = formatDate(requestDetail.received);
+      requestDetail.neededBy = formatDate(requestDetail.neededBy)
 
       res.render("../views/supplier/review-summary.njk", {
         backLink,
-        request: requestDetail.data,
+        request: requestDetail
       });
     } catch (error) {
       console.error(error);
@@ -437,8 +411,10 @@ router.get(
   reviewRequestAbacMiddleware,
   shareRequestDetailMiddleware,
   (req: Request, res: Response) => {
+    const requestDetail = req.shareRequest!
+    requestDetail.neededBy = formatDate(requestDetail.neededBy)
     res.render("../views/supplier/review-request.njk", {
-      request: req.shareRequest,
+      request: requestDetail,
       replacements: replace
     });
   },
@@ -591,20 +567,16 @@ router.post(
 router.get(
   "/received-requests/:requestId/accept-request",
   reviewRequestAbacMiddleware,
+  shareRequestDetailMiddleware,
   (req: Request, res: Response) => {
     const backLink = req.headers.referer || "/";
     const requestId = req.params.requestId;
-    const requestData = req.session.acquirerForms;
-
-    if (!requestData) {
-      return res.status(404).send("Request data not found");
-    }
 
     res.render("../views/supplier/accept-request.njk", {
       backLink,
       requestId,
-      requestingOrg: requestData.requestingOrg,
-      requesterEmail: requestData.requesterEmail,
+      requestingOrg: req.shareRequest?.requestingOrg,
+      requesterEmail: req.shareRequest?.requesterEmail,
     });
   },
 );
@@ -620,19 +592,15 @@ router.post(
 router.get(
   "/received-requests/:requestId/reject-request",
   reviewRequestAbacMiddleware,
+  shareRequestDetailMiddleware,
   async (req: Request, res: Response) => {
     const backLink = req.headers.referer || "/";
     const requestId = req.params.requestId;
-    const requestData = req.session.acquirerForms;
-
-    if (!requestData) {
-      return res.status(404).send("Request data not found");
-    }
 
     res.render("../views/supplier/reject-request.njk", {
       backLink,
       requestId,
-      requestingOrg: requestData.requestingOrg,
+      requestingOrg: req.shareRequest?.requestingOrg,
     });
   },
 );
@@ -648,19 +616,15 @@ router.post(
 router.get(
   "/received-requests/:requestId/return-request",
   reviewRequestAbacMiddleware,
+  shareRequestDetailMiddleware,
   async (req: Request, res: Response) => {
     const backLink = req.headers.referer || "/";
     const requestId = req.params.requestId;
-    const requestData = req.session.acquirerForms;
-
-    if (!requestData) {
-      return res.status(404).send("Request data not found");
-    }
 
     res.render("../views/supplier/return-request.njk", {
       backLink,
       requestId,
-      requestingOrg: requestData.requestingOrg,
+      requestingOrg: req.shareRequest?.requestingOrg,
     });
   },
 );
@@ -675,39 +639,24 @@ router.post(
 
 router.get(
   "/received-requests/:requestId/outcome",
+  reviewRequestAbacMiddleware,
+  shareRequestDetailMiddleware,
   async (req: Request, res: Response) => {
     const backLink = req.headers.referer || "/manage-shares/received-requests/";
     const requestId = req.params.requestId;
 
     try {
-      const requestDetail = await axios.get(
-        `${URL}/received-requests/${requestId}`,
-        {
-          headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
-        },
-      );
-
-      if (!requestDetail.data) {
-        return res.status(404).send("Request not found");
-      }
-
+      const requestDetail = req.shareRequest!
       // Format the received date
-      requestDetail.data.received = formatDate(requestDetail.data.received);
-      requestDetail.data.neededBy = formatDate(requestDetail.data.neededBy);
-      requestDetail.data.decisionDate = formatDate(
-        requestDetail.data.decisionDate,
-      );
-
-      // Format the neededBy date
-      const dateObj = requestDetail.data.sharedata.steps.date.value;
-      requestDetail.data.sharedata.steps.date.formattedValue =
-        formatDateObject(dateObj);
-
-      req.session.acquirerForms = requestDetail.data;
+      requestDetail.received = formatDate(requestDetail.received);
+      requestDetail.neededBy = formatDate(requestDetail.neededBy);
+      requestDetail.decisionDate = formatDate(requestDetail.decisionDate || "");
+      requestDetail.neededBy = formatDate(requestDetail.neededBy);
 
       res.render("../views/supplier/received-request-outcome.njk", {
         backLink,
-        request: requestDetail.data,
+        request: requestDetail,
+        replacements: replace
       });
     } catch (error) {
       console.error(error);
@@ -718,34 +667,22 @@ router.get(
 
 router.get(
   "/received-requests/:requestId/view-answers",
+  reviewRequestAbacMiddleware,
+  shareRequestDetailMiddleware,
   async (req: Request, res: Response) => {
     const requestId = req.params.requestId;
     const backLink =
       req.headers.referer || `/manage-shares/received-requests/${requestId}`;
 
     try {
-      const requestDetail = await axios.get(
-        `${URL}/received-requests/${requestId}`,
-        {
-          headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
-        },
-      );
+      const requestDetail = req.shareRequest!
+      // Format the dates
+      requestDetail.received = formatDate(requestDetail.received);
+      requestDetail.neededBy = formatDate(requestDetail.neededBy)
 
-      if (!requestDetail.data) {
-        return res.status(404).send("Request not found");
-      }
-
-      // Format the received date
-      requestDetail.data.received = formatDate(requestDetail.data.received);
-
-      // Format the neededBy date
-      const dateObj = requestDetail.data.sharedata.steps.date.value;
-      requestDetail.data.sharedata.steps.date.formattedValue =
-        formatDateObject(dateObj);
-
-      req.session.acquirerForms = requestDetail.data;
       res.render("../views/supplier/received-request-view-full-request.njk", {
-        request: requestDetail.data,
+        request: requestDetail,
+        replacements: replace,
         backLink,
       });
     } catch (error) {
