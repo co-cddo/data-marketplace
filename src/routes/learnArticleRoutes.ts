@@ -1,6 +1,9 @@
 import express, { Request, Response } from "express";
 const router = express.Router();
 
+router.get("/sign-in-process", async (req: Request, res: Response) => {
+  res.render("../views/learn/sign-in-process.njk");
+});
 
 router.get("/glossary", async (req: Request, res: Response) => {
   res.render("../views/learn/glossary.njk");
