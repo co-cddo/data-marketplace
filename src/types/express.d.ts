@@ -234,6 +234,7 @@ declare module "express-session" {
     backLink: string;
     formErrors: { [key: string]: { text: string } };
     decision: { status: string; notes: string };
+    formValuesValidationError: RequestBody;
   }
 }
 
