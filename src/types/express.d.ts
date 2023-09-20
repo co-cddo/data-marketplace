@@ -230,7 +230,7 @@ declare module "express-serve-static-core" {
 
 declare module "express-session" {
   interface SessionData {
-    acquirerForms?: Record<string, FormData>;
+    acquirerForms: Record<string, FormData>;
     backLink: string;
     formErrors: { [key: string]: { text: string } };
     decision: { status: string; notes: string };

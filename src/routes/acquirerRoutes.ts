@@ -13,7 +13,12 @@ import {
   updateStepsStatus,
 } from "../helperFunctions/formHelper";
 import axios from "axios";
-import { FormData, GenericStringArray, UserData } from "../types/express";
+import {
+  FormData,
+  GenericStringArray,
+  ShareRequestResponse,
+  UserData,
+} from "../types/express";
 
 const generateFormTemplate = (
   req: Request,
@@ -127,6 +132,34 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   } else {
     backLink = `/acquirer/${resourceID}/start`;
   }
+
+  let returnedNotes, returnedNotesTitle;
+  if (formStep === "check") {
+    try {
+      const shareRequestDetailResponse = await axios.get(
+        `${process.env.API_ENDPOINT}/manage-shares/received-requests/${formdata.requestId}`,
+        {
+          headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
+        },
+      );
+      const shareRequestDetail =
+        shareRequestDetailResponse.data as ShareRequestResponse;
+      req.session.acquirerForms![shareRequestDetail.sharedata.dataAsset] =
+        shareRequestDetail.sharedata;
+      returnedNotes = shareRequestDetail.decisionNotes;
+      returnedNotesTitle = `From ${shareRequestDetail.assetPublisher.title}`;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error(
+          `API ERROR - ${error.response?.status}: ${error.response?.statusText}`,
+        );
+        console.error(error.response?.data.detail);
+      } else {
+        console.error(error);
+      }
+    }
+  }
+
   res.render(`../views/acquirer/${formStep}.njk`, {
     requestId: formdata.requestId,
     assetId: formdata.dataAsset,
@@ -137,6 +170,8 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
     savedValue: stepData.value,
     errorMessage: stepData.errorMessage,
     data: formStep === "check" ? checkAnswer(formdata) : [],
+    returnedNotes,
+    returnedNotesTitle,
   });
 });
 
