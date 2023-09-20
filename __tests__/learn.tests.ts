@@ -21,13 +21,13 @@ describe("GET /learn", () => {
   });
 
   it('should respond as expected when accessing publish-data-descriptions-questions"', async () => {
-    const response = await request(app).get("/learn/publish-data-descriptions-questions");
+    const response = await request(app).get("/learn/articles/publish-data-descriptions-questions");
     expect(response.status).toBe(200);
     expect(response.text).toContain("Questions you will be asked");
   });
 
   it('should respond as expected when accessing adding-a-single-data-asset"', async () => {
-    const response = await request(app).get("/learn/adding-a-single-data-asset");
+    const response = await request(app).get("/learn/articles/adding-a-single-data-asset");
     expect(response.status).toBe(200);
     expect(response.text).toContain("add a data description");
   });
@@ -39,7 +39,7 @@ describe("GET /learn", () => {
   });
 
   it('should respond as expected when accessing adding-a-CSV-file"', async () => {
-    const response = await request(app).get("/learn/adding-a-CSV-file");
+    const response = await request(app).get("/learn/articles/adding-a-CSV-file");
     expect(response.status).toBe(200);
     expect(response.text).toContain("CSV file");
   });

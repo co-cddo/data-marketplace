@@ -21,14 +21,14 @@ router.get("/data-sharing-questions", async (req: Request, res: Response) => {
 });
 
 router.get(
-  "/publish-data-descriptions-questions",
+  "/articles/publish-data-descriptions-questions",
   async (req: Request, res: Response) => {
     res.render("../views/learn/publish-data-descriptions-questions.njk");
   },
 );
 
 router.get(
-  "/adding-a-single-data-asset",
+  "/articles/adding-a-single-data-asset",
   async (req: Request, res: Response) => {
     res.render("../views/learn/adding-a-single-data-asset.njk");
   },
@@ -42,7 +42,7 @@ router.get("/articles/metadata-model", async (req: Request, res: Response) => {
   res.render("../views/learn/metadata-model.njk");
 });
 
-router.get("/adding-a-CSV-file", async (req: Request, res: Response) => {
+router.get("/articles/adding-a-CSV-file", async (req: Request, res: Response) => {
   res.render("../views/learn/adding-a-CSV-file.njk");
 });
 
