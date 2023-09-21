@@ -231,6 +231,15 @@ router.post(
       formdata.stepHistory = [];
     }
 
+    if (formStep === 'benefits') {
+      const benefitsData = stepData.value
+      for (const value of Object.values(benefitsData)) {
+        if (!value.checked) {
+          value.explanation = '';
+        }
+      }
+    }
+    
     if (req.body.addCountry) {
       if (Array.isArray(formdata.steps["data-travel-location"].value)) {
         formdata.steps["data-travel-location"].value.push(""); // Add a new empty string.
