@@ -16,10 +16,11 @@
           <p class="govuk-notification-banner__heading">
             From {{request.assetPublisher.title}}
           </p>
-          <p>{{request.decisionNotes}}</p>
+          <p>{{request.decisionNotes if request.decisionNotes else "No feedback provided."}}</p>
         </div>
       </div>
-      <span class="govuk-caption-l">Request ID: {{request.requestId}}</span> </div>
+      <span class="govuk-caption-l">Request ID: {{request.requestId}}</span>
+    </div>
     <div class="govuk-grid-column-full" id="checkYourAnswers">
       {% for section in sharedata %}
         <h2 class="govuk-heading-m check-heading">{{section.name}}</h2>
