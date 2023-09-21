@@ -5,51 +5,13 @@ import {
   ShareRequestTable,
 } from "../types/express";
 import axios from "axios";
-import { checkAnswer } from "../helperFunctions/formHelper";
 import { createAbacMiddleware } from "../middleware/ABACMiddleware";
 import { shareRequestDetailMiddleware } from "../middleware/apiMiddleware";
 import { replace } from "../helperFunctions/checkhelper";
-import { capitalise } from "../helperFunctions/stringHelpers";
+import { capitalise, formatDate } from "../helperFunctions/stringHelpers";
+import { checkAnswer } from "../helperFunctions/formHelper";
 const router = express.Router();
 const URL = `${process.env.API_ENDPOINT}/manage-shares`;
-
-const formatDate = (dateString: string): string => {
-  if (dateString === "UNREQUESTED") {
-    return "Unrequested";
-  }
-  const options: Intl.DateTimeFormatOptions = {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  };
-  return new Date(dateString).toLocaleDateString("en-GB", options);
-};
-
-function formatDateObject(dateObj: {
-  day: string;
-  month: string;
-  year: string;
-}): string {
-  const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-
-  const monthIndex = parseInt(dateObj.month, 10) - 1; // Convert month string to number and subtract 1 for zero-based index
-  const monthName = monthNames[monthIndex];
-
-  return `${dateObj.day} ${monthName} ${dateObj.year}`;
-}
 
 router.get("/", async (req: Request, res: Response) => {
   const backLink = req.headers.referer || "/";
@@ -118,18 +80,17 @@ router.get(
       {
         html:
           r.status === "RETURNED"
-            ? `<a class="govuk-link" href="/manage-shares/created-requests/${
-                r.requestId
-              }/view-answers">${r.requestId.substring(0, 8)}...</a>`
-            : `<a href="/acquirer/${
+            ? `<a class="govuk-link" href="/acquirer/${
+                r.sharedata.dataAsset
+              }/check">${r.requestId.substring(0, 8)}...</a>`
+            : `<a class="govuk-link" href="/acquirer/${
                 r.sharedata.dataAsset
               }/start">${r.requestId.substring(0, 8)}...</a>`,
       },
       { text: r.assetTitle },
       { text: r.assetPublisher.title },
       {
-        text:
-          r.neededBy === "UNREQUESTED" ? "Unrequested" : formatDate(r.neededBy),
+        text: formatDate(r.neededBy),
       },
       {
         html: `<span class="govuk-tag ${getCreatedRequestStatusClass(
@@ -171,7 +132,7 @@ router.get(
     );
     let completedRows: ShareRequestTable = completedRequests.map((r) => [
       {
-        html: `<a href="/manage-shares/created-requests/${
+        html: `<a class="govuk-link" href="/manage-shares/created-requests/${
           r.requestId
         }">${r.requestId.substring(0, 8)}...</a>`,
       },
@@ -209,39 +170,16 @@ router.get(
 
 router.get(
   "/created-requests/:requestId",
+  shareRequestDetailMiddleware,
   async (req: Request, res: Response) => {
     const backLink = req.headers.referer || "/manage-shares/created-requests/";
-    const requestId = req.params.requestId;
 
     try {
-      const requestDetail = await axios.get(
-        `${URL}/received-requests/${requestId}`,
-        {
-          headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
-        },
-      );
-
-      if (!requestDetail.data) {
-        return res.status(404).send("Request not found");
-      }
-
-      // Format the received date
-      requestDetail.data.received = formatDate(requestDetail.data.received);
-      requestDetail.data.neededBy = formatDate(requestDetail.data.neededBy);
-      requestDetail.data.decisionDate = formatDate(
-        requestDetail.data.decisionDate,
-      );
-
-      // Format the neededBy date
-      const dateObj = requestDetail.data.sharedata.steps.date.value;
-      requestDetail.data.sharedata.steps.date.formattedValue =
-        formatDateObject(dateObj);
-
-      req.session.acquirerForms = requestDetail.data;
+      const requestDetail = req.shareRequest!;
 
       res.render("../views/acquirer/created-request-outcome.njk", {
         backLink,
-        request: requestDetail.data,
+        request: requestDetail,
       });
     } catch (error) {
       console.error(error);
@@ -252,34 +190,16 @@ router.get(
 
 router.get(
   "/created-requests/:requestId/view-answers",
+  shareRequestDetailMiddleware,
   async (req: Request, res: Response) => {
-    const requestId = req.params.requestId;
     const backLink = req.headers.referer || `/manage-shares/created-requests/`;
 
     try {
-      const requestDetail = await axios.get(
-        `${URL}/received-requests/${requestId}`,
-        {
-          headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
-        },
-      );
+      const requestDetail = req.shareRequest!;
 
-      if (!requestDetail.data) {
-        return res.status(404).send("Request not found");
-      }
-
-      // Format the received date
-      requestDetail.data.received = formatDate(requestDetail.data.received);
-
-      // Format the neededBy date
-      const dateObj = requestDetail.data.sharedata.steps.date.value;
-      requestDetail.data.sharedata.steps.date.formattedValue =
-        formatDateObject(dateObj);
-
-      req.session.acquirerForms = requestDetail.data;
       res.render("../views/acquirer/created-request-view-full-request.njk", {
-        request: requestDetail.data,
-        sharedata: checkAnswer(requestDetail.data.sharedata),
+        request: requestDetail,
+        sharedata: checkAnswer(requestDetail.sharedata),
         backLink,
       });
     } catch (error) {
@@ -326,10 +246,10 @@ router.get(
       {
         html:
           r.status === "RETURNED"
-            ? `<a href="/manage-shares/received-requests/${
+            ? `<a class="govuk-link" href="/manage-shares/received-requests/${
                 r.requestId
               }/outcome">${r.requestId.substring(0, 8)}...</a>`
-            : `<a href="/manage-shares/received-requests/${
+            : `<a class="govuk-link" href="/manage-shares/received-requests/${
                 r.requestId
               }">${r.requestId.substring(0, 8)}...</a>`,
       },
@@ -354,16 +274,14 @@ router.get(
     );
     let completedRows: ShareRequestTable = completedRequests.map((r) => [
       {
-        html: `<a href="/manage-shares/received-requests/${
+        html: `<a class="govuk-link" href="/manage-shares/received-requests/${
           r.requestId
         }/outcome">${r.requestId.substring(0, 8)}...</a>`,
       },
       { text: r.requestingOrg },
       { text: r.assetTitle },
       { text: formatDate(r.received) },
-      {
-        text: r.decisionDate ? formatDate(r.decisionDate) : "",
-      },
+      { text: formatDate(r.decisionDate) },
       {
         html: `${capitalise(r.status)}`,
       },
@@ -391,9 +309,6 @@ router.get(
 
     try {
       const requestDetail = req.shareRequest!;
-      // Format the dates
-      requestDetail.received = formatDate(requestDetail.received);
-      requestDetail.neededBy = formatDate(requestDetail.neededBy);
 
       res.render("../views/supplier/review-summary.njk", {
         backLink,
@@ -423,7 +338,6 @@ router.get(
   shareRequestDetailMiddleware,
   (req: Request, res: Response) => {
     const requestDetail = req.shareRequest!;
-    requestDetail.neededBy = formatDate(requestDetail.neededBy);
 
     res.render("../views/supplier/review-request.njk", {
       request: requestDetail,
@@ -667,11 +581,6 @@ router.get(
 
     try {
       const requestDetail = req.shareRequest!;
-      // Format the received date
-      requestDetail.received = formatDate(requestDetail.received);
-      requestDetail.neededBy = formatDate(requestDetail.neededBy);
-      requestDetail.decisionDate = formatDate(requestDetail.decisionDate || "");
-      requestDetail.neededBy = formatDate(requestDetail.neededBy);
 
       res.render("../views/supplier/received-request-outcome.njk", {
         backLink,
@@ -696,9 +605,6 @@ router.get(
 
     try {
       const requestDetail = req.shareRequest!;
-      // Format the dates
-      requestDetail.received = formatDate(requestDetail.received);
-      requestDetail.neededBy = formatDate(requestDetail.neededBy);
 
       res.render("../views/supplier/received-request-view-full-request.njk", {
         request: requestDetail,

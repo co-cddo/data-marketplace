@@ -2,6 +2,7 @@ import axios from "axios";
 import { NextFunction, Request, Response } from "express";
 import { ApiUser } from "../models/apiUser";
 import { ShareRequestResponse } from "../types/express";
+import { formatDate } from "../helperFunctions/stringHelpers";
 
 const API = `${process.env.API_ENDPOINT}`;
 
@@ -54,6 +55,11 @@ export const shareRequestDetailMiddleware = async (
     );
     const shareRequestDetail =
       shareRequestDetailResponse.data as ShareRequestResponse;
+    shareRequestDetail.received = formatDate(shareRequestDetail.received);
+    shareRequestDetail.neededBy = formatDate(shareRequestDetail.neededBy);
+    shareRequestDetail.decisionDate = formatDate(
+      shareRequestDetail.decisionDate,
+    );
     req.shareRequest = shareRequestDetail;
     next();
   } catch (error) {
