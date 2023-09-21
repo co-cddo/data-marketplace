@@ -29,7 +29,7 @@ const callApiAsAdmin = async (
   req: Request,
   res: Response,
   path: string,
-  verb: "GET" | "PUT" = "GET",
+  verb: "GET" | "PUT" | "DELETE" = "GET",
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any = {},
 ) => {
@@ -38,6 +38,8 @@ const callApiAsAdmin = async (
     let response;
     if (verb === "GET") {
       response = await axios.get(API(path), { headers });
+    } else if (verb === "DELETE") {
+      response = await axios.delete(API(path), { headers })
     } else {
       response = await axios.put(API(path), { ...data }, { headers });
     }
@@ -61,6 +63,11 @@ router.get("/users", async (req: Request, res: Response) => {
 router.get("/users/:userId", async (req: Request, res: Response) => {
   const userId = req.params.userId;
   return await callApiAsAdmin(req, res, `users/${userId}`);
+});
+
+router.delete("/users/:userId", async (req: Request, res: Response) => {
+  const userId = req.params.userId;
+  return await callApiAsAdmin(req, res, `users/${userId}`, "DELETE");
 });
 
 router.put("/users/:userId/org", async (req: Request, res: Response) => {
