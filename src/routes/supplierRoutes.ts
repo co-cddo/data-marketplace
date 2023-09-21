@@ -83,7 +83,7 @@ router.get(
             ? `<a class="govuk-link" href="/acquirer/${
                 r.sharedata.dataAsset
               }/check">${r.requestId.substring(0, 8)}...</a>`
-            : `<a href="/acquirer/${
+            : `<a class="govuk-link" href="/acquirer/${
                 r.sharedata.dataAsset
               }/start">${r.requestId.substring(0, 8)}...</a>`,
       },
@@ -132,7 +132,7 @@ router.get(
     );
     let completedRows: ShareRequestTable = completedRequests.map((r) => [
       {
-        html: `<a href="/manage-shares/created-requests/${
+        html: `<a class="govuk-link" href="/manage-shares/created-requests/${
           r.requestId
         }">${r.requestId.substring(0, 8)}...</a>`,
       },
@@ -246,10 +246,10 @@ router.get(
       {
         html:
           r.status === "RETURNED"
-            ? `<a href="/manage-shares/received-requests/${
+            ? `<a class="govuk-link" href="/manage-shares/received-requests/${
                 r.requestId
               }/outcome">${r.requestId.substring(0, 8)}...</a>`
-            : `<a href="/manage-shares/received-requests/${
+            : `<a class="govuk-link" href="/manage-shares/received-requests/${
                 r.requestId
               }">${r.requestId.substring(0, 8)}...</a>`,
       },
@@ -274,7 +274,7 @@ router.get(
     );
     let completedRows: ShareRequestTable = completedRequests.map((r) => [
       {
-        html: `<a href="/manage-shares/received-requests/${
+        html: `<a class="govuk-link" href="/manage-shares/received-requests/${
           r.requestId
         }/outcome">${r.requestId.substring(0, 8)}...</a>`,
       },
