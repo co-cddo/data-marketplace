@@ -38,10 +38,22 @@ describe("GET /learn/articles", () => {
     expect(response.status).toBe(200);
     expect(response.text).toContain("publish descriptions of data");
   });
-
+  
   it('should respond as expected when accessing adding-a-CSV-file"', async () => {
     const response = await request(app).get("/learn/articles/adding-a-CSV-file");
     expect(response.status).toBe(200);
     expect(response.text).toContain("CSV file");
+  });
+  
+   it('should respond as expected when accessing about Essential-Shared-Data-Assets"', async () => {
+    const response = await request(app).get("/learn/articles/esda");
+    expect(response.status).toBe(200);
+    expect(response.text).toContain("Using metadata to describe Essential");
+  });
+
+  it('should respond as expected when accessing guidance-on-publish"', async () => {
+    const response = await request(app).get("/learn/articles/dcat");
+    expect(response.status).toBe(200);
+    expect(response.text).toContain("Using metadata to describe data assets");
   });
 });
