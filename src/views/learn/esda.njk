@@ -1,0 +1,140 @@
+{% extends "page.njk" %}
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">Using metadata to describe data assets in a data catalogue</h1>
+    <ul class="govuk-list govuk-!-margin-bottom-7">
+      <li>Collection: <a class="govuk-link" href="https://www.gov.uk/government/collections/metadata-standards-for-sharing-and-publishing-data">Metadata standards for sharing and publishing data</a></li>
+      <li>Status: Under review</li>
+    </ul>
+        <aside class="content-container govuk-!-margin-bottom-5" role="complementary">
+         <nav aria-label="Pages in this guide" class="contents-list" role="navigation">
+           <h2 class="contents-list__title govuk-body-s">
+            Contents
+            </h2>
+          <ol class="contents-list__list">
+            <ol class="contents-list__list">
+            <li class="contents-list__list-item contents-list__list-item--dashed govuk-body-s" aria-current="true">
+                Overview
+            </li>
+            <li class="contents-list__list-item contents-list__list-item--dashed">
+                <a href="#who-should-use-this-guidance" class="contents-list__link govuk-link">Who should use this guidance</a>
+            </li>
+            <li class="contents-list__list-item contents-list__list-item--dashed">
+                <a href="#using-metadata-in-government" class="contents-list__link govuk-link">Using metadata in government</a></li>
+            <li class="contents-list__list-item contents-list__list-item--dashed">
+                <a href="#where-to-record-and-store-your-metadata" class="contents-list__link govuk-link">Where to record and store your metadata</a>
+            </li>
+            <li class="contents-list__list-item contents-list__list-item--dashed">
+                <a href="#making-metadata-machine-readable-and-accessible" class="contents-list__link govuk-link">Making metadata machine readable and accessible</a>
+            </li>
+            <li class="contents-list__list-item contents-list__list-item--dashed">
+                <a href="#metadata-you-should-record" class="contents-list__link govuk-link">Metadata you should record</a>
+            </li>
+          </ol>
+        </nav>
+      </aside>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible no-spacing">
+</div>
+
+<div class="govuk-grid-row no-spacing">
+    <div class="govuk-grid-column-two-thirds govuk-!-margin-bottom-6 govuk-!-margin-top-6 ">
+      <!-- guide elements -->
+      
+      <h2 class="govuk-heading-l">Overview</h2>
+      
+      <p class="govuk-body">Using metadata to describe Essential Shared Data Assets making it easier to catalogue, validate, reuse and share your data.</p>
+      
+      <p class="govuk-body">If you are responsible for a data asset that is shared with another public sector organisation to deliver an essential purpose or process (e.g. Essential Shared Data Assets), you should create a record which includes information about your data and store it within your dataset.</p>
+      <p class="govuk-body">This information is called metadata and the records that contain this information may be referred to as attributes or meta(data) elements. By doing this, you will:</p>
+      
+      <ul class="govuk-list govuk-list--bullet">
+        <li>make your data searchable and easier for users to find it</li>
+        <li>make it easier for the data to be catalogued and validated</li>
+        <li>ensure your data is accessible and reusable - your data is often reused even when you do not expect it to be</li>
+      </ul>
+  
+      <p class="govuk-body">If the data asset you create will be published in the form of <a class="govuk-link" href="https://www.gov.uk/guidance/creating-and-sharing-spreadsheets">spreadsheets</a>, CSV files or other data in <a class="govuk-link" href="https://en.wikipedia.org/wiki/Table_(information)">tabular form</a>, you should also refer to the guide on <a class="govuk-link" href="https://www.gov.uk/guidance/publishing-your-tabular-data">publishing your tabular data</a>, if you’re making your data open. All CSV files should comply with the <a class="govuk-link" href="https://www.gov.uk/government/publications/recommended-open-standards-for-government/tabular-data-standard">Tabular data standard</a>.</p>
+      
+      <h2 class="govuk-heading-l" id="who-should-use-this-guidance">Who should use this guidance</h2>
+      <p class="govuk-body">This guidance is part of a <a class="govuk-link" href="https://www.gov.uk/government/collections/open-standards-for-government-data-and-technology#recommended-open-standards">collection on open standards</a> to assist those already working with metadata and you should adopt it if your organisation does not currently have metadata guidance for you to use.</p>
+      <p class="govuk-body">You must follow this guidance if the data assets being shared have been designated as Essential Shared Data Assets (ESDAs), which refer to data collected, used and maintained to deliver public  services (and any other purposes or processes defined in the underlying guidance on ESDAs). As best practice, use this guidance if you create any other type of data assets you intend to share, unless the use of <a class="govuk-link" href="https://www.gov.uk/government/collections/metadata-standards-for-sharing-and-publishing-data">other metadata standards is more appropriate</a>. </p>
+      <p class="govuk-body">For example, if you are creating, maintaining or managing metadata for geospatial data (that which references data to a location on the surface of the Earth), you should instead use the <a class="govuk-link" href="https://www.agi.org.uk/gemini/">GEMINI</a> metadata for spatial data sets, including those covered by the <a class="govuk-link" href="https://guidance.data.gov.uk/publish_and_manage_data/harvest_or_add_data/inspire/">INSPIRE regulations</a>. You can also refer to the open standards profiles on <a class="govuk-link" href="https://www.gov.uk/government/publications/open-standards-for-government/exchange-of-location-point">‘Exchange of location point’</a> and <a class="govuk-link" href="https://www.gov.uk/government/publications/open-standards-for-government/identifying-property-and-street-information">‘Identifying property and street information’</a> for more details.</p>
+      
+      <h2 class="govuk-heading-l" id="using-metadata-in-government">Using metadata in government</h2>
+      <p class="govuk-body">By following this guidance, you will use a consistent metadata vocabulary to describe Essential Shared Data Assets and improve data interoperability across government. This guidance is related to other Open Standards such as <a class="govuk-link" href="https://schema.org/">schema.org</a> and <a class="govuk-link" href="https://www.dublincore.org/">Dublin Core</a>, both recommended for government use.</p>
+      
+      <h2 class="govuk-heading-l" id="where-to-record-and-store-your-metadata">Where to record and store your metadata</h2>
+      <p class="govuk-body">When recording metadata, it’s important to store this close to, or with, the data it’s describing. You can do this by storing metadata:</p>
+      
+      <ul class="govuk-list govuk-list--bullet">
+        <li>within the dataset itself, or</li>
+        <li>in a separate file, such as a readme file, and keep a record showing the link between data and metadata, and</li>
+        <li>in a Metadata Catalogue, if your government organisation has one</li>
+      </ul>
+  
+      <p class="govuk-body">When publishing your data, you will need to consider:</p>
+      
+      <ul class="govuk-list govuk-list--bullet">
+        <li>how the metadata may be harvested by data portals, such as the Government Data Marketplace, and</li>
+        <li>how easy it will be for users to discover the data assets you intend to publish.</li>
+      </ul>
+  
+      <p class="govuk-body">Read our guidance on <a class="govuk-link" href="https://www.gov.uk/guidance/publishing-your-tabular-data">‘Publishing tabular data’</a> to understand more about how you publish metadata.</p>
+      
+      <h2 class="govuk-heading-l" id="making-metadata-machine-readable-and-accessible">Making metadata machine readable and accessible</h2>
+      <p class="govuk-body">To make metadata machine readable and accessible, you must format your metadata in a specific way. For example, use camelCase which is the practice of writing phrases so that there are no spaces between words and each word in the middle of the phrase begins with a capital letter.</p>
+      <p class="govuk-body">When recording your metadata, make sure you use plain English and follow the <a class="govuk-link" href="https://www.gov.uk/guidance/content-design/writing-for-gov-uk">writing for GOV.UK guide</a>. For example, do not use jargon, and make sure you define technical terms and expand acronyms. Try to avoid using symbols that users might misinterpret.</p>
+      <p class="govuk-body">If you are providing usage guidelines within the metadata information and you include links to content stored elsewhere, i.e. by inserting URLs to ancillary documentation, web pages - do make sure these can be accessible by users outside your organisation, otherwise remove them and provide that information alongside your dataset. </p>
+      <p class="govuk-body">It is important that all Mandatory attributes are completed when publishing Essential Shared Data Assets. For Recommended or Optional metadata attributes, if you do not have the information you need to record, you can still add the metadata, but add “unknown” or “not applicable” when relevant, in preference for ‘null values’.</p>
+      
+      <h2 class="govuk-heading-l" id="metadata-you-should-record">Metadata you should record</h2>
+      <p class="govuk-body">Please see the <a class="govuk-link" href="https://co-cddo.github.io/ukgov-metadata-exchange-model/">UK Government Metadata Model</a> for details of the metadata that you should provide for your ESDA.</p>
+    </div>
+  
+    <!-- guide elements -->
+    
+    <div class="govuk-grid-column-one-third">
+      <aside class="app-related-items" role="complementary">
+        <h2 class="govuk-heading-s" id="subsection-title">
+          Related content
+        </h2>
+        <nav role="navigation" aria-labelledby="subsection-title">
+          <ul class="govuk-list govuk-!-font-size-16">
+            <li><a class="govuk-link" href="https://www.gov.uk/government/collections/metadata-standards-for-sharing-and-publishing-data">Metadata standards for sharing and publishing data - GOV.UK</a></li>
+            <li><a class="govuk-link" href="https://www.gov.uk/government/publications/recommended-open-standards-for-government/using-metadata-to-describe-data-shared-within-government">Using metadata to describe data shared within government - GOV.UK</a></li>
+            <li><a class="govuk-link" href="https://www.gov.uk/guidance/record-information-about-data-sets-you-share-with-others">Record information about data sets you share with others - GOV.UK</a></li>
+            <li><a class="govuk-link" href="https://www.gov.uk/guidance/publishing-your-tabular-data">Publishing your tabular data - GOV.UK</a></li>
+            <li><a class="govuk-link" href="https://www.gov.uk/government/publications/data-sharing-governance-framework/data-sharing-governance-framework#make-your-data-sharing-more-efficient-by-following-five-principles">Data Sharing Governance Framework - GOV.UK</a></li>
+            <li><a class="govuk-link" href="https://www.gov.uk/guidance/creating-and-sharing-spreadsheets">Creating and sharing spreadsheets - GOV.UK</a></li>
+          </ul>
+        </nav>
+      </aside>
+    </div>
+  </div>
+
+
+
+
+
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full govuk-!-margin-top-8">
+    <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
+  </div>
+  <div class="govuk-grid-column-one-half-from-desktop">
+    <h2 id="community" class="govuk-heading-m">Learn</h2>
+    <p class="govuk-body">
+      <a class="govuk-link" href="/learn">Find information to help you</a> with the data marketplace.
+      <br>
+      For example: a glossary, or the UK Cross-Government Metadata Exchange model.
+    </p>
+  </div>
+  <div class="govuk-grid-column-one-half-from-desktop">
+    <h2 id="support" class="govuk-heading-m">Contact Data Marketplace Team</h2>
+    <p class="govuk-body">
+      <a class="govuk-link" href="#1">Contact the team</a> if you have a question, suggestion or idea. We’d love to hear from you.
+    </p>
+  </div>
+</div>
+{% endblock %}

@@ -56,6 +56,10 @@ router.get("/metadata-model", async (req: Request, res: Response) => {
   res.render("../views/learn/metadata-model.njk");
 });
 
+router.get("/esda", async (req: Request, res: Response) => {
+  res.render("../views/learn/esda.njk");
+});
+
 router.get("/dcat", async (req: Request, res: Response) => {
   res.render("../views/learn/dcat.njk");
 });
