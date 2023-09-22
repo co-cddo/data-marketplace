@@ -184,9 +184,9 @@
               <ul class="gem-c-related-navigation__link-list">
                 {% for data in resource.servesDataset %}
                   {% if data.identifier %}
-                    <li class="gem-c-related-navigation__link"><a class="govuk-link gem-c-related-navigation__section-link gem-c-related-navigation__section-link--sidebar  gem-c-related-navigation__section-link--other" href="/find/{{data.identifier}}">{{data.title}}</a></li>
+                    <li class="gem-c-related-navigation__link"><a class="govuk-link gem-c-related-navigation__section-link gem-c-related-navigation__section-link--sidebar gem-c-related-navigation__section-link--other" href="/find/{{data.identifier}}">{{data.title}}</a></li>
                   {% else %}
-                    <li class="gem-c-related-navigation__link"><a class="govuk-link gem-c-related-navigation__section-link gem-c-related-navigation__section-link--sidebar  gem-c-related-navigation__section-link--other" href="#">{{data}}</a></li>
+                    <li class="gem-c-related-navigation__link"><a class="govuk-link gem-c-related-navigation__section-link gem-c-related-navigation__section-link--sidebar gem-c-related-navigation__section-link--other" href="/find/{{data.identifier}}">{{data.title}}</a></li>
                   {% endif %}
                 {% endfor %}
               </ul>
@@ -195,9 +195,9 @@
               <ul class="gem-c-related-navigation__link-list">
                 {% for data in resource.relatedAssets %}
                   {% if data.identifier %}
-                    <li class="gem-c-related-navigation__link"><a class="govuk-link gem-c-related-navigation__section-link gem-c-related-navigation__section-link--sidebar  gem-c-related-navigation__section-link--other" href="/find/{{data.identifier}}">{{data.title}}</a></li>
+                    <li class="gem-c-related-navigation__link"><a class="govuk-link gem-c-related-navigation__section-link gem-c-related-navigation__section-link--sidebar gem-c-related-navigation__section-link--other" href="/find/{{data.identifier}}">{{data.title}}</a></li>
                   {% else %}
-                    <li class="gem-c-related-navigation__link"><a class="govuk-link gem-c-related-navigation__section-link gem-c-related-navigation__section-link--sidebar  gem-c-related-navigation__section-link--other" href="{{data}}">{{data}}</a> </li>
+                    <li class="gem-c-related-navigation__link"><a class="govuk-link gem-c-related-navigation__section-link gem-c-related-navigation__section-link--sidebar gem-c-related-navigation__section-link--other" target="_blank" href="{{data}}">{{data}}</a> </li>
                   {% endif %}
                 {% endfor %}
               </ul>
