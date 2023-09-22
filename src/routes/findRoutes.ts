@@ -122,11 +122,6 @@ router.get("/:resourceID", async (req: Request, res: Response) => {
   const resourceID = req.params.resourceID;
   const resource = await fetchResourceById(resourceID);
 
-  req.session.resourceDetails = {
-    resourceTitle: resource.title,
-    organisationTitle: resource.organisation.title,
-  };
-
   res.render("resource.njk", {
     route: req.params.page,
     backLink: backLink,

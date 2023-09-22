@@ -22,14 +22,8 @@ router.get(
     const backLink = req.session.backLink || "/";
     req.session.backLink = req.originalUrl;
 
-    const resourceDetails = req.session.resourceDetails || {
-      resourceTitle: "the data asset",
-      organisationTitle: "the data asset publisher",
-    };
-
     res.render("../views/learn/data-sharing-questions.njk", {
       backLink,
-      ...resourceDetails,
     });
   },
 );
