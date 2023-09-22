@@ -112,6 +112,30 @@ env.addFilter("formatDate", function (date: string | number | Date) {
 
 // Set Nunjucks as the Express view engine
 app.set("view engine", "njk");
+app.use((req, res, next) => {
+  const fromBack = req.query.fromBack === "true";
+  req.session.pageHistory = req.session.pageHistory || [];
+  const urlIndex = req.session.pageHistory.indexOf(req.url);
+
+  if (
+    req.method === "GET" &&
+    !fromBack &&
+    !req.session.pageHistory.includes(req.url)
+  ) {
+    req.session.pageHistory.push(req.url);
+    const maxHistoryLength = 5;
+    if (req.session.pageHistory.length > maxHistoryLength) {
+      req.session.pageHistory.shift();
+    }
+    // res.locals.pageHistory = req.session.pageHistory;
+    // console.log(res.locals.pageHistory);
+  } else {
+    req.session.pageHistory.splice(urlIndex, 1);
+  }
+  res.locals.pageHistory = req.session.pageHistory;
+  console.log(res.locals.pageHistory);
+  next();
+});
 
 app.use("/", loginRoutes);
 app.use("/auth", authRoutes);

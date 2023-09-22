@@ -239,6 +239,7 @@ declare module "express-session" {
       resourceTitle: string;
       organisationTitle: string;
     };
+    pageHistory: string[];
   }
 }
 
