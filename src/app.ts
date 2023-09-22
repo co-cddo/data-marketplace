@@ -18,7 +18,6 @@ import loginRoutes from "./routes/loginRoutes";
 import authRoutes from "./routes/authRoutes";
 import profileRoutes from "./routes/profileRoutes";
 import manageRoutes from "./routes/supplierRoutes";
-import path from "path";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import session from "express-session";
@@ -48,17 +47,9 @@ app.use(
 );
 app.use(cookieParser());
 
-app.use(
-  "/assets",
-  express.static(
-    path.join(__dirname, "../node_modules/govuk-frontend/govuk/assets"),
-  ),
-);
-
-app.use(
-  "/javascripts",
-  express.static(path.join(__dirname, "../node_modules/govuk-frontend/govuk")),
-);
+app.use("/assets", express.static("node_modules/govuk-frontend/govuk/assets"));
+app.use("/gov", express.static("node_modules/govuk-frontend/govuk"));
+app.use(express.static("public"));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -92,8 +83,6 @@ app.use((req, res, next) => {
   modifyApplicationMiddleware(req, res, next);
 });
 app.use(loadJwtFromCookie);
-
-app.use(express.static("public"));
 
 app.use(handleCookies);
 
