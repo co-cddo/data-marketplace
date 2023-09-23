@@ -172,7 +172,7 @@
     </table>
   </div>
   <div>
-    {% if (resource.servesDataset | length > 0) or (resource.relatedAssets | length > 0) %}
+    {% if (resource.servesDataset | length) or (resource.relatedAssets | length) %}
     <div class="govuk-grid-column-one-third">
       <div class="gem-c-contextual-sidebar">
         <div class="gem-c-related-navigation">
@@ -180,7 +180,7 @@
             Related Data
           </h2>
           <nav role="navigation" class="gem-c-related-navigation__nav-section" aria-labelledby="related-nav-related_items">
-            {% if resource.servesDataset | length > 0 %}
+            {% if resource.servesDataset | length %}
               <ul class="gem-c-related-navigation__link-list">
                 {% for data in resource.servesDataset %}
                   {% if data.identifier %}
@@ -191,7 +191,7 @@
                 {% endfor %}
               </ul>
             {% endif %}
-            {% if resource.relatedAssets | length > 0 %}
+            {% if resource.relatedAssets | length %}
               <ul class="gem-c-related-navigation__link-list">
                 {% for data in resource.relatedAssets %}
                   {% if data.identifier %}
