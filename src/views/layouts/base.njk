@@ -40,7 +40,9 @@
       {% endfor %} #}
       {{pageHistory|dump}}
       {% if pageHistory.length >= 1 %}
-        <a class="govuk-back-link" href="{{ pageHistory[pageHistory.length - 2] }}?fromBack=true">Back</a>
+        <a id="history-back-link" class="govuk-back-link" href="{{ pageHistory[pageHistory.length - 2] }}?fromBack=true">Back</a>
+        {% else %}
+        <a id="history-back-link" class="govuk-back-link" href="/?fromBack=true">Back</a>
       {% endif %}
       {# <a class="govuk-back-link" href="{{ backLink }}">Back</a> #}
     </div>
