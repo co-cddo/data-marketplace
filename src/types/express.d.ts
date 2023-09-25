@@ -237,6 +237,7 @@ declare module "express-session" {
     decision: { status: string; notes: string };
     formValuesValidationError: RequestBody;
     pageHistory: string[];
+    returnTo: string;
   }
 }
 

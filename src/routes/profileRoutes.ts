@@ -89,15 +89,20 @@ router.post(
         },
         { headers: { Authorization: `Bearer ${req.cookies.jwtToken}` } },
       );
+
       const user: ApiUser = response.data;
+
       if (
         user.org?.slug === req.body.organisation &&
         user.jobTitle === jobTitle
       ) {
-        return res.redirect("/profile");
+        const returnTo = req.session.returnTo || "/profile";
+        delete req.session.returnTo;
+        return res.redirect(returnTo);
       } else {
         throw new Error("Complete profile failed");
       }
+
     } catch (error) {
       console.error("Error completing user profile");
       if (axios.isAxiosError(error)) {
