@@ -33,6 +33,21 @@ export const apiUser = async (
   }
 };
 
+export const apiUserWithOrganisation = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  if (!req.user.organisation) {
+    return res.render("error.njk", {
+      messageTitle: "Permissions error",
+      messageBody:
+        'You are not currently assigned to an organisation. Please <a class="govuk-link" href="/profile/complete">complete your profile</a>.',
+    });
+  }
+  next();
+};
+
 export const shareRequestDetailMiddleware = async (
   req: Request,
   res: Response,
