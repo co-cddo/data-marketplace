@@ -236,10 +236,7 @@ declare module "express-session" {
     profileErrors: { [key: string]: { text: string } };
     decision: { status: string; notes: string };
     formValuesValidationError: RequestBody;
-    resourceDetails?: {
-      resourceTitle: string;
-      organisationTitle: string;
-    };
+    pageHistory: string[];
   }
 }
 

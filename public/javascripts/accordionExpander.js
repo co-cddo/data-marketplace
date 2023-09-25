@@ -1,11 +1,14 @@
 function handleCheckboxes() {
-  const checkboxes = document.querySelectorAll(".govuk-checkboxes__input");
-  const searchButton = document.querySelector(".gem-c-search__submit");
-  checkboxes.forEach((checkbox) => {
-    checkbox.addEventListener("change", () => {
-      searchButton.click(); // Trigger form submission
+  const container = document.querySelector(".moj-override");
+  if (container) {
+    const checkboxes = container.querySelectorAll(".govuk-checkboxes__input");
+    const searchButton = document.querySelector(".gem-c-search__submit");
+    checkboxes.forEach((checkbox) => {
+      checkbox.addEventListener("change", () => {
+        searchButton.click();
+      });
     });
-  });
+  }
 }
 
 function handleDocumentListAccordion() {

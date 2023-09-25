@@ -22,14 +22,8 @@ router.get(
     const backLink = req.session.backLink || "/";
     req.session.backLink = req.originalUrl;
 
-    const resourceDetails = req.session.resourceDetails || {
-      resourceTitle: "the data asset",
-      organisationTitle: "the data asset publisher",
-    };
-
     res.render("../views/learn/data-sharing-questions.njk", {
       backLink,
-      ...resourceDetails,
     });
   },
 );
@@ -54,6 +48,10 @@ router.get("/guidance-on-publish", async (req: Request, res: Response) => {
 
 router.get("/metadata-model", async (req: Request, res: Response) => {
   res.render("../views/learn/metadata-model.njk");
+});
+
+router.get("/esda", async (req: Request, res: Response) => {
+  res.render("../views/learn/esda.njk");
 });
 
 router.get("/dcat", async (req: Request, res: Response) => {

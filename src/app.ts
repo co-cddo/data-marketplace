@@ -21,6 +21,7 @@ import manageRoutes from "./routes/supplierRoutes";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import session from "express-session";
+import { backLink } from "./middleware/backMiddleware";
 import { handleCookies } from "./middleware/cookieMiddleware";
 import passport from "passport";
 import {
@@ -112,6 +113,8 @@ env.addFilter("formatDate", function (date: string | number | Date) {
 
 // Set Nunjucks as the Express view engine
 app.set("view engine", "njk");
+
+app.use(backLink);
 
 app.use("/", loginRoutes);
 app.use("/auth", authRoutes);
