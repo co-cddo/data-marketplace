@@ -24,20 +24,6 @@
       Publish data descriptions
     </a>
   </div>
-  <div class="govuk-grid-column-full">
-    <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
-  </div>
-  <div class="govuk-grid-column-one-half-from-desktop">
-    <h2 id="community" class="govuk-heading-m">Knowledge Hub</h2>
-    <p class="govuk-body">
-      <a class="govuk-link" href="{{assetpath}}/learn">Find information to help you</a> with the data marketplace. For example: a glossary, or the UK Cross-Government Metadata Exchange model.
-    </p>
-  </div>
-  <div class="govuk-grid-column-one-half-from-desktop">
-    <h2 id="support" class="govuk-heading-m">Contact Data Marketplace Team</h2>
-    <p class="govuk-body">
-      <a class="govuk-link" href="#">Contact the team</a> if you have a question, suggestion or idea. We’d love to hear from you.
-    </p>
-  </div>
-</div>
+{% include "partials/learnBanner.njk" %}
+  
 {% endblock %}
