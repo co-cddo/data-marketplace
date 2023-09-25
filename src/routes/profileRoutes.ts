@@ -2,7 +2,6 @@ import express, { NextFunction, Request, Response } from "express";
 import { ApiUser } from "../models/apiUser";
 import axios from "axios";
 import { Organisation } from "../models/dataModels";
-import { sampleJobTitles } from "../mockData/jobTitles";
 import { apiUser } from "../middleware/apiMiddleware";
 
 const router = express.Router();
@@ -16,9 +15,7 @@ router.get(
       return res.redirect("/error");
     }
     let jobTitle = req.user.jobTitle;
-    if (jobTitle) {
-      jobTitle = sampleJobTitles[jobTitle].text;
-    }
+
     res.render("profile.njk", {
       heading: "Authed",
       user: req.user,
@@ -37,7 +34,7 @@ router.get(
   },
 );
 
-router.get("/complete", apiUser, async (req: Request, res: Response) => {
+router.get("/complete", apiUser, async (req: Request, res: Response, next: NextFunction) => {
   // If the authenticated user already has an organisation they can't set it again
   if (req.user.organisation) {
     return res.redirect("/profile");
@@ -51,24 +48,32 @@ router.get("/complete", apiUser, async (req: Request, res: Response) => {
   }));
 
   res.render("completeProfile.njk", {
-    organisations: templateOrgs,
-    jobTitles: Object.values(sampleJobTitles),
+    organisations: templateOrgs
   });
 });
 
 router.post(
   "/complete",
   async (req: Request, res: Response, next: NextFunction) => {
+
+    let jobTitle = req.body.jobTitle;
+    if (jobTitle === 'other') {
+      jobTitle = req.body.other
+    }
+
     try {
       const response = await axios.put(
         `${API}/users/complete-profile`,
-        { ...req.body },
+        {
+          organisation: req.body.organisation,
+          jobTitle
+        },
         { headers: { Authorization: `Bearer ${req.cookies.jwtToken}` } },
       );
       const user: ApiUser = response.data;
       if (
         user.org?.slug === req.body.organisation &&
-        user.jobTitle === req.body.jobTitle
+        user.jobTitle === jobTitle
       ) {
         return res.redirect("/profile");
       } else {

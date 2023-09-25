@@ -1,29 +1,90 @@
 {% extends "page.njk" %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set otherHtml %}
+{{ govukInput({
+    id: "other",
+    name: "other",
+    classes: "govuk-!-width-full",
+    label: {
+    text: "Enter other primary skill"
+    }
+}) }}
+{% endset %}
 
 {% block content %}
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <h1 class="govuk-heading-xl">Complete your profile</h1>
+            <h1 class="govuk-heading-l">Complete your profile</h1>
             <form method="POST" id="completeProfileForm">
+
                 {{ govukSelect({
                     id: "organisation",
                     name: "organisation",
+                    classes: "govuk-!-width-full",
                     label: {
                         text: "Organisation"
                     },
                     items: organisations
                 }) }}
-                {{ govukSelect({
+                {{ govukRadios({
                     id: "jobTitle",
                     name: "jobTitle",
-                    label: {
-                        text: "Role"
+                    fieldset: {
+                        legend: {
+                        text: "What is your primary skill?",
+                        isPageHeading: false
+                        }
                     },
-                    items: jobTitles
-                }) }}
+                    items: [
+                        {
+                            value: "Technology",
+                            text: "Technology",
+                            hint: {
+                                text: "For example: a technical architect, to help define data flows and requirements."
+                            }
+                        },
+                        {
+                            value: "Data security",
+                            text: "Data security",
+                            hint: {
+                                text: "For example: a cyber security analyst, to ensure data is shared safely."
+                            }
+                        },
+                        {
+                            value: "Data protection",
+                            text: "Data protection",
+                            hint: {
+                                text: "For example: a data protection specialist, to ensure you meet data regulations."
+                            }
+                        },
+                        {
+                            value: "Data governance",
+                            text: "Data governance",
+                            hint: {
+                                text: "For example: an information manager, to ensure data is stored and managed correctly."
+                            }
+                        },
+                        {
+                            value: "Business ownership",
+                            text: "Business ownership",
+                            hint: {
+                                text: "For example: a product owner or delivery manager, to oversee the project"
+                            }
+                        },
+                        {
+                            value: "other",
+                            text: "Other",
+                            conditional: {
+                                html: otherHtml
+                            }
+                        }
+                    ]
+                })}}
                 {{ govukButton({
                     text: "Continue",
                     value: "continue"

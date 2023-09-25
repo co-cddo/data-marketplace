@@ -9,7 +9,7 @@
       <h1 class="govuk-heading-xl">Account</h1>
 
       {% if user %}
-      {{ govukTable({
+        {{ govukTable({
         captionClasses: "govuk-table__caption--m",
         firstCellIsHeader: false,
         rows: [
@@ -39,7 +39,7 @@
           ],
           [
             {
-              text: "Role"
+              text: "Primary Skill"
             },
             {
               text: jobTitle if jobTitle else "unavailable"
@@ -48,7 +48,7 @@
         ]
       }) }}
 
-    {% endif %}
+      {% endif %}
     </div>
   </div>
 
