@@ -8,46 +8,15 @@
 
       <h1 class="govuk-heading-xl">Account</h1>
 
-      {% if user %}
-        {{ govukTable({
+      {{ govukTable({
         captionClasses: "govuk-table__caption--m",
         firstCellIsHeader: false,
-        rows: [
-          [
-            {
-              text: "Name"
-            },
-            {
-              text: user.display_name
-            }
-          ],
-          [
-            {
-              text: "Email"
-            },
-            {
-              text: user.email
-            }
-          ],
-          [
-            {
-              text: "Organisation"
-            },
-            {
-              text: organisation if organisation else "unavailable"
-            }
-          ],
-          [
-            {
-              text: "Primary Skill"
-            },
-            {
-              text: jobTitle if jobTitle else "unavailable"
-            }
-          ]
-        ]
+        rows: profileTableRows
       }) }}
-
+      {% if needsToComplete %}
+        <p class="govuk-body">
+          Please <a class="govuk_link" href="/profile/complete">complete your profile</a> so that you can create and review data share requests.
+        </p>
       {% endif %}
     </div>
   </div>

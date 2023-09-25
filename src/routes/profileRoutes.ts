@@ -14,13 +14,26 @@ router.get(
     if (!req.isAuthenticated()) {
       return res.redirect("/error");
     }
-    let jobTitle = req.user.jobTitle;
+
+    const profileTableRows = [
+      [{ text: "Name" }, { text: req.user.display_name }],
+      [{ text: "Email" }, { text: req.user.email }],
+    ];
+
+    if (req.user.organisation) {
+      profileTableRows.push([
+        { text: "Organisation" },
+        { text: req.user.organisation.title },
+      ]);
+      profileTableRows.push([
+        { text: "Primary skill" },
+        { text: req.user.jobTitle! },
+      ]);
+    }
 
     res.render("profile.njk", {
-      heading: "Authed",
-      user: req.user,
-      organisation: req.user.organisation?.title,
-      jobTitle: jobTitle,
+      profileTableRows,
+      needsToComplete: !req.user.organisation,
     });
   },
   (err: Error, req: Request, res: Response, next: NextFunction) => {
@@ -34,7 +47,7 @@ router.get(
   },
 );
 
-router.get("/complete", apiUser, async (req: Request, res: Response, next: NextFunction) => {
+router.get("/complete", apiUser, async (req: Request, res: Response) => {
   // If the authenticated user already has an organisation they can't set it again
   if (req.user.organisation) {
     return res.redirect("/profile");
@@ -48,17 +61,16 @@ router.get("/complete", apiUser, async (req: Request, res: Response, next: NextF
   }));
 
   res.render("completeProfile.njk", {
-    organisations: templateOrgs
+    organisations: templateOrgs,
   });
 });
 
 router.post(
   "/complete",
   async (req: Request, res: Response, next: NextFunction) => {
-
     let jobTitle = req.body.jobTitle;
-    if (jobTitle === 'other') {
-      jobTitle = req.body.other
+    if (jobTitle === "other") {
+      jobTitle = req.body.other;
     }
 
     try {
@@ -66,7 +78,7 @@ router.post(
         `${API}/users/complete-profile`,
         {
           organisation: req.body.organisation,
-          jobTitle
+          jobTitle,
         },
         { headers: { Authorization: `Bearer ${req.cookies.jwtToken}` } },
       );
