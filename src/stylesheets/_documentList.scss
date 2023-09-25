@@ -187,25 +187,18 @@
 }
 
 .result-list__limit-height {
-  max-height: 1.3157894737em * 4;
+  max-height: 150em;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.result-list__limit-height.theres-no-limit {
-  max-height: fit-content;
-}
-
-.result-list__limit-height.theres-no-limit {
-  max-height: fit-content;
-}
-
-.result-list__limit-height {
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 6;
   -webkit-box-orient: vertical;
-  overflow: hidden;
 }
+
+.result-list__limit-height.theres-no-limit {
+  max-height: fit-content;
+}
+  
 
 .theres-no-limit {
   -webkit-line-clamp: unset;
