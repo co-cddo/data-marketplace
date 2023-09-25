@@ -62,6 +62,7 @@ router.get("/complete", apiUser, async (req: Request, res: Response) => {
 
   res.render("completeProfile.njk", {
     organisations: templateOrgs,
+    errorMessage: req.session.profileErrors
   });
 });
 
@@ -71,6 +72,12 @@ router.post(
     let jobTitle = req.body.jobTitle;
     if (jobTitle === "other") {
       jobTitle = req.body.other;
+    }
+    if (!jobTitle) {
+      req.session.profileErrors = { jobTitle: { text: "Please select a primary skill" } }
+      return res.redirect('/profile/complete')
+    } else {
+      req.session.profileErrors = {}
     }
 
     try {

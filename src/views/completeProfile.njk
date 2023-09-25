@@ -21,7 +21,6 @@
         <div class="govuk-grid-column-two-thirds">
             <h1 class="govuk-heading-l">Complete your profile</h1>
             <form method="POST" id="completeProfileForm">
-
                 {{ govukSelect({
                     id: "organisation",
                     name: "organisation",
@@ -34,6 +33,7 @@
                 {{ govukRadios({
                     id: "jobTitle",
                     name: "jobTitle",
+                    errorMessage: errorMessage["jobTitle"],
                     fieldset: {
                         legend: {
                         text: "What is your primary skill?",

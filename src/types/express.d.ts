@@ -233,6 +233,7 @@ declare module "express-session" {
     acquirerForms: Record<string, FormData>;
     backLink: string;
     formErrors: { [key: string]: { text: string } };
+    profileErrors: { [key: string]: { text: string } };
     decision: { status: string; notes: string };
     formValuesValidationError: RequestBody;
     resourceDetails?: {
