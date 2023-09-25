@@ -39,7 +39,7 @@ router.get(
         }
 
         if (response?.data.new_user) {
-          req.session.returnTo = returnTo
+          req.session.returnTo = returnTo;
           return res.redirect("/profile/complete");
         }
 

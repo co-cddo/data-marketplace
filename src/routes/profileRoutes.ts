@@ -62,7 +62,7 @@ router.get("/complete", apiUser, async (req: Request, res: Response) => {
 
   res.render("completeProfile.njk", {
     organisations: templateOrgs,
-    errorMessage: req.session.profileErrors
+    errorMessage: req.session.profileErrors,
   });
 });
 
@@ -74,10 +74,12 @@ router.post(
       jobTitle = req.body.other;
     }
     if (!jobTitle) {
-      req.session.profileErrors = { jobTitle: { text: "Please select a primary skill" } }
-      return res.redirect('/profile/complete')
+      req.session.profileErrors = {
+        jobTitle: { text: "Please select a primary skill" },
+      };
+      return res.redirect("/profile/complete");
     } else {
-      req.session.profileErrors = {}
+      req.session.profileErrors = {};
     }
 
     try {
@@ -102,7 +104,6 @@ router.post(
       } else {
         throw new Error("Complete profile failed");
       }
-
     } catch (error) {
       console.error("Error completing user profile");
       if (axios.isAxiosError(error)) {

@@ -122,7 +122,13 @@ app.use("/", homeRoute);
 app.use("/profile", authenticateJWT, profileRoutes);
 app.use("/find", findRoutes);
 app.use("/share", authenticateJWT, shareRoutes);
-app.use("/acquirer", authenticateJWT, apiUser, apiUserWithOrganisation, acquirerRoutes);
+app.use(
+  "/acquirer",
+  authenticateJWT,
+  apiUser,
+  apiUserWithOrganisation,
+  acquirerRoutes,
+);
 app.use(
   "/manage-shares",
   authenticateJWT,
@@ -153,7 +159,7 @@ app.use("*", (req: Request, res: Response) => {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   const backLink = req.headers.referer || "/";
-  console.error(err)
+  console.error(err);
   res.status(500).render("error", {
     status: 500,
     messageTitle: "Sorry, there is a problem with the service",
