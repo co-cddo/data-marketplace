@@ -49,7 +49,7 @@ app.use(
 app.use(cookieParser());
 
 app.use("/assets", express.static("node_modules/govuk-frontend/govuk/assets"));
-app.use("/js", express.static("node_modules/govuk-frontend/govuk"));
+app.use("/gov", express.static("node_modules/govuk-frontend/govuk"));
 app.use(express.static("public"));
 
 app.use(bodyParser.urlencoded({ extended: true }));
