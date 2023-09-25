@@ -1,13 +1,13 @@
 function removeFilter() {
   document.addEventListener("DOMContentLoaded", () => {
-    const backButton = document.getElementById("history-back-link");
-    if (backButton) {
-      backButton.addEventListener("click", (event) => {
-        console.log("back clicked");
-        event.preventDefault();
-        window.history.back();
-      });
-    }
+    // leaving this commented in favour of backend solution
+    // const backButton = document.getElementById("history-back-link");
+    // if (backButton) {
+    //   backButton.addEventListener("click", (event) => {
+    //     event.preventDefault();
+    //     window.history.back();
+    //   });
+    // }
 
     const filterButtons = document.querySelectorAll(".moj-filter__tag");
 
