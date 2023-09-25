@@ -31,6 +31,13 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
       organisationFilters,
       themeFilters,
     );
+
+    resources.forEach(resource => {
+      if (resource.mediaType) {
+        resource.mediaType = resource.mediaType.map(type => type === 'OASIS' ? 'ODS' : type);
+      }
+    });
+
     const organisations = await fetchOrganisations();
     const themesList = themes;
     const filterOptions = [
@@ -121,6 +128,14 @@ router.get("/:resourceID", async (req: Request, res: Response) => {
   req.session.backLink = req.originalUrl;
   const resourceID = req.params.resourceID;
   const resource = await fetchResourceById(resourceID);
+
+  if (resource.distributions) {
+    resource.distributions.forEach(distribution => {
+      if (distribution.mediaType === 'OASIS') {
+        distribution.mediaType = 'ODS';
+      }
+    });
+  }
 
   res.render("resource.njk", {
     route: req.params.page,
