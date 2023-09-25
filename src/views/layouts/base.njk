@@ -34,16 +34,11 @@
   {% else %}
     <div class="govuk-width-container">
       {% include "partials/phaseBanner.njk" %}
-          {# {% for page in pageHistory %}
-        <a class="govuk-back-link" href="{{ page }}">Back</a>
-      {% endfor %} #}
-      {{pageHistory|dump}}
       {% if pageHistory.length >= 1 %}
         <a id="history-back-link" class="govuk-back-link" href="{{ pageHistory[pageHistory.length - 2] }}?fromBack=true">Back</a>
         {% else %}
         <a id="history-back-link" class="govuk-back-link" href="/?fromBack=true">Back</a>
       {% endif %}
-      {# <a class="govuk-back-link" href="{{ backLink }}">Back</a> #}
     </div>
   {% endif %}
 {% endblock %}
