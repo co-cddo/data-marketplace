@@ -118,7 +118,7 @@ function getDateValidation() {
           }
           const currentYear = new Date().getFullYear();
           if (value < currentYear || value > currentYear + 10) {
-            throw new Error("Year is invalid");
+            throw new Error("Year must be in the future");
           }
         }
         return true;
