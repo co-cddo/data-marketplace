@@ -58,10 +58,19 @@ router.get("/complete", apiUser, async (req: Request, res: Response) => {
   const templateOrgs = organisations.map((o) => ({
     value: o.slug,
     text: o.title,
+    selected: req.session.profileData?.organisation === o.slug
   }));
+
+  templateOrgs.unshift({
+    value: "please-select",
+    text: "Please select",
+    selected: !req.session.profileData?.organisation
+  })
 
   res.render("completeProfile.njk", {
     organisations: templateOrgs,
+    selectedJob: req.session.profileData?.jobTitle,
+    otherJobTitle: req.session.profileData?.otherJobTitle,
     errorMessage: req.session.profileErrors,
   });
 });
@@ -70,16 +79,31 @@ router.post(
   "/complete",
   async (req: Request, res: Response, next: NextFunction) => {
     let jobTitle = req.body.jobTitle;
+    let otherJobTitle = false;
     if (jobTitle === "other") {
       jobTitle = req.body.other;
+      otherJobTitle = true;
     }
+
+    const profileErrors: { [key: string]: { text: string } } = {};
+    const formData: { jobTitle?: string, organisation?: string } = {}
+
     if (!jobTitle) {
-      req.session.profileErrors = {
-        jobTitle: { text: "Please select a primary skill" },
-      };
-      return res.redirect("/profile/complete");
+      profileErrors["jobTitle"] = { text: "Please select a primary skill" }
     } else {
-      req.session.profileErrors = {};
+      formData["jobTitle"] = jobTitle
+    }
+
+    if (req.body.organisation === 'please-select') {
+      profileErrors["organisation"] = { text: "Please select an organisation" }
+    } else {
+      formData["organisation"] = req.body.organisation
+    }
+
+    if (Object.keys(profileErrors).length > 0) {
+      req.session.profileErrors = profileErrors
+      req.session.profileData = { ...formData, "otherJobTitle": otherJobTitle }
+      return res.redirect("/profile/complete");
     }
 
     try {

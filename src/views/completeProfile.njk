@@ -10,8 +10,9 @@
     name: "other",
     classes: "govuk-!-width-full",
     label: {
-    text: "Enter other primary skill"
-    }
+        text: "Enter other primary skill"
+    },
+    value: (selectedJob if otherJobTitle else "")
 }) }}
 {% endset %}
 
@@ -28,7 +29,8 @@
                     label: {
                         text: "Organisation"
                     },
-                    items: organisations
+                    items: organisations,
+                    errorMessage: errorMessage["organisation"]
                 }) }}
                 {{ govukRadios({
                     id: "jobTitle",
@@ -46,39 +48,45 @@
                             text: "Technology",
                             hint: {
                                 text: "For example: a technical architect, to help define data flows and requirements."
-                            }
+                            },
+                            checked: selectedJob == "Technology"
                         },
                         {
                             value: "Data security",
                             text: "Data security",
                             hint: {
                                 text: "For example: a cyber security analyst, to ensure data is shared safely."
-                            }
+                            },
+                            checked: selectedJob == "Data security"
                         },
                         {
                             value: "Data protection",
                             text: "Data protection",
                             hint: {
                                 text: "For example: a data protection specialist, to ensure you meet data regulations."
-                            }
+                            },
+                            checked: selectedJob == "Data security"
                         },
                         {
                             value: "Data governance",
                             text: "Data governance",
                             hint: {
                                 text: "For example: an information manager, to ensure data is stored and managed correctly."
-                            }
+                            },
+                            checked: selectedJob == "Data governance"
                         },
                         {
                             value: "Business ownership",
                             text: "Business ownership",
                             hint: {
                                 text: "For example: a product owner or delivery manager, to oversee the project"
-                            }
+                            },
+                            checked: selectedJob == "Business ownership"
                         },
                         {
                             value: "other",
                             text: "Other",
+                            checked: otherJobTitle,
                             conditional: {
                                 html: otherHtml
                             }
