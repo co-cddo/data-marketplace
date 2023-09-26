@@ -6,7 +6,12 @@
   <div class="govuk-grid-column-two-thirds-from-desktop govuk-!-margin-bottom-4">
     <span class="govuk-caption-xl">{{ resource.organisation.title }}</span>
     <h1 class="govuk-heading-xl govuk-!-margin-bottom-1">{{ resource.title }}</h1>
-    <p class="govuk-caption-m">Last updated: <strong>{{ resource.modified | formatDate  }}</strong></p>
+    <p class="govuk-caption-m">
+      {% if resource.modified %}
+      Last updated: <strong>{{ resource.modified | formatDate  }}</strong></p>
+      {% elif resource.issued %}
+      Created: <strong>{{ resource.issued | formatDate  }}</strong></p>
+      {% endif %}
     <p class="govuk-body govuk-!-margin-bottom-5">
       {% if resource.type.toLowerCase() == "dataset" %}
       <span>Dataset | Filetypes:</span>
@@ -102,8 +107,14 @@
         </tr>
         {% if resource.endpointURL %}
         <tr class="govuk-table__row">
-          <th scope="row" class="govuk-table__header">Endpoint URL (o)</th>
+          <th scope="row" class="govuk-table__header">Endpoint URL</th>
           <td class="govuk-table__cell"><a href="{{ resource.endpointURL }}" class="govuk-link">{{ resource.endpointURL }}</a></td>
+        </tr>
+        {% endif %}
+        {% if resource.endpointDescription %}
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header">Documentation</th>
+          <td class="govuk-table__cell"><a href="{{ resource.endpointDescription }}" class="govuk-link">{{ resource.endpointDescription }}</a></td>
         </tr>
         {% endif %}
       </tbody>
@@ -130,14 +141,18 @@
           <th scope="row" class="govuk-table__header govuk-!-width-one-half">Security Classification</th>
           <td class="govuk-table__cell govuk-!-width-one-half">{{resource.securityClassification | lower | capitalize}}</td>
         </tr>
+        {% if resource.issued %}
         <tr class="govuk-table__row">
           <th scope="row" class="govuk-table__header govuk-!-width-one-half">Created</th>
           <td class="govuk-table__cell govuk-!-width-one-half">{{resource.issued | formatDate }}</td>
         </tr>
+        {%endif%}
+        {% if resource.modified %}
         <tr class="govuk-table__row">
           <th scope="row" class="govuk-table__header govuk-!-width-one-half">Updated</th>
           <td class="govuk-table__cell govuk-!-width-one-half">{{ resource.modified | formatDate }}</td>
         </tr>
+        {%endif%}
         <tr class="govuk-table__row">
           <th scope="row" class="govuk-table__header govuk-!-width-one-half">Added to Data Marketplace</th>
           <td class="govuk-table__cell govuk-!-width-one-half">{{ resource.catalogueCreated | formatDate }}</td>
@@ -156,12 +171,6 @@
           <th scope="row" class="govuk-table__header govuk-!-width-one-half">Version</th>
           <td class="govuk-table__cell govuk-!-width-one-half">{{resource.version}}</td>
         </tr>
-        {% if resource.endpointDescription %}
-        <tr class="govuk-table__row">
-          <th scope="row" class="govuk-table__header">Documentation</th>
-          <td class="govuk-table__cell"><a href="{{ resource.endpointDescription }}" class="govuk-link">{{ resource.endpointDescription }}</a></td>
-        </tr>
-        {% endif %}
         {% if resource.contactPoint.email %}
         <tr class="govuk-table__row">
           <th scope="row" class="govuk-table__header">Contact</th>
