@@ -234,7 +234,11 @@ declare module "express-session" {
     backLink: string;
     formErrors: { [key: string]: { text: string } };
     profileErrors: { [key: string]: { text: string } };
-    profileData: { jobTitle?: string, otherJobTitle?: boolean, organisation?: string };
+    profileData: {
+      jobTitle?: string;
+      otherJobTitle?: boolean;
+      organisation?: string;
+    };
     decision: { status: string; notes: string };
     formValuesValidationError: RequestBody;
     pageHistory: string[];

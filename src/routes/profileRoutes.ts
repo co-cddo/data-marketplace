@@ -58,14 +58,14 @@ router.get("/complete", apiUser, async (req: Request, res: Response) => {
   const templateOrgs = organisations.map((o) => ({
     value: o.slug,
     text: o.title,
-    selected: req.session.profileData?.organisation === o.slug
+    selected: req.session.profileData?.organisation === o.slug,
   }));
 
   templateOrgs.unshift({
     value: "please-select",
     text: "Please select",
-    selected: !req.session.profileData?.organisation
-  })
+    selected: !req.session.profileData?.organisation,
+  });
 
   res.render("completeProfile.njk", {
     organisations: templateOrgs,
@@ -86,23 +86,23 @@ router.post(
     }
 
     const profileErrors: { [key: string]: { text: string } } = {};
-    const formData: { jobTitle?: string, organisation?: string } = {}
+    const formData: { jobTitle?: string; organisation?: string } = {};
 
     if (!jobTitle) {
-      profileErrors["jobTitle"] = { text: "Please select a primary skill" }
+      profileErrors["jobTitle"] = { text: "Please select a primary skill" };
     } else {
-      formData["jobTitle"] = jobTitle
+      formData["jobTitle"] = jobTitle;
     }
 
-    if (req.body.organisation === 'please-select') {
-      profileErrors["organisation"] = { text: "Please select an organisation" }
+    if (req.body.organisation === "please-select") {
+      profileErrors["organisation"] = { text: "Please select an organisation" };
     } else {
-      formData["organisation"] = req.body.organisation
+      formData["organisation"] = req.body.organisation;
     }
 
     if (Object.keys(profileErrors).length > 0) {
-      req.session.profileErrors = profileErrors
-      req.session.profileData = { ...formData, "otherJobTitle": otherJobTitle }
+      req.session.profileErrors = profileErrors;
+      req.session.profileData = { ...formData, otherJobTitle: otherJobTitle };
       return res.redirect("/profile/complete");
     }
 
