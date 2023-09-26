@@ -6,7 +6,7 @@ import {
   fetchOrganisations,
 } from "../services/findService";
 import { themes } from "../mockData/themes";
-import removeMd from 'remove-markdown';
+import removeMd from "remove-markdown";
 
 router.get("/", async (req: Request, res: Response, next: NextFunction) => {
   const backLink = req.session.backLink || "/";
@@ -33,12 +33,13 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
       themeFilters,
     );
 
-
-    resources.forEach(resource => {
+    resources.forEach((resource) => {
       if (resource.mediaType) {
-        resource.mediaType = resource.mediaType.map(type => type === 'OASIS' ? 'ODS' : type);
+        resource.mediaType = resource.mediaType.map((type) =>
+          type === "OASIS" ? "ODS" : type,
+        );
       }
-    // Strip Markdown from each resource's summary and description
+      // Strip Markdown from each resource's summary and description
       if (resource.summary) {
         resource.summary = removeMd(resource.summary);
       }
@@ -139,9 +140,9 @@ router.get("/:resourceID", async (req: Request, res: Response) => {
   const resource = await fetchResourceById(resourceID);
 
   if (resource.distributions) {
-    resource.distributions.forEach(distribution => {
-      if (distribution.mediaType === 'OASIS') {
-        distribution.mediaType = 'ODS';
+    resource.distributions.forEach((distribution) => {
+      if (distribution.mediaType === "OASIS") {
+        distribution.mediaType = "ODS";
       }
     });
   }

@@ -13,13 +13,13 @@
 
 .large-button {
   font-size: 1.6em;
-  font-weight: 900;  
+  font-weight: 900;
 }
 
 @media screen and (max-width: 640px) {
   .large-button {
     font-size: 18px;
-    font-weight: 700;  
+    font-weight: 700;
   }
 }
 
@@ -118,8 +118,8 @@
 
 .contents-list {
   // padding-bottom: govuk-spacing(6);
-  .contents-list__title{
-    margin:0;
+  .contents-list__title {
+    margin: 0;
     padding-bottom: govuk-spacing(2);
   }
 
@@ -130,7 +130,7 @@
 
     &-item {
       position: relative;
-      padding: .4em 25px;
+      padding: 0.4em 25px;
 
       &:first-child {
         margin: 0;
@@ -160,9 +160,9 @@
   }
 }
 
-.no-spacing{
-  padding:0;
-  margin:0;
+.no-spacing {
+  padding: 0;
+  margin: 0;
 }
 
 dl.publish-metrics {

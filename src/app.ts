@@ -19,7 +19,6 @@ import authRoutes from "./routes/authRoutes";
 import profileRoutes from "./routes/profileRoutes";
 import manageRoutes from "./routes/supplierRoutes";
 import publisherRoutes from "./routes/publisherRoutes";
-import path from "path";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import session from "express-session";
