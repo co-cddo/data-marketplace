@@ -11,29 +11,29 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds govuk-!-margin-bottom-6">
 
-    <p class="govuk-body">You can add data descriptions using a CSV file. This can be used to provide multiple data descriptions in a single process. The descriptions must be added to the provided <a class="govuk-link" href="/documents/learn/uk_cross_government_metadata_exchange_model.xlsx">CSV template file</a>, which has been structured to ensure descriptions conform to <a class="govuk-link" href="https://co-cddo.github.io/ukgov-metadata-exchange-model/">the cross-government data sharing metadata model</a>.</p>
+    <p class="govuk-body">You can add data descriptions using a CSV file. This can be used to provide multiple data descriptions in a single process. The descriptions must be added to the provided <a class="govuk-link" href="/documents/learn/CSV_Bulk_Upload_Template_for_Data_Asset_Metadata.xlsx.ods">CSV template file</a>, which has been structured to ensure descriptions conform to <a class="govuk-link" href="https://co-cddo.github.io/ukgov-metadata-exchange-model/">the cross-government data sharing metadata model</a>.</p>
 
     <h2 class="govuk-heading-m">Step 1: Gather information about your data description</h2>
 
-    <p class="govuk-body">Use the <a class="govuk-link" href="#">questions</a> as a guide to ensure enough information can be provided at each stage of adding a data description</p>
+    <p class="govuk-body">Use the <a class="govuk-link" href="/learn/articles/publish-data-descriptions-questions">questions</a> as a guide to ensure enough information can be provided at each stage of adding a data description</p>
 
     <p class="govuk-body">You need to answer the questions to make sure your published data description will be helpful to users trying to find data. You should avoid using domain specific jargon, acronyms and abbreviations. Write your description in plain English.</p>
 
     <h2 class="govuk-heading-m">Step 2: Entering your descriptions into the CSV file</h2>
 
-    <p class="govuk-body">Download the <a class="govuk-link" href="/documents/learn/uk_cross_government_metadata_exchange_model.xlsx">CSV template file</a> and provide your answers to the questions under the relevant columns.</p>
+    <p class="govuk-body">Download the <a class="govuk-link" href="/documents/learn/CSV_Bulk_Upload_Template_for_Data_Asset_Metadata.xlsx.ods">CSV template file</a> and provide your answers to the questions under the relevant columns.</p>
 
     <p class="govuk-body">The first tab in the spreadsheet provides some guidance on using the template. The Dataset tab should be completed with the values for your dataset descriptions (the data made available as a file download). The DataService tab should be completed with the values for your data service descriptions (the data that is made available as a web API).</p>
 
     <h2 class="govuk-heading-m">Step 3: Uploading the CSV file to the Data Marketplace</h2>
 
-    <p class="govuk-body">Sign in to the Data Marketplace and navigate to the <a class="govuk-link" href="#">Publish data descriptions</a> dashboard. Then click on the ‘Add new data description’ button. On the next page you will need to select 'Upload a CSV file of data asset descriptions'.</p>
+    <p class="govuk-body">Sign in to the Data Marketplace and navigate to the <a class="govuk-link" href="/publish/publish-dashboard">Publish data descriptions</a> dashboard. Then click on the ‘Add new data description’ button. On the next page you will need to select 'Upload a CSV file of data asset descriptions'.</p>
 
     <img class="learn-images" src="/images/learn/add-description-options.png" alt="Add your data description screenshot"/>
     <br>
     <br>
 
-    <p class="govuk-body">You will now be taken through to a page where you can download the <a class="govuk-link" href="/documents/learn/uk_cross_government_metadata_exchange_model.xlsx">CSV template file</a> for providing your data descriptions. When you are ready, click on the Upload CSV file button.</p>
+    <p class="govuk-body">You will now be taken through to a page where you can download the <a class="govuk-link" href="/documents/learn/CSV_Bulk_Upload_Template_for_Data_Asset_Metadata.xlsx.ods">CSV template file</a> for providing your data descriptions. When you are ready, click on the Upload CSV file button.</p>
 
     <img class="learn-images" src="/images/learn/upload-CSV-page.png" alt="Upload a CSV file screenshot"/>
     <br>
@@ -58,27 +58,6 @@
     <img class="learn-images" src="/images/learn/successful-upload-summary.png" alt="Upload summary no errors screenshot"/>
   </div>
 </div>
-
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-full govuk-!-margin-top-8">
-    <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
-  </div>
-
-  <div class="govuk-grid-column-one-half-from-desktop">
-    <h2 id="community" class="govuk-heading-m">Learn</h2>
-    <p class="govuk-body">
-      <a class="govuk-link" href="/learn/">Find information to help you</a> with the data marketplace.
-      <br>
-      For example: a glossary, or the UK Cross-Government Metadata Exchange model.
-    </p>
-  </div>
-
-  <div class="govuk-grid-column-one-half-from-desktop">
-    <h2 id="support" class="govuk-heading-m">Contact Data Marketplace Team</h2>
-    <p class="govuk-body">
-      <a class="govuk-link" href="#1">Contact the team</a> if you have a question, suggestion or idea. We’d love to hear from you.
-    </p>
-  </div>
-</div>
+{% include "partials/learnBanner.njk" %}
 
 {% endblock %}

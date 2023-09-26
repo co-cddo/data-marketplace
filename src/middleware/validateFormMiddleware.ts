@@ -15,14 +15,12 @@ function getProjectAimsValidation() {
       .trim()
       .not()
       .isEmpty({ ignore_whitespace: true })
-      .withMessage("Please provide the aims of your project."),
+      .withMessage("Enter aim of your project"),
 
     body("explanation")
       .not()
       .isEmpty()
-      .withMessage(
-        "Please explain how the data will help achieve the project aims.",
-      ),
+      .withMessage("Enter how the data will help you achieve your aims"),
   ];
 }
 
@@ -40,7 +38,7 @@ function getDataSubjectValidation() {
     body("data-subjects")
       .not()
       .isEmpty()
-      .withMessage("Enter description of data needed"),
+      .withMessage("Enter a description of the data subjects"),
   ];
 }
 
@@ -59,25 +57,12 @@ function getOtherOrgsValidation(req: Request) {
   for (const key in req.body) {
     if (key.startsWith("org-name")) {
       validations.push(
-        body(key).not().isEmpty().withMessage(`Organisation cannot be empty`),
-      );
-    }
-  }
-  return validations;
-}
-
-function getDataTravelLocationValidation(req: Request) {
-  if (req.body.removeCountry) {
-    const countryIndexToRemove = req.body.removeCountry;
-
-    delete req.body["country-name-" + countryIndexToRemove];
-  }
-
-  const validations = [];
-  for (const key in req.body) {
-    if (key.startsWith("country-name")) {
-      validations.push(
-        body(key).not().isEmpty().withMessage(`Country cannot be empty`),
+        body(key)
+          .not()
+          .isEmpty()
+          .withMessage(
+            `Enter the name of the other organisation that will need access to this data`,
+          ),
       );
     }
   }
@@ -98,112 +83,77 @@ function getImpactValidation() {
 function getDateValidation() {
   return [
     body("day")
-      .optional({ checkFalsy: true })
-      .isInt({ min: 1, max: 31 })
-      .withMessage("Day is invalid")
+      .custom((value, { req }) => {
+        if (value || req.body.month || req.body.year) {
+          if (!value) {
+            throw new Error("Day is required if month or year is provided");
+          }
+          if (value < 1 || value > 31) {
+            throw new Error("Day is invalid");
+          }
+        }
+        return true;
+      })
+      .optional()
       .escape(),
     body("month")
-      .optional({ checkFalsy: true })
-      .isInt({ min: 1, max: 12 })
-      .withMessage("Month is invalid")
+      .custom((value, { req }) => {
+        if (value || req.body.day || req.body.year) {
+          if (!value) {
+            throw new Error("Month is required if day or year is provided");
+          }
+          if (value < 1 || value > 12) {
+            throw new Error("Month is invalid");
+          }
+        }
+        return true;
+      })
+      .optional()
       .escape(),
     body("year")
-      .optional({ checkFalsy: true })
-      .isInt({
-        min: new Date().getFullYear(),
-        max: new Date().getFullYear() + 10,
+      .custom((value, { req }) => {
+        if (value || req.body.day || req.body.month) {
+          if (!value) {
+            throw new Error("Year is required if day or month is provided");
+          }
+          const currentYear = new Date().getFullYear();
+          if (value < currentYear || value > currentYear + 10) {
+            throw new Error("Year must be in the future");
+          }
+        }
+        return true;
       })
-      .withMessage("Year is invalid")
+      .optional()
       .escape(),
-    body(["day", "month", "year"]).custom((value, { req }) => {
-      const day = req.body.day;
-      const month = req.body.month;
-      const year = req.body.year;
-      const currentYear = new Date().getFullYear();
-
-      if (year && year < currentYear) {
-        throw new Error("Year cannot be in the past");
-      }
-
-      if (day && (!month || !year)) {
-        throw new Error("Month and year are invalid.");
-      }
-
-      if (month && (!day || !year)) {
-        throw new Error("Day and year are invalid.");
-      }
-
-      if (year && (!day || !month)) {
-        throw new Error("Day and month are invalid");
-      }
-
-      if (day && month && !year) {
-        throw new Error("Year is invalid");
-      }
-
-      if (day && year && !month) {
-        throw new Error("Month is invalid");
-      }
-
-      if (year && month && !day) {
-        throw new Error("Day is invalid");
-      }
-
-      return true;
-    }),
   ];
 }
 
-function getBenefitsValidation() {
-  return [
-    body("benefits")
+function getBenefitsValidation(req: Request) {
+  const errorText = "Enter how your project will provide this public benefit";
+  const benefits = req.body.benefits;
+  const benefitErrors = [
+    body("benefits", "Please select at least one benefit")
       .exists()
-      .withMessage("Select one or more benefits")
-      .custom((benefitsArray, { req }) => {
-        if (!benefitsArray) {
-          return true;
-        }
-
-        if (!Array.isArray(benefitsArray)) {
-          benefitsArray = [benefitsArray];
-        }
-
-        const missingExplanations = [];
-
-        for (const benefit of benefitsArray) {
-          const explanation = req.body[benefit];
-          if (!explanation || explanation.trim() === "") {
-            missingExplanations.push(benefit);
-          }
-        }
-
-        if (missingExplanations.length > 0) {
-          throw new Error(
-            "Enter how your project will provide the public benefit",
-          );
-        }
-
-        return true;
-      }),
+      .withMessage("Select one or more benefits"),
   ];
+  if (Array.isArray(benefits)) {
+    benefits.forEach((benefit: string) => {
+      benefitErrors.push(body(benefit).notEmpty().withMessage(`${errorText}`));
+    });
+  } else {
+    benefitErrors.push(body(benefits).notEmpty().withMessage(`${errorText}`));
+  }
+  return benefitErrors;
 }
 
 function getLegalPowerValidation() {
   return [
-    body("legal-power")
-      .exists()
-      .withMessage("Select Yes, No or we don’t know")
-      .custom((value, { req }) => {
-        if (value === "yes") {
-          if (
-            !req.body["legal-power-input"] ||
-            req.body["legal-power-input"].trim() === ""
-          ) {
-            throw new Error("Enter the legal power");
-          }
-        }
-        return true;
-      }),
+    body("legal-power").exists().withMessage("Select Yes, No or we don’t know"),
+    body("legal-power-input")
+      .if(body("legal-power").contains("yes"))
+      .notEmpty()
+      .withMessage("Enter the legal power")
+      .escape(),
   ];
 }
 
@@ -211,31 +161,24 @@ function getLegalGatewayValidation() {
   return [
     body("legal-gateway")
       .exists()
-      .withMessage("Select Yes, No or we don’t know")
-      .custom((value, { req }) => {
-        if (
-          value === "yes" &&
-          (!req.body["yes"] || req.body["yes"].trim() === "")
-        ) {
-          throw new Error("Enter the legal gateway explanation");
-        }
-        if (
-          value === "other" &&
-          (!req.body["other"] || req.body["other"].trim() === "")
-        ) {
-          throw new Error("Enter the other legal grounds explanation");
-        }
-        return true;
-      }),
+      .withMessage("Select Yes, No or we don’t know"),
+    body("yes")
+      .if(body("legal-gateway").contains("yes"))
+      .notEmpty()
+      .withMessage("Enter the legal gateway for acquiring this data")
+      .escape(),
+    body("other")
+      .if(body("legal-gateway").contains("other"))
+      .notEmpty()
+      .withMessage(
+        "Enter the other legal grounds that you have for acquiring this data",
+      )
+      .escape(),
   ];
 }
 
 function getLegalReviewValidation() {
-  return [
-    body("legal-review")
-      .exists()
-      .withMessage("Select Yes, No or we don’t know"),
-  ];
+  return [body("legal-review").exists().withMessage("Select Yes or No")];
 }
 
 function getLawfulPersonalValidation() {
@@ -266,6 +209,27 @@ function getDataTravelValidation() {
   return [body("data-travel").exists().withMessage("Select No or Yes")];
 }
 
+function getDataTravelLocationValidation(req: Request) {
+  if (req.body.removeCountry) {
+    const countryIndexToRemove = req.body.removeCountry;
+
+    delete req.body["country-name-" + countryIndexToRemove];
+  }
+
+  const validations = [];
+  for (const key in req.body) {
+    if (key.startsWith("country-name")) {
+      validations.push(
+        body(key)
+          .not()
+          .isEmpty()
+          .withMessage(`Enter the country the data will travel through`),
+      );
+    }
+  }
+  return validations;
+}
+
 function getRoleValidation() {
   return [
     body("role")
@@ -277,17 +241,35 @@ function getRoleValidation() {
 }
 
 function getProtectionReviewValidation() {
+  return [body("protection-review").exists().withMessage("Select Yes or No")];
+}
+
+function getDeliveryValidation() {
   return [
-    body("protection-review").exists().withMessage("Please select an option."),
+    body("delivery")
+      .exists()
+      .withMessage(
+        "Select Through secure third-party software, Physical delivery or Something else",
+      ),
+
+    body("something-else")
+      .if(body("delivery").contains("something"))
+      .notEmpty()
+      .withMessage("How would you like to receive the data")
+      .escape(),
   ];
 }
 
 function getFormatValidation() {
-  return [body("format").exists().withMessage("Please select an option.")];
-}
+  return [
+    body("format").exists().withMessage("Select one option"),
 
-function getDeliveryValidation() {
-  return [body("delivery").exists().withMessage("Please select an option.")];
+    body("something-else")
+      .if(body("format").contains("something"))
+      .notEmpty()
+      .withMessage("Enter preferred format of data")
+      .escape(),
+  ];
 }
 
 function getDisposalValidation() {
@@ -314,7 +296,7 @@ function getValidationRules(req: Request, step: string) {
     case "date":
       return getDateValidation();
     case "benefits":
-      return getBenefitsValidation();
+      return getBenefitsValidation(req);
     case "data-access":
       return getDataAccessValidation();
     case "other-orgs":
@@ -408,15 +390,16 @@ export const handleValidationErrors = (
 
       // Combine the 'msg' values into one message
       const combinedMessage = Array.from(new Set(validMessages)).join(", ");
-      errorMessages["date"] = { text: combinedMessage };
-    } else {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      errors.forEach((error: any) => {
-        errorMessages[error.path] = { text: error.msg };
-      });
+      errorMessages["dateCombined"] = { text: combinedMessage };
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    errors.forEach((error: any) => {
+      errorMessages[error.path] = { text: error.msg };
+    });
     req.session.formErrors = errorMessages;
+    req.session.formValuesValidationError = req.body;
     console.log("Form errors", req.session.formErrors); //leaving this in for ease of debugging
+
     return res.redirect(req.originalUrl);
   }
 

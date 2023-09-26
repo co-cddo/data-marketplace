@@ -5,44 +5,13 @@ import {
   ShareRequestTable,
 } from "../types/express";
 import axios from "axios";
+import { createAbacMiddleware } from "../middleware/ABACMiddleware";
+import { shareRequestDetailMiddleware } from "../middleware/apiMiddleware";
+import { replace } from "../helperFunctions/checkhelper";
+import { capitalise, formatDate } from "../helperFunctions/stringHelpers";
 import { checkAnswer } from "../helperFunctions/formHelper";
 const router = express.Router();
 const URL = `${process.env.API_ENDPOINT}/manage-shares`;
-
-const formatDate = (dateString: string): string => {
-  const options: Intl.DateTimeFormatOptions = {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  };
-  return new Date(dateString).toLocaleDateString(undefined, options);
-};
-
-function formatDateObject(dateObj: {
-  day: string;
-  month: string;
-  year: string;
-}): string {
-  const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-
-  const monthIndex = parseInt(dateObj.month, 10) - 1; // Convert month string to number and subtract 1 for zero-based index
-  const monthName = monthNames[monthIndex];
-
-  return `${dateObj.day} ${monthName} ${dateObj.year}`;
-}
 
 router.get("/", async (req: Request, res: Response) => {
   const backLink = req.headers.referer || "/";
@@ -52,7 +21,7 @@ router.get("/", async (req: Request, res: Response) => {
 });
 
 // Function to get the tag class based on the status value
-function getStatusClass(status: string): string {
+function getCreatedRequestStatusClass(status: string): string {
   switch (status) {
     case "NOT STARTED":
       return "govuk-tag--grey";
@@ -64,6 +33,17 @@ function getStatusClass(status: string): string {
       return "govuk-tag--grey";
   }
 }
+
+const getReceivedRequestStatusClass = (status: string) => {
+  switch (status) {
+    case "AWAITING REVIEW":
+      return "govuk-tag--red";
+    case "IN REVIEW":
+      return "govuk-tag--blue";
+    default:
+      return "govuk-tag--grey";
+  }
+};
 
 router.get(
   "/created-requests",
@@ -86,14 +66,10 @@ router.get(
     }
     const response = createdRequests?.data as ShareRequestResponse[];
 
-    const acquirerForms = response.reduce(
-      (acc: Record<string, FormData>, val: ShareRequestResponse) => ({
-        ...acc,
-        [val.sharedata.dataAsset]: val.sharedata,
-      }),
-      {},
-    );
-    req.session.acquirerForms = acquirerForms;
+    const acquirerForms: { [key: string]: FormData } = {};
+    for (const s of response) {
+      acquirerForms[s.sharedata.dataAsset] = s.sharedata;
+    }
 
     const backLink = req.headers.referer || "/";
 
@@ -102,18 +78,24 @@ router.get(
     );
     let pendingRows: ShareRequestTable = pendingRequests.map((r) => [
       {
-        html: `<a href="/acquirer/${r.sharedata.dataAsset
-          }/start">${r.requestId.substring(0, 8)}...</a>`,
+        html:
+          r.status === "RETURNED"
+            ? `<a class="govuk-link" href="/acquirer/${
+                r.sharedata.dataAsset
+              }/check">${r.requestId.substring(0, 8)}...</a>`
+            : `<a class="govuk-link" href="/acquirer/${
+                r.sharedata.dataAsset
+              }/start">${r.requestId.substring(0, 8)}...</a>`,
       },
       { text: r.assetTitle },
       { text: r.assetPublisher.title },
       {
-        text:
-          r.neededBy === "UNREQUESTED" ? "Unrequested" : formatDate(r.neededBy),
+        text: formatDate(r.neededBy),
       },
       {
-        html: `<span class="govuk-tag ${getStatusClass(r.status)}">${r.status
-          }</span>`,
+        html: `<span class="govuk-tag ${getCreatedRequestStatusClass(
+          r.status,
+        )}">${r.status}</span>`,
       },
     ]);
     if (pendingRows.length === 0) {
@@ -127,19 +109,16 @@ router.get(
     );
     let submittedRows: ShareRequestTable = submittedRequests.map((r) => [
       {
-        html: `<a href="/acquirer/${r.sharedata.dataAsset
-          }/start">${r.requestId.substring(0, 8)}...</a>`,
+        html: `${r.requestId.substring(0, 8)}...`,
       },
       { text: r.assetTitle },
       { text: r.assetPublisher.title },
       { text: formatDate(r.received) },
+      { text: formatDate(r.neededBy) },
       {
-        text:
-          r.neededBy === "UNREQUESTED" ? "Unrequested" : formatDate(r.neededBy),
-      },
-      {
-        html: `<span class="govuk-tag ${getStatusClass(r.status)}">${r.status
-          }</span>`,
+        html: `<span class="govuk-tag ${getCreatedRequestStatusClass(
+          r.status,
+        )}">${r.status}</span>`,
       },
     ]);
     if (submittedRows.length === 0) {
@@ -153,7 +132,7 @@ router.get(
     );
     let completedRows: ShareRequestTable = completedRequests.map((r) => [
       {
-        html: `<a href="/manage-shares/created-requests/${
+        html: `<a class="govuk-link" href="/manage-shares/created-requests/${
           r.requestId
         }">${r.requestId.substring(0, 8)}...</a>`,
       },
@@ -165,8 +144,9 @@ router.get(
       },
       { text: formatDate(r.decisionDate as string) },
       {
-        html: `<span class="govuk-tag ${getStatusClass(r.status)}">${r.status
-          }</span>`,
+        html: `<span class="govuk-tag ${getCreatedRequestStatusClass(
+          r.status,
+        )}">${r.status}</span>`,
       },
     ]);
     if (completedRows.length === 0) {
@@ -190,39 +170,16 @@ router.get(
 
 router.get(
   "/created-requests/:requestId",
+  shareRequestDetailMiddleware,
   async (req: Request, res: Response) => {
     const backLink = req.headers.referer || "/manage-shares/created-requests/";
-    const requestId = req.params.requestId;
 
     try {
-      const requestDetail = await axios.get(
-        `${URL}/received-requests/${requestId}`,
-        {
-          headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
-        },
-      );
-
-      if (!requestDetail.data) {
-        return res.status(404).send("Request not found");
-      }
-
-      // Format the received date
-      requestDetail.data.received = formatDate(requestDetail.data.received);
-      requestDetail.data.neededBy = formatDate(requestDetail.data.neededBy);
-      requestDetail.data.decisionDate = formatDate(
-        requestDetail.data.decisionDate,
-      );
-
-      // Format the neededBy date
-      const dateObj = requestDetail.data.sharedata.steps.date.value;
-      requestDetail.data.sharedata.steps.date.formattedValue =
-        formatDateObject(dateObj);
-
-      req.session.acquirerForms = requestDetail.data;
+      const requestDetail = req.shareRequest!;
 
       res.render("../views/acquirer/created-request-outcome.njk", {
         backLink,
-        request: requestDetail.data,
+        request: requestDetail,
       });
     } catch (error) {
       console.error(error);
@@ -233,35 +190,16 @@ router.get(
 
 router.get(
   "/created-requests/:requestId/view-answers",
+  shareRequestDetailMiddleware,
   async (req: Request, res: Response) => {
-    const requestId = req.params.requestId;
-    const backLink =
-      req.headers.referer || `/manage-shares/created-requests/${requestId}`;
+    const backLink = req.headers.referer || `/manage-shares/created-requests/`;
 
     try {
-      const requestDetail = await axios.get(
-        `${URL}/received-requests/${requestId}`,
-        {
-          headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
-        },
-      );
+      const requestDetail = req.shareRequest!;
 
-      if (!requestDetail.data) {
-        return res.status(404).send("Request not found");
-      }
-
-      // Format the received date
-      requestDetail.data.received = formatDate(requestDetail.data.received);
-
-      // Format the neededBy date
-      const dateObj = requestDetail.data.sharedata.steps.date.value;
-      requestDetail.data.sharedata.steps.date.formattedValue =
-        formatDateObject(dateObj);
-
-      req.session.acquirerForms = requestDetail.data;
       res.render("../views/acquirer/created-request-view-full-request.njk", {
-        request: requestDetail.data,
-        sharedata: checkAnswer(requestDetail.data.sharedata),
+        request: requestDetail,
+        sharedata: checkAnswer(requestDetail.sharedata),
         backLink,
       });
     } catch (error) {
@@ -271,95 +209,110 @@ router.get(
   },
 );
 
-router.get("/received-requests", async (req: Request, res: Response) => {
-  const backLink = req.headers.referer || "/manage-shares";
+const reviewRequestAbacMiddleware = createAbacMiddleware(
+  "organisation",
+  "REVIEW_SHARE_REQUESTS",
+  "You are not authorised to review share requests. Please contact your organisation administrator.",
+);
 
-  const response = await axios.get(`${URL}/received-requests`, {
-    headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
-  });
-  const receivedTableRows = [];
-  if (response.data && response.data.length > 0) {
-    for (const request of response.data) {
-      // Format the received date
-      request.received = formatDate(request.received);
+router.get(
+  "/received-requests",
+  reviewRequestAbacMiddleware,
+  async (req: Request, res: Response, next: NextFunction) => {
+    const backLink = req.headers.referer || "/manage-shares";
 
-      // Format the "Needed by" date on the
-      if (
-        request.sharedata &&
-        request.sharedata.steps &&
-        request.sharedata.steps.date
-      ) {
-        const dateObj = request.sharedata.steps.date.value;
-      
-        if (
-          dateObj.day === null && dateObj.month === undefined || dateObj.year === null 
-        ) {
-          request.sharedata.steps.date.formattedValue = "Unrequested";
-        } else {
-          request.sharedata.steps.date.formattedValue = formatDateObject(dateObj);
-        }
+    let receivedRequests;
+    try {
+      receivedRequests = await axios.get(`${URL}/received-requests`, {
+        headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
+      });
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error(
+          `API ERROR - ${error.response?.status}: ${error.response?.statusText}`,
+        );
+        console.error(error.response?.data.detail);
       } else {
-        request.sharedata.steps.date = {
-          formattedValue: "Unrequested"
-        };
+        console.error(error);
       }
-
-      const row = [
-        {
-          html: `<a class="govuk-link" href="/manage-shares/received-requests/${request.requestId}">${request.requestId}</a>`,
-        },
-        { text: request.requesterEmail },
-        { text: request.assetTitle },
-        { text: request.received },
-        { text: request.sharedata.steps.date.formattedValue },
-        {
-          html: `<span class="govuk-tag ${getStatusClass(request.status)}">${request.status
-            }</span>`,
-        },
-      ];
-      receivedTableRows.push(row);
+      next(error);
     }
-  } else {
-    receivedTableRows.push([{ text: "No received requests.", colspan: 6 }]);
-  }
+    const response = receivedRequests?.data as ShareRequestResponse[];
+    const currentRequests = response.filter((r) =>
+      ["AWAITING REVIEW", "IN REVIEW", "RETURNED"].includes(r.status),
+    );
 
-  res.render("../views/supplier/received-requests.njk", {
-    backLink,
-    receivedTableRows: receivedTableRows,
-  });
-});
+    let currentRows: ShareRequestTable = currentRequests.map((r) => [
+      {
+        html:
+          r.status === "RETURNED"
+            ? `<a class="govuk-link" href="/manage-shares/received-requests/${
+                r.requestId
+              }/outcome">${r.requestId.substring(0, 8)}...</a>`
+            : `<a class="govuk-link" href="/manage-shares/received-requests/${
+                r.requestId
+              }">${r.requestId.substring(0, 8)}...</a>`,
+      },
+      { text: r.requestingOrg },
+      { text: r.assetTitle },
+      { text: formatDate(r.received) },
+      { text: formatDate(r.neededBy) },
+      {
+        html: `<span class="govuk-tag ${getReceivedRequestStatusClass(
+          r.status,
+        )}">${r.status}</span>`,
+      },
+    ]);
+    if (currentRows.length === 0) {
+      currentRows = [
+        [{ text: "There are no data share requests", colspan: 6 }],
+      ];
+    }
+
+    const completedRequests = response.filter((r) =>
+      ["ACCEPTED", "REJECTED"].includes(r.status),
+    );
+    let completedRows: ShareRequestTable = completedRequests.map((r) => [
+      {
+        html: `<a class="govuk-link" href="/manage-shares/received-requests/${
+          r.requestId
+        }/outcome">${r.requestId.substring(0, 8)}...</a>`,
+      },
+      { text: r.requestingOrg },
+      { text: r.assetTitle },
+      { text: formatDate(r.received) },
+      { text: formatDate(r.decisionDate) },
+      {
+        html: `${capitalise(r.status)}`,
+      },
+    ]);
+    if (completedRows.length === 0) {
+      completedRows = [
+        [{ text: "There are no data completed share requests", colspan: 6 }],
+      ];
+    }
+
+    res.render("../views/supplier/received-requests.njk", {
+      backLink,
+      currentRows,
+      completedRows,
+    });
+  },
+);
 
 router.get(
   "/received-requests/:requestId",
+  reviewRequestAbacMiddleware,
+  shareRequestDetailMiddleware,
   async (req: Request, res: Response) => {
     const backLink = req.headers.referer || "/manage-shares/received-requests/";
-    const requestId = req.params.requestId;
 
     try {
-      const requestDetail = await axios.get(
-        `${URL}/received-requests/${requestId}`,
-        {
-          headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
-        },
-      );
-
-      if (!requestDetail.data) {
-        return res.status(404).send("Request not found");
-      }
-
-      // Format the received date
-      requestDetail.data.received = formatDate(requestDetail.data.received);
-
-      // Format the neededBy date
-      const dateObj = requestDetail.data.sharedata.steps.date.value;
-      requestDetail.data.sharedata.steps.date.formattedValue =
-        formatDateObject(dateObj);
-
-      req.session.acquirerForms = requestDetail.data;
+      const requestDetail = req.shareRequest!;
 
       res.render("../views/supplier/review-summary.njk", {
         backLink,
-        request: requestDetail.data,
+        request: requestDetail,
       });
     } catch (error) {
       console.error(error);
@@ -370,6 +323,7 @@ router.get(
 
 router.post(
   "/received-requests/:requestId",
+  reviewRequestAbacMiddleware,
   async (req: Request, res: Response) => {
     const requestId = req.params.requestId;
     res.redirect(
@@ -380,36 +334,59 @@ router.post(
 
 router.get(
   "/received-requests/:requestId/review-request",
+  reviewRequestAbacMiddleware,
+  shareRequestDetailMiddleware,
   (req: Request, res: Response) => {
-    const requestDetail = req.session.acquirerForms;
-
-    if (!requestDetail) {
-      return res.status(404).send("Request data not found in session");
-    }
+    const requestDetail = req.shareRequest!;
 
     res.render("../views/supplier/review-request.njk", {
       request: requestDetail,
+      replacements: replace,
     });
   },
 );
 
 router.post(
   "/received-requests/:requestId/review-request",
-  async (req: Request, res: Response) => {
+  reviewRequestAbacMiddleware,
+  async (req: Request, res: Response, next: NextFunction) => {
     const requestId = req.params.requestId;
+
+    if (req.body.notes) {
+      try {
+        await axios.put(
+          `${URL}/received-requests/${requestId}/review`,
+          { notes: req.body.notes },
+          {
+            headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
+          },
+        );
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          console.error(
+            `API ERROR - ${error.response?.status}: ${error.response?.statusText}`,
+          );
+          console.error(error.response?.data.detail);
+        } else {
+          console.error(error);
+        }
+        return next(error);
+      }
+    }
 
     if (req.body.continueButton) {
       return res.redirect(
         `/manage-shares/received-requests/${requestId}/decision`,
       );
     } else if (req.body.returnButton) {
-      return res.redirect("/manage-shares/review-summary");
+      return res.redirect(`/manage-shares/received-requests/${requestId}`);
     }
   },
 );
 
 router.get(
   "/received-requests/:requestId/decision",
+  reviewRequestAbacMiddleware,
   async (req: Request, res: Response) => {
     const backLink = req.headers.referer || "/";
     const requestId = req.params.requestId;
@@ -423,38 +400,64 @@ router.get(
 
 router.post(
   "/received-requests/:requestId/decision",
-  async (req: Request, res: Response) => {
+  reviewRequestAbacMiddleware,
+  async (req: Request, res: Response, next: NextFunction) => {
     const requestId = req.params.requestId;
 
     const decision = req.body.decision;
 
-    if (decision === "return") {
-      return res.redirect(
-        `/manage-shares/received-requests/${requestId}/return-request`,
-      );
-    }
-
     if (decision === "approve") {
+      // This needs to be stored in the session so that we can access it again
+      // after the Declaration page:
+      req.session.decision = { status: "ACCEPTED", notes: req.body.approve };
       return res.redirect(
         `/manage-shares/received-requests/${requestId}/declaration`,
       );
     }
 
-    if (decision === "reject") {
-      return res.redirect(
-        `/manage-shares/received-requests/${requestId}/reject-request`,
-      );
+    let status, decisionNotes, redirectUrl;
+
+    if (decision === "return") {
+      status = "RETURNED";
+      decisionNotes = req.body["return-with-comments"];
+      redirectUrl = `/manage-shares/received-requests/${requestId}/return-request`;
+    } else if (decision === "reject") {
+      status = "REJECTED";
+      decisionNotes = req.body.reject;
+      redirectUrl = `/manage-shares/received-requests/${requestId}/reject-request`;
+    } else {
+      redirectUrl = "/manage-shares/received-requests";
     }
 
-    return res.redirect("/manage-shares/received-requests");
+    try {
+      await axios.put(
+        `${URL}/received-requests/${requestId}/decision`,
+        { status, decisionNotes },
+        { headers: { Authorization: `Bearer ${req.cookies.jwtToken}` } },
+      );
+      return res.redirect(redirectUrl);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error(
+          `API ERROR - ${error.response?.status}: ${error.response?.statusText}`,
+        );
+        console.error(error.response?.data.detail);
+      } else {
+        console.error(error);
+      }
+      return next(error);
+    }
   },
 );
 
 router.get(
   "/received-requests/:requestId/declaration",
+  reviewRequestAbacMiddleware,
   async (req: Request, res: Response) => {
     const requestId = req.params.requestId;
+    const backLink = `/manage-shares/received-requests/${requestId}/decision`;
     res.render("../views/supplier/declaration.njk", {
+      backLink,
       requestId,
     });
   },
@@ -462,8 +465,30 @@ router.get(
 
 router.post(
   "/received-requests/:requestId/declaration",
-  async (req: Request, res: Response) => {
+  reviewRequestAbacMiddleware,
+  async (req: Request, res: Response, next: NextFunction) => {
     const requestId = req.params.requestId;
+
+    try {
+      await axios.put(
+        `${URL}/received-requests/${requestId}/decision`,
+        {
+          status: req.session.decision?.status,
+          decisionNotes: req.session.decision?.notes,
+        },
+        { headers: { Authorization: `Bearer ${req.cookies.jwtToken}` } },
+      );
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error(
+          `API ERROR - ${error.response?.status}: ${error.response?.statusText}`,
+        );
+        console.error(error.response?.data.detail);
+      } else {
+        console.error(error);
+      }
+      return next(error);
+    }
 
     if (req.body.acceptButton) {
       return res.redirect(
@@ -476,106 +501,24 @@ router.post(
 
 router.get(
   "/received-requests/:requestId/accept-request",
+  reviewRequestAbacMiddleware,
+  shareRequestDetailMiddleware,
   (req: Request, res: Response) => {
     const backLink = req.headers.referer || "/";
     const requestId = req.params.requestId;
-    const requestData = req.session.acquirerForms;
-
-    if (!requestData) {
-      return res.status(404).send("Request data not found");
-    }
 
     res.render("../views/supplier/accept-request.njk", {
       backLink,
       requestId,
-      requestingOrg: requestData.requestingOrg,
-      requesterEmail: requestData.requesterEmail,
+      requestingOrg: req.shareRequest?.requestingOrg,
+      requesterEmail: req.shareRequest?.requesterEmail,
     });
   },
 );
 
 router.post(
   "/received-requests/:requestId/accept-request",
-  async (req: Request, res: Response) => {
-    return res.redirect("/manage-shares/received-requests");
-  },
-);
-
-router.post(
-  "/received-requests/:requestId/decision",
-  async (req: Request, res: Response) => {
-    const requestId = req.params.requestId;
-
-    const decision = req.body.decision;
-
-    if (decision === "return") {
-      return res.redirect(
-        `/manage-shares/received-requests/${requestId}/return-request`,
-      );
-    }
-
-    if (decision === "approve") {
-      return res.redirect(
-        `/manage-shares/received-requests/${requestId}/declaration`,
-      );
-    }
-
-    if (decision === "reject") {
-      return res.redirect(
-        `/manage-shares/received-requests/${requestId}/reject-request`,
-      );
-    }
-
-    return res.redirect("/manage-shares/received-requests");
-  },
-);
-
-router.get(
-  "/received-requests/:requestId/declaration",
-  async (req: Request, res: Response) => {
-    const requestId = req.params.requestId;
-    res.render("../views/supplier/declaration.njk", {
-      requestId,
-    });
-  },
-);
-
-router.post(
-  "/received-requests/:requestId/declaration",
-  async (req: Request, res: Response) => {
-    const requestId = req.params.requestId;
-
-    if (req.body.acceptButton) {
-      return res.redirect(
-        `/manage-shares/received-requests/${requestId}/accept-request`,
-      );
-    }
-    return res.redirect("/manage-shares/received-requests");
-  },
-);
-
-router.get(
-  "/received-requests/:requestId/accept-request",
-  (req: Request, res: Response) => {
-    const backLink = req.headers.referer || "/";
-    const requestId = req.params.requestId;
-    const requestData = req.session.acquirerForms;
-
-    if (!requestData) {
-      return res.status(404).send("Request data not found");
-    }
-
-    res.render("../views/supplier/accept-request.njk", {
-      backLink,
-      requestId,
-      requestingOrg: requestData.requestingOrg,
-      requesterEmail: requestData.requesterEmail,
-    });
-  },
-);
-
-router.post(
-  "/received-requests/:requestId/accept-request",
+  reviewRequestAbacMiddleware,
   async (req: Request, res: Response) => {
     return res.redirect("/manage-shares/received-requests");
   },
@@ -583,25 +526,23 @@ router.post(
 
 router.get(
   "/received-requests/:requestId/reject-request",
+  reviewRequestAbacMiddleware,
+  shareRequestDetailMiddleware,
   async (req: Request, res: Response) => {
     const backLink = req.headers.referer || "/";
     const requestId = req.params.requestId;
-    const requestData = req.session.acquirerForms;
-
-    if (!requestData) {
-      return res.status(404).send("Request data not found");
-    }
 
     res.render("../views/supplier/reject-request.njk", {
       backLink,
       requestId,
-      requestingOrg: requestData.requestingOrg,
+      requestingOrg: req.shareRequest?.requestingOrg,
     });
   },
 );
 
 router.post(
   "/received-requests/:requestId/reject-request",
+  reviewRequestAbacMiddleware,
   async (req: Request, res: Response) => {
     return res.redirect("/manage-shares/received-requests");
   },
@@ -609,44 +550,72 @@ router.post(
 
 router.get(
   "/received-requests/:requestId/return-request",
+  reviewRequestAbacMiddleware,
+  shareRequestDetailMiddleware,
   async (req: Request, res: Response) => {
     const backLink = req.headers.referer || "/";
     const requestId = req.params.requestId;
-    const requestData = req.session.acquirerForms;
-
-    if (!requestData) {
-      return res.status(404).send("Request data not found");
-    }
 
     res.render("../views/supplier/return-request.njk", {
       backLink,
       requestId,
-      requestingOrg: requestData.requestingOrg,
+      requestingOrg: req.shareRequest?.requestingOrg,
     });
   },
 );
 
 router.post(
   "/received-requests/:requestId/return-request",
+  reviewRequestAbacMiddleware,
   async (req: Request, res: Response) => {
     return res.redirect("/manage-shares/received-requests");
   },
 );
 
-// Routes for request outcomes
+router.get(
+  "/received-requests/:requestId/outcome",
+  reviewRequestAbacMiddleware,
+  shareRequestDetailMiddleware,
+  async (req: Request, res: Response) => {
+    const backLink = req.headers.referer || "/manage-shares/received-requests/";
 
-router.get("/request-accepted", async (req: Request, res: Response) => {
-  const backLink = req.headers.referer || "/";
-  res.render("../views/supplier/request-accepted.njk", {
-    backLink,
-  });
-});
+    try {
+      const requestDetail = req.shareRequest!;
 
-router.get("/request-rejected", async (req: Request, res: Response) => {
-  const backLink = req.headers.referer || "/";
-  res.render("../views/supplier/request-rejected.njk", {
-    backLink,
-  });
-});
+      res.render("../views/supplier/received-request-outcome.njk", {
+        backLink,
+        request: requestDetail,
+        replacements: replace,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Internal Server Error");
+    }
+  },
+);
+
+router.get(
+  "/received-requests/:requestId/view-answers",
+  reviewRequestAbacMiddleware,
+  shareRequestDetailMiddleware,
+  async (req: Request, res: Response) => {
+    const requestId = req.params.requestId;
+    const backLink =
+      req.headers.referer || `/manage-shares/received-requests/${requestId}`;
+
+    try {
+      const requestDetail = req.shareRequest!;
+
+      res.render("../views/supplier/received-request-view-full-request.njk", {
+        request: requestDetail,
+        replacements: replace,
+        backLink,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Internal Server Error");
+    }
+  },
+);
 
 export default router;

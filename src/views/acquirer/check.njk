@@ -1,10 +1,26 @@
 {% extends "page.njk" %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+
+{% set returnedNotesHtml %}
+<div>
+  <p class="govuk-notification-banner__heading">
+    {{returnedNotesTitle}}
+  </p>
+  <p>{{returnedNotes}}</p>
+</div>
+{% endset %}
 
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
+      {% if returnedNotes %}
+        {{ govukNotificationBanner({
+          titleText: "Comments",
+          html: returnedNotesHtml
+        }) }}
+      {% endif %}
       <span class="govuk-caption-l">Request ID: {{requestId}}</span>
       <h1 class="govuk-heading-xl">Check your answers before sending your request</h1>
     </div>

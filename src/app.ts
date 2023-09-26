@@ -7,7 +7,8 @@ import markdown from "nunjucks-markdown";
 import marked from "marked";
 import helmet from "helmet";
 import homeRoute from "./routes/homeRoute";
-import learnRoutes from "./routes/learnRoutes";
+import learnRoute from "./routes/learnRoute";
+import learnArticleRoutes from "./routes/learnArticleRoutes";
 import adminRoutes from "./routes/adminRoutes";
 import findRoutes from "./routes/findRoutes";
 import shareRoutes from "./routes/shareRoutes";
@@ -22,6 +23,7 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import session from "express-session";
+import { backLink } from "./middleware/backMiddleware";
 import { handleCookies } from "./middleware/cookieMiddleware";
 import passport from "passport";
 import {
@@ -30,6 +32,7 @@ import {
   JwtStrategy,
   modifyApplicationMiddleware,
 } from "./middleware/authMiddleware";
+import { apiUser } from "./middleware/apiMiddleware";
 
 export const app = express();
 // Set up security headers with Helmet
@@ -47,17 +50,9 @@ app.use(
 );
 app.use(cookieParser());
 
-app.use(
-  "/assets",
-  express.static(
-    path.join(__dirname, "../node_modules/govuk-frontend/govuk/assets"),
-  ),
-);
-
-app.use(
-  "/javascripts",
-  express.static(path.join(__dirname, "../node_modules/govuk-frontend/govuk")),
-);
+app.use("/assets", express.static("node_modules/govuk-frontend/govuk/assets"));
+app.use("/gov", express.static("node_modules/govuk-frontend/govuk"));
+app.use(express.static("public"));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -92,8 +87,6 @@ app.use((req, res, next) => {
 });
 app.use(loadJwtFromCookie);
 
-app.use(express.static("public"));
-
 app.use(handleCookies);
 
 // use dotenv for env variables
@@ -123,6 +116,8 @@ env.addFilter("formatDate", function (date: string | number | Date) {
 // Set Nunjucks as the Express view engine
 app.set("view engine", "njk");
 
+app.use(backLink);
+
 app.use("/", loginRoutes);
 app.use("/auth", authRoutes);
 app.use("/", homeRoute);
@@ -130,9 +125,10 @@ app.use("/profile", authenticateJWT, profileRoutes);
 app.use("/find", findRoutes);
 app.use("/share", authenticateJWT, shareRoutes);
 app.use("/acquirer", authenticateJWT, acquirerRoutes);
-app.use("/manage-shares", authenticateJWT, manageRoutes);
+app.use("/manage-shares", authenticateJWT, apiUser, manageRoutes);
 app.use("/cookie-settings", cookieRoutes);
-app.use("/learn", learnRoutes);
+app.use("/learn", learnRoute);
+app.use("/learn/articles", learnArticleRoutes);
 app.use("/admin", adminRoutes);
 app.use("/publish", publisherRoutes);
 

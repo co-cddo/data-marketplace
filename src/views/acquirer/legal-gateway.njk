@@ -20,7 +20,8 @@
                 text: "What is the legal gateway for acquiring this data?"
             },
             value: savedValue['yes']['explanation'],
-            errorMessage: errorMessage
+            errorMessage: errorMessage['yes']
+
         }) }}
         {% endset -%}
 
@@ -34,7 +35,7 @@
                 text: "What other legal grounds do you have for acquiring this data?"
             },
             value: savedValue['other']['explanation'],
-            errorMessage: errorMessage
+            errorMessage: errorMessage['other']
         }) }}
         {% endset -%}
 

@@ -110,8 +110,12 @@
                         </div>
                         <span class="js-result-list-toggle-height govuk-accordion__section-toggle" data-nosnippet=""><span class="govuk-accordion__section-toggle-focus"><span class="govuk-accordion-nav__chevron govuk-accordion-nav__chevron--down"></span><span class="govuk-accordion__section-toggle-text">Show more</span></span></span>
                         <ul class="gem-c-document-list__item-metadata">
-                            <li class="gem-c-document-list__attribute"> Updated: <time>{{ resource.modified | formatDate }}</time> </li>
-
+                            <li class="gem-c-document-list__attribute"> 
+                            {% if resource.modified %}
+                            Updated: <time>{{ resource.modified | formatDate }}</time> </li>
+                            {% elif resource.issued %}
+                            Created: <time>{{ resource.created | formatDate }}</time> </li>
+                            {% endif %}
                         </ul>
                     </li>
                     {% endfor %}

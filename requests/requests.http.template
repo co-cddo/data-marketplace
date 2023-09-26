@@ -3,7 +3,6 @@
 @jwt = Bearer <copy from browser>
 @user = <first.last>@digital.cabinet-office.gov.uk
 
-
 ### Test login:
 GET {{API}}/login
 Authorization: {{jwt}}
@@ -22,7 +21,7 @@ PUT {{API}}/users/{{user}}/org
 x-api-key: {{ops-api-key}}
 
 {
-    "org": "ofsted"
+    "org": "department-for-work-pensions"
 }
 
 ### Let a user complete their profile (JWT):
@@ -30,7 +29,7 @@ PUT {{API}}/users/complete-profile
 Authorization: {{jwt}}
 
 {
-    "org": "department-for-work-pensions",
+    "org": "ofsted",
     "role": "lawyer"
 }
 
@@ -67,10 +66,22 @@ Authorization: {{jwt}}
     "decisionNotes": "This is not Ok"
 }
 
-### Change user permissions
+### Add user permissions
 PUT {{API}}/users/{{user}}/permissions
 x-api-key: {{ops-api-key}}
 
-            {
-    "remove": ["MEMBER" , "PUBLISHER" , "SHARE_REVIEWER" , "ADMINISTRATOR"]
+{
+    "add": ["SHARE_REVIEWER"]
 }
+
+### Remove user permissions
+PUT {{API}}/users/b64c6e5a9861aa120c06caac1f2dfc3d/permissions
+x-api-key: {{ops-api-key}}
+
+{
+    "remove": ["SHARE_REVIEWER"]
+}
+
+### Check a user's permissions
+GET {{API}}/users/permission/organisation/department-for-work-pensions/VIEW_SHARE_REQUESTS
+Authorization: {{jwt}}

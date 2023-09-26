@@ -13,7 +13,12 @@ import {
   updateStepsStatus,
 } from "../helperFunctions/formHelper";
 import axios from "axios";
-import { FormData, GenericStringArray, UserData } from "../types/express";
+import {
+  FormData,
+  GenericStringArray,
+  ShareRequestResponse,
+  UserData,
+} from "../types/express";
 
 const generateFormTemplate = (
   req: Request,
@@ -74,6 +79,66 @@ router.get("/:resourceID/start", async (req: Request, res: Response) => {
   }
 });
 
+router.get("/:resourceID/check", async (req: Request, res: Response) => {
+  const resourceID = req.params.resourceID;
+
+  if (!req.session.acquirerForms?.[resourceID]) {
+    return res.redirect(`/share/${resourceID}/acquirer`);
+  }
+
+  const formdata = req.session.acquirerForms[resourceID];
+
+  if (!formdata.stepHistory) {
+    formdata.stepHistory = [];
+  }
+
+  if (req.query.action === "back") {
+    formdata.stepHistory.pop();
+  }
+
+  let backLink = null;
+  if (formdata.stepHistory && formdata.stepHistory.length > 0) {
+    backLink = `/acquirer/${resourceID}/${
+      formdata.stepHistory[formdata.stepHistory.length - 1]
+    }?action=back`;
+  } else {
+    backLink = `/acquirer/${resourceID}/start`;
+  }
+
+  let returnedNotes, returnedNotesTitle;
+  try {
+    const shareRequestDetailResponse = await axios.get(
+      `${process.env.API_ENDPOINT}/manage-shares/received-requests/${formdata.requestId}`,
+      {
+        headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
+      },
+    );
+    const shareRequestDetail =
+      shareRequestDetailResponse.data as ShareRequestResponse;
+    req.session.acquirerForms![shareRequestDetail.sharedata.dataAsset] =
+      shareRequestDetail.sharedata;
+    returnedNotes = shareRequestDetail.decisionNotes;
+    returnedNotesTitle = `From ${shareRequestDetail.assetPublisher.title}`;
+
+    res.render(`../views/acquirer/check.njk`, {
+      requestId: formdata.requestId,
+      backLink,
+      data: checkAnswer(formdata),
+      returnedNotes,
+      returnedNotesTitle,
+    });
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error(
+        `API ERROR - ${error.response?.status}: ${error.response?.statusText}`,
+      );
+      console.error(error.response?.data.detail);
+    } else {
+      console.error(error);
+    }
+  }
+});
+
 router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   const resourceID = req.params.resourceID;
   const formStep = req.params.step;
@@ -110,6 +175,15 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
     formdata.stepHistory = [];
   }
 
+  // handle form errors
+  if (req.session.formValuesValidationError) {
+    stepData.value = extractFormData(
+      stepData,
+      req.session.formValuesValidationError,
+    );
+    delete req.session.formValuesValidationError;
+  }
+
   if (formdata.stepHistory && formdata.stepHistory.length > 0) {
     // Otherwise, set it to the previous step from stepHistory
     backLink = `/acquirer/${resourceID}/${
@@ -118,6 +192,7 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   } else {
     backLink = `/acquirer/${resourceID}/start`;
   }
+
   res.render(`../views/acquirer/${formStep}.njk`, {
     requestId: formdata.requestId,
     assetId: formdata.dataAsset,
@@ -127,7 +202,6 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
     stepId: formStep,
     savedValue: stepData.value,
     errorMessage: stepData.errorMessage,
-    data: formStep === "check" ? checkAnswer(formdata) : [],
   });
 });
 
@@ -157,6 +231,15 @@ router.post(
       formdata.stepHistory = [];
     }
 
+    if (formStep === 'benefits') {
+      const benefitsData = stepData.value
+      for (const value of Object.values(benefitsData)) {
+        if (!value.checked) {
+          value.explanation = '';
+        }
+      }
+    }
+    
     if (req.body.addCountry) {
       if (Array.isArray(formdata.steps["data-travel-location"].value)) {
         formdata.steps["data-travel-location"].value.push(""); // Add a new empty string.
@@ -253,6 +336,9 @@ router.post(
     if (req.body.continueButton && nextStep) {
       redirectURL = `/acquirer/${resourceID}/${nextStep}`;
     }
+
+    //reset errors at this point as API doesnt need them and validation has happened
+    formdata.steps[formStep].errorMessage = "";
 
     // Send the formdata to the backend if logged in
     if (req.isAuthenticated()) {

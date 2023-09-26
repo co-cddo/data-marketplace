@@ -1,91 +1,80 @@
 {% extends "page.njk" %}
 
 {% block content %}
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-      <h1 class="govuk-heading-xl">Check questions for publishing data descriptions before you start</h1>
+    <h1 class="govuk-heading-xl">Check questions for publishing data descriptions before you start</h1>
   </div>
 </div>
-
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds govuk-!-margin-bottom-6">
+  <div class="govuk-grid-column-two-thirds-from-desktop govuk-!-margin-bottom-8">
     <p class="govuk-body">The Data Marketplace is a place for people who work in government organisations, agencies and public bodies to discover data available from other organisations and request access to it.</p>
     <p class="govuk-body">To allow your data to be discovered, it needs to have detailed descriptions that are understandable to a wide audience, not just those in your domain. This means you should avoid the use of acronyms, abbreviations and domain jargon.</p>
     <p class="govuk-body">The questions below are used to help you provide a description of your data. The questions differ slightly based on whether you’re adding a dataset or data service.</p>
     <p class="govuk-body">More information about what these questions mean will be given on the page as you go through the pages and add your description.</p>
     <p class="govuk-body">You will need to ensure your description meets data protection and data sharing standards.</p>
     <h2 class="govuk-heading-l" id="anchor__questions">Questions you will be asked</h2>
-    <h3 class="govuk-heading-m">Dataset description</h3>
     <ul class="govuk-list govuk-list--bullet">
+      <li>
+        How do you want to add your data description?
+        <ul class="govuk-list govuk-list--bullet">
+          <li>Manually</li>
+          <li>Upload CSV</li>
+          <li>Connect a data harvester</li>
+        </ul>
+      </li>
       <li>What is the title of the data?</li>
-      <li>Are there any alternative titles for the data?</li>
+      <li>Are there any alternative titles for the data? (optional)</li>
       <li>What is the data about?</li>
-      <li>Please provide a short summary of the data.</li>
+      <li>Provide a short summary of the data. (optional)</li>
       <li>What internal identifier do you have for the data?</li>
-      <li>What are the themes associated with the data?</li>
-      <li>What are the keywords associated with the data?</li>
-      <li>Who is the point of contact for this data?</li>
+      <li>What are the themes associated with the data? (optional)</li>
+      <li>What are the keywords associated with the data? (optional)</li>
+      <li>Who is the point of contact for the data?</li>
       <li>Which organisation(s) have created the data?</li>
       <li>What is the version number of the data?</li>
       <li>When was the data issued?</li>
       <li>When was the data last modified?</li>
       <li>What licence will be used to allow the data to be shared?</li>
       <li>What access rights does the user have?</li>
-      <li>What is the security classification of the data?</li>
-      <li>Are there any related data?</li>
+      <li>What is the Security Classification of the data?</li>
+      <li>Is there any related data?</li>
       <li>How is the data made available?</li>
+    </ul>
+    <h3 class="govuk-heading-m">If your data is made available as a file, you will be asked:</h3>
+    <ul class="govuk-list govuk-list--bullet">
       <li>How often is the dataset updated?</li>
       <li>What is the title of the distribution?</li>
       <li>What is the download URL?</li>
       <li>What is the file size?</li>
     </ul>
-    <h3 class="govuk-heading-m">Data service description</h3>
+    <h3 class="govuk-heading-m">If your data is made available through a web service, you will be asked:</h3>
     <ul class="govuk-list govuk-list--bullet">
-      <li>What is the title of the data?</li>
-      <li>Are there any alternative titles for the data?</li>
-      <li>What is the data about?</li>
-      <li>Please provide a short summary of the data</li>
-      <li>What internal identifier do you have for the data?</li>
-      <li>What are the themes associated with the data?</li>
-      <li>What are the keywords associated with the data?</li>
-      <li>Who is the point of contact for this data?</li>
-      <li>Which organisation(s) have created the data?</li>
-      <li>What is the version number of the data?</li>
-      <li>When was the data issued?</li>
-      <li>When was the data last modified?</li>
-      <li>What licence will be used to allow the data to be shared?</li>
-      <li>What access rights does the user have?</li>
-      <li>What is the security classification of the data?</li>
-      <li>Are there any related data?</li>
-      <li>How is the data made available?</li>
       <li>What is the endpoint URL?</li>
       <li>What is the endpoint documentation link?</li>
       <li>What is the service status?</li>
     </ul>
   </div>
-</div>
-
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-full govuk-!-margin-top-8">
-    <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
-  </div>
-
-  <div class="govuk-grid-column-one-half-from-desktop">
-    <h2 id="community" class="govuk-heading-m">Learn</h2>
-    <p class="govuk-body">
-      <a class="govuk-link" href="/learn/">Find information to help you</a> with the data marketplace.
-      <br>
-      For example: a glossary, or the UK Cross-Government Metadata Exchange model.
-    </p>
-  </div>
-
-  <div class="govuk-grid-column-one-half-from-desktop">
-    <h2 id="support" class="govuk-heading-m">Contact Data Marketplace Team</h2>
-    <p class="govuk-body">
-      <a class="govuk-link" href="#1">Contact the team</a> if you have a question, suggestion or idea. We’d love to hear from you.
-    </p>
+  <div class="govuk-grid-column-one-third-from-desktop govuk-!-margin-bottom-8">
+    <div class="gem-c-contextual-sidebar">
+      <div class="gem-c-related-navigation">
+        <h2 id="learnLinks" class="gem-c-related-navigation__main-heading">
+          Related content
+        </h2>
+        <nav role="navigation" class="gem-c-related-navigation__nav-section" aria-labelledby="learnLinks">
+          <ul class="gem-c-related-navigation__link-list">
+            <li class="gem-c-related-navigation__link">
+              <a class="govuk-link govuk-link gem-c-related-navigation__section-link govuk-link gem-c-related-navigation__section-link--sidebar  govuk-link gem-c-related-navigation__section-link--other" href="/learn/articles/adding-a-single-data-asset">Adding a single data description</a>
+            </li>
+            <li class="gem-c-related-navigation__link">
+              <a class="govuk-link govuk-link gem-c-related-navigation__section-link govuk-link gem-c-related-navigation__section-link--sidebar  govuk-link gem-c-related-navigation__section-link--other" href="/learn/articles/adding-a-CSV-file">Adding a collection of metadata records as a CSV file</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
   </div>
 </div>
+{% include "partials/learnBanner.njk" %}
 
 {% endblock %}

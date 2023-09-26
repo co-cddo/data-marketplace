@@ -34,7 +34,7 @@
       <li>What type of data do you need?</li>
       <li>Who are the data subjects?</li>
       <li>What are the aims of your project?</li>
-      <li>What data from ((data-resource-name)) do you need?</li>
+      <li>What data from this dataset do you need?</li>
       <li>What public benefits will your project provide?</li>
       <li>Will other organisations need access to this data?</li>
       <li>How will it impact your project if you don't get this data?</li>
@@ -44,7 +44,7 @@
     <h3 class="govuk-heading-m">Legal power and gateway</h3>
     <ul class="govuk-list govuk-list--bullet">
       <li>Do you have the legal power to request this data?</li>
-      <li>What legal gateway allows ((department-name)) to share this data with you?</li>
+      <li>What legal gateway will you use to request access to this dataset?</li>
     </ul>
 
     <h3 class="govuk-heading-m">Data protection</h3>
@@ -65,28 +65,7 @@
     <p class="govuk-body">You will need to give assurance that you’ve had your answers checked by people with the appropriate legal, data protection and data security knowledge and expertise. This will increase the chance of your request being accepted and cause minimum delay.</p>
   </div>
 </div>
-
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-full govuk-!-margin-top-8">
-    <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--xl govuk-!-margin-top-0">
-  </div>
-
-  <div class="govuk-grid-column-one-half-from-desktop">
-    <h2 id="community" class="govuk-heading-m">Learn</h2>
-    <p class="govuk-body">
-      <a class="govuk-link" href="/learn">Find information to help you</a> with the data marketplace.
-      <br>
-      For example: a glossary, or the UK Cross-Government Metadata Exchange model.
-    </p>
-  </div>
-
-  <div class="govuk-grid-column-one-half-from-desktop">
-    <h2 id="support" class="govuk-heading-m">Contact Data Marketplace Team</h2>
-    <p class="govuk-body">
-      <a class="govuk-link" href="#1">Contact the team</a> if you have a question, suggestion or idea. We’d love to hear from you.
-    </p>
-  </div>
-</div>
+{% include "partials/learnBanner.njk" %}
 
 {% endblock %}
 

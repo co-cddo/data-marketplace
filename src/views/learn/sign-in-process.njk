@@ -1,0 +1,24 @@
+{% extends "page.njk" %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">Sign-in process</h1>
+  </div>
+</div>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop govuk-!-margin-bottom-8">
+  <p class="govuk-body">Access to some features and data in the Data Marketplace, for example to start a data share request, requires you to sign in to verify that you’re a government employee. You can sign in at any time by clicking the <b>Sign in</b> link at the top of the page. Otherwise you will be prompted to sign in when you try to access a feature that’s only available to authorised users.</p>
+  <p class="govuk-body">To sign in, you'll use your government email address and go through your standard sign-in process, for example an authentication code sent to your phone or using an authentication app. Our sign in process uses <a class="govuk-link" href="https://www.security.gov.uk/">the government single sign on service</a>.</p>
+  <p class="govuk-body">When you first sign in to the Data Marketplace, you'll be invited to complete your profile by choosing your organisation from a drop-down list and select your primary skill from a list of available options.</p>
+  <p class="govuk-body">Once you've set up your profile and are signed in to the Data Marketplace, you'll see an <b>Account</b> link at the top of the page. From there, you can view your profile which will show your:</p>
+  <ul class="govuk-list govuk-list--bullet">
+      <li>Name</li>
+      <li>Email address</li>
+      <li>Organisation</li>
+      <li>Role</li>
+    </ul>
+  </div>
+{% include "partials/learnBanner.njk" %}
+
+{% endblock %}
