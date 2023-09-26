@@ -29,7 +29,7 @@ export const createAbacMiddleware =
       const isAllowed: boolean = abacResponse.data;
       if (!isAllowed) {
         return res.render("permissionsError.njk", {
-          permissionDetail: "review share requests",
+          permissionDetail: errorMessage,
         });
       }
       next();
