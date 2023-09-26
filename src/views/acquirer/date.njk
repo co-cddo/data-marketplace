@@ -2,6 +2,21 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 
+{% if errorMessage.day %} 
+  {% set dayClass = "govuk-input--width-2 govuk-input--error" %}
+{% else %}
+  {% set dayClass = "govuk-input--width-2" %}
+{% endif %}
+{% if errorMessage.month %} 
+  {% set monthClass = "govuk-input--width-2 govuk-input--error" %}
+{% else %}
+  {% set monthClass = "govuk-input--width-2" %}
+{% endif %}
+{% if errorMessage.year %} 
+  {% set yearClass = "govuk-input--width-4 govuk-input--error" %}
+{% else %}
+  {% set yearClass = "govuk-input--width-4" %}
+{% endif %}
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -32,17 +47,17 @@
             items: [{
               name: "day",
               value: savedValue.day,
-              classes: "govuk-input--width-2"
+              classes: dayClass
             }, {
               name: "month",
               value: savedValue.month,
-              classes: "govuk-input--width-2"
+              classes: monthClass
             }, {
               name: "year",
               value: savedValue.year,
-              classes: "govuk-input--width-4"
+              classes: yearClass
             }],
-          errorMessage: errorMessage["date"]
+          errorMessage: errorMessage["dateCombined"]
         }) }}
         </div>
         <div class="govuk-button-group">
