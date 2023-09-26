@@ -42,6 +42,7 @@ jest.mock("../src/middleware/apiMiddleware", () => ({
       },
         req.user.user_id = "abcd1234",
         req.user.jobTitle = "Technology"
+      next()
     }
   )
 }))
