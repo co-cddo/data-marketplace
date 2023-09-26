@@ -1,0 +1,30 @@
+{% extends "page.njk" %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">Account permissions for the Data Marketplace</h1>
+  </div>
+</div>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds govuk-!-margin-bottom-9">
+    <p class="govuk-body">To search for data in the Data Marketplace, and submit a data share request, you only need a gov.uk email address.</p>
+    <p class="govuk-body">If you want to add a metadata description of your data, or if you want to review a request from someone to see your data, you’ll need to request additional permissions.</p>
+    <h2 class="govuk-heading-l">What permissions you need</h2>
+    <p class="govuk-body">If you want to add a description of your data (also referred to as metadata) to the Data Marketplace so your data is available for colleagues in government organisations to find, you’ll need permission to add a data description.</p>
+    <p class="govuk-body">If you want to review a request from colleagues in government organisations who want you to share your data with them, you’ll need permission to review a data share request.</p>
+    <h2 class="govuk-heading-l">What permissions enable you to do</h2>
+    <p class="govuk-body"><b>Add a data description permission</b> will enable you to add a metadata description of your data to the Data Marketplace so it can be found by other colleagues across government.</p>
+    <p class="govuk-body"><b>Review a data share request permission</b> will enable you to review a data share request from colleagues who have found a description of your data and would like you to share it with them.</p>
+    <h2 class="govuk-heading-l">How to request permission</h2>
+    <p class="govuk-body">In the <a class="govuk-link" href="https://forms.gle/rpy2BMchHGDNVFfAA">Data Marketplace help and support form</a> select either:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>Permission to add data descriptions</li>
+      <li>Permission to review data share requests</li>
+    </ul>
+    <p class="govuk-body">The form will be sent to your organisation, or team, administrator for approval. They’ll send you an email to confirm whether or not you have been given permission.</p>
+  </div>
+</div>
+{% include "partials/learnBanner.njk" %}
+
+{% endblock %}

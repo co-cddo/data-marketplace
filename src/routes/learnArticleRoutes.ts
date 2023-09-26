@@ -5,6 +5,10 @@ router.get("/sign-in-process", async (req: Request, res: Response) => {
   res.render("../views/learn/sign-in-process.njk");
 });
 
+router.get("/account-permission", async (req: Request, res: Response) => {
+  res.render("../views/learn/account-permission.njk");
+});
+
 router.get("/glossary", async (req: Request, res: Response) => {
   res.render("../views/learn/glossary.njk");
 });
