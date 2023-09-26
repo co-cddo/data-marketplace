@@ -11,6 +11,18 @@
 @import "_task-list";
 @import "_relatedData";
 
+.large-button {
+  font-size: 1.6em;
+  font-weight: 900;  
+}
+
+@media screen and (max-width: 640px) {
+  .large-button {
+    font-size: 18px;
+    font-weight: 700;  
+  }
+}
+
 //overrides
 .govuk-list {
   li > .govuk-link {
