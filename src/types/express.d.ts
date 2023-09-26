@@ -229,17 +229,16 @@ declare module "express-serve-static-core" {
 }
 
 type NestedJSON = {
-    [key: string]: NestedJSON | string | number | boolean | null;
+  [key: string]: NestedJSON | string | number | boolean | null;
 };
 
 export type UploadError = {
-    scope: string;
-    message: string;
-    location: string;
-    extras: {[key: string]: any};
-    sub_errors: UploadError[] | null;
-}
-
+  scope: string;
+  message: string;
+  location: string;
+  extras: { [key: string]: unknown };
+  sub_errors: UploadError[] | null;
+};
 
 declare module "express-session" {
   interface SessionData {
@@ -269,10 +268,10 @@ export type ShareRequestTableRow = ShareRequestTableColumn[];
 export type ShareRequestTable = ShareRequestTableRow[];
 
 interface IFile {
-    fieldname: string;
-    originalname: string;
-    encoding: string;
-    mimetype: string;
-    buffer: Buffer;
-    size: number;
+  fieldname: string;
+  originalname: string;
+  encoding: string;
+  mimetype: string;
+  buffer: Buffer;
+  size: number;
 }

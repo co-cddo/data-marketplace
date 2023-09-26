@@ -53,17 +53,35 @@ router.post(
           ...fd.getHeaders(),
         },
       });
+      console.log(response.data)
       const errs = response.data.errors;
       const data = response.data.data;
       req.session.uploadData = data;
       req.session.uploadErrors = errs;
-      return res.redirect("/publish/preview");
+      return res.redirect("/publish/csv/upload-summary");
     } catch (err) {
       console.error(err);
       res.sendStatus(400);
     }
   },
 );
+
+router.get("/csv/upload-summary", async (req: Request, res: Response) => {
+  const backLink = req.headers.referer || "/";
+  const data = req.session.uploadData || [];
+
+  // Transform data into suitable format for table
+  const uploadSummary = data.map((dataset, index) => [
+    { html: `<a class="govuk-link" href="/publish/csv/preview/${index}">${dataset.title}</a>` },
+    { text: dataset.type },
+    { text: dataset.status }
+  ]);
+
+  res.render("../views/publisher/upload-summary.njk", {
+      backLink,
+      uploadSummary
+  });
+});
 
 router.get("/preview", async (req: Request, res: Response) => {
   let fileError: UploadError | null = null;

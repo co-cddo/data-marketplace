@@ -4,27 +4,22 @@
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-      <h1 class="govuk-heading-l">
-        Upload a CSV file of data asset descriptions
-      </h1>
-        <p class="govuk-body">First, <a href="/documents/learn/CSV_Bulk_Upload_Template_for_Data_Asset_Metadata.xlsx.ods" class="govuk-link">Download the CSV template</a> and add your data asset descriptions.</p>
-        <p class="govuk-body">Then upload the file, where it will be checked for errors.</p>
-        <h4 class="govuk-heading-m">TODO: add the real link here</h4>
-      
-      <p class="govuk-body">Then upload the file, where it will be checked for errors.</p>
-      <h4 class="govuk-heading-m">TODO: we need to instruct people to export the "dataset" and "data service" pages as CSV files</h4>
-
-
+    <h1 class="govuk-heading-l">
+      Upload CSV file
+    </h1>
+    <p class="govuk-body">Upload the CSV file containing your data asset descriptions.</p>
+    <p class="govuk-body">Then upload the file, where it will be checked for errors.</p>
+    <h4 class="govuk-heading-m">TODO: we need to instruct people to export the "dataset" and "data service" pages as CSV files</h4>
     <form action="/publish/csv/upload" method="POST" enctype="multipart/form-data">
       <div class="govuk-grid-column-one-half">
-          {{ govukFileUpload({
-            id: "datasetsCSV",
-            name: "datasetsCSV",
-            label: {
-              text: "Upload dataset CSV",
-              for: "datasetsCSV"
-            }
-          }) }}
+        {{ govukFileUpload({
+          id: "datasetsCSV",
+          name: "datasetsCSV",
+          label: {
+            text: "Upload dataset CSV",
+            for: "datasetsCSV"
+          }
+        }) }}
       </div>
 
       <div class="govuk-grid-column-one-half">
@@ -37,7 +32,7 @@
         }
       }) }}
       </div>
-        <button type="submit" class="govuk-button" data-module="govuk-button">Done</button>
+        <button type="submit" class="govuk-button" data-module="govuk-button">Continue</button>
     </form>
     </div>
   
@@ -56,4 +51,37 @@
     </div>   
   </div>
 </div>
+
 {% endblock %} 
+
+{% set customFooterContent %}
+<h2 id="support" class="govuk-heading-m">Get help and support</h2>
+<p class="govuk-body-s"><a class="govuk-footer__link" href="https://forms.gle/rpy2BMchHGDNVFfAA">Tell us what you need help with</a>.</p>
+<p class="govuk-body-s">If you have any questions about the data asset description (metadata), you should contact the data asset supplier directly.</p>
+{% endset %}
+
+{% set customFooterContent %}
+
+<h2 id="support" class="govuk-heading-m">Get help and support</h2>
+<p class="govuk-body-s"><a class="govuk-footer__link" href="https://forms.gle/rpy2BMchHGDNVFfAA">Tell us what you need help with</a>.</p>
+<p class="govuk-body-s">If you have any questions about the data asset description (metadata), you should contact the data asset supplier directly.</p>
+<ul class="govuk-footer__inline-list">
+    <li class="govuk-footer__inline-list-item">
+        <a class="govuk-footer__link" href="#">Accessibility</a>
+    </li>
+    <li class="govuk-footer__inline-list-item">
+        <a class="govuk-footer__link" href="#">Cookies</a>
+    </li>
+    <li class="govuk-footer__inline-list-item">
+        <a class="govuk-footer__link" href="#">Privacy</a>
+    </li>
+</ul>
+{% endset %}
+
+{% block footer %}
+{{ govukFooter({
+    meta: {
+      html: customFooterContent
+    }
+  }) }}
+{% endblock %}
