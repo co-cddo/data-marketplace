@@ -28,6 +28,23 @@ jest.mock("../src/middleware/authMiddleware", () => ({
     },
   ),
 }));
+jest.mock("../src/middleware/apiMiddleware", () => ({
+  ...jest.requireActual("../src/middleware/apiMiddleware"),
+  apiUser: jest.fn(
+    (req: Request, res: Response, next: NextFunction) => {
+      req.user.organisation = {
+        "id": "https://www.gov.uk/api/organisations/department-for-work-pensions",
+        "title": "Department for Work and Pensions",
+        "abbreviation": "DWP",
+        "slug": "department-for-work-pensions",
+        "format": "Ministerial department",
+        "web_url": "https://www.gov.uk/government/organisations/department-for-work-pensions"
+      },
+        req.user.user_id = "abcd1234",
+        req.user.jobTitle = "Technology"
+    }
+  )
+}))
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe("GET /:resourceID/start", () => {
