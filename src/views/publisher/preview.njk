@@ -2,62 +2,188 @@
 
 {% block content %}
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-      <h1 class="govuk-heading-l">
-      {% if hasError %} 
-        There are errors in your upload
-      {% else %}
-        Preview your assets
-      {% endif %}
-      </h1>
-      {% if hasError %} 
-        <h2>Errors</h2>
-       {% for error in errors %}
-          <div style="border: 2px solid red">
-          <p> Error for row with ID {{ error.location }}</p> 
-          {% for fielderr in error.sub_errors %}
-            <p>
-            {{ fielderr.message }}
-            <br>
-            <strong>Field</strong> {{ fielderr.location }}
-            <strong>Value</strong> {{ fielderr.value }}
-            </p>
-          {% endfor %}
+  <div class="govuk-grid-column-full">
 
+    {% if dataset.type == 'Dataset' %}
+      <h2 class="govuk-heading-xl">Dataset Description</h2>
+      <dl class="govuk-summary-list">
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Title</dt>
+          <dd class="govuk-summary-list__value">{{ dataset.title }}</dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Alternative title</dt>
+          <dd class="govuk-summary-list__value">
+            {% for altTitle in dataset.alternativeTitle %}
+              {{ altTitle }}
+              {% if not loop.last %}, {% endif %}
+            {% endfor %}
+          </dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Description</dt>
+          <dd class="govuk-summary-list__value">{{ dataset.description }}</dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Summary</dt>
+          <dd class="govuk-summary-list__value">{{ dataset.summary }}</dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Keywords</dt>
+          <dd class="govuk-summary-list__value">
+            {% for keyword in dataset.keyword %}
+              {{ keyword }}
+              {% if not loop.last %}, {% endif %}
+            {% endfor %}
+          </dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Themes</dt>
+          <dd class="govuk-summary-list__value">
+            {% for theme in dataset.theme %}
+              {{ theme }}
+              {% if not loop.last %}, {% endif %}
+            {% endfor %}
+          </dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Point of Contact</dt>
+          <dd class="govuk-summary-list__value">{{ dataset.contactPoint.name }} (Email: {{ dataset.contactPoint.email }})</dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Version</dt>
+          <dd class="govuk-summary-list__value">{{ dataset.version }}</dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Access rights</dt>
+          <dd class="govuk-summary-list__value">{{ dataset.accessRights }}</dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Licence</dt>
+          <dd class="govuk-summary-list__value"><a class="govuk-link" target="_blank" href="{{ dataset.licence }}">License Link</a></dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Security Classification</dt>
+          <dd class="govuk-summary-list__value">{{ dataset.securityClassification }}</dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Creator</dt>
+          <dd class="govuk-summary-list__value">
+            {% for creator in dataset.creatorID %}
+              {{ creator }}
+              {% if not loop.last %}, {% endif %}
+            {% endfor %}
+          </dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Existing identifier</dt>
+          <dd class="govuk-summary-list__value">{{ dataset.externalIdentifier }}</dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Date Issued</dt>
+          <dd class="govuk-summary-list__value">{{ dataset.issued }}</dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Date Modified</dt>
+          <dd class="govuk-summary-list__value">{{ dataset.modified }}</dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Related data</dt>
+          <dd class="govuk-summary-list__value">
+            {% for relatedData in dataset.relatedAssets %}
+              <a class="govuk-link" target="_blank" href="{{ relatedData }}">Link</a>
+              {% if not loop.last %}, {% endif %}
+            {% endfor %}
+          </dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Update frequency</dt>
+          <dd class="govuk-summary-list__value">{{ dataset.updateFrequency }}</dd>
+        </div>
+      </dl>
+
+      <h2 class="govuk-heading-xl govuk-!-margin-top-9">Distributions</h2>
+      {% for distribution in dataset.distributions %}
+        <dl class="govuk-summary-list">
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Title</dt>
+            <dd class="govuk-summary-list__value">{{ distribution.title }}</dd>
           </div>
-       {% endfor %}
-        <h2>Correct rows</h2>
-      {% endif %}
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Description</dt>
+            <dd class="govuk-summary-list__value">{{ distribution.description }}</dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Modified</dt>
+            <dd class="govuk-summary-list__value">{{ distribution.modified }}</dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Identifier</dt>
+            <dd class="govuk-summary-list__value">{{ distribution.externalIdentifier }}</dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Access service</dt>
+            <dd class="govuk-summary-list__value">{{ distribution.accessService }}</dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Download URL</dt>
+            <dd class="govuk-summary-list__value">{{ distribution.accessService }}</dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Media type</dt>
+            <dd class="govuk-summary-list__value">{{ distribution.mediaType }}</dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">File size</dt>
+            <dd class="govuk-summary-list__value">{{ distribution.byteSize }}</dd>
+          </div>
+        </dl>
+      {% endfor %}
+    {% endif %}
+    {% if dataset.type == 'DataService' %}
+      <h2>Data Service Details</h2>
+      <dl class="govuk-summary-list">
 
-       {% for record in data %}
-            <div style="border: 2px solid green">
-                <h3>{{ record.title }}</h3>
-                    {% for key, value in record %}
-                      <div>
-                        {% if key == 'description' %}
-                          {{ key }}: Description too long but it's here 
-                        {% else %}
-                          {{ key }}: {{ value }}
-                        {% endif %}
-                      </div>
-                    {% endfor %}
-            </div>
-        {% endfor %}
-        {% if hasError %}
-          <a href="{{assetpath}}/publish/csv" class="govuk-button" data-module="govuk-button">
-          Try again
-          </a>
-        {% else %}
-          <a href="{{assetpath}}/publish/csv" class="govuk-button" data-module="govuk-button">
-          Make changes to files
-          </a>
-          <form action="/publish/commit", method="POST">
-            <button type="submit" class="govuk-button" data-module="govuk-button">
-              Publish
-            </button>
-          </form
-        {% endif %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Title</dt>
+          <dd class="govuk-summary-list__value">{{ dataset.title }}</dd>
+        </div>
 
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Modified</dt>
+          <dd class="govuk-summary-list__value">{{ dataset.modified }}</dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Endpoint</dt>
+          <dd class="govuk-summary-list__value">{{ dataset.endpointURL }}</dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Access URL</dt>
+          <dd class="govuk-summary-list__value">{{ dataset.accessURL }}</dd>
+        </div>
+
+      </dl>
+    {% endif %}
   </div>
 </div>
-{% endblock %} 
+
+{% endblock %}

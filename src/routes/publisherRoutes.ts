@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import multer from "multer";
-import { IFile, UploadError } from "../types/express";
+import { IFile } from "../types/express";
 import axios from "axios";
 import FormData from "form-data";
 
@@ -70,7 +70,6 @@ router.get("/csv/upload-summary", async (req: Request, res: Response) => {
   const backLink = req.headers.referer || "/";
   const data = req.session.uploadData || [];
 
-  // Transform data into suitable format for table
   const uploadSummary = data.map((dataset, index) => [
     { html: `<a class="govuk-link" href="/publish/csv/preview/${index}">${dataset.title}</a>` },
     { text: dataset.type },
@@ -83,38 +82,57 @@ router.get("/csv/upload-summary", async (req: Request, res: Response) => {
   });
 });
 
-router.get("/preview", async (req: Request, res: Response) => {
-  let fileError: UploadError | null = null;
-  const rowErrors: UploadError[] = [];
-  if (req.session.uploadErrors) {
-    req.session.uploadErrors.forEach((e) => {
-      if (e.scope == "FILE") {
-        fileError = e;
-      } else {
-        rowErrors.push(e);
-      }
-    });
+router.get("/csv/preview/:id", async (req: Request, res: Response) => {
+  const assetId = Number(req.params.id);
+
+  if (!req.session.uploadData) {
+    return res.status(400).send("Invalid asset ID or data is not available");
   }
-  if (fileError) {
-    console.log(JSON.stringify(fileError));
-    res.render("../views/publisher/file_error.njk", {
-      error: JSON.stringify(fileError, null, 2),
-    });
-  } else if (rowErrors.length > 0) {
-    console.log(JSON.stringify(rowErrors));
-    res.render("../views/publisher/preview.njk", {
-      data: req.session.uploadData,
-      errors: rowErrors,
-      hasError: true,
-    });
-  } else {
-    res.render("../views/publisher/preview.njk", {
-      data: req.session.uploadData,
-      errors: rowErrors,
-      hasError: false,
-    });
+
+  const dataset = req.session.uploadData[assetId];
+
+  console.log("/publish/csv/preview specific asset", dataset)
+  if (!dataset) {
+    return res.status(404).send("Asset not found");
   }
+
+  res.render("../views/publisher/preview.njk", {
+    dataset
+  });
 });
+
+// router.get("/preview/", async (req: Request, res: Response) => {
+//   let fileError: UploadError | null = null;
+//   const rowErrors: UploadError[] = [];
+//   if (req.session.uploadErrors) {
+//     req.session.uploadErrors.forEach((e) => {
+//       if (e.scope == "FILE") {
+//         fileError = e;
+//       } else {
+//         rowErrors.push(e);
+//       }
+//     });
+//   }
+//   if (fileError) {
+//     console.log(JSON.stringify(fileError));
+//     res.render("../views/publisher/file_error.njk", {
+//       error: JSON.stringify(fileError, null, 2),
+//     });
+//   } else if (rowErrors.length > 0) {
+//     console.log(JSON.stringify(rowErrors));
+//     res.render("../views/publisher/preview.njk", {
+//       data: req.session.uploadData,
+//       errors: rowErrors,
+//       hasError: true,
+//     });
+//   } else {
+//     res.render("../views/publisher/preview.njk", {
+//       data: req.session.uploadData,
+//       errors: rowErrors,
+//       hasError: false,
+//     });
+//   }
+// });
 
 router.post("/commit", async (req: Request, res: Response) => {
   const body = { data: req.session.uploadData };
