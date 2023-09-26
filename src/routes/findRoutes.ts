@@ -6,6 +6,7 @@ import {
   fetchOrganisations,
 } from "../services/findService";
 import { themes } from "../mockData/themes";
+import removeMd from 'remove-markdown';
 
 router.get("/", async (req: Request, res: Response, next: NextFunction) => {
   const backLink = req.session.backLink || "/";
@@ -31,6 +32,21 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
       organisationFilters,
       themeFilters,
     );
+
+
+    resources.forEach(resource => {
+      if (resource.mediaType) {
+        resource.mediaType = resource.mediaType.map(type => type === 'OASIS' ? 'ODS' : type);
+      }
+    // Strip Markdown from each resource's summary and description
+      if (resource.summary) {
+        resource.summary = removeMd(resource.summary);
+      }
+      if (resource.description) {
+        resource.description = removeMd(resource.description);
+      }
+    });
+
     const organisations = await fetchOrganisations();
     const themesList = themes;
     const filterOptions = [
@@ -121,6 +137,14 @@ router.get("/:resourceID", async (req: Request, res: Response) => {
   req.session.backLink = req.originalUrl;
   const resourceID = req.params.resourceID;
   const resource = await fetchResourceById(resourceID);
+
+  if (resource.distributions) {
+    resource.distributions.forEach(distribution => {
+      if (distribution.mediaType === 'OASIS') {
+        distribution.mediaType = 'ODS';
+      }
+    });
+  }
 
   res.render("resource.njk", {
     route: req.params.page,
