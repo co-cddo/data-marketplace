@@ -83,19 +83,47 @@ function getImpactValidation() {
 function getDateValidation() {
   return [
     body("day")
-      .isInt({ min: 1, max: 31 })
-      .withMessage("Day is invalid")
+      .custom((value, { req }) => {
+        if (value || req.body.month || req.body.year) {
+          if (!value) {
+            throw new Error("Day is required if month or year is provided");
+          }
+          if (value < 1 || value > 31) {
+            throw new Error("Day is invalid");
+          }
+        }
+        return true;
+      })
+      .optional()
       .escape(),
     body("month")
-      .isInt({ min: 1, max: 12 })
-      .withMessage("Month is invalid")
+      .custom((value, { req }) => {
+        if (value || req.body.day || req.body.year) {
+          if (!value) {
+            throw new Error("Month is required if day or year is provided");
+          }
+          if (value < 1 || value > 12) {
+            throw new Error("Month is invalid");
+          }
+        }
+        return true;
+      })
+      .optional()
       .escape(),
     body("year")
-      .isInt({
-        min: new Date().getFullYear(),
-        max: new Date().getFullYear() + 10,
+      .custom((value, { req }) => {
+        if (value || req.body.day || req.body.month) {
+          if (!value) {
+            throw new Error("Year is required if day or month is provided");
+          }
+          const currentYear = new Date().getFullYear();
+          if (value < currentYear || value > currentYear + 10) {
+            throw new Error("Year is invalid");
+          }
+        }
+        return true;
       })
-      .withMessage("Year is invalid")
+      .optional()
       .escape(),
   ];
 }
