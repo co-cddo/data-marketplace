@@ -34,14 +34,14 @@
         </div>
 
         <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Keywords</dt>
-          <dd class="govuk-summary-list__value">
-            {% for keyword in dataset.keyword %}
-              {{ keyword }}
-              {% if not loop.last %}, {% endif %}
-            {% endfor %}
-          </dd>
-        </div>
+        <dt class="govuk-summary-list__key">Keywords</dt>
+        <dd class="govuk-summary-list__value">
+          {% for keyword in dataset.keyword %}
+            {{ keyword }}{% if not loop.last %}, {% endif %}
+          {% endfor %}
+        </dd>
+      </div>
+
 
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Themes</dt>
