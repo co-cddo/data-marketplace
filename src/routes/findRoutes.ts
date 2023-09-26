@@ -6,12 +6,18 @@ import {
   fetchOrganisations,
 } from "../services/findService";
 import { themes } from "../mockData/themes";
-import removeMd from 'remove-markdown';
+import removeMd from "remove-markdown";
 
 router.get("/", async (req: Request, res: Response, next: NextFunction) => {
   const backLink = req.session.backLink || "/";
   req.session.backLink = req.originalUrl;
-  const query: string | undefined = (req.query.q as string)?.toLowerCase();
+  // Extract and sanitize the search query:
+  // - Trim any whitespace from the beginning and end.
+  // - Convert the query to lowercase for consistent processing.
+  // If the result is an empty string (or only contained whitespace), set it to undefined.
+  const rawQuery: string | undefined = req.query.q as string;
+  const query = rawQuery?.trim().toLowerCase() || undefined;
+
   let organisationFilters: string[] | undefined = req.query
     .organisationFilters as string[] | undefined;
   let themeFilters: string[] | undefined = req.query.themeFilters as
@@ -33,12 +39,13 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
       themeFilters,
     );
 
-
-    resources.forEach(resource => {
+    resources.forEach((resource) => {
       if (resource.mediaType) {
-        resource.mediaType = resource.mediaType.map(type => type === 'OASIS' ? 'ODS' : type);
+        resource.mediaType = resource.mediaType.map((type) =>
+          type === "OASIS" ? "ODS" : type,
+        );
       }
-    // Strip Markdown from each resource's summary and description
+      // Strip Markdown from each resource's summary and description
       if (resource.summary) {
         resource.summary = removeMd(resource.summary);
       }
@@ -139,9 +146,9 @@ router.get("/:resourceID", async (req: Request, res: Response) => {
   const resource = await fetchResourceById(resourceID);
 
   if (resource.distributions) {
-    resource.distributions.forEach(distribution => {
-      if (distribution.mediaType === 'OASIS') {
-        distribution.mediaType = 'ODS';
+    resource.distributions.forEach((distribution) => {
+      if (distribution.mediaType === "OASIS") {
+        distribution.mediaType = "ODS";
       }
     });
   }
