@@ -1,0 +1,14 @@
+{% extends "layouts/base.njk" %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+    {% if hasError %}
+      <h2 class="govuk-heading-l govuk-!-font-weight-bold">Something went wrong</h2>
+      <p> {{ error }}
+    {% else %}
+      <h2 class="govuk-heading-l govuk-!-font-weight-bold">Success!</h2>
+      <p> {{ numPublished }} records added</p>
+    {% endif %}
+</div>
+{% endblock %} 

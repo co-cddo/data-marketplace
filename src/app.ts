@@ -17,6 +17,7 @@ import loginRoutes from "./routes/loginRoutes";
 import authRoutes from "./routes/authRoutes";
 import profileRoutes from "./routes/profileRoutes";
 import manageRoutes from "./routes/supplierRoutes";
+import publisherRoutes from "./routes/publisherRoutes";
 import path from "path";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
@@ -133,6 +134,7 @@ app.use("/manage-shares", authenticateJWT, manageRoutes);
 app.use("/cookie-settings", cookieRoutes);
 app.use("/learn", learnRoutes);
 app.use("/admin", adminRoutes);
+app.use("/publish", publisherRoutes);
 
 // Error handling
 // Catch all route to handle errors

@@ -1,0 +1,63 @@
+{% extends "page.njk" %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">
+      {% if hasError %} 
+        There are errors in your upload
+      {% else %}
+        Preview your assets
+      {% endif %}
+      </h1>
+      {% if hasError %} 
+        <h2>Errors</h2>
+       {% for error in errors %}
+          <div style="border: 2px solid red">
+          <p> Error for row with ID {{ error.location }}</p> 
+          {% for fielderr in error.sub_errors %}
+            <p>
+            {{ fielderr.message }}
+            <br>
+            <strong>Field</strong> {{ fielderr.location }}
+            <strong>Value</strong> {{ fielderr.value }}
+            </p>
+          {% endfor %}
+
+          </div>
+       {% endfor %}
+        <h2>Correct rows</h2>
+      {% endif %}
+
+       {% for record in data %}
+            <div style="border: 2px solid green">
+                <h3>{{ record.title }}</h3>
+                    {% for key, value in record %}
+                      <div>
+                        {% if key == 'description' %}
+                          {{ key }}: Description too long but it's here 
+                        {% else %}
+                          {{ key }}: {{ value }}
+                        {% endif %}
+                      </div>
+                    {% endfor %}
+            </div>
+        {% endfor %}
+        {% if hasError %}
+          <a href="{{assetpath}}/publish/csv" class="govuk-button" data-module="govuk-button">
+          Try again
+          </a>
+        {% else %}
+          <a href="{{assetpath}}/publish/csv" class="govuk-button" data-module="govuk-button">
+          Make changes to files
+          </a>
+          <form action="/publish/commit", method="POST">
+            <button type="submit" class="govuk-button" data-module="govuk-button">
+              Publish
+            </button>
+          </form
+        {% endif %}
+
+  </div>
+</div>
+{% endblock %} 
