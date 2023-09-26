@@ -1,0 +1,112 @@
+{% extends "layouts/base.njk" %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl ">
+            Department for Levelling Up, Housing and Communities published data descriptions
+        </h1>
+        <p class="govuk-body">Here's where you manage your data descriptions. Each government department has their own page.</p>
+    </div>
+    <div class="govuk-grid-column-two-thirds govuk-!-margin-bottom-6">
+        {{ govukButton({
+            text: "Add new data description",
+            href: "/publish"
+        }) }}
+    </div>
+
+
+    <div class="govuk-grid-column-full govuk-!-margin-bottom-4">
+        <h2 class="govuk-heading-l">
+            Your published metadata records
+        </h2>
+        <dl class="publish-metrics">
+        <div class="publish-metric">
+            <dt><h3 class="govuk-heading-m">Datasets</h3></dt>
+            <dd><p class="govuk-body">0 published datasets</p></a></dd>
+        </div>
+        <div class="publish-metric">
+            <dt><h3 class="govuk-heading-m">Data services</h3></dt>
+            <dd><p class="govuk-body">0 published data services</p></dd>
+        </div>
+        <div class="publish-metric">
+            <dt><h3 class="govuk-heading-m">Pending share requests</h3></dt>
+            <dd><p class="govuk-body">No pending Datasets</p></dd>
+        </div>
+        <div class="publish-metric">
+            <dt><h3 class="govuk-heading-m">Submitted share requests</h3></dt>
+            <dd><p class="govuk-body">0 Data share requests</p></dd>
+        </div>
+        <div class="publish-metric">
+            <dt><h3 class="govuk-heading-m">Completed data shares</h3></dt>
+            <dd><p class="govuk-body">0 Completed data shares</a></p></dd>
+        </div>
+        </dl>
+    </div>
+
+<div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-full">
+
+        <div class="gem-c-related-navigation">
+          <h2 id="learnLinks" class="gem-c-related-navigation__main-heading">
+            Learn
+          </h2>
+          <nav role="navigation" class="gem-c-related-navigation__nav-section" aria-labelledby="learnLinks">
+            <ul class="gem-c-related-navigation__link-list">
+              
+              <li class="gem-c-related-navigation__link">
+                <a class="govuk-link govuk-link gem-c-related-navigation__section-link govuk-link gem-c-related-navigation__section-link--sidebar  govuk-link gem-c-related-navigation__section-link--other" href="/learn/articles/guidance-on-publish">Publishing data descriptions</a>
+              </li>
+              <li class="gem-c-related-navigation__link">
+                <a class="govuk-link govuk-link gem-c-related-navigation__section-link govuk-link gem-c-related-navigation__section-link--sidebar  govuk-link gem-c-related-navigation__section-link--other" href="/learn/articles/metadata-model">Metadata sharing requirements</a>
+              </li>
+              <li class="gem-c-related-navigation__link">
+                <a class="govuk-link govuk-link gem-c-related-navigation__section-link govuk-link gem-c-related-navigation__section-link--sidebar  govuk-link gem-c-related-navigation__section-link--other" href="/learn/articles/adding-a-single-data-asset">Adding a single data description</a>
+              </li>
+              <li class="gem-c-related-navigation__link">
+                <a class="govuk-link govuk-link gem-c-related-navigation__section-link govuk-link gem-c-related-navigation__section-link--sidebar  govuk-link gem-c-related-navigation__section-link--other" href="/learn/articles/adding-a-CSV-file">Adding a collection of metadata records as a CSV file</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        </div>
+        </div>
+
+</div>
+{% endblock %}  
+
+{% set customFooterContent %}
+<h2 id="support" class="govuk-heading-m">Get help and support</h2>
+<p class="govuk-body-s"><a class="govuk-footer__link" href="https://forms.gle/rpy2BMchHGDNVFfAA">Tell us what you need help with</a>.</p>
+<p class="govuk-body-s">If you have any questions about the data asset description (metadata), you should contact the data asset supplier directly.</p>
+{% endset %}
+
+{% set customFooterContent %}
+
+<h2 id="support" class="govuk-heading-m">Get help and support</h2>
+<p class="govuk-body-s"><a class="govuk-footer__link" href="https://forms.gle/rpy2BMchHGDNVFfAA">Tell us what you need help with</a>.</p>
+<p class="govuk-body-s">If you have any questions about the data asset description (metadata), you should contact the data asset supplier directly.</p>
+<ul class="govuk-footer__inline-list">
+    <li class="govuk-footer__inline-list-item">
+        <a class="govuk-footer__link" href="#">Accessibility</a>
+    </li>
+    <li class="govuk-footer__inline-list-item">
+        <a class="govuk-footer__link" href="#">Cookies</a>
+    </li>
+    <li class="govuk-footer__inline-list-item">
+        <a class="govuk-footer__link" href="#">Privacy</a>
+    </li>
+</ul>
+{% endset %}
+
+{% block footer %}
+{{ govukFooter({
+    meta: {
+      html: customFooterContent
+    }
+  }) }}
+{% endblock %}

@@ -21,6 +21,13 @@ router.get("/", async (req: Request, res: Response) => {
     });
 });
 
+router.get("/publish-dashboard", async (req: Request, res: Response) => {
+    const backLink = req.headers.referer || "/";
+    res.render("../views/publisher/publish-dashboard.njk", {
+        backLink,
+    });
+});
+
 router.get("/csv", async (req: Request, res: Response) => {
     const backLink = req.headers.referer || "/publish";
     res.render("../views/publisher/csv.njk", {

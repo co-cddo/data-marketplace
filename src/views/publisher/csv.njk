@@ -1,4 +1,5 @@
 {% extends "page.njk" %}
+{% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
 
 {% block content %}
 <div class="govuk-grid-row">
@@ -6,30 +7,53 @@
       <h1 class="govuk-heading-l">
         Upload a CSV file of data asset descriptions
       </h1>
+        <p class="govuk-body">First, <a href="/documents/learn/CSV_Bulk_Upload_Template_for_Data_Asset_Metadata.xlsx.ods" class="govuk-link">Download the CSV template</a> and add your data asset descriptions.</p>
+        <p class="govuk-body">Then upload the file, where it will be checked for errors.</p>
+        <h4 class="govuk-heading-m">TODO: add the real link here</h4>
+      
+      <p class="govuk-body">Then upload the file, where it will be checked for errors.</p>
+      <h4 class="govuk-heading-m">TODO: we need to instruct people to export the "dataset" and "data service" pages as CSV files</h4>
 
-      <h4>TODO: add the real link here</h4>
-      <p>First, <a href="https://dds-e2e.herokuapp.com/public/documents/learn/uk_cross_government_metadata_exchange_model.xlsx.ods" class="govuk-link">Download the CSV template</a> and add your data asset descriptions.</p>
-
-      <p>Then upload the file, where it will be checked for errors.</p>
-      <h4>TODO: we need to instruct people to export the "dataset" and "data service" pages as CSV files</h4>
 
     <form action="/publish/csv/upload" method="POST" enctype="multipart/form-data">
-      <div>
-        <label for="datasetsCSV">Choose dataset File</label>
-        <input type="file" name="datasetsCSV" accept=".csv" required>
+      <div class="govuk-grid-column-one-half">
+          {{ govukFileUpload({
+            id: "datasetsCSV",
+            name: "datasetsCSV",
+            label: {
+              text: "Upload dataset CSV",
+              for: "datasetsCSV"
+            }
+          }) }}
       </div>
-      <div>
-        <label for="servicesCSV">Choose data service File</label> 
-        <input type="file" name="servicesCSV" accept=".csv" required>
+
+      <div class="govuk-grid-column-one-half">
+      {{ govukFileUpload({
+        id: "servicesCSV",
+        name: "servicesCSV",
+        label: {
+          text: "Upload dataService CSV",
+          for: "servicesCSV"
+        }
+      }) }}
       </div>
-      <div>
         <button type="submit" class="govuk-button" data-module="govuk-button">Done</button>
-      </div>
     </form>
-
-     
-
-    
+    </div>
+  
+    <div class="govuk-grid-column-one-third">
+      <aside class="app-related-items learn-aside" role="complementary">
+        <h2 class="govuk-heading-s govuk-!-margin-top-3 govuk-!-margin-bottom-3" id="subsection-title">
+          Learn
+        </h2>
+        <nav role="navigation" aria-labelledby="subsection-title">
+          <ul class="govuk-list govuk-!-font-size-16">
+              <li><a href="/learn/articles/metadata-model" class="govuk-link">Metadata sharing requirements</a></li>
+              <li><a href="/learn/articles/metadata-model" class="govuk-link">Adding a collection of metadata records as a CSV file</a></li>
+          </ul>
+        </nav>
+      </aside>
+    </div>   
   </div>
 </div>
 {% endblock %} 

@@ -164,3 +164,19 @@
   padding:0;
   margin:0;
 }
+
+dl.publish-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 30px;
+}
+
+.publish-metric h3 {
+  margin-bottom: 5px;
+  border-bottom: 1px solid #b1b4b6;
+  padding-bottom: 5px;
+}
+
+.publish-metric dd {
+  margin: 0;
+}
