@@ -6,6 +6,7 @@ import {
   fetchOrganisations,
 } from "../services/findService";
 import { themes } from "../mockData/themes";
+import removeMd from 'remove-markdown';
 
 router.get("/", async (req: Request, res: Response, next: NextFunction) => {
   const backLink = req.session.backLink || "/";
@@ -31,6 +32,16 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
       organisationFilters,
       themeFilters,
     );
+
+    // Strip Markdown from each resource's summary and description
+    resources.forEach(resource => {
+      if (resource.summary) {
+        resource.summary = removeMd(resource.summary);
+      }
+      if (resource.description) {
+        resource.description = removeMd(resource.description);
+      }
+    });
     const organisations = await fetchOrganisations();
     const themesList = themes;
     const filterOptions = [
