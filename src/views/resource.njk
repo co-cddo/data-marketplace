@@ -9,7 +9,7 @@
     <p class="govuk-caption-m">
       {% if resource.modified %}
       Last updated: <strong>{{ resource.modified | formatDate  }}</strong></p>
-      {% else %}
+      {% elif resource.issued %}
       Created: <strong>{{ resource.issued | formatDate  }}</strong></p>
       {% endif %}
     <p class="govuk-body govuk-!-margin-bottom-5">

@@ -113,7 +113,7 @@
                             <li class="gem-c-document-list__attribute"> 
                             {% if resource.modified %}
                             Updated: <time>{{ resource.modified | formatDate }}</time> </li>
-                            {% else %}
+                            {% elif resource.issued %}
                             Created: <time>{{ resource.created | formatDate }}</time> </li>
                             {% endif %}
                         </ul>
