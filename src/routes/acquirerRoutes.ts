@@ -185,7 +185,6 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   });
 });
 
-
 router.post(
   "/:resourceID/:step",
   validateFormMiddleware,
@@ -206,11 +205,11 @@ router.post(
 
     stepData.value = extractFormData(stepData, req.body) || "";
 
-    if (formStep === 'benefits') {
-      const benefitsData = stepData.value
+    if (formStep === "benefits") {
+      const benefitsData = stepData.value;
       for (const value of Object.values(benefitsData)) {
         if (!value.checked) {
-          value.explanation = '';
+          value.explanation = "";
         }
       }
     }
@@ -282,7 +281,6 @@ router.post(
     if (req.body.continueButton && formStep === "declaration") {
       formdata.status = "AWAITING REVIEW";
     }
-
 
     if (req.body.continueButton && formStep === "confirmation") {
       return res.redirect(`/manage-shares/created-requests`);
