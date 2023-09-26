@@ -28,9 +28,8 @@ export const createAbacMiddleware =
       );
       const isAllowed: boolean = abacResponse.data;
       if (!isAllowed) {
-        return res.render("error.njk", {
-          messageTitle: "Permissions error",
-          messageBody: errorMessage,
+        return res.render("permissionsError.njk", {
+          permissionDetail: "review share requests",
         });
       }
       next();

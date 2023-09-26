@@ -40,7 +40,7 @@ export const apiUserWithOrganisation = async (
 ) => {
   if (!req.user.organisation) {
     return res.render("error.njk", {
-      messageTitle: "Permissions error",
+      messageTitle: "Profile error",
       messageBody:
         'You are not currently assigned to an organisation. Please <a class="govuk-link" href="/profile/complete">complete your profile</a>.',
     });
