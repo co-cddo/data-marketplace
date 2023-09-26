@@ -11,12 +11,11 @@
 
         <p class="govuk-body">First, <a href="/documents/learn/CSV_Bulk_Upload_Template_for_Data_Asset_Metadata.xlsx.ods" class="govuk-link">Download the CSV template</a> and add your data asset descriptions.</p>
         <p class="govuk-body">Then upload the file, where it will be checked for errors.</p>
-        <form action="{{assetpath}}/publish/csv">
-            {{ govukButton({
-                 text: "Publish from csv",
-                 name: "continueButton"
-             }) }}
-         </form>
+        {{ govukButton({
+              text: "Publish from CSV",
+              href: "/publish/csv/upload",
+              name: "continueButton"
+          }) }}
     </div>
     <div class="govuk-grid-column-one-third">
         <aside class="app-related-items learn-aside" role="complementary">
