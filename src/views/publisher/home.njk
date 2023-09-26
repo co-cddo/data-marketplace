@@ -1,11 +1,35 @@
 {% extends "layouts/base.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% block content %}
 
 <div class="govuk-grid-row">
-    <h2 class="govuk-heading-l govuk-!-font-weight-bold">Upload from CSV</h2>
-    <a href="{{assetpath}}/publish/csv" class="govuk-button" data-module="govuk-button">
-    Publish from csv
-    </a>
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">
+            Upload a CSV file of data asset descriptions
+        </h1>
+
+        <p class="govuk-body">First, <a href="/documents/learn/CSV_Bulk_Upload_Template_for_Data_Asset_Metadata.xlsx.ods" class="govuk-link">Download the CSV template</a> and add your data asset descriptions.</p>
+        <p class="govuk-body">Then upload the file, where it will be checked for errors.</p>
+        <form action="{{assetpath}}/publish/csv">
+            {{ govukButton({
+                 text: "Upload CSV file",
+                 name: "continueButton"
+             }) }}
+         </form>
+    </div>
+    <div class="govuk-grid-column-one-third">
+        <aside class="app-related-items learn-aside" role="complementary">
+          <h2 class="govuk-heading-s govuk-!-margin-top-3 govuk-!-margin-bottom-3" id="subsection-title">
+            Learn
+          </h2>
+          <nav role="navigation" aria-labelledby="subsection-title">
+            <ul class="govuk-list govuk-!-font-size-16">
+                <li><a href="/learn/articles/metadata-model" class="govuk-link">Metadata sharing requirements</a></li>
+                <li><a href="/learn/articles/metadata-model" class="govuk-link">Adding a collection of metadata records as a CSV file</a></li>
+            </ul>
+          </nav>
+        </aside>
+    </div>
 </div>
-{% endblock %} 
+{% endblock %}  

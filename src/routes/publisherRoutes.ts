@@ -58,7 +58,7 @@ router.post("/csv/upload",
 });
 
 router.get("/preview", async (req: Request, res: Response) => {
-    var fileError: UploadError | null = null;
+    let fileError: UploadError | null = null;
     const rowErrors: UploadError[] = [];
     if (req.session.uploadErrors) {
 

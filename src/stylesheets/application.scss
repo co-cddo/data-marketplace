@@ -116,8 +116,6 @@
   border: 1px solid grey;
 }
 
-
-
 .contents-list {
   // padding-bottom: govuk-spacing(6);
   .contents-list__title{
@@ -153,6 +151,12 @@
         font-weight: bold;
       }
     }
+  }
+}
+
+.learn-aside {
+  li:first-of-type {
+    margin-bottom: govuk-spacing(3);
   }
 }
 
