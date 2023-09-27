@@ -247,9 +247,16 @@ declare module "express-session" {
     formErrors: { [key: string]: { text: string } };
     uploadData: NestedJSON[];
     uploadErrors: UploadError[];
+    profileErrors: { [key: string]: { text: string } };
+    profileData: {
+      jobTitle?: string;
+      otherJobTitle?: boolean;
+      organisation?: string;
+    };
     decision: { status: string; notes: string };
     formValuesValidationError: RequestBody;
     pageHistory: string[];
+    returnTo: string;
   }
 }
 

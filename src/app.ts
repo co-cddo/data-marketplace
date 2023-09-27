@@ -19,6 +19,7 @@ import authRoutes from "./routes/authRoutes";
 import profileRoutes from "./routes/profileRoutes";
 import manageRoutes from "./routes/supplierRoutes";
 import publisherRoutes from "./routes/publisherRoutes";
+import infoRoutes from "./routes/infoRoutes";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import session from "express-session";
@@ -31,7 +32,7 @@ import {
   JwtStrategy,
   modifyApplicationMiddleware,
 } from "./middleware/authMiddleware";
-import { apiUser } from "./middleware/apiMiddleware";
+import { apiUser, apiUserWithOrganisation } from "./middleware/apiMiddleware";
 
 export const app = express();
 // Set up security headers with Helmet
@@ -123,13 +124,26 @@ app.use("/", homeRoute);
 app.use("/profile", authenticateJWT, profileRoutes);
 app.use("/find", findRoutes);
 app.use("/share", authenticateJWT, shareRoutes);
-app.use("/acquirer", authenticateJWT, acquirerRoutes);
-app.use("/manage-shares", authenticateJWT, apiUser, manageRoutes);
+app.use(
+  "/acquirer",
+  authenticateJWT,
+  apiUser,
+  apiUserWithOrganisation,
+  acquirerRoutes,
+);
+app.use(
+  "/manage-shares",
+  authenticateJWT,
+  apiUser,
+  apiUserWithOrganisation,
+  manageRoutes,
+);
 app.use("/cookie-settings", cookieRoutes);
 app.use("/learn", learnRoute);
 app.use("/learn/articles", learnArticleRoutes);
 app.use("/admin", adminRoutes);
 app.use("/publish", publisherRoutes);
+app.use("/", infoRoutes);
 
 // Error handling
 // Catch all route to handle errors
