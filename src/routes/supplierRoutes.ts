@@ -74,7 +74,7 @@ router.get(
     const backLink = req.headers.referer || "/";
 
     const pendingRequests = response.filter((r) =>
-      ["IN PROGRESS", "RETURNED"].includes(r.status),
+      ["IN PROGRESS", "RETURNED", "NOT STARTED"].includes(r.status),
     );
     let pendingRows: ShareRequestTable = pendingRequests.map((r) => [
       {

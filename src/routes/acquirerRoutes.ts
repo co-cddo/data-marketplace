@@ -41,6 +41,8 @@ const generateFormTemplate = (
   return template;
 };
 
+const URL = `${process.env.API_ENDPOINT}/sharedata`;
+
 router.get("/:resourceID/start", async (req: Request, res: Response) => {
   const resourceID = req.params.resourceID;
   const backLink = req.headers.referer || `/share/${resourceID}/acquirer`;
@@ -64,6 +66,22 @@ router.get("/:resourceID/start", async (req: Request, res: Response) => {
     req.session.acquirerForms[resourceID] =
       req.session.acquirerForms?.[resourceID] ||
       generateFormTemplate(req, resourceID, assetTitle, contactPoint);
+
+    try {
+      await axios.put(
+        URL,
+        { sharedata: req.session.acquirerForms[resourceID] },
+        { headers: { Authorization: `Bearer ${req.cookies.jwtToken}` } },
+      );
+    } catch (error: unknown) {
+      console.error("Error sending formdata to backend");
+      if (axios.isAxiosError(error)) {
+        console.error(error.response?.data.detail);
+      } else {
+        console.error(error);
+      }
+    }
+
     res.render("../views/acquirer/start.njk", {
       route: req.params.page,
       heading: "Acquirer Start",
@@ -88,23 +106,6 @@ router.get("/:resourceID/check", async (req: Request, res: Response) => {
 
   const formdata = req.session.acquirerForms[resourceID];
 
-  if (!formdata.stepHistory) {
-    formdata.stepHistory = [];
-  }
-
-  if (req.query.action === "back") {
-    formdata.stepHistory.pop();
-  }
-
-  let backLink = null;
-  if (formdata.stepHistory && formdata.stepHistory.length > 0) {
-    backLink = `/acquirer/${resourceID}/${
-      formdata.stepHistory[formdata.stepHistory.length - 1]
-    }?action=back`;
-  } else {
-    backLink = `/acquirer/${resourceID}/start`;
-  }
-
   let returnedNotes, returnedNotesTitle;
   try {
     const shareRequestDetailResponse = await axios.get(
@@ -122,7 +123,6 @@ router.get("/:resourceID/check", async (req: Request, res: Response) => {
 
     res.render(`../views/acquirer/check.njk`, {
       requestId: formdata.requestId,
-      backLink,
       data: checkAnswer(formdata),
       returnedNotes,
       returnedNotesTitle,
@@ -158,21 +158,11 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
   }
   delete req.session.formErrors;
 
-  if (req.query.action === "back" && formdata.stepHistory) {
-    formdata.stepHistory.pop();
-  }
-
   if (
     stepData.status === "NOT REQUIRED" ||
     stepData.status === "CANNOT START YET"
   ) {
     return res.redirect(`/acquirer/${resourceID}/${stepData.nextStep}`);
-  }
-
-  let backLink = null;
-
-  if (!formdata.stepHistory) {
-    formdata.stepHistory = [];
   }
 
   // handle form errors
@@ -184,28 +174,16 @@ router.get("/:resourceID/:step", async (req: Request, res: Response) => {
     delete req.session.formValuesValidationError;
   }
 
-  if (formdata.stepHistory && formdata.stepHistory.length > 0) {
-    // Otherwise, set it to the previous step from stepHistory
-    backLink = `/acquirer/${resourceID}/${
-      formdata.stepHistory[formdata.stepHistory.length - 1]
-    }?action=back`;
-  } else {
-    backLink = `/acquirer/${resourceID}/start`;
-  }
-
   res.render(`../views/acquirer/${formStep}.njk`, {
     requestId: formdata.requestId,
     assetId: formdata.dataAsset,
     assetTitle,
     contactPoint: contactPoint,
-    backLink,
     stepId: formStep,
     savedValue: stepData.value,
     errorMessage: stepData.errorMessage,
   });
 });
-
-const URL = `${process.env.API_ENDPOINT}/sharedata`;
 
 router.post(
   "/:resourceID/:step",
@@ -226,10 +204,6 @@ router.post(
     }
 
     stepData.value = extractFormData(stepData, req.body) || "";
-
-    if (!formdata.stepHistory) {
-      formdata.stepHistory = [];
-    }
 
     if (formStep === "benefits") {
       const benefitsData = stepData.value;
@@ -308,18 +282,6 @@ router.post(
       formdata.status = "AWAITING REVIEW";
     }
 
-    // Check which button was clicked "Save and continue || Save and return"
-    let redirectURL = `/acquirer/${resourceID}/start`;
-    if (req.body.returnButton) {
-      // If save and return was clicked, clear the step history
-      formdata.stepHistory = [];
-    } else {
-      // Otherwise add the current step to the history if it's not already there
-      if (formdata.stepHistory.indexOf(formStep) === -1) {
-        formdata.stepHistory.push(formStep);
-      }
-    }
-
     updateStepsStatus(
       formStep,
       stepData.value,
@@ -329,6 +291,7 @@ router.post(
 
     const nextStep = formdata.steps[formStep].nextStep;
 
+    let redirectURL = `/acquirer/${resourceID}/start`;
     if (req.body.continueButton && nextStep) {
       redirectURL = `/acquirer/${resourceID}/${nextStep}`;
     }
