@@ -412,12 +412,10 @@ router.post(
 
     if (!decision) {
       decisionErrors["decision"] = {text: "Select one option."};
-    } else if (decision === "approve" && !req.body.approve) {
-      decisionErrors["approve"] = {text: "Enter comments."};
-    } else if (decision === "return" && !req.body["return-with-comments"]) {
+    } 
+    
+    if (decision === "return" && !req.body["return-with-comments"]) {
       decisionErrors["return-with-comments"] = {text: "Enter comments."};
-    } else if (decision === "reject" && !req.body.reject) {
-      decisionErrors["reject"] = {text: "Enter comments."};
     }
 
     if (Object.keys(decisionErrors).length > 0) {
@@ -466,9 +464,8 @@ router.post(
       }
       return next(error);
     }
-  },
+  }
 );
-
 
 router.get(
   "/received-requests/:requestId/declaration",
