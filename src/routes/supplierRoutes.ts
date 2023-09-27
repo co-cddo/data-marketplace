@@ -419,25 +419,10 @@ router.post(
     }
 
     if (Object.keys(decisionErrors).length > 0) {
-      let notes;
-      switch (decision) {
-        case "return":
-          notes = req.body["return-with-comments"];
-          break;
-        case "approve":
-          notes = req.body.approve;
-          break;
-        case "reject":
-          notes = req.body.reject;
-          break;
-        default:
-          notes = "";
-      }
-
       req.session.decisionErrors = decisionErrors;
       req.session.decision = {
-        status: decision,
-        notes: notes,
+          status: decision,
+          notes: req.body["return-with-comments"] || "" 
       };
 
       return res.redirect(
