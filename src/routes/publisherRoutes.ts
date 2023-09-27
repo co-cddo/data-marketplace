@@ -59,11 +59,14 @@ router.post(
       req.session.uploadErrors = errs;
       return res.redirect("/publish/csv/upload-summary");
     } catch (err) {
-      console.error(err);
-      res.sendStatus(400);
+        return res.redirect("/publish/csv/upload/error");
     }
   },
 );
+
+router.get("/csv/upload/error", async (req: Request, res: Response) => {
+    res.render("../views/publisher/total_error.njk");
+})
 
 router.get("/csv/upload-summary", async (req: Request, res: Response) => {
     const backLink = req.headers.referer || "/";
