@@ -220,3 +220,9 @@
 </div>
 </div>
 {% endblock %}
+
+{% block bodyEnd %}
+  {{ super() }}  
+    <script src="{{ assetPath }}/javascripts/accordionExpander.js" type="text/javascript"></script>
+    <script src="{{ assetPath }}/javascripts/linkStyling.js" type="text/javascript"></script>
+{% endblock %}
