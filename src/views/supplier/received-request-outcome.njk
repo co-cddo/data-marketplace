@@ -1,7 +1,7 @@
 {% extends "page.njk" %}
 
 {% if request.status === "ACCEPTED" %}
-  {% set nextSteps = "The " + request.requestingOrg + " have been told that this request was accepted. Contact " + request.requesterEmail + " to set up the data share arrangement." %}
+  {% set nextSteps = "The " + request.requestingOrg + " have been told that this request was accepted. Contact EMAIL_PLACEHOLDER to set up the data share arrangement." %}
 {% elif request.status === "RETURNED" %}
   {% set nextSteps = "Your department does not need to do anything. " + request.assetPublisher.title + " has been told that this request has been returned." %}
 {% elif request.status === "REJECTED" %}
@@ -31,7 +31,9 @@
       <p class="govuk-body">{{ request.reviewNotes if request.reviewNotes else "No notes provided." }}</p>
 
       <h2 class="govuk-heading-m govuk-!-static-margin-bottom-1">What happens next</h2>
-      <p class="govuk-body">{{ nextSteps }}</p>
+      <p class="govuk-body">
+        {{ nextSteps | replace("EMAIL_PLACEHOLDER", '<a class="govuk-link" target="_blank" href="mailto:' + request.requesterEmail + '">' + request.requesterEmail + '</a>') | safe }}
+      </p>
     </div>
 
     <div class="govuk-grid-column-one-third">

@@ -22,7 +22,7 @@ import {
 } from "../types/express";
 import { licences } from "../mockData/licences";
 import { replace } from "./checkhelper";
-
+import { formatDate } from "./stringHelpers";
 export const updateStepsStatus = (
   currentStep: string,
   stepValue: StepValue,
@@ -705,8 +705,11 @@ function checkAnswer(formdata: FormData) {
           break;
         case "date":
           const date = stepData.value as DateStep;
+          const dateString = `${date.year}-${(date.month)}-${date.day}`;
+          const newDate = formatDate(dateString)
+           
           if (date.year) {
-            dataTypeValue.push(`${date.day}/${date.month}/${date.year}`);
+            dataTypeValue.push(`${newDate}`);
           } else {
             dataTypeValue.push(`<span class="not-required">Unrequested</span>`);
           }
