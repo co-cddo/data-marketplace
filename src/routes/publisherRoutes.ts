@@ -105,14 +105,14 @@ router.get("/csv/upload-summary", async (req: Request, res: Response) => {
     };
 });
 
-router.get("/csv/preview/:id", async (req: Request, res: Response) => {
-  const assetId = Number(req.params.id);
+router.get("/csv/preview/:assetIndex", async (req: Request, res: Response) => {
+  const assetIndex = Number(req.params.assetIndex);
 
   if (!req.session.uploadData) {
     return res.status(400).send("Invalid asset ID or data is not available");
   }
 
-  const dataset = req.session.uploadData[assetId];
+  const dataset = req.session.uploadData[assetIndex];
 
   console.log("/publish/csv/preview specific asset", dataset)
   if (!dataset) {
