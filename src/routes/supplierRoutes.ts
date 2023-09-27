@@ -398,6 +398,10 @@ router.get(
       selectedDecisionStatus: req.session.decision?.status,
       selectedDecisionNotes: req.session.decision?.notes,
     });
+
+    // Clear the session data related to the decision to stop appearing when a decision has to be re-submitted
+    delete req.session.decision;
+    delete req.session.decisionErrors;
   },
 );
 
@@ -419,10 +423,31 @@ router.post(
     }
 
     if (Object.keys(decisionErrors).length > 0) {
+      let notes;
+      switch (decision) {
+        case "return":
+          notes = req.body["return-with-comments"];
+          break;
+        case "approve":
+          notes = req.body.approve;
+          break;
+        case "reject":
+          notes = req.body.reject;
+          break;
+        default:
+          notes = "";
+      }
+    
       req.session.decisionErrors = decisionErrors;
-      req.session.decision = decision;
+      req.session.decision = {
+        status: decision,
+        notes: notes
+      };
+
       return res.redirect(`/manage-shares/received-requests/${requestId}/decision`);
     }
+    
+    
 
     let status, decisionNotes, redirectUrl;
 
@@ -473,6 +498,9 @@ router.get(
   async (req: Request, res: Response) => {
     const requestId = req.params.requestId;
     const backLink = `/manage-shares/received-requests/${requestId}/decision`;
+        // Clear the session data related to the decision
+        delete req.session.decision;
+        delete req.session.decisionErrors;
     res.render("../views/supplier/declaration.njk", {
       backLink,
       requestId,

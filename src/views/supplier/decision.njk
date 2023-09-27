@@ -49,7 +49,7 @@
             {
             value: "return",
             text: "Return with comments",
-            checked: "",
+            checked: selectedDecisionStatus === "return",
             hint: {
               text: "Some details are missing. A decision cannot be made without them. If they provide this information, you will progress the request."
             },
@@ -60,7 +60,7 @@
             {
             value: "approve",
             text: "Accept data share request",
-            checked: "",
+            checked: selectedDecisionStatus === "approve",
             hint: {
               text: "Approve and arrange a meeting to discuss the next steps."
             },
@@ -71,7 +71,7 @@
             {
             value: "reject",
             text: "Reject data share request",
-            checked: "",
+            checked: selectedDecisionStatus === "reject",
             hint: {
               text: "There are fundamental problems with this request that cannot be solved. Use the comments box to tell the department why you have rejected their request."
             },
