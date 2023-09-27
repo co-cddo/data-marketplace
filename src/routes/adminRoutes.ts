@@ -39,7 +39,7 @@ const callApiAsAdmin = async (
     if (verb === "GET") {
       response = await axios.get(API(path), { headers });
     } else if (verb === "DELETE") {
-      response = await axios.delete(API(path), { headers })
+      response = await axios.delete(API(path), { headers });
     } else {
       response = await axios.put(API(path), { ...data }, { headers });
     }
