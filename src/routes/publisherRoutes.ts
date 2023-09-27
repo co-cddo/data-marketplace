@@ -84,16 +84,19 @@ router.get("/csv/upload-summary", async (req: Request, res: Response) => {
         });
     } else {
         const uploadSummaries = data.map((dataset, index) => ({
-            linkHTML: `<a class="govuk-link" href="/publish/csv/preview/${index}">${dataset.title}</a>`,
             link: `/publish/csv/preview/${index}`,
             linkText: dataset.title,
             assetType: dataset.type
         }));
-        const errorSummaries = rowErrors.map((err, index) => ({
-            linkHTML: `<a class="govuk-link" href="/publish/csv/error/${index}">Unprocessable asset with ID <em>${err.location}</em></a>`,
-            link: `/publish/csv/error/${index}`,
-            linkText: err.location
-        }));
+        const errorSummaries = rowErrors.map((err, index) => {
+            const input_data: any = err.extras?.input_data || {};
+            const dataType = input_data.type;
+            return {
+                link: `/publish/csv/error/${index}`,
+                linkText: input_data.title || err.location,
+                assetType: input_data.type || "Undefined"
+            };
+        });
         const hasErrors: boolean = rowErrors.length > 0;
 
         res.render("../views/publisher/upload-summary.njk", {
@@ -122,6 +125,24 @@ router.get("/csv/preview/:assetIndex", async (req: Request, res: Response) => {
   res.render("../views/publisher/preview.njk", {
     dataset
   });
+});
+
+router.get("/csv/error/:errorIndex", async (req: Request, res: Response) => {
+    const errorIndex = Number(req.params.errorIndex);
+
+    if (!req.session.uploadErrors) {
+        return res.status(400).send("Data is not available - please return to home screen");
+    }
+
+    const assetErr = req.session.uploadErrors[errorIndex];
+
+    if (!assetErr) {
+        return res.status(404).send("Error not found");
+    }
+
+    res.render("../views/publisher/asset-error.njk", {
+        assetErr
+    });
 });
 
 router.post("/commit", async (req: Request, res: Response) => {
