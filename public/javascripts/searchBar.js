@@ -1,13 +1,14 @@
 function clearSearchResults() {
   document.addEventListener('DOMContentLoaded', function() {
-  const searchInput = document.getElementById('search');
-  const searchForm = document.getElementById('searchForm');
+    const searchInput = document.getElementById('search');
+    const searchForm = document.getElementById('searchForm');
 
-  searchInput.addEventListener('input', function() {
-      if (!this.value.trim()) {
-          searchForm.submit();
-      }
-  });
+    if (searchInput && searchForm) {
+        searchInput.addEventListener('blur', function() {
+            searchForm.submit();
+        });
+    }
 });
 }
+
 clearSearchResults();
