@@ -70,17 +70,17 @@ router.get("/csv/upload-summary", async (req: Request, res: Response) => {
     const data = req.session.uploadData || [];
     const errors = req.session.uploadErrors || [];
     const rowErrors: UploadError[] = [];
-    let fileError: UploadError | null = null;
+    const fileErrors: UploadError[] = [];
     errors.forEach((e) => {
         if (e.scope == "FILE") {
-            fileError = e;
+            fileErrors.push(e);
         } else {
             rowErrors.push(e);
         }
     });
-    if (fileError) {
+    if (fileErrors.length > 0) {
         res.render("../views/publisher/file_error.njk", {
-            error: JSON.stringify(fileError, null, 2),
+            errors: fileErrors
         });
     } else {
         const uploadSummaries = data.map((dataset, index) => ({
