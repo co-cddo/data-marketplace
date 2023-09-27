@@ -169,29 +169,3 @@ export const replace: any = {
   disposal: { type: "string" },
 };
 
-export const month : {[k: string]: string} = {
-  "01": "January",
-  "02": "February",
-  "03": "March",
-  "04": "April",
-  "05": "May",
-  "06": "June",
-  "07": "July",
-  "08": "August",
-  "09": "September",
-  "10": "October",
-  "11": "November",
-  "12": "December"
-}
-
-export const dayNumber : {[k: string]: number} = {
-  "01": 1,
-  "02": 2,
-  "03": 3,
-  "04": 4,
-  "05": 5,
-  "06": 6,
-  "07": 7,
-  "08": 8,
-  "09": 9,
-}
