@@ -21,7 +21,7 @@ import {
   GenericStringArray,
 } from "../types/express";
 import { licences } from "../mockData/licences";
-import { replace } from "./checkhelper";
+import { replace, month, dayNumber } from "./checkhelper";
 
 export const updateStepsStatus = (
   currentStep: string,
@@ -705,8 +705,23 @@ function checkAnswer(formdata: FormData) {
           break;
         case "date":
           const date = stepData.value as DateStep;
+
+          const day = dayNumber[date.day as number] || date.day
+
+          let dateDay = ""
+          if(day === 1 || day === 21 || day === 31) {
+            dateDay = `${day}st`
+          } else if(day === 2 || day === 22) {
+            dateDay = `${day}nd`
+          } else if(day === 3 || day === 23) {
+            dateDay = `${day}rd`
+          } else {
+            dateDay = `${day}th`
+          }
+
+          const dateMonth: string = date?.month?.toString() || ""
           if (date.year) {
-            dataTypeValue.push(`${date.day}/${date.month}/${date.year}`);
+            dataTypeValue.push(`${dateDay} ${month[dateMonth]} ${date.year}`);
           } else {
             dataTypeValue.push(`<span class="not-required">Unrequested</span>`);
           }
