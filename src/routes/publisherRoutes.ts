@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import multer from "multer";
-import { IFile } from "../types/express";
+import { IFile, NestedJSON, UploadError } from "../types/express";
 import axios from "axios";
 import FormData from "form-data";
 import { createAbacMiddleware } from "../middleware/ABACMiddleware";
@@ -12,7 +12,7 @@ const publishUrl = `${process.env.API_ENDPOINT}/publish`;
 const router = express.Router();
 
 const publishDataAbacMiddleware = createAbacMiddleware(
-  "organisation", "CREATE_ASSET", "publish data descriptions"
+  "organisation", "PUBLISHER", "publish data descriptions"
 )
 
 router.use(publishDataAbacMiddleware)
@@ -28,6 +28,36 @@ router.get("/csv/start", async (req: Request, res: Response) => {
 router.get("/csv/upload", async (req: Request, res: Response) => {
   res.render("../views/publisher/csv_upload.njk");
 });
+
+async function checkPermissionToAdd(assets: NestedJSON[], jwt: string) {
+  const errs: UploadError[] = [];
+
+  await Promise.all(assets.map(async (asset) => {
+    const org = asset.organisationID;
+    const url = `${process.env.API_ENDPOINT}/users/permission/organisation/${org}/CREATE_ASSET`;
+
+    try {
+      const response = await axios.get(url, { headers: { Authorization: `Bearer ${jwt}` } });
+      if (response.data !== true) {
+        const assetID = asset.externalIdentifier != null ? asset.externalIdentifier.toString() : 'identifier not found';
+
+        const err: UploadError = {
+          scope: 'ASSET',
+          message: `Not authorised to add asset for ${org}`,
+          location: assetID,
+          extras: {},
+          sub_errors: [],
+        };
+
+        errs.push(err);
+      }
+    } catch (error) {
+      // Handle errors
+      console.error('There was a problem with the Axios request:', error);
+    }
+  }));
+  return errs;
+}
 
 router.post(
   "/csv/upload",
@@ -54,8 +84,11 @@ router.post(
       console.log(response.data)
       const errs = response.data.errors;
       const data = response.data.data;
+      const accessErrors = await checkPermissionToAdd(data, req.cookies.jwtToken)
+      const allErrs = accessErrors.concat(errs)
+      console.log(allErrs)
       req.session.uploadData = data;
-      req.session.uploadErrors = errs;
+      req.session.uploadErrors = allErrs;
       return res.redirect("/publish/csv/upload-summary");
     } catch (err) {
       console.error(err);
