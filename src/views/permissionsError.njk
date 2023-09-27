@@ -1,0 +1,25 @@
+{% extends "layouts/base.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block pageTitle %}{{messageTitle}} - Data Marketplace - GOV.UK{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl govuk-!-font-weight-bold">You need permission to {{permissionDetail}}</h1>
+      <div class="govuk-body">
+        <a class="govuk-link" href="https://forms.gle/rpy2BMchHGDNVFfAA">Use the Data Marketplace support form</a> to request permission to {{permissionDetail}}.
+      </div>
+      <div class="govuk-body">
+        Your organisation, or team, administrator, will send you an email when they've made a decision.
+      </div>
+      <div class="govuk-button-group">
+        {{govukButton({
+        href: "https://forms.gle/rpy2BMchHGDNVFfAA",
+        text: "Request Permission"
+      })}}
+        <a class="govuk-link" href="{{ pageHistory[pageHistory.length - 2] }}?fromBack=true">Back</a>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -212,7 +212,7 @@ router.get(
 const reviewRequestAbacMiddleware = createAbacMiddleware(
   "organisation",
   "REVIEW_SHARE_REQUESTS",
-  "You are not authorised to review share requests. Please contact your organisation administrator.",
+  "review share requests",
 );
 
 router.get(

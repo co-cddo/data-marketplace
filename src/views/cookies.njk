@@ -1,0 +1,56 @@
+{% extends "layouts/base.njk" %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">Cookie statement</h1>
+    <p class="govuk-body">Cookies are small files saved on your phone, tablet or computer when you visit a website.</p>
+    <p class="govuk-body">We use cookies to make the Data Marketplace service work and to collect information about how you use our service.</p>
+
+    <h1 class="govuk-heading-l">Essential cookies</h1>
+    <p class="govuk-body">We use only essential cookies to keep your information secure while you use the Data Marketplace service. We do not need to ask permission to use them.</p>
+    
+    {{ govukTable({
+  head: [
+    {
+      text: "Name"
+    },
+    {
+      text: "Purpose"
+    },
+    {
+      text: "Expires"
+    }
+  ],
+  rows: [
+    [
+      {
+        text: "session_cookie"
+      },
+      {
+        text: "Used to keep you signed in"
+      },
+      {
+        text: "20 hours"
+      }
+    ],
+    [
+       {
+        text: "cookie_policy"
+      },
+      {
+        text: "Saves your cookie consent settings"
+      },
+      {
+        text: "1 year"
+      }
+    ]
+  ]
+}) }}
+
+    <h1 class="govuk-heading-l">Analytics cookies</h1>
+    <p class="govuk-body">We do not use any analytics cookies to collect data about how you use the service.</p>
+</div>
+</div>
+{% endblock %}

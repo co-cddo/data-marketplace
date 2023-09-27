@@ -282,10 +282,6 @@ router.post(
       formdata.status = "AWAITING REVIEW";
     }
 
-    if (req.body.continueButton && formStep === "confirmation") {
-      return res.redirect(`/manage-shares/created-requests`);
-    }
-
     updateStepsStatus(
       formStep,
       stepData.value,
