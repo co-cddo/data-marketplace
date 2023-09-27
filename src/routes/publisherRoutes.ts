@@ -12,7 +12,7 @@ const publishUrl = `${process.env.API_ENDPOINT}/publish`;
 const router = express.Router();
 
 const publishDataAbacMiddleware = createAbacMiddleware(
-  "organisation", "PUBLISHER", "publish data descriptions"
+  "organisation", "CREATE_ASSET", "publish data descriptions"
 )
 
 router.use(publishDataAbacMiddleware)
@@ -81,7 +81,6 @@ router.post(
           ...fd.getHeaders(),
         },
       });
-      console.log(response.data)
       const errs = response.data.errors;
       const data = response.data.data;
       const accessErrors = await checkPermissionToAdd(data, req.cookies.jwtToken)
