@@ -26,7 +26,6 @@ interface FormData {
   status: FormStatus;
   overviewSections: Record<string, Section>;
   steps: Record<string, Step>;
-  stepHistory?: string[];
 }
 
 interface ShareRequestResponse {

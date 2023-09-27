@@ -28,7 +28,6 @@ const mockFormData: FormData = {
       errorMessage: ""
     },
   },
-  stepHistory: [],
 };
 
 describe("updateStepsStatus function", () => {
