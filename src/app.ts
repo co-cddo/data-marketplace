@@ -18,6 +18,7 @@ import loginRoutes from "./routes/loginRoutes";
 import authRoutes from "./routes/authRoutes";
 import profileRoutes from "./routes/profileRoutes";
 import manageRoutes from "./routes/supplierRoutes";
+import infoRoutes from "./routes/infoRoutes";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import session from "express-session";
@@ -140,6 +141,7 @@ app.use("/cookie-settings", cookieRoutes);
 app.use("/learn", learnRoute);
 app.use("/learn/articles", learnArticleRoutes);
 app.use("/admin", adminRoutes);
+app.use("/", infoRoutes);
 
 // Error handling
 // Catch all route to handle errors
