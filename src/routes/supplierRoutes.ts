@@ -82,10 +82,10 @@ router.get(
           r.status === "RETURNED"
             ? `<a class="govuk-link" href="/acquirer/${
                 r.sharedata.dataAsset
-              }/check">${r.requestId.substring(0, 8)}...</a>`
+              }/check">${r.requestId.substring(0, 8)}... - View</a>`
             : `<a class="govuk-link" href="/acquirer/${
                 r.sharedata.dataAsset
-              }/start">${r.requestId.substring(0, 8)}...</a>`,
+              }/start">${r.requestId.substring(0, 8)}... - View</a>`,
       },
       { text: r.assetTitle },
       { text: r.assetPublisher.title },
@@ -109,7 +109,7 @@ router.get(
     );
     let submittedRows: ShareRequestTable = submittedRequests.map((r) => [
       {
-        html: `${r.requestId.substring(0, 8)}...`,
+        html: `${r.requestId.substring(0, 8)}... - View`,
       },
       { text: r.assetTitle },
       { text: r.assetPublisher.title },
@@ -134,7 +134,7 @@ router.get(
       {
         html: `<a class="govuk-link" href="/manage-shares/created-requests/${
           r.requestId
-        }">${r.requestId.substring(0, 8)}...</a>`,
+        }">${r.requestId.substring(0, 8)}... - View</a>`,
       },
       { text: r.assetTitle },
       { text: r.assetPublisher.title },
@@ -248,10 +248,10 @@ router.get(
           r.status === "RETURNED"
             ? `<a class="govuk-link" href="/manage-shares/received-requests/${
                 r.requestId
-              }/outcome">${r.requestId.substring(0, 8)}...</a>`
+              }/outcome">${r.requestId.substring(0, 8)}... - View</a>`
             : `<a class="govuk-link" href="/manage-shares/received-requests/${
                 r.requestId
-              }">${r.requestId.substring(0, 8)}...</a>`,
+              }">${r.requestId.substring(0, 8)}... - View</a>`,
       },
       { text: r.requestingOrg },
       { text: r.assetTitle },
@@ -276,7 +276,7 @@ router.get(
       {
         html: `<a class="govuk-link" href="/manage-shares/received-requests/${
           r.requestId
-        }/outcome">${r.requestId.substring(0, 8)}...</a>`,
+        }/outcome">${r.requestId.substring(0, 8)}... - View</a>`,
       },
       { text: r.requestingOrg },
       { text: r.assetTitle },
