@@ -447,8 +447,6 @@ router.post(
       return res.redirect(`/manage-shares/received-requests/${requestId}/decision`);
     }
     
-    
-
     let status, decisionNotes, redirectUrl;
 
     switch (decision) {
@@ -498,9 +496,6 @@ router.get(
   async (req: Request, res: Response) => {
     const requestId = req.params.requestId;
     const backLink = `/manage-shares/received-requests/${requestId}/decision`;
-        // Clear the session data related to the decision
-        delete req.session.decision;
-        delete req.session.decisionErrors;
     res.render("../views/supplier/declaration.njk", {
       backLink,
       requestId,
