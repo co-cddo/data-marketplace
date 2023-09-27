@@ -407,15 +407,15 @@ router.post(
   async (req: Request, res: Response, next: NextFunction) => {
     const requestId = req.params.requestId;
     const decision = req.body.decision;
-      
+
     const decisionErrors: { [key: string]: { text: string } } = {};
 
     if (!decision) {
-      decisionErrors["decision"] = {text: "Select one option."};
-    } 
-    
+      decisionErrors["decision"] = { text: "Select one option." };
+    }
+
     if (decision === "return" && !req.body["return-with-comments"]) {
-      decisionErrors["return-with-comments"] = {text: "Enter comments."};
+      decisionErrors["return-with-comments"] = { text: "Enter comments." };
     }
 
     if (Object.keys(decisionErrors).length > 0) {
@@ -433,14 +433,16 @@ router.post(
         default:
           notes = "";
       }
-    
+
       req.session.decisionErrors = decisionErrors;
       req.session.decision = {
         status: decision,
-        notes: notes
+        notes: notes,
       };
 
-      return res.redirect(`/manage-shares/received-requests/${requestId}/decision`);
+      return res.redirect(
+        `/manage-shares/received-requests/${requestId}/decision`,
+      );
     }
 
     if (decision === "approve") {
@@ -451,7 +453,7 @@ router.post(
         `/manage-shares/received-requests/${requestId}/declaration`,
       );
     }
-    
+
     let status, decisionNotes, redirectUrl;
 
     if (decision === "return") {
