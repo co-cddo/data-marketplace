@@ -2,7 +2,8 @@ import express, { Request, Response } from "express";
 import multer from 'multer'
 import {
     IFile,
-    UploadError
+    UploadError,
+    NestedJSON
 } from "../types/express";
 import axios from "axios";
 import FormData from "form-data";
@@ -29,6 +30,38 @@ router.get("/csv", async (req: Request, res: Response) => {
 });
 
 
+// TODO!!!! The user doesn't actually end up at the API at all!
+async function checkPermissionToAdd(assets: NestedJSON[]) {
+    const errs: UploadError[] = [];
+
+    await Promise.all(assets.map(async (asset) => {
+        const org = asset.organisationID;
+        const url = `${process.env.API_ENDPOINT}/users/permission/organisation/${org}/CREATE_ASSET`;
+
+        try {
+            const response = await axios.get(url);
+            if (response.data !== true) {
+                const assetID = asset.externalIdentifier != null ? asset.externalIdentifier.toString() : 'identifier not found';
+
+                const err: UploadError = {
+                    scope: 'ASSET',
+                    message: `Not authorised to add asset for {org}`,
+                    location: assetID,
+                    extras: {},
+                    sub_errors: [],
+                };
+
+                errs.push(err);
+                console.log('Added error:', err);
+            }
+        } catch (error) {
+            // Handle errors
+            console.error('There was a problem with the Axios request:', error);
+        }
+    }));
+    return errs;
+}
+
 router.post("/csv/upload",
             upload.fields([{name: 'datasetsCSV', maxCount: 1},
                            {name: 'servicesCSV', maxCount: 1}]),
@@ -46,8 +79,14 @@ router.post("/csv/upload",
                 ...fd.getHeaders(),
             },
         });
-        const errs = response.data.errors;
         const data = response.data.data;
+
+        const accessErrs = await checkPermissionToAdd(data);
+        console.log("access errors");
+        console.log(accessErrs);
+        const errs = accessErrs.concat(response.data.errors);
+        console.log("all errors");
+        console.log(errs);
         req.session.uploadData = data;
         req.session.uploadErrors = errs;
         return res.redirect("/publish/preview");

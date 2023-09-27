@@ -134,7 +134,7 @@ app.use("/manage-shares", authenticateJWT, manageRoutes);
 app.use("/cookie-settings", cookieRoutes);
 app.use("/learn", learnRoutes);
 app.use("/admin", adminRoutes);
-app.use("/publish", publisherRoutes);
+app.use("/publish", authenticateJWT, publisherRoutes);
 
 // Error handling
 // Catch all route to handle errors
