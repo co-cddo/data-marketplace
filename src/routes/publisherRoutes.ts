@@ -3,6 +3,7 @@ import multer from "multer";
 import { IFile } from "../types/express";
 import axios from "axios";
 import FormData from "form-data";
+import { createAbacMiddleware } from "../middleware/ABACMiddleware";
 
 const upload = multer();
 const verifyUrl = `${process.env.API_ENDPOINT}/publish/verify`;
@@ -10,25 +11,22 @@ const publishUrl = `${process.env.API_ENDPOINT}/publish`;
 
 const router = express.Router();
 
+const publishDataAbacMiddleware = createAbacMiddleware(
+  "organisation", "CREATE_ASSET", "publish data descriptions"
+)
+
+router.use(publishDataAbacMiddleware)
+
 router.get("/publish-dashboard", async (req: Request, res: Response) => {
-  const backLink = req.headers.referer || "/";
-  res.render("../views/publisher/publish-dashboard.njk", {
-    backLink,
-  });
+  res.render("../views/publisher/publish-dashboard.njk");
 });
 
 router.get("/csv/start", async (req: Request, res: Response) => {
-  const backLink = req.headers.referer || "/";
-  res.render("../views/publisher/csv_start.njk", {
-    backLink,
-  });
+  res.render("../views/publisher/csv_start.njk");
 });
 
 router.get("/csv/upload", async (req: Request, res: Response) => {
-  const backLink = req.headers.referer || "/publish";
-  res.render("../views/publisher/csv_upload.njk", {
-    backLink,
-  });
+  res.render("../views/publisher/csv_upload.njk");
 });
 
 router.post(
@@ -77,8 +75,8 @@ router.get("/csv/upload-summary", async (req: Request, res: Response) => {
   ]);
 
   res.render("../views/publisher/upload-summary.njk", {
-      backLink,
-      uploadSummary
+    backLink,
+    uploadSummary
   });
 });
 

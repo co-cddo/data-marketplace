@@ -142,7 +142,13 @@ app.use("/cookie-settings", cookieRoutes);
 app.use("/learn", learnRoute);
 app.use("/learn/articles", learnArticleRoutes);
 app.use("/admin", adminRoutes);
-app.use("/publish", publisherRoutes);
+app.use(
+  "/publish",
+  authenticateJWT,
+  apiUser,
+  apiUserWithOrganisation,
+  publisherRoutes,
+);
 app.use("/", infoRoutes);
 
 // Error handling
