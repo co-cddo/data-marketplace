@@ -239,6 +239,7 @@ declare module "express-session" {
       otherJobTitle?: boolean;
       organisation?: string;
     };
+    decisionErrors: { [key: string]: {text: string } };
     decision: { status: string; notes: string };
     formValuesValidationError: RequestBody;
     pageHistory: string[];

@@ -12,25 +12,29 @@
         {{ govukTextarea({
           id: "return-with-comments-textarea",
           name: "return-with-comments",
-          value: []
+          value: [],
+          errorMessage: errorMessage['return-with-comments']
         }) }}
       {% endset -%}
       {% set ApproveHtml %}
         {{ govukTextarea({
           id: "approve-textarea",
           name: "approve",
-          value: []
+          value: [],
+          errorMessage: errorMessage['approve']
         }) }}
       {% endset -%}
       {% set RejectHtml %}
         {{ govukTextarea({
           id: "reject-textarea",
           name: "reject",
-          value: []
+          value: [],
+          errorMessage: errorMessage['reject']
         }) }}
       {% endset -%}
       {{ govukRadios({
         name: "decision",
+        errorMessage: errorMessage["decision"],
         fieldset: {
           legend: {
           text: "What is your decision?",

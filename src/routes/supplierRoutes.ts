@@ -394,6 +394,9 @@ router.get(
     res.render("../views/supplier/decision.njk", {
       backLink,
       requestId,
+      errorMessage: req.session.decisionErrors,
+      selectedDecisionStatus: req.session.decision?.status,
+      selectedDecisionNotes: req.session.decision?.notes,
     });
   },
 );
@@ -403,30 +406,46 @@ router.post(
   reviewRequestAbacMiddleware,
   async (req: Request, res: Response, next: NextFunction) => {
     const requestId = req.params.requestId;
-
     const decision = req.body.decision;
 
-    if (decision === "approve") {
-      // This needs to be stored in the session so that we can access it again
-      // after the Declaration page:
-      req.session.decision = { status: "ACCEPTED", notes: req.body.approve };
-      return res.redirect(
-        `/manage-shares/received-requests/${requestId}/declaration`,
-      );
+    const decisionErrors: { [key: string]: { text: string } } = {};
+
+    if (!decision) {
+      decisionErrors["decision"] = {text: "Select one option."};
+    } else if (decision === "approve" && !req.body.approve) {
+      decisionErrors["approve"] = {text: "Enter comments."};
+    } else if (decision === "return" && !req.body["return-with-comments"]) {
+      decisionErrors["return-with-comments"] = {text: "Enter comments."};
+    } else if (decision === "reject" && !req.body.reject) {
+      decisionErrors["reject"] = {text: "Enter comments."};
+    }
+
+    if (Object.keys(decisionErrors).length > 0) {
+      req.session.decisionErrors = decisionErrors;
+      req.session.decision = decision;
+      return res.redirect(`/manage-shares/received-requests/${requestId}/decision`);
     }
 
     let status, decisionNotes, redirectUrl;
 
-    if (decision === "return") {
-      status = "RETURNED";
-      decisionNotes = req.body["return-with-comments"];
-      redirectUrl = `/manage-shares/received-requests/${requestId}/return-request`;
-    } else if (decision === "reject") {
-      status = "REJECTED";
-      decisionNotes = req.body.reject;
-      redirectUrl = `/manage-shares/received-requests/${requestId}/reject-request`;
-    } else {
-      redirectUrl = "/manage-shares/received-requests";
+    switch (decision) {
+      case "approve":
+        status = "ACCEPTED";
+        decisionNotes = req.body.approve;
+        redirectUrl = `/manage-shares/received-requests/${requestId}/declaration`;
+        break;
+      case "return":
+        status = "RETURNED";
+        decisionNotes = req.body["return-with-comments"];
+        redirectUrl = `/manage-shares/received-requests/${requestId}/return-request`;
+        break;
+      case "reject":
+        status = "REJECTED";
+        decisionNotes = req.body.reject;
+        redirectUrl = `/manage-shares/received-requests/${requestId}/reject-request`;
+        break;
+      default:
+        redirectUrl = "/manage-shares/received-requests";
     }
 
     try {
@@ -449,6 +468,7 @@ router.post(
     }
   },
 );
+
 
 router.get(
   "/received-requests/:requestId/declaration",
