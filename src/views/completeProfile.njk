@@ -1,29 +1,98 @@
 {% extends "page.njk" %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set otherHtml %}
+{{ govukInput({
+    id: "other",
+    name: "other",
+    classes: "govuk-!-width-full",
+    label: {
+        text: "Enter other primary skill"
+    },
+    value: (selectedJob if otherJobTitle else "")
+}) }}
+{% endset %}
 
 {% block content %}
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <h1 class="govuk-heading-xl">Complete your profile</h1>
+            <h1 class="govuk-heading-l">Complete your profile</h1>
             <form method="POST" id="completeProfileForm">
                 {{ govukSelect({
                     id: "organisation",
                     name: "organisation",
+                    classes: "govuk-!-width-full",
                     label: {
                         text: "Organisation"
                     },
-                    items: organisations
+                    items: organisations,
+                    errorMessage: errorMessage["organisation"]
                 }) }}
-                {{ govukSelect({
+                {{ govukRadios({
                     id: "jobTitle",
                     name: "jobTitle",
-                    label: {
-                        text: "Role"
+                    errorMessage: errorMessage["jobTitle"],
+                    fieldset: {
+                        legend: {
+                        text: "What is your primary skill?",
+                        isPageHeading: false
+                        }
                     },
-                    items: jobTitles
-                }) }}
+                    items: [
+                        {
+                            value: "Technology",
+                            text: "Technology",
+                            hint: {
+                                text: "For example: a technical architect, to help define data flows and requirements."
+                            },
+                            checked: selectedJob == "Technology"
+                        },
+                        {
+                            value: "Data security",
+                            text: "Data security",
+                            hint: {
+                                text: "For example: a cyber security analyst, to ensure data is shared safely."
+                            },
+                            checked: selectedJob == "Data security"
+                        },
+                        {
+                            value: "Data protection",
+                            text: "Data protection",
+                            hint: {
+                                text: "For example: a data protection specialist, to ensure you meet data regulations."
+                            },
+                            checked: selectedJob == "Data security"
+                        },
+                        {
+                            value: "Data governance",
+                            text: "Data governance",
+                            hint: {
+                                text: "For example: an information manager, to ensure data is stored and managed correctly."
+                            },
+                            checked: selectedJob == "Data governance"
+                        },
+                        {
+                            value: "Business ownership",
+                            text: "Business ownership",
+                            hint: {
+                                text: "For example: a product owner or delivery manager, to oversee the project"
+                            },
+                            checked: selectedJob == "Business ownership"
+                        },
+                        {
+                            value: "other",
+                            text: "Other",
+                            checked: otherJobTitle,
+                            conditional: {
+                                html: otherHtml
+                            }
+                        }
+                    ]
+                })}}
                 {{ govukButton({
                     text: "Continue",
                     value: "continue"

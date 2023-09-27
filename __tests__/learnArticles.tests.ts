@@ -9,6 +9,12 @@ describe("GET /learn/articles", () => {
     expect(response.text).toContain("Sign-in process");
   });
 
+  it('should respond as expected', async () => {
+    const response = await request(app).get("/learn/articles/account-permission");
+    expect(response.status).toBe(200);
+    expect(response.text).toContain("Account permissions for the Data Marketplace");
+  });
+
   it('should respond as expected when accessing data-sharing-arrangements', async () => {
     const response = await request(app).get("/learn/articles/data-sharing-arrangements");
     expect(response.status).toBe(200);
