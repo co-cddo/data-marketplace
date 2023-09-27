@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import multer from "multer";
-import { IFile } from "../types/express";
+import { IFile, UploadError } from "../types/express";
 import axios from "axios";
 import FormData from "form-data";
 
@@ -53,7 +53,6 @@ router.post(
           ...fd.getHeaders(),
         },
       });
-      console.log(response.data)
       const errs = response.data.errors;
       const data = response.data.data;
       req.session.uploadData = data;
@@ -67,19 +66,43 @@ router.post(
 );
 
 router.get("/csv/upload-summary", async (req: Request, res: Response) => {
-  const backLink = req.headers.referer || "/";
-  const data = req.session.uploadData || [];
+    const backLink = req.headers.referer || "/";
+    const data = req.session.uploadData || [];
+    const errors = req.session.uploadErrors || [];
+    const rowErrors: UploadError[] = [];
+    let fileError: UploadError | null = null;
+    errors.forEach((e) => {
+        if (e.scope == "FILE") {
+            fileError = e;
+        } else {
+            rowErrors.push(e);
+        }
+    });
+    if (fileError) {
+        res.render("../views/publisher/file_error.njk", {
+            error: JSON.stringify(fileError, null, 2),
+        });
+    } else {
+        const uploadSummaries = data.map((dataset, index) => ({
+            linkHTML: `<a class="govuk-link" href="/publish/csv/preview/${index}">${dataset.title}</a>`,
+            link: `/publish/csv/preview/${index}`,
+            linkText: dataset.title,
+            assetType: dataset.type
+        }));
+        const errorSummaries = rowErrors.map((err, index) => ({
+            linkHTML: `<a class="govuk-link" href="/publish/csv/error/${index}">Unprocessable asset with ID <em>${err.location}</em></a>`,
+            link: `/publish/csv/error/${index}`,
+            linkText: err.location
+        }));
+        const hasErrors: boolean = rowErrors.length > 0;
 
-  const uploadSummary = data.map((dataset, index) => [
-    { html: `<a class="govuk-link" href="/publish/csv/preview/${index}">${dataset.title}</a>` },
-    { text: dataset.type },
-    { text: dataset.status }
-  ]);
-
-  res.render("../views/publisher/upload-summary.njk", {
-      backLink,
-      uploadSummary
-  });
+        res.render("../views/publisher/upload-summary.njk", {
+            backLink,
+            uploadSummaries,
+            errorSummaries,
+            hasErrors
+        });
+    };
 });
 
 router.get("/csv/preview/:id", async (req: Request, res: Response) => {
@@ -100,39 +123,6 @@ router.get("/csv/preview/:id", async (req: Request, res: Response) => {
     dataset
   });
 });
-
-// router.get("/preview/", async (req: Request, res: Response) => {
-//   let fileError: UploadError | null = null;
-//   const rowErrors: UploadError[] = [];
-//   if (req.session.uploadErrors) {
-//     req.session.uploadErrors.forEach((e) => {
-//       if (e.scope == "FILE") {
-//         fileError = e;
-//       } else {
-//         rowErrors.push(e);
-//       }
-//     });
-//   }
-//   if (fileError) {
-//     console.log(JSON.stringify(fileError));
-//     res.render("../views/publisher/file_error.njk", {
-//       error: JSON.stringify(fileError, null, 2),
-//     });
-//   } else if (rowErrors.length > 0) {
-//     console.log(JSON.stringify(rowErrors));
-//     res.render("../views/publisher/preview.njk", {
-//       data: req.session.uploadData,
-//       errors: rowErrors,
-//       hasError: true,
-//     });
-//   } else {
-//     res.render("../views/publisher/preview.njk", {
-//       data: req.session.uploadData,
-//       errors: rowErrors,
-//       hasError: false,
-//     });
-//   }
-// });
 
 router.post("/commit", async (req: Request, res: Response) => {
   const body = { data: req.session.uploadData };
