@@ -421,8 +421,8 @@ router.post(
     if (Object.keys(decisionErrors).length > 0) {
       req.session.decisionErrors = decisionErrors;
       req.session.decision = {
-          status: decision,
-          notes: req.body["return-with-comments"] || "" 
+        status: decision,
+        notes: req.body["return-with-comments"] || "",
       };
 
       return res.redirect(
