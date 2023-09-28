@@ -122,15 +122,19 @@
     {% endif %}
     <h2 class="govuk-heading-l">Further information</h2>
     <table class="govuk-table govuk-!-margin-bottom-8">
-      <tbody class="govuk-table__body">
+    <tbody class="govuk-table__body">
         {% if resource.licence %}
         <tr class="govuk-table__row">
-          <th scope="row" class="govuk-table__header  govuk-!-width-one-half">Licence</th>
-          <td class="govuk-table__cell  govuk-!-width-one-half">        
-            <a href="{{ resource.licence }}" class="govuk-link">
-            {{ resource.licenceTitle }}
-            </a>
-          </td>
+            <th scope="row" class="govuk-table__header  govuk-!-width-one-half">Licence</th>
+            <td class="govuk-table__cell  govuk-!-width-one-half">
+                {% if resource.licence == "http://marketplace.cddo.gov.uk/licence/internal" %}
+                    Data Share Agreement is required
+                {% else %}
+                    <a href="{{ resource.licence }}" class="govuk-link">
+                        {{ resource.licenceTitle }}
+                    </a>
+                {% endif %}
+            </td>
         </tr>
         {% endif %}
         <tr class="govuk-table__row">
