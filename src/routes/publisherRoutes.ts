@@ -92,13 +92,13 @@ router.get("/csv/upload-summary", async (req: Request, res: Response) => {
             assetType: dataset.type
         }));
         const errorSummaries = rowErrors.map((err, index) => {
-            const input_data: any = err.extras?.input_data || {};
-            const dataType = input_data.type;
-            return {
-                link: `/publish/csv/error/${index}`,
-                linkText: input_data.title || err.location,
-                assetType: input_data.type || "Undefined"
-            };
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const input_data: any = err.extras?.input_data || {};
+          return {
+              link: `/publish/csv/error/${index}`,
+              linkText: input_data.title || err.location,
+              assetType: input_data.type || "Undefined"
+          };
         });
         const hasErrors: boolean = rowErrors.length > 0;
 
@@ -159,7 +159,7 @@ router.post("/commit", async (req: Request, res: Response) => {
     .then((response) => {
       req.session.uploadData = response.data.data;
       req.session.uploadErrors = response.data.errors;
-      return res.redirect("/publish/result");
+      return res.redirect("/publish/csv/confirmation");
     })
     .catch((error) => {
       console.error(error);
@@ -167,7 +167,7 @@ router.post("/commit", async (req: Request, res: Response) => {
     });
 });
 
-router.get("/result", async (req: Request, res: Response) => {
+router.get("/csv/confirmation", async (req: Request, res: Response) => {
   if (req.session.uploadErrors && req.session.uploadData) {
     if (req.session.uploadErrors.length > 0) {
       res.render("../views/publisher/post_publish.njk", {
