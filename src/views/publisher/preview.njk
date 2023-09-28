@@ -144,12 +144,12 @@
             <dd class="govuk-summary-list__value">{{ distribution.title }}</dd>
           </div>
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Description</dt>
-            <dd class="govuk-summary-list__value">{{ distribution.description }}</dd>
-          </div>
-          <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Modified</dt>
             <dd class="govuk-summary-list__value">{{ distribution.modified }}</dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Licence</dt>
+            <dd class="govuk-summary-list__value"><a class="govuk-link" target="_blank" href="{{ dataset.licence }}">{{ dataset.licence }}</a></dd>
           </div>
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Identifier</dt>
