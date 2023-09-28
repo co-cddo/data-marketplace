@@ -1,5 +1,6 @@
 {% extends "page.njk" %}
 {%- from "govuk/components/tag/macro.njk" import govukTag -%}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 <table class="govuk-table">
 
@@ -79,6 +80,19 @@
         {% endfor %}
         </tbody>
       </table>
+      <form action="/publish/commit" method="POST">
+        {{ govukButton({
+          text: "Publish data asset description",
+          attributes: {
+            type: "submit"
+          }
+        }) }}
+        {{ govukButton({
+          text: "Re-upload CSV file",
+          href: "/publish/csv/upload",
+          classes: "govuk-button--secondary"
+        }) }}
+      </form>
     </div>
   </div>
 </div>
