@@ -4,5 +4,13 @@
 }
 
 .resource-table {
-  word-break: break-all;
+  overflow-wrap: break-word;
+}
+
+@media (max-width: 567px) {
+  .resource-table td,
+  .resource-table td a {
+    word-wrap: break-word;
+    white-space: normal;
+  }
 }

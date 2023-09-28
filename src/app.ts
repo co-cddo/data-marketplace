@@ -102,10 +102,10 @@ const env = nunjucks.configure(["node_modules/govuk-frontend/", "src/views"], {
 // Configure Nunjucks Markdown
 const renderer = {
   link(href: string, title: string | null | undefined, text: string) {
-    return `<a target="_blank" href=${href} class="govuk-link">${text}</a>`
-  }
-}
-marked.use({ renderer })
+    return `<a target="_blank" href=${href} class="govuk-link">${text}</a>`;
+  },
+};
+marked.use({ renderer });
 markdown.register(env, marked.parse);
 
 // Add a custom filter for date formatting

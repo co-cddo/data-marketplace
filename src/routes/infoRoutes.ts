@@ -13,5 +13,4 @@ router.get("/privacy", (req: Request, res: Response) => {
   res.render("privacy.njk", { route: "Privacy" });
 });
 
-
 export default router;
