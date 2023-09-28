@@ -394,6 +394,9 @@ router.get(
     res.render("../views/supplier/decision.njk", {
       backLink,
       requestId,
+      errorMessage: req.session.decisionErrors,
+      selectedDecisionStatus: req.session.decision?.status,
+      selectedDecisionNotes: req.session.decision?.notes,
     });
   },
 );
@@ -403,8 +406,29 @@ router.post(
   reviewRequestAbacMiddleware,
   async (req: Request, res: Response, next: NextFunction) => {
     const requestId = req.params.requestId;
-
     const decision = req.body.decision;
+
+    const decisionErrors: { [key: string]: { text: string } } = {};
+
+    if (!decision) {
+      decisionErrors["decision"] = { text: "Select one option." };
+    }
+
+    if (decision === "return" && !req.body["return-with-comments"]) {
+      decisionErrors["return-with-comments"] = { text: "Enter comments." };
+    }
+
+    if (Object.keys(decisionErrors).length > 0) {
+      req.session.decisionErrors = decisionErrors;
+      req.session.decision = {
+          status: decision,
+          notes: req.body["return-with-comments"] || "" 
+      };
+
+      return res.redirect(
+        `/manage-shares/received-requests/${requestId}/decision`,
+      );
+    }
 
     if (decision === "approve") {
       // This needs to be stored in the session so that we can access it again
@@ -435,6 +459,9 @@ router.post(
         { status, decisionNotes },
         { headers: { Authorization: `Bearer ${req.cookies.jwtToken}` } },
       );
+      // Clear the session data related to the decision to stop appearing when a decision has to be re-submitted
+      delete req.session.decision;
+      delete req.session.decisionErrors;
       return res.redirect(redirectUrl);
     } catch (error) {
       if (axios.isAxiosError(error)) {
