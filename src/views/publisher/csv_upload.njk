@@ -1,7 +1,6 @@
 {% extends "page.njk" %}
 {% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/details/macro.njk" import govukDetails %}
 
 {% block content %}
 <div class="govuk-grid-row">
@@ -10,19 +9,7 @@
       Upload CSV file
     </h1>
     <p class="govuk-body">Upload the CSV files containing your data asset descriptions.</p>
-    <p class="govuk-body">Then upload the files, where it will be checked for errors.</p>
-
-    {% set uploadGuide %}
-      <p class="govuk-body">Ensure that the uploaded file types are of .CSV, you may need to export the template to CSV </p>
-      <p class="govuk-body">Ensure all mandatory fields in the template have data</p>
-      <p class="govuk-body">Upload the files, where they will be checked for errors.</p>
-      <p class="govuk-body">A few attempts might be needed to continue</p>
-    {% endset %}
-    {{ govukDetails({
-      summaryText: "Help with uploading your CSV files",
-      html: uploadGuide
-    }) }}
-
+    
     <form action="/publish/csv/upload" method="POST" enctype="multipart/form-data">
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-half">
