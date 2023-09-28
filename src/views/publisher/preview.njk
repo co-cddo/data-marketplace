@@ -64,10 +64,11 @@
             <ul class="govuk-list govuk-list--bullet">
               {% for key, value in dataset.contactPoint %}
                 <li>
+                  {% set capitalizedKey = key | capitalize %}
                   {% if key == 'email' %}
                     <a class="govuk-link" href="mailto:{{ value }}">{{ value }}</a>
                   {% else %}
-                    {{ key }}: {{ value }}
+                    <strong>{{ capitalizedKey }}:</strong> {{ value }}
                   {% endif %}
                 </li>
               {% endfor %}
@@ -245,10 +246,11 @@
             <ul class="govuk-list govuk-list--bullet">
               {% for key, value in dataset.contactPoint %}
                 <li>
+                  {% set capitalizedKey = key | capitalize %}
                   {% if key == 'email' %}
                     <a class="govuk-link" href="mailto:{{ value }}">{{ value }}</a>
                   {% else %}
-                    {{ key }}: {{ value }}
+                    <strong>{{ capitalizedKey }}:</strong> {{ value }}
                   {% endif %}
                 </li>
               {% endfor %}
