@@ -1,5 +1,6 @@
 {% extends "page.njk" %}
 {%- from "govuk/components/tag/macro.njk" import govukTag -%}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 <table class="govuk-table">
 
@@ -11,7 +12,6 @@
     <div class="govuk-grid-column-two-thirds">
       <p class="govuk-body">File: <strong>my_data_file_without_errors.csv</strong></p>
       <p class="govuk-body">All data asset descriptions passed validation. Review the records to ensure that they are correct. If you are happy then click Publish otherwise click on upload new CSV file.</p>
-
     </div>
     <div class="govuk-grid-column-one-third">
       <div class="gem-c-contextual-sidebar">
@@ -24,7 +24,6 @@
               <li class="gem-c-related-navigation__link">
                 <a class="govuk-link govuk-link gem-c-related-navigation__section-link govuk-link gem-c-related-navigation__section-link--sidebar  govuk-link gem-c-related-navigation__section-link--other" href="/learn/articles/metadata-model">Metadata sharing requirements</a>
               </li>
-              
               <li class="gem-c-related-navigation__link">
                 <a class="govuk-link govuk-link gem-c-related-navigation__section-link govuk-link gem-c-related-navigation__section-link--sidebar  govuk-link gem-c-related-navigation__section-link--other" href="/learn/articles/adding-a-CSV-file">Adding a collection of metadata records as a CSV file</a>
               </li>
@@ -35,56 +34,70 @@
     </div>
   </div>
   <div class="govuk-grid-row">
-    <!-- Harvesters info to be added in later iterations -->
-    <h2 class="app-task-list__section">
-    Data Harvesters
-    </h2>
-
-
-<table class="govuk-table">
-  <thead class="govuk-table__head">
-    <tr class="govuk-table__row">
-      <th class="govuk-table__header" scope="col"> Data Asset </th>
-      <th class="govuk-table__header" scope="col"> Asset Type </th>
-      <th class="govuk-table__header" scope="col"> Status </th>
-    </tr>
-  </thead>
-  <tbody class="govuk-table__body">
-  {% for asset in uploadSummaries %}
-    <tr class="govuk-table__row">
-      <td class="govuk-table__cell">
-        <a class="govuk-link" href="{{ asset.link }}">{{asset.linkText}}</a>
-      </td>
-      <td class="govuk-table__cell">
-        {{ asset.assetType }}
-      </td>
-      <td class="govuk-table__cell">
-        {{govukTag({
-          text: "PASS",
-          classes: "govuk-tag--blue"
-        })}}
-      </td>
-    </tr>
-  {% endfor %}
-  {% for err in errorSummaries %}
-    <tr class="govuk-table__row">
-      <td class="govuk-table__cell">
-        <a class="govuk-link" href="{{ err.link }}">{{err.linkText}}</a>
-      </td>
-      <td class="govuk-table__cell">
-        {{ err.assetType }}
-      </td>
-      <td class="govuk-table__cell">
-        {{govukTag({
-          text: "ERROR",
-          classes: "govuk-tag--red"
-        })}}
-      </td>
-    </tr>
-  {% endfor %}
-  </tbody>
-</table>
-
+    <div class="govuk-grid-column-full">
+      <table class="govuk-table">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col"> Data Asset </th>
+            <th class="govuk-table__header" scope="col"> Asset Type </th>
+            <th class="govuk-table__header" scope="col"> Status </th>
+            <th class="govuk-table__header" scope="col"> Message </th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+        {% for asset in uploadSummaries %}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+              <a class="govuk-link" href="{{ asset.link }}">{{asset.linkText}}</a>
+            </td>
+            <td class="govuk-table__cell">
+              {{ asset.assetType }}
+            </td>
+            <td class="govuk-table__cell">
+              {{govukTag({
+                text: "PASS",
+                classes: "govuk-tag--blue"
+              })}}
+            </td>
+            <td class="govuk-table__cell">
+            </td>
+          </tr>
+        {% endfor %}
+        {% for err in errorSummaries %}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+              <a class="govuk-link" href="{{ err.link }}">{{err.linkText}}</a>
+            </td>
+            <td class="govuk-table__cell">
+              {{ err.assetType }}
+            </td>
+            <td class="govuk-table__cell">
+              {{govukTag({
+                text: "ERROR",
+                classes: "govuk-tag--red"
+              })}}
+            <td class="govuk-table__cell">
+              {{ err.msg }}
+            <td>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <form action="/publish/commit" method="POST">
+        {{ govukButton({
+          text: "Publish data asset description",
+          attributes: {
+            type: "submit"
+          }
+        }) }}
+        {{ govukButton({
+          text: "Re-upload CSV file",
+          href: "/publish/csv/upload",
+          classes: "govuk-button--secondary"
+        }) }}
+      </form>
+    </div>
   </div>
 </div>
 

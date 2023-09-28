@@ -1,9 +1,10 @@
 import express, { Request, Response } from "express";
 import multer from "multer";
-import { IFile, UploadError } from "../types/express";
+import { IFile, NestedJSON, UploadError } from "../types/express";
 import axios from "axios";
 import FormData from "form-data";
 import * as XLSX from 'xlsx';
+import { createAbacMiddleware } from "../middleware/ABACMiddleware";
 
 const upload = multer();
 const verifyUrl = `${process.env.API_ENDPOINT}/publish/verify`;
@@ -11,26 +12,53 @@ const publishUrl = `${process.env.API_ENDPOINT}/publish`;
 
 const router = express.Router();
 
+const publishDataAbacMiddleware = createAbacMiddleware(
+  "organisation", "CREATE_ASSET", "publish data descriptions"
+)
+
+router.use(publishDataAbacMiddleware)
+
 router.get("/publish-dashboard", async (req: Request, res: Response) => {
-  const backLink = req.headers.referer || "/";
-  res.render("../views/publisher/publish-dashboard.njk", {
-    backLink,
-  });
+  res.render("../views/publisher/publish-dashboard.njk");
 });
 
 router.get("/csv/start", async (req: Request, res: Response) => {
-  const backLink = req.headers.referer || "/";
-  res.render("../views/publisher/csv_start.njk", {
-    backLink,
-  });
+  res.render("../views/publisher/csv_start.njk");
 });
 
 router.get("/csv/upload", async (req: Request, res: Response) => {
-  const backLink = req.headers.referer || "/publish";
-  res.render("../views/publisher/csv_upload.njk", {
-    backLink,
-  });
+  res.render("../views/publisher/csv_upload.njk");
 });
+
+async function checkPermissionToAdd(assets: NestedJSON[], jwt: string) {
+  const errs: UploadError[] = [];
+
+  await Promise.all(assets.map(async (asset) => {
+    const org = asset.organisationID;
+    const url = `${process.env.API_ENDPOINT}/users/permission/organisation/${org}/CREATE_ASSET`;
+
+    try {
+      const response = await axios.get(url, { headers: { Authorization: `Bearer ${jwt}` } });
+      if (response.data !== true) {
+        const assetID = asset.externalIdentifier != null ? asset.externalIdentifier.toString() : 'identifier not found';
+
+        const err: UploadError = {
+          scope: 'ASSET',
+          message: `Not authorised to add asset for ${org}`,
+          location: assetID,
+          extras: { input_data: asset },
+          sub_errors: [],
+        };
+
+        errs.push(err);
+      }
+    } catch (error) {
+      // Handle errors
+      console.error('There was a problem with the Axios request:', error);
+    }
+  }));
+  return errs;
+}
 
 router.post(
   "/csv/upload",
@@ -57,12 +85,6 @@ router.post(
         },
       });
 
-      console.log(JSON.stringify(response.data.errors, null, 2))
-
-      return res.render("error.njk", {
-        messageTitle: "Testing upload",
-        messageBody: "Testing upload"
-      })
 
       // const datasets = files["datasetsCSV"][0];
       // const dataservices = files["servicesCSV"][0];
@@ -81,6 +103,14 @@ router.post(
       // req.session.uploadData = data;
       // req.session.uploadErrors = errs;
       // return res.redirect("/publish/csv/upload-summary");
+      const errs = response.data.errors;
+      const data = response.data.data;
+      const accessErrors = await checkPermissionToAdd(data, req.cookies.jwtToken)
+      const allErrs = accessErrors.concat(errs)
+      console.log(allErrs)
+      req.session.uploadData = data;
+      req.session.uploadErrors = allErrs;
+      return res.redirect("/publish/csv/upload-summary");
     } catch (err) {
       return res.redirect("/publish/csv/upload/error");
     }
@@ -90,6 +120,16 @@ router.post(
 router.get("/csv/upload/error", async (req: Request, res: Response) => {
   res.render("../views/publisher/total_error.njk");
 })
+
+function errorSummaryMessage(err: UploadError): string {
+  let msg: string = err.message;
+  if (err.sub_errors && err.sub_errors.length === 1) {
+    msg = `${err.sub_errors[0].location}: ${err.sub_errors[0].message}`;
+  } else if (err.sub_errors && err.sub_errors.length > 1) {
+    msg = "Multiple errors";
+  }
+  return msg;
+}
 
 router.get("/csv/upload-summary", async (req: Request, res: Response) => {
   const backLink = req.headers.referer || "/";
@@ -115,15 +155,16 @@ router.get("/csv/upload-summary", async (req: Request, res: Response) => {
       assetType: dataset.type
     }));
     const errorSummaries = rowErrors.map((err, index) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const input_data: any = err.extras?.input_data || {};
-      const dataType = input_data.type;
       return {
         link: `/publish/csv/error/${index}`,
         linkText: input_data.title || err.location,
-        assetType: input_data.type || "Undefined"
+        assetType: input_data.type || "Undefined",
+        msg: errorSummaryMessage(err)
       };
     });
-    const hasErrors: boolean = rowErrors.length > 0;
+    const hasErrors: boolean = errors.length > 0;
 
     res.render("../views/publisher/upload-summary.njk", {
       backLink,
@@ -182,7 +223,7 @@ router.post("/commit", async (req: Request, res: Response) => {
     .then((response) => {
       req.session.uploadData = response.data.data;
       req.session.uploadErrors = response.data.errors;
-      return res.redirect("/publish/result");
+      return res.redirect("/publish/csv/confirmation");
     })
     .catch((error) => {
       console.error(error);
@@ -190,7 +231,7 @@ router.post("/commit", async (req: Request, res: Response) => {
     });
 });
 
-router.get("/result", async (req: Request, res: Response) => {
+router.get("/csv/confirmation", async (req: Request, res: Response) => {
   if (req.session.uploadErrors && req.session.uploadData) {
     if (req.session.uploadErrors.length > 0) {
       res.render("../views/publisher/post_publish.njk", {

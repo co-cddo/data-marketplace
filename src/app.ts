@@ -101,6 +101,12 @@ const env = nunjucks.configure(["node_modules/govuk-frontend/", "src/views"], {
   watch: !isTesting,
 });
 // Configure Nunjucks Markdown
+const renderer = {
+  link(href: string, title: string | null | undefined, text: string) {
+    return `<a target="_blank" href=${href} class="govuk-link">${text}</a>`
+  }
+}
+marked.use({ renderer })
 markdown.register(env, marked.parse);
 
 // Add a custom filter for date formatting
@@ -142,7 +148,13 @@ app.use("/cookie-settings", cookieRoutes);
 app.use("/learn", learnRoute);
 app.use("/learn/articles", learnArticleRoutes);
 app.use("/admin", adminRoutes);
-app.use("/publish", publisherRoutes);
+app.use(
+  "/publish",
+  authenticateJWT,
+  apiUser,
+  apiUserWithOrganisation,
+  publisherRoutes,
+);
 app.use("/", infoRoutes);
 
 // Error handling
