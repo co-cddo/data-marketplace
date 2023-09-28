@@ -107,7 +107,7 @@ router.get("/csv/upload-summary", async (req: Request, res: Response) => {
           return {
               link: `/publish/csv/error/${index}`,
               linkText: input_data.title || err.location,
-              assetType: input_data.type || "Undefined"
+              assetType: input_data.type || "Undefined",
               msg: errorSummaryMessage(err)
           };
         });
