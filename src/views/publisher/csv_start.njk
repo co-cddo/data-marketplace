@@ -31,36 +31,5 @@
         </aside>
     </div>
 </div>
+
 {% endblock %}  
-
-{% set customFooterContent %}
-<h2 id="support" class="govuk-heading-m">Get help and support</h2>
-<p class="govuk-body-s"><a class="govuk-footer__link" href="https://forms.gle/rpy2BMchHGDNVFfAA">Tell us what you need help with</a>.</p>
-<p class="govuk-body-s">If you have any questions about the data asset description (metadata), you should contact the data asset supplier directly.</p>
-{% endset %}
-
-{% set customFooterContent %}
-
-<h2 id="support" class="govuk-heading-m">Get help and support</h2>
-<p class="govuk-body-s"><a class="govuk-footer__link" href="https://forms.gle/rpy2BMchHGDNVFfAA">Tell us what you need help with</a>.</p>
-<p class="govuk-body-s">If you have any questions about the data asset description (metadata), you should contact the data asset supplier directly.</p>
-<ul class="govuk-footer__inline-list">
-    <li class="govuk-footer__inline-list-item">
-        <a class="govuk-footer__link" href="#">Accessibility</a>
-    </li>
-    <li class="govuk-footer__inline-list-item">
-        <a class="govuk-footer__link" href="#">Cookies</a>
-    </li>
-    <li class="govuk-footer__inline-list-item">
-        <a class="govuk-footer__link" href="#">Privacy</a>
-    </li>
-</ul>
-{% endset %}
-
-{% block footer %}
-{{ govukFooter({
-    meta: {
-      html: customFooterContent
-    }
-  }) }}
-{% endblock %}
