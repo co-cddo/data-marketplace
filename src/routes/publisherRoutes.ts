@@ -142,7 +142,7 @@ router.get("/csv/upload-summary", async (req: Request, res: Response) => {
               msg: errorSummaryMessage(err)
           };
         });
-        const hasErrors: boolean = rowErrors.length > 0;
+        const hasErrors: boolean = errors.length > 0;
 
         res.render("../views/publisher/upload-summary.njk", {
             backLink,
