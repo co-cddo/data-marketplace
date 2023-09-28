@@ -127,8 +127,8 @@
         <tr class="govuk-table__row">
             <th scope="row" class="govuk-table__header  govuk-!-width-one-half">Licence</th>
             <td class="govuk-table__cell  govuk-!-width-one-half">
-                {% if resource.licence == "http://marketplace.cddo.gov.uk/licence/internal" %}
-                    Data Share Agreement is required
+                {% if resource.licence === "http://marketplace.cddo.gov.uk/licence/internal" %}
+                    Data share agreement required
                 {% else %}
                     <a href="{{ resource.licence }}" class="govuk-link">
                         {{ resource.licenceTitle }}
