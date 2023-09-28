@@ -1,0 +1,22 @@
+{% extends "page.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">
+          Malformed files
+      </h1>
+      <div class="govuk-error-summary" data-module="govuk-error-summary">
+        <p class="govuk-body">
+           Your files could not be parsed. Please ensure that you have uploaded both sheets from the template as CSV files.
+        </p>
+      </div>
+  {{ govukButton({
+        text: "Try again",
+        href: "/publish/csv/upload",
+        name: "tryAgainButton"
+    }) }}
+  </div>
+</div>
+{% endblock %}
