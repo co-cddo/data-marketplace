@@ -2,40 +2,25 @@
 {% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
 
 {% block content %}
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">
-      Upload CSV file
-    </h1>
-    <p class="govuk-body">Upload the CSV file containing your data asset descriptions.</p>
-    <p class="govuk-body">Then upload the file, where it will be checked for errors.</p>
-    <h4 class="govuk-heading-m">TODO: we need to instruct people to export the "dataset" and "data service" pages as CSV files</h4>
-    <form action="/publish/csv/upload" method="POST" enctype="multipart/form-data">
-      <div class="govuk-grid-column-one-half">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">
+        Upload CSV file
+      </h1>
+      <p class="govuk-body">Upload the CSV file containing your data asset descriptions.</p>
+      <form action="/publish/csv/upload" method="POST" enctype="multipart/form-data">
         {{ govukFileUpload({
-          id: "datasetsCSV",
-          name: "datasetsCSV",
+          id: "spreadsheet",
+          name: "spreadsheet",
           label: {
-            text: "Upload dataset CSV",
-            for: "datasetsCSV"
+            text: "Upload a file",
+            for: "spreadsheet"
           }
         }) }}
-      </div>
-
-      <div class="govuk-grid-column-one-half">
-      {{ govukFileUpload({
-        id: "servicesCSV",
-        name: "servicesCSV",
-        label: {
-          text: "Upload dataService CSV",
-          for: "servicesCSV"
-        }
-      }) }}
-      </div>
         <button type="submit" class="govuk-button" data-module="govuk-button">Continue</button>
-    </form>
+      </form>
     </div>
-  
+
     <div class="govuk-grid-column-one-third">
       <aside class="app-related-items learn-aside" role="complementary">
         <h2 class="govuk-heading-s govuk-!-margin-top-3 govuk-!-margin-bottom-3" id="subsection-title">
@@ -43,38 +28,44 @@
         </h2>
         <nav role="navigation" aria-labelledby="subsection-title">
           <ul class="govuk-list govuk-!-font-size-16">
-              <li><a href="/learn/articles/metadata-model" class="govuk-link">Metadata sharing requirements</a></li>
-              <li><a href="/learn/articles/metadata-model" class="govuk-link">Adding a collection of metadata records as a CSV file</a></li>
+            <li>
+              <a href="/learn/articles/metadata-model" class="govuk-link">Metadata sharing requirements</a>
+            </li>
+            <li>
+              <a href="/learn/articles/metadata-model" class="govuk-link">Adding a collection of metadata records as a CSV file</a>
+            </li>
           </ul>
         </nav>
       </aside>
-    </div>   
+    </div>
   </div>
 </div>
 
-{% endblock %} 
+{% endblock %}
 
 {% set customFooterContent %}
 <h2 id="support" class="govuk-heading-m">Get help and support</h2>
-<p class="govuk-body-s"><a class="govuk-footer__link" href="https://forms.gle/rpy2BMchHGDNVFfAA">Tell us what you need help with</a>.</p>
+<p class="govuk-body-s">
+<a class="govuk-footer__link" href="https://forms.gle/rpy2BMchHGDNVFfAA">Tell us what you need help with</a>.</p>
 <p class="govuk-body-s">If you have any questions about the data asset description (metadata), you should contact the data asset supplier directly.</p>
 {% endset %}
 
 {% set customFooterContent %}
 
 <h2 id="support" class="govuk-heading-m">Get help and support</h2>
-<p class="govuk-body-s"><a class="govuk-footer__link" href="https://forms.gle/rpy2BMchHGDNVFfAA">Tell us what you need help with</a>.</p>
+<p class="govuk-body-s">
+<a class="govuk-footer__link" href="https://forms.gle/rpy2BMchHGDNVFfAA">Tell us what you need help with</a>.</p>
 <p class="govuk-body-s">If you have any questions about the data asset description (metadata), you should contact the data asset supplier directly.</p>
 <ul class="govuk-footer__inline-list">
-    <li class="govuk-footer__inline-list-item">
-        <a class="govuk-footer__link" href="#">Accessibility</a>
-    </li>
-    <li class="govuk-footer__inline-list-item">
-        <a class="govuk-footer__link" href="#">Cookies</a>
-    </li>
-    <li class="govuk-footer__inline-list-item">
-        <a class="govuk-footer__link" href="#">Privacy</a>
-    </li>
+<li class="govuk-footer__inline-list-item">
+  <a class="govuk-footer__link" href="#">Accessibility</a>
+</li>
+<li class="govuk-footer__inline-list-item">
+  <a class="govuk-footer__link" href="#">Cookies</a>
+</li>
+<li class="govuk-footer__inline-list-item">
+  <a class="govuk-footer__link" href="#">Privacy</a>
+</li>
 </ul>
 {% endset %}
 
