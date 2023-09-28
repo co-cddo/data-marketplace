@@ -3,14 +3,16 @@
   padding: 25px 30px 15px 30px;
 }
 
-.resource-table {
-  overflow-wrap: break-word;
+.resource-page {
+  overflow-wrap: break-word; 
+  table-layout: fixed;
+  width: 100%; 
 }
 
-@media (max-width: 567px) {
-  .resource-table td,
-  .resource-table td a {
-    word-wrap: break-word;
-    white-space: normal;
-  }
+.resource-page td,
+.resource-page td a {
+  max-width: 100%;
+  overflow-wrap: break-word; 
+  word-wrap: break-word; 
+  white-space: normal;
 }
