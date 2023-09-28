@@ -36,64 +36,56 @@
     </div>
   </div>
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-      <table class="govuk-table">
-        <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col"> Data Asset </th>
-            <th class="govuk-table__header" scope="col"> Asset Type </th>
-            <th class="govuk-table__header" scope="col"> Status </th>
-          </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-        {% for asset in uploadSummaries %}
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell">
-              <a class="govuk-link" href="{{ asset.link }}">{{asset.linkText}}</a>
-            </td>
-            <td class="govuk-table__cell">
-              {{ asset.assetType }}
-            </td>
-            <td class="govuk-table__cell">
-              {{govukTag({
-                text: "PASS",
-                classes: "govuk-tag--blue"
-              })}}
-            </td>
-          </tr>
-        {% endfor %}
-        {% for err in errorSummaries %}
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell">
-              <a class="govuk-link" href="{{ err.link }}">{{err.linkText}}</a>
-            </td>
-            <td class="govuk-table__cell">
-              {{ err.assetType }}
-            </td>
-            <td class="govuk-table__cell">
-              {{govukTag({
-                text: "ERROR",
-                classes: "govuk-tag--red"
-              })}}
-            </td>
-          </tr>
-        {% endfor %}
-        </tbody>
-      </table>
-      <form action="/publish/commit" method="POST">
-        {{ govukButton({
-          text: "Publish data asset description",
-          attributes: {
-            type: "submit"
-          }
-        }) }}
-        {{ govukButton({
-          text: "Re-upload CSV file",
-          href: "/publish/csv/upload",
-          classes: "govuk-button--secondary"
-        }) }}
-      </form>
-    </div>
+<table class="govuk-table">
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th class="govuk-table__header" scope="col"> Data Asset </th>
+      <th class="govuk-table__header" scope="col"> Asset Type </th>
+      <th class="govuk-table__header" scope="col"> Status </th>
+      <th class="govuk-table__header" scope="col"> Message </th>
+    </tr>
+  </thead>
+  <tbody class="govuk-table__body">
+  {% for asset in uploadSummaries %}
+    <tr class="govuk-table__row">
+      <td class="govuk-table__cell">
+        <a class="govuk-link" href="{{ asset.link }}">{{asset.linkText}}</a>
+      </td>
+      <td class="govuk-table__cell">
+        {{ asset.assetType }}
+      </td>
+      <td class="govuk-table__cell">
+        {{govukTag({
+          text: "PASS",
+          classes: "govuk-tag--blue"
+        })}}
+      </td>
+      <td class="govuk-table__cell">
+      </td>
+    </tr>
+  {% endfor %}
+  {% for err in errorSummaries %}
+    <tr class="govuk-table__row">
+      <td class="govuk-table__cell">
+        <a class="govuk-link" href="{{ err.link }}">{{err.linkText}}</a>
+      </td>
+      <td class="govuk-table__cell">
+        {{ err.assetType }}
+      </td>
+      <td class="govuk-table__cell">
+        {{govukTag({
+          text: "ERROR",
+          classes: "govuk-tag--red"
+        })}}
+      <td class="govuk-table__cell">
+        {{ err.msg }}
+      <td>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
   </div>
 </div>
 

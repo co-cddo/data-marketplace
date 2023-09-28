@@ -68,6 +68,16 @@ router.get("/csv/upload/error", async (req: Request, res: Response) => {
     res.render("../views/publisher/total_error.njk");
 })
 
+function errorSummaryMessage(err: UploadError): string {
+    let msg: string = err.message;
+    if (err.sub_errors && err.sub_errors.length === 1) {
+        msg = `${err.sub_errors[0].location}: ${err.sub_errors[0].message}`;
+    } else if (err.sub_errors && err.sub_errors.length > 1) {
+        msg = "Multiple errors";
+    }
+    return msg;
+}
+
 router.get("/csv/upload-summary", async (req: Request, res: Response) => {
     const backLink = req.headers.referer || "/";
     const data = req.session.uploadData || [];
@@ -98,6 +108,7 @@ router.get("/csv/upload-summary", async (req: Request, res: Response) => {
               link: `/publish/csv/error/${index}`,
               linkText: input_data.title || err.location,
               assetType: input_data.type || "Undefined"
+              msg: errorSummaryMessage(err)
           };
         });
         const hasErrors: boolean = rowErrors.length > 0;
