@@ -1,4 +1,5 @@
 {% extends "page.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% block content %}
 <div class="govuk-grid-row">
@@ -63,10 +64,11 @@
             <ul class="govuk-list govuk-list--bullet">
               {% for key, value in dataset.contactPoint %}
                 <li>
-                  {% if key == 'email' %}
+                  {% set capitalizedKey = key | capitalize %}
+                  {% if key == 'Email' %}
                     <a class="govuk-link" href="mailto:{{ value }}">{{ value }}</a>
                   {% else %}
-                    {{ key }}: {{ value }}
+                    <strong>{{ capitalizedKey }}:</strong> {{ value }}
                   {% endif %}
                 </li>
               {% endfor %}
@@ -143,24 +145,13 @@
             <dt class="govuk-summary-list__key">Title</dt>
             <dd class="govuk-summary-list__value">{{ distribution.title }}</dd>
           </div>
+         
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Description</dt>
-            <dd class="govuk-summary-list__value">{{ distribution.description }}</dd>
-          </div>
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Modified</dt>
-            <dd class="govuk-summary-list__value">{{ distribution.modified }}</dd>
-          </div>
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Identifier</dt>
-            <dd class="govuk-summary-list__value">{{ distribution.externalIdentifier }}</dd>
+            <dt class="govuk-summary-list__key">Licence</dt>
+            <dd class="govuk-summary-list__value"><a class="govuk-link" target="_blank" href="{{ dataset.licence }}">{{ dataset.licence }}</a></dd>
           </div>
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Access service</dt>
-            <dd class="govuk-summary-list__value">{{ distribution.accessService }}</dd>
-          </div>
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Download URL</dt>
             <dd class="govuk-summary-list__value">{{ distribution.accessService }}</dd>
           </div>
           <div class="govuk-summary-list__row">
@@ -168,8 +159,8 @@
             <dd class="govuk-summary-list__value">{{ distribution.mediaType }}</dd>
           </div>
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">File size</dt>
-            <dd class="govuk-summary-list__value">{{ distribution.byteSize }}</dd>
+            <dt class="govuk-summary-list__key">Modified</dt>
+            <dd class="govuk-summary-list__value">{{ distribution.modified }}</dd>
           </div>
         </dl>
       {% endfor %}
@@ -255,10 +246,11 @@
             <ul class="govuk-list govuk-list--bullet">
               {% for key, value in dataset.contactPoint %}
                 <li>
-                  {% if key == 'email' %}
+                  {% set capitalizedKey = key | capitalize %}
+                  {% if key == 'Email' %}
                     <a class="govuk-link" href="mailto:{{ value }}">{{ value }}</a>
                   {% else %}
-                    {{ key }}: {{ value }}
+                    <strong>{{ capitalizedKey }}:</strong> {{ value }}
                   {% endif %}
                 </li>
               {% endfor %}
@@ -266,7 +258,7 @@
           </dd>
         </div>
       </dl>
-      {% endif %}
+    {% endif %}
   </div>
 </div>
 
