@@ -174,3 +174,11 @@ dl.publish-metrics {
 .publish-metric dd {
   margin: 0;
 }
+
+.govuk-table__cell {
+  a.govuk-link {
+    word-break: break-word;
+    display: block;
+    overflow-wrap: break-word;
+  }
+}
