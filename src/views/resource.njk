@@ -75,17 +75,17 @@
     <table class="govuk-table govuk-!-margin-bottom-8">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
-          <th scope="col" class="govuk-table__header">File</th>
-          <th scope="col" class="govuk-table__header">Date added</th>
-          <th scope="col" class="govuk-table__header">File format</th>
+          <th scope="col" class="govuk-table__header govuk-!-width-one-half">File</th>
+          <th scope="col" class="govuk-table__header govuk-!-width-one-half">Date added</th>
+          <th scope="col" class="govuk-table__header govuk-!-width-one-half">File format</th>
         </tr>
       </thead>
       <tbody class="govuk-table__body">
         {% for distribution in resource.distributions %}
         <tr class="govuk-table__row">
           <th scope="row" class="govuk-table__header">{{ resource.title }}-{{ loop.index0 + 1 }}</th>
-          <td class="govuk-table__cell">{{resource.catalogueCreated | formatDate }}</td>
-          <td class="govuk-table__cell">{{ distribution.mediaType }}</td>
+          <td class="govuk-table__cell govuk-!-width-one-half">{{resource.catalogueCreated | formatDate }}</td>
+          <td class="govuk-table__cell govuk-!-width-one-half">{{ distribution.mediaType }}</td>
         </tr>
         {% endfor %}
       </tbody>
@@ -93,35 +93,35 @@
     {% elif resource.type.toLowerCase() == "dataservice" %}
     <h2 class="govuk-heading-l">Data available</h2>
     <p class="govuk-body">The API information is available for this data service.</p>
-    <table class="govuk-table govuk-!-margin-bottom-8">
+    <table class="govuk-table govuk-!-margin-bottom-8 resource-table">
       <tbody class="govuk-table__body">
         <tr class="govuk-table__row">
-          <th scope="row" class="govuk-table__header">Service type</th>
-          <td class="govuk-table__cell">
+          <th scope="row" class="govuk-table__header govuk-!-width-one-half">Service type</th>
+          <td class="govuk-table__cell govuk-!-width-one-half">
             {{ resource.serviceType }}
           </td>
         </tr>
         <tr class="govuk-table__row">
-          <th scope="row" class="govuk-table__header">Service status</th>
-          <td class="govuk-table__cell">{{resource.serviceStatus | lower | capitalize}}</td>
+          <th scope="row" class="govuk-table__header govuk-!-width-one-half">Service status</th>
+          <td class="govuk-table__cell govuk-!-width-one-half">{{resource.serviceStatus | lower | capitalize}}</td>
         </tr>
         {% if resource.endpointURL %}
         <tr class="govuk-table__row">
-          <th scope="row" class="govuk-table__header">Endpoint URL</th>
-          <td class="govuk-table__cell"><a href="{{ resource.endpointURL }}" class="govuk-link">{{ resource.endpointURL }}</a></td>
+          <th scope="row" class="govuk-table__header govuk-!-width-one-half">Endpoint URL</th>
+          <td class="govuk-table__cell govuk-!-width-one-half"><a href="{{ resource.endpointURL }}" class="govuk-link">{{ resource.endpointURL }}</a></td>
         </tr>
         {% endif %}
         {% if resource.endpointDescription %}
         <tr class="govuk-table__row">
-          <th scope="row" class="govuk-table__header">Documentation</th>
-          <td class="govuk-table__cell"><a href="{{ resource.endpointDescription }}" class="govuk-link">{{ resource.endpointDescription }}</a></td>
+          <th scope="row" class="govuk-table__header govuk-!-width-one-half">Documentation</th>
+          <td class="govuk-table__cell govuk-!-width-one-half"><a href="{{ resource.endpointDescription }}" class="govuk-link">{{ resource.endpointDescription }}</a></td>
         </tr>
         {% endif %}
       </tbody>
     </table>
     {% endif %}
     <h2 class="govuk-heading-l">Further information</h2>
-    <table class="govuk-table govuk-!-margin-bottom-8">
+    <table class="govuk-table govuk-!-margin-bottom-8 resource-table">
     <tbody class="govuk-table__body">
         {% if resource.licence %}
         <tr class="govuk-table__row">
