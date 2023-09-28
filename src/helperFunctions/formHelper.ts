@@ -29,6 +29,9 @@ export const updateStepsStatus = (
   formdata: FormData,
   returnToStart: boolean,
 ) => {
+  if (formdata.status === "NOT STARTED") {
+    formdata.status = "IN PROGRESS";
+  }
   const completedSections = new Set();
   // Group up the steps so we can work out which sections have been completed later
   const purposeSteps = [
@@ -705,9 +708,9 @@ function checkAnswer(formdata: FormData) {
           break;
         case "date":
           const date = stepData.value as DateStep;
-          const dateString = `${date.year}-${(date.month)}-${date.day}`;
-          const newDate = formatDate(dateString)
-           
+          const dateString = `${date.year}-${date.month}-${date.day}`;
+          const newDate = formatDate(dateString);
+
           if (date.year) {
             dataTypeValue.push(`${newDate}`);
           } else {
