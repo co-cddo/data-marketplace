@@ -29,6 +29,9 @@ export const updateStepsStatus = (
   formdata: FormData,
   returnToStart: boolean,
 ) => {
+  if (formdata.status === "NOT STARTED") {
+    formdata.status = "IN PROGRESS";
+  }
   const completedSections = new Set();
   // Group up the steps so we can work out which sections have been completed later
   const purposeSteps = [
