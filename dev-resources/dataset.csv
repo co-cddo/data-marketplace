@@ -1,0 +1,85 @@
+Mandatory,Recommended,Recommended,Mandatory,Optional,Recommended,Mandatory,Mandatory,Mandatory,Mandatory,Mandatory,Recommended,Mandatory,Optional,Mandatory,Mandatory,Mandatory,Mandatory,Mandatory,Recommended,,Mandatory,Mandatory if applicable,Mandatory,Recommended,Optional,Mandatory,Recommended,Mandatory
+title,alternativeTitle,summary,description,keyword,theme,contactPoint_contactName,contactPoint_email,publisher,creator,version,issued,modified,created,updateFrequency,licence,accessRights,securityClassification,identifier,relatedResource,,distribution_title,distribution_accessService,distribution_identifier,distribution_modified,distribution_issued,distribution_licence,distribution_byteSize,distribution_mediaType
+Bathing Water Monitoring Locations,Bathing Water Sample Points,,"The Environment Agency collects and analyses water samples each year from May to September, to ensure that designated bathing water sites on the coast and inland are safe and clean for swimming and other activities. This shape file shows the approximate locations of our monitoring sites and the compliance or classification for each bathing water in England from 1988 to present. It is updated twice a year, to revise the inventory, and the assessment results. For coastal waters the specific locations of monitoring vary along a transect with the changing of the tides. The results of these samples are assessed in annual classifications and are available to view and download through the bathing water data explorer. This data is covered by AfA470. Attribution Statement: © Environment Agency copyright and/or database right 2015. All rights reserved.","OpenData,beach,water monitoring,surface water,water quality,tidal water,water pollution,bathing freshwater,bathing water,bathing seawater,recreation,brackish water,protected area,Environment",https://www.data.gov.uk/search?filters%5Btopic%5D=Environment,DSP Customer Forum,DSPcustomerforum@environment-agency.gov.uk,department-for-environment-food-rural-affairs,environment-agency,,2010-10-01,2023-08-11,2010-10-01,freq:biennial,http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/,OPEN,OFFICIAL,fb8da72f-4938-4100-ac91-d9b8438ffd4c,"https://environment.data.gov.uk/arcgis/rest/services/EA/BathingWatersMonitoringLocations/MapServer, https://support.environment.data.gov.uk/hc/en-gb, https://environment.data.gov.uk/spatialdata/bathing-waters-monitoring-locations/wms, https://environment.data.gov.uk/spatialdata/bathing-waters-monitoring-locations/wfs, https://environment.data.gov.uk/arcgis/rest/services/EA/BathingWatersMonitoringLocations/FeatureServer, https://www.data.gov.uk/dataset/dcb8bd46-c4cf-4749-bad0-7663da96845c/bathing-waters-monitoring-locations",,Shapefile,c86c44ac5b494907a38e1f85df4dc2f9,,,,,,application/vnd.shp
+Bathing Water Monitoring Locations,Bathing Water Sample Points,,"The Environment Agency collects and analyses water samples each year from May to September, to ensure that designated bathing water sites on the coast and inland are safe and clean for swimming and other activities. This shape file shows the approximate locations of our monitoring sites and the compliance or classification for each bathing water in England from 1988 to present. It is updated twice a year, to revise the inventory, and the assessment results. For coastal waters the specific locations of monitoring vary along a transect with the changing of the tides. The results of these samples are assessed in annual classifications and are available to view and download through the bathing water data explorer. This data is covered by AfA470. Attribution Statement: © Environment Agency copyright and/or database right 2015. All rights reserved.","OpenData,beach,water monitoring,surface water,water quality,tidal water,water pollution,bathing freshwater,bathing water,bathing seawater,recreation,brackish water,protected area,Environment",https://www.data.gov.uk/search?filters%5Btopic%5D=Environment,DSP Customer Forum,DSPcustomerforum@environment-agency.gov.uk,department-for-environment-food-rural-affairs,environment-agency,,2010-10-01,2023-08-11,2010-10-01,freq:biennial,http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/,OPEN,OFFICIAL,fb8da72f-4938-4100-ac91-d9b8438ffd4c,"https://environment.data.gov.uk/arcgis/rest/services/EA/BathingWatersMonitoringLocations/MapServer, https://support.environment.data.gov.uk/hc/en-gb, https://environment.data.gov.uk/spatialdata/bathing-waters-monitoring-locations/wms, https://environment.data.gov.uk/spatialdata/bathing-waters-monitoring-locations/wfs, https://environment.data.gov.uk/arcgis/rest/services/EA/BathingWatersMonitoringLocations/FeatureServer, https://www.data.gov.uk/dataset/dcb8bd46-c4cf-4749-bad0-7663da96845c/bathing-waters-monitoring-locations",,Geographic Markup Language,c86c44ac5b494907a38e1f85df4dc2f9,,,,,,application/gml+xml
+Bathing Water Monitoring Locations,Bathing Water Sample Points,,"The Environment Agency collects and analyses water samples each year from May to September, to ensure that designated bathing water sites on the coast and inland are safe and clean for swimming and other activities. This shape file shows the approximate locations of our monitoring sites and the compliance or classification for each bathing water in England from 1988 to present. It is updated twice a year, to revise the inventory, and the assessment results. For coastal waters the specific locations of monitoring vary along a transect with the changing of the tides. The results of these samples are assessed in annual classifications and are available to view and download through the bathing water data explorer. This data is covered by AfA470. Attribution Statement: © Environment Agency copyright and/or database right 2015. All rights reserved.","OpenData,beach,water monitoring,surface water,water quality,tidal water,water pollution,bathing freshwater,bathing water,bathing seawater,recreation,brackish water,protected area,Environment",https://www.data.gov.uk/search?filters%5Btopic%5D=Environment,DSP Customer Forum,DSPcustomerforum@environment-agency.gov.uk,department-for-environment-food-rural-affairs,environment-agency,,2010-10-01,2023-08-11,2010-10-01,freq:biennial,http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/,OPEN,OFFICIAL,fb8da72f-4938-4100-ac91-d9b8438ffd4c,"https://environment.data.gov.uk/arcgis/rest/services/EA/BathingWatersMonitoringLocations/MapServer, https://support.environment.data.gov.uk/hc/en-gb, https://environment.data.gov.uk/spatialdata/bathing-waters-monitoring-locations/wms, https://environment.data.gov.uk/spatialdata/bathing-waters-monitoring-locations/wfs, https://environment.data.gov.uk/arcgis/rest/services/EA/BathingWatersMonitoringLocations/FeatureServer, https://www.data.gov.uk/dataset/dcb8bd46-c4cf-4749-bad0-7663da96845c/bathing-waters-monitoring-locations",,Keyhole Markup Language,c86c44ac5b494907a38e1f85df4dc2f9,,,,,,application/vnd.google-earth.kml+xml
+MoJ Data First magistrates' court defendant case level dataset,,,"## What does this share consist of?
+
+The magistrates’ court defendant case level dataset provides data on defendant appearances in the magistrates’ court between January 2011 and December 2020 and is extracted from the magistrates’ court management information system (Libra).
+
+The dataset has been deduplicated, which means multiple instances of the same person appearing before the magistrates’ court over the period are identified and assigned a single unique identifier.
+
+This enables researchers to establish if the same user has entered the criminal courts more than once, and the frequency, purpose and outcomes of those appearances.
+
+The magistrates’ court dataset includes approximately 60 variables, including the dates of hearings, type of offences, arrests and the initiation date of proceedings (see Figure 6). This data explains how proceedings were dealt with (for example, whether the defendant chose trial by jury) and provides information on the final plea of the defendant.
+
+Other data include details on bail, remand, and whether the defendant was committed to the Crown Court.
+
+## What is the potential of this data?
+Sharing this deduplicated data with accredited researchers will help develop the evidence base on the magistrates’ court defendants and their outcomes.
+
+Examples of research questions that this might be able to answer:
+- What is the nature and extent of repeat users of the magistrates’ court?
+- Who are our repeat users?
+- How does sentencing change with repeat use of the magistrates’ court?
+- At what stage in a case do people plead guilty?
+- How do experiences and outcomes in the magistrates’ court differ by characteristics such as the defendant’s age and ethnicity?
+
+As the Data First project continues, magistrates’ court data will be linked to other datasets in order to address other research questions. For example, case progression to the Crown
+Court and prison and probation services.
+
+## Structure        
+One record per defendant per case giving details of defendant characteristics, offence categorisation, court proceedings, and outcomes. Details of the principle offence (the offence with the most serious disposal) are given. 
+        
+## Coverage        
+Individuals appearing as defendants in criminal cases dealt with by the magistrates' court in England and Wales (including Youth Courts). Companies appearing as defendants have been excluded. 
+        
+## Time period        
+1 January 2011 to 31 December 2020
+        
+## Data source        
+LIBRA-MIS. LIBRA is a fully managed service to the criminal magistrates' courts in England and Wales supporting business functions such as case preparation, case scheduling, court diary, accounting and enforcement. 
+        
+## Access        
+Access for approved purposes and projects is to accredited researchers through the ONS Secure Research Service (SRS). The application form is available on gov.uk and governed by MoJ and HMCTS. Please see the application form guidance and the Data First user guide for more information on the process.
+",,https://www.data.gov.uk/search?filters%5Btopic%5D=Crime+and+justice,Data First,datafirst@justice.gov.uk,ministry-of-justice,ministry-of-justice,v2,2020-06-30,2021-05-07,,freq:irregular,,INTERNAL,OFFICIAL,df-magistrates_-court-defendant-data-catalogue-v2,,,Data First magistrates' court defendant data catalogue,,https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/984564/df-magistrates_-court-defendant-data-catalogue-v2.ods,,,,,application/vnd.oasis.opendocument.spreadsheet
+MoJ Data First Crown Court defendant case level dataset,,,"## What does this share consist of?
+
+The Crown Court defendant case level dataset provides data on defendant appearances in the Crown Court between January 2013 and December 2020 and is extracted from the new court management information system (Xhibit).
+
+The dataset has been deduplicated, which means multiple instances of the same person appearing before the court over the period are identified and assigned a unique identifier. 
+
+This enables researchers to establish if the same user has entered the criminal courts more than once, and the frequency, purpose and outcomes of these appearances.
+
+The Crown Court dataset includes over 100 variables, including the dates of hearings, type of offences, arrests and the initiation date of proceedings (see Figure 7). This data explains how proceedings were dealt with (for example, whether the defendant chose trial by jury) and provides information on the final plea of the defendant. Other data include details on bail and remand.
+
+## What is the potential of this data?
+
+Sharing this deduplicated data with accredited researchers will help develop the evidence base on the Crown Court defendants and their outcomes.
+
+Examples of research questions that this might be able to answer:
+- How do previous convictions affect sentencing outcomes in the Crown Court?
+- What is the impact of earlier pleas on sentencing outcomes in the Crown Court?
+- What are the associations between defendant characteristics and being sentenced to prison in the Crown Court?
+- What are the key drivers of delays in the Crown Court?
+- Who are the repeat users of the Crown Court? What are their characteristics? How often do they return? How long does it take for repeat users to return?
+
+As the Data First project continues, Crown Court data will be linked to other datasets in order to address other research questions. For example, case progression from the magistrates’ court to prison and probation services, and interaction with other justice services.
+
+## Structure        
+
+One record per defendant per case giving details of defendant characteristics, offence categorisation, court proceedings, and outcomes. Where multiple offence and disposal types were recorded for a case, only details of the most serious offence and most serious disposal are given. The fields populated for appeals differ from other case types.
+        
+## Coverage        
+Individuals appearing as defendants in criminal cases dealt with by the Crown Court in England and Wales. Companies appearing as defendants have been excluded. 
+        
+## Time period        
+
+1 January 2013 to 31 December 2020
+        
+## Data source        
+XHIBIT, the administrative database used by Crown Courts across England and Wales, which contains all details of Crown Court cases. Please note that the previous administrative system, CREST, was fully migrated to XHIBIT from September 2019. Earlier years of data have been sourced through XHIBIT.
+        
+## Access        
+Access for approved purposes and projects is to accredited researchers through the ONS Secure Research Service (SRS). The application form is available on gov.uk and governed by MoJ and HMCTS. Please see the application form guidance and the Data First user guide for more information on the process.
+",,https://www.data.gov.uk/search?filters%5Btopic%5D=Crime+and+justice,Data First,datafirst@justice.gov.uk,ministry-of-justice,ministry-of-justice,v2,2020-06-30,2021-05-07,,freq:irregular,,INTERNAL,OFFICIAL,df-crown-court-defendent-data-catalogue-v2,,,Data First Crown Court defendant data catalogue,,https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/984565/df-crown-court-defendant-data-catalogue-v2.ods,,,,,application/vnd.oasis.opendocument.spreadsheet

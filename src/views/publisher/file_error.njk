@@ -1,0 +1,43 @@
+{% extends "page.njk" %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+      <h1 class="govuk-heading-l">
+        Errors parsing input
+      </h1>
+      {% for err in errors %}
+      <div class="govuk-error-summary" data-module="govuk-error-summary">
+        <dl class="govuk-summary-list">
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Location</dt>
+            <dd class="govuk-summary-list__value">
+              {% if err.location == "assetType.dataset file" %}
+                Datasets file
+              {% else %}
+                Data services file
+              {% endif %}
+            </dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Error</dt>
+            <dd class="govuk-summary-list__value">{{ err.message }}</dd>
+          </div>
+          {% if err.message == "Incorrect headers in CSV" %}
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Unexpected headers found</dt>
+              <dd class="govuk-summary-list__value">{{ err.extras.invalid_cols }}</dd>
+            </div>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Required headers are missing</dt>
+              <dd class="govuk-summary-list__value">{{ err.extras.missing_cols }}</dd>
+            </div>
+
+          {% endif %}
+        </dl>
+        </div>
+      {% endfor %}
+
+  </div>
+</div>
+{% endblock %} 

@@ -227,11 +227,25 @@ declare module "express-serve-static-core" {
   }
 }
 
+type NestedJSON = {
+  [key: string]: NestedJSON | string | number | boolean | null;
+};
+
+export type UploadError = {
+  scope: string;
+  message: string;
+  location: string;
+  extras: { [key: string]: unknown };
+  sub_errors: UploadError[] | null;
+};
+
 declare module "express-session" {
   interface SessionData {
     acquirerForms: Record<string, FormData>;
     backLink: string;
     formErrors: { [key: string]: { text: string } };
+    uploadData: NestedJSON[];
+    uploadErrors: UploadError[];
     profileErrors: { [key: string]: { text: string } };
     profileData: {
       jobTitle?: string;
@@ -259,3 +273,12 @@ export type ShareRequestTableColumn = {
 export type ShareRequestTableRow = ShareRequestTableColumn[];
 
 export type ShareRequestTable = ShareRequestTableRow[];
+
+interface IFile {
+  fieldname: string;
+  originalname: string;
+  encoding: string;
+  mimetype: string;
+  buffer: Buffer;
+  size: number;
+}
