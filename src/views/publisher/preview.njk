@@ -1,4 +1,5 @@
 {% extends "page.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% block content %}
 <div class="govuk-grid-row">
@@ -143,24 +144,13 @@
             <dt class="govuk-summary-list__key">Title</dt>
             <dd class="govuk-summary-list__value">{{ distribution.title }}</dd>
           </div>
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Modified</dt>
-            <dd class="govuk-summary-list__value">{{ distribution.modified }}</dd>
-          </div>
+         
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Licence</dt>
             <dd class="govuk-summary-list__value"><a class="govuk-link" target="_blank" href="{{ dataset.licence }}">{{ dataset.licence }}</a></dd>
           </div>
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Identifier</dt>
-            <dd class="govuk-summary-list__value">{{ distribution.externalIdentifier }}</dd>
-          </div>
-          <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Access service</dt>
-            <dd class="govuk-summary-list__value">{{ distribution.accessService }}</dd>
-          </div>
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Download URL</dt>
             <dd class="govuk-summary-list__value">{{ distribution.accessService }}</dd>
           </div>
           <div class="govuk-summary-list__row">
@@ -168,8 +158,8 @@
             <dd class="govuk-summary-list__value">{{ distribution.mediaType }}</dd>
           </div>
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">File size</dt>
-            <dd class="govuk-summary-list__value">{{ distribution.byteSize }}</dd>
+            <dt class="govuk-summary-list__key">Modified</dt>
+            <dd class="govuk-summary-list__value">{{ distribution.modified }}</dd>
           </div>
         </dl>
       {% endfor %}
@@ -266,7 +256,7 @@
           </dd>
         </div>
       </dl>
-      {% endif %}
+    {% endif %}
   </div>
 </div>
 
