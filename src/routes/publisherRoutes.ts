@@ -159,7 +159,7 @@ router.post("/commit", async (req: Request, res: Response) => {
     .then((response) => {
       req.session.uploadData = response.data.data;
       req.session.uploadErrors = response.data.errors;
-      return res.redirect("/publish/result");
+      return res.redirect("/publish/csv/confirmation");
     })
     .catch((error) => {
       console.error(error);
@@ -167,7 +167,7 @@ router.post("/commit", async (req: Request, res: Response) => {
     });
 });
 
-router.get("/result", async (req: Request, res: Response) => {
+router.get("/csv/confirmation", async (req: Request, res: Response) => {
   if (req.session.uploadErrors && req.session.uploadData) {
     if (req.session.uploadErrors.length > 0) {
       res.render("../views/publisher/post_publish.njk", {
