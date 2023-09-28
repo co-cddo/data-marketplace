@@ -67,6 +67,20 @@ router.post(
     try {
       const xlsx = XLSX.read(req.file?.buffer)
 
+      let missingSheets = []
+      const sheets = xlsx.SheetNames;
+      if (!sheets.includes("Dataset")) {
+        missingSheets.push("Dataset")
+      }
+      if (!sheets.includes("DataService")) {
+        missingSheets.push("DataService")
+      }
+      if (missingSheets.length > 0) {
+        return res.render("../views/publisher/bad_spreadsheet.njk",
+          { missingSheets: missingSheets.join(", ") }
+        )
+      }
+
       const datasetCSV = XLSX.utils.sheet_to_csv(xlsx.Sheets["Dataset"], { blankrows: false })
       const datasetBuffer = Buffer.from(datasetCSV, 'utf8')
 
@@ -85,29 +99,10 @@ router.post(
         },
       });
 
-
-      // const datasets = files["datasetsCSV"][0];
-      // const dataservices = files["servicesCSV"][0];
-      // const fd = new FormData();
-      // fd.append("datasets", datasets.buffer, { filename: "datasets.csv" });
-      // fd.append("dataservices", dataservices.buffer, {
-      //   filename: "dataservices.csv",
-      // });
-      // const response = await axios.post(verifyUrl, fd, {
-      //   headers: {
-      //     ...fd.getHeaders(),
-      //   },
-      // });
-      // const errs = response.data.errors;
-      // const data = response.data.data;
-      // req.session.uploadData = data;
-      // req.session.uploadErrors = errs;
-      // return res.redirect("/publish/csv/upload-summary");
       const errs = response.data.errors;
       const data = response.data.data;
       const accessErrors = await checkPermissionToAdd(data, req.cookies.jwtToken)
       const allErrs = accessErrors.concat(errs)
-      console.log(allErrs)
       req.session.uploadData = data;
       req.session.uploadErrors = allErrs;
       return res.redirect("/publish/csv/upload-summary");
