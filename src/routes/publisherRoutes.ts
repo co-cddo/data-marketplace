@@ -92,13 +92,13 @@ router.get("/csv/upload-summary", async (req: Request, res: Response) => {
             assetType: dataset.type
         }));
         const errorSummaries = rowErrors.map((err, index) => {
-            const input_data: any = err.extras?.input_data || {};
-            const dataType = input_data.type;
-            return {
-                link: `/publish/csv/error/${index}`,
-                linkText: input_data.title || err.location,
-                assetType: input_data.type || "Undefined"
-            };
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const input_data: any = err.extras?.input_data || {};
+          return {
+              link: `/publish/csv/error/${index}`,
+              linkText: input_data.title || err.location,
+              assetType: input_data.type || "Undefined"
+          };
         });
         const hasErrors: boolean = rowErrors.length > 0;
 
