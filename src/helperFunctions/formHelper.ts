@@ -708,9 +708,9 @@ function checkAnswer(formdata: FormData) {
           break;
         case "date":
           const date = stepData.value as DateStep;
-          const dateString = `${date.year}-${(date.month)}-${date.day}`;
-          const newDate = formatDate(dateString)
-           
+          const dateString = `${date.year}-${date.month}-${date.day}`;
+          const newDate = formatDate(dateString);
+
           if (date.year) {
             dataTypeValue.push(`${newDate}`);
           } else {
