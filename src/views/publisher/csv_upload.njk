@@ -1,55 +1,50 @@
 {% extends "page.njk" %}
 {% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% block content %}
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
+ <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">
       Upload CSV file
     </h1>
-    <p class="govuk-body">Upload the CSV file containing your data asset descriptions.</p>
-    <p class="govuk-body">Then upload the file, where it will be checked for errors.</p>
-    <h4 class="govuk-heading-m">TODO: we need to instruct people to export the "dataset" and "data service" pages as CSV files</h4>
+    <p class="govuk-body">Upload the CSV files containing your data asset descriptions.</p>
+    
     <form action="/publish/csv/upload" method="POST" enctype="multipart/form-data">
       <div class="govuk-grid-column-one-half">
-        {{ govukFileUpload({
-          id: "datasetsCSV",
-          name: "datasetsCSV",
-          label: {
-            text: "Upload dataset CSV",
-            for: "datasetsCSV"
-          }
-        }) }}
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="datasetsCSV">
+            Upload dataset CSV
+          </label>
+          <input class="govuk-file-upload" id="datasetsCSV" name="datasetsCSV" type="file", accept="text/csv", required="true">
+        </div>
       </div>
 
       <div class="govuk-grid-column-one-half">
-      {{ govukFileUpload({
-        id: "servicesCSV",
-        name: "servicesCSV",
-        label: {
-          text: "Upload dataService CSV",
-          for: "servicesCSV"
-        }
-      }) }}
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="servicesCSV">
+            Upload dataService CSV
+          </label>
+          <input class="govuk-file-upload" id="servicesCSV" name="servicesCSV" type="file", accept="text/csv", required="true">
+        </div>
       </div>
         <button type="submit" class="govuk-button" data-module="govuk-button">Continue</button>
     </form>
-    </div>
-  
-    <div class="govuk-grid-column-one-third">
-      <aside class="app-related-items learn-aside" role="complementary">
+</div>
+
+<div class="govuk-grid-column-one-third">
+    <aside class="app-related-items learn-aside" role="complementary">
         <h2 class="govuk-heading-s govuk-!-margin-top-3 govuk-!-margin-bottom-3" id="subsection-title">
           Learn
         </h2>
         <nav role="navigation" aria-labelledby="subsection-title">
-          <ul class="govuk-list govuk-!-font-size-16">
-              <li><a href="/learn/articles/metadata-model" class="govuk-link">Metadata sharing requirements</a></li>
-              <li><a href="/learn/articles/metadata-model" class="govuk-link">Adding a collection of metadata records as a CSV file</a></li>
-          </ul>
+            <ul class="govuk-list govuk-!-font-size-16">
+                <li><a href="/learn/articles/metadata-model" class="govuk-link">Metadata sharing requirements</a></li>
+                <li><a href="/learn/articles/metadata-model" class="govuk-link">Adding a collection of metadata records as a CSV file</a></li>
+            </ul>
         </nav>
-      </aside>
-    </div>   
-  </div>
+    </aside>
+</div>   
 </div>
 
 {% endblock %} 

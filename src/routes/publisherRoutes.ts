@@ -90,36 +90,77 @@ router.post(
       req.session.uploadErrors = allErrs;
       return res.redirect("/publish/csv/upload-summary");
     } catch (err) {
-      console.error(err);
-      res.sendStatus(400);
+        return res.redirect("/publish/csv/upload/error");
     }
   },
 );
 
+router.get("/csv/upload/error", async (req: Request, res: Response) => {
+    res.render("../views/publisher/total_error.njk");
+})
+
+function errorSummaryMessage(err: UploadError): string {
+    let msg: string = err.message;
+    if (err.sub_errors && err.sub_errors.length === 1) {
+        msg = `${err.sub_errors[0].location}: ${err.sub_errors[0].message}`;
+    } else if (err.sub_errors && err.sub_errors.length > 1) {
+        msg = "Multiple errors";
+    }
+    return msg;
+}
+
 router.get("/csv/upload-summary", async (req: Request, res: Response) => {
-  const backLink = req.headers.referer || "/";
-  const data = req.session.uploadData || [];
+    const backLink = req.headers.referer || "/";
+    const data = req.session.uploadData || [];
+    const errors = req.session.uploadErrors || [];
+    const rowErrors: UploadError[] = [];
+    const fileErrors: UploadError[] = [];
+    errors.forEach((e) => {
+        if (e.scope == "FILE") {
+            fileErrors.push(e);
+        } else {
+            rowErrors.push(e);
+        }
+    });
+    if (fileErrors.length > 0) {
+        res.render("../views/publisher/file_error.njk", {
+            errors: fileErrors
+        });
+    } else {
+        const uploadSummaries = data.map((dataset, index) => ({
+            link: `/publish/csv/preview/${index}`,
+            linkText: dataset.title,
+            assetType: dataset.type
+        }));
+        const errorSummaries = rowErrors.map((err, index) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const input_data: any = err.extras?.input_data || {};
+          return {
+              link: `/publish/csv/error/${index}`,
+              linkText: input_data.title || err.location,
+              assetType: input_data.type || "Undefined",
+              msg: errorSummaryMessage(err)
+          };
+        });
+        const hasErrors: boolean = rowErrors.length > 0;
 
-  const uploadSummary = data.map((dataset, index) => [
-    { html: `<a class="govuk-link" href="/publish/csv/preview/${index}">${dataset.title}</a>` },
-    { text: dataset.type },
-    { text: dataset.status }
-  ]);
-
-  res.render("../views/publisher/upload-summary.njk", {
-    backLink,
-    uploadSummary
-  });
+        res.render("../views/publisher/upload-summary.njk", {
+            backLink,
+            uploadSummaries,
+            errorSummaries,
+            hasErrors
+        });
+    };
 });
 
-router.get("/csv/preview/:id", async (req: Request, res: Response) => {
-  const assetId = Number(req.params.id);
+router.get("/csv/preview/:assetIndex", async (req: Request, res: Response) => {
+  const assetIndex = Number(req.params.assetIndex);
 
   if (!req.session.uploadData) {
     return res.status(400).send("Invalid asset ID or data is not available");
   }
 
-  const dataset = req.session.uploadData[assetId];
+  const dataset = req.session.uploadData[assetIndex];
 
   console.log("/publish/csv/preview specific asset", dataset)
   if (!dataset) {
@@ -131,38 +172,23 @@ router.get("/csv/preview/:id", async (req: Request, res: Response) => {
   });
 });
 
-// router.get("/preview/", async (req: Request, res: Response) => {
-//   let fileError: UploadError | null = null;
-//   const rowErrors: UploadError[] = [];
-//   if (req.session.uploadErrors) {
-//     req.session.uploadErrors.forEach((e) => {
-//       if (e.scope == "FILE") {
-//         fileError = e;
-//       } else {
-//         rowErrors.push(e);
-//       }
-//     });
-//   }
-//   if (fileError) {
-//     console.log(JSON.stringify(fileError));
-//     res.render("../views/publisher/file_error.njk", {
-//       error: JSON.stringify(fileError, null, 2),
-//     });
-//   } else if (rowErrors.length > 0) {
-//     console.log(JSON.stringify(rowErrors));
-//     res.render("../views/publisher/preview.njk", {
-//       data: req.session.uploadData,
-//       errors: rowErrors,
-//       hasError: true,
-//     });
-//   } else {
-//     res.render("../views/publisher/preview.njk", {
-//       data: req.session.uploadData,
-//       errors: rowErrors,
-//       hasError: false,
-//     });
-//   }
-// });
+router.get("/csv/error/:errorIndex", async (req: Request, res: Response) => {
+    const errorIndex = Number(req.params.errorIndex);
+
+    if (!req.session.uploadErrors) {
+        return res.status(400).send("Data is not available - please return to home screen");
+    }
+
+    const assetErr = req.session.uploadErrors[errorIndex];
+
+    if (!assetErr) {
+        return res.status(404).send("Error not found");
+    }
+
+    res.render("../views/publisher/asset-error.njk", {
+        assetErr
+    });
+});
 
 router.post("/commit", async (req: Request, res: Response) => {
   const body = { data: req.session.uploadData };
@@ -175,7 +201,7 @@ router.post("/commit", async (req: Request, res: Response) => {
     .then((response) => {
       req.session.uploadData = response.data.data;
       req.session.uploadErrors = response.data.errors;
-      return res.redirect("/publish/result");
+      return res.redirect("/publish/csv/confirmation");
     })
     .catch((error) => {
       console.error(error);
@@ -183,7 +209,7 @@ router.post("/commit", async (req: Request, res: Response) => {
     });
 });
 
-router.get("/result", async (req: Request, res: Response) => {
+router.get("/csv/confirmation", async (req: Request, res: Response) => {
   if (req.session.uploadErrors && req.session.uploadData) {
     if (req.session.uploadErrors.length > 0) {
       res.render("../views/publisher/post_publish.njk", {
