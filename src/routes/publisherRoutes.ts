@@ -105,6 +105,7 @@ router.post(
       const allErrs = accessErrors.concat(errs)
       req.session.uploadData = data;
       req.session.uploadErrors = allErrs;
+      req.session.uploadFilename = req.file?.originalname;
       return res.redirect("/publish/csv/upload-summary");
     } catch (err) {
       return res.redirect("/publish/csv/upload/error");
@@ -127,7 +128,6 @@ function errorSummaryMessage(err: UploadError): string {
 }
 
 router.get("/csv/upload-summary", async (req: Request, res: Response) => {
-  const backLink = req.headers.referer || "/";
   const data = req.session.uploadData || [];
   const errors = req.session.uploadErrors || [];
   const rowErrors: UploadError[] = [];
@@ -162,10 +162,10 @@ router.get("/csv/upload-summary", async (req: Request, res: Response) => {
     const hasErrors: boolean = errors.length > 0;
 
     res.render("../views/publisher/upload-summary.njk", {
-      backLink,
       uploadSummaries,
       errorSummaries,
-      hasErrors
+      hasErrors,
+      filename: req.session.uploadFilename
     });
   };
 });
