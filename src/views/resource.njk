@@ -127,6 +127,10 @@
           <th scope="row" class="govuk-table__header">Creator</th>
           <td class="govuk-table__cell">{{ resource.creator[0].title }}</td>
         </tr>
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header">Publisher</th>
+          <td class="govuk-table__cell">{{ resource.organisation.title }}</td>
+        </tr>
         {% if resource.licence %}
         <tr class="govuk-table__row">
             <th scope="row" class="govuk-table__header  govuk-!-width-one-half">Licence</th>
