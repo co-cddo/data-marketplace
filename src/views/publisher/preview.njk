@@ -65,7 +65,7 @@
               {% for key, value in dataset.contactPoint %}
                 <li>
                   {% set capitalizedKey = key | capitalize %}
-                  {% if key == 'email' %}
+                  {% if key == 'Email' %}
                     <a class="govuk-link" href="mailto:{{ value }}">{{ value }}</a>
                   {% else %}
                     <strong>{{ capitalizedKey }}:</strong> {{ value }}
@@ -247,7 +247,7 @@
               {% for key, value in dataset.contactPoint %}
                 <li>
                   {% set capitalizedKey = key | capitalize %}
-                  {% if key == 'email' %}
+                  {% if key == 'Email' %}
                     <a class="govuk-link" href="mailto:{{ value }}">{{ value }}</a>
                   {% else %}
                     <strong>{{ capitalizedKey }}:</strong> {{ value }}
