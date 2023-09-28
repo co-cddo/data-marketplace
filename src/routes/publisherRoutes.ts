@@ -45,7 +45,7 @@ async function checkPermissionToAdd(assets: NestedJSON[], jwt: string) {
           scope: 'ASSET',
           message: `Not authorised to add asset for ${org}`,
           location: assetID,
-          extras: {},
+          extras: {input_data: asset},
           sub_errors: [],
         };
 
