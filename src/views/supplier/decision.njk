@@ -12,25 +12,29 @@
         {{ govukTextarea({
           id: "return-with-comments-textarea",
           name: "return-with-comments",
-          value: []
+          value: [],
+          errorMessage: errorMessage['return-with-comments']
         }) }}
       {% endset -%}
       {% set ApproveHtml %}
         {{ govukTextarea({
           id: "approve-textarea",
           name: "approve",
-          value: []
+          value: [],
+          errorMessage: errorMessage['approve']
         }) }}
       {% endset -%}
       {% set RejectHtml %}
         {{ govukTextarea({
           id: "reject-textarea",
           name: "reject",
-          value: []
+          value: [],
+          errorMessage: errorMessage['reject']
         }) }}
       {% endset -%}
       {{ govukRadios({
         name: "decision",
+        errorMessage: errorMessage["decision"],
         fieldset: {
           legend: {
           text: "What is your decision?",
@@ -45,7 +49,7 @@
             {
             value: "return",
             text: "Return with comments",
-            checked: "",
+            checked: selectedDecisionStatus === "return",
             hint: {
               text: "Some details are missing. A decision cannot be made without them. If they provide this information, you will progress the request."
             },
@@ -56,7 +60,7 @@
             {
             value: "approve",
             text: "Accept data share request",
-            checked: "",
+            checked: selectedDecisionStatus === "approve",
             hint: {
               text: "Approve and arrange a meeting to discuss the next steps."
             },
@@ -67,7 +71,7 @@
             {
             value: "reject",
             text: "Reject data share request",
-            checked: "",
+            checked: selectedDecisionStatus === "reject",
             hint: {
               text: "There are fundamental problems with this request that cannot be solved. Use the comments box to tell the department why you have rejected their request."
             },

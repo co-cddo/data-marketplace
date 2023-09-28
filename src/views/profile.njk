@@ -8,47 +8,16 @@
 
       <h1 class="govuk-heading-xl">Account</h1>
 
-      {% if user %}
       {{ govukTable({
         captionClasses: "govuk-table__caption--m",
         firstCellIsHeader: false,
-        rows: [
-          [
-            {
-              text: "Name"
-            },
-            {
-              text: user.display_name
-            }
-          ],
-          [
-            {
-              text: "Email"
-            },
-            {
-              text: user.email
-            }
-          ],
-          [
-            {
-              text: "Organisation"
-            },
-            {
-              text: organisation if organisation else "unavailable"
-            }
-          ],
-          [
-            {
-              text: "Role"
-            },
-            {
-              text: jobTitle if jobTitle else "unavailable"
-            }
-          ]
-        ]
+        rows: profileTableRows
       }) }}
-
-    {% endif %}
+      {% if needsToComplete %}
+        <p class="govuk-body">
+          You must <a class="govuk_link" href="/profile/complete">complete your profile</a> before you can create data share requests.
+        </p>
+      {% endif %}
     </div>
   </div>
 
