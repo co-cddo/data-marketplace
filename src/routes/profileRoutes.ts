@@ -17,17 +17,17 @@ router.get(
     }
 
     const profileTableRows: ShareRequestTable = [
-      [{ text: "Name" }, { text: req.user.display_name }],
-      [{ text: "Email" }, { text: req.user.email }],
+      [{ text: "Name", classes: "govuk-!-width-one-quarter" }, { text: req.user.display_name }],
+      [{ text: "Email", classes: "govuk-!-width-one-quarter" }, { text: req.user.email }],
     ];
 
     if (req.user.organisation) {
       profileTableRows.push([
-        { text: "Organisation" },
+        { text: "Organisation", classes: "govuk-!-width-one-quarter" },
         { text: req.user.organisation.title },
       ]);
       profileTableRows.push([
-        { text: "Primary skill" },
+        { text: "Primary skill", classes: "govuk-!-width-one-quarter" },
         { text: req.user.jobTitle! },
       ]);
 
@@ -37,7 +37,7 @@ router.get(
       const permissionsRow =
         permissions.length > 0 ? permissions.join(" ") : "None";
       profileTableRows.push([
-        { text: "Permissions" },
+        { text: "Permissions", classes: "govuk-!-width-one-quarter" },
         { html: permissionsRow },
       ]);
     }
