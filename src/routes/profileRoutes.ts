@@ -17,8 +17,14 @@ router.get(
     }
 
     const profileTableRows: ShareRequestTable = [
-      [{ text: "Name", classes: "govuk-!-width-one-quarter" }, { text: req.user.display_name }],
-      [{ text: "Email", classes: "govuk-!-width-one-quarter" }, { text: req.user.email }],
+      [
+        { text: "Name", classes: "govuk-!-width-one-quarter" },
+        { text: req.user.display_name },
+      ],
+      [
+        { text: "Email", classes: "govuk-!-width-one-quarter" },
+        { text: req.user.email },
+      ],
     ];
 
     if (req.user.organisation) {
