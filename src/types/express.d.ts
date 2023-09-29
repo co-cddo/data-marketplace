@@ -246,6 +246,7 @@ declare module "express-session" {
     formErrors: { [key: string]: { text: string } };
     uploadData: NestedJSON[];
     uploadErrors: UploadError[];
+    uploadFilename: string;
     profileErrors: { [key: string]: { text: string } };
     profileData: {
       jobTitle?: string;
