@@ -5,4 +5,5 @@ export type ApiUser = {
   email: string;
   org: Organisation | null;
   jobTitle: string | null;
+  permission: string[];
 };

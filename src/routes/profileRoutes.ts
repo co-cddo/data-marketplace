@@ -3,6 +3,7 @@ import { ApiUser } from "../models/apiUser";
 import axios from "axios";
 import { Organisation } from "../models/dataModels";
 import { apiUser } from "../middleware/apiMiddleware";
+import { ShareRequestTable } from "../types/express";
 
 const router = express.Router();
 const API = `${process.env.API_ENDPOINT}`;
@@ -15,7 +16,7 @@ router.get(
       return res.redirect("/error");
     }
 
-    const profileTableRows = [
+    const profileTableRows: ShareRequestTable = [
       [{ text: "Name" }, { text: req.user.display_name }],
       [{ text: "Email" }, { text: req.user.email }],
     ];
@@ -29,6 +30,13 @@ router.get(
         { text: "Primary skill" },
         { text: req.user.jobTitle! },
       ]);
+
+      const permissions = req.user.permission.map(
+        (p) => `<span class=govuk-tag>${p}</span>`,
+      );
+      const permissionsRow =
+        permissions.length > 0 ? permissions.join(" ") : "None";
+      profileTableRows.push([{ text: "Permission" }, { html: permissionsRow }]);
     }
 
     res.render("profile.njk", {

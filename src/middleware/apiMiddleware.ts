@@ -19,6 +19,7 @@ export const apiUser = async (
     req.user.user_id = apiUser.user_id;
     req.user.organisation = apiUser.org;
     req.user.jobTitle = apiUser.jobTitle;
+    req.user.permission = apiUser.permission;
     next();
   } catch (error) {
     if (axios.isAxiosError(error)) {
