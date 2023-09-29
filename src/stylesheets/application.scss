@@ -158,3 +158,10 @@
   padding: 0;
   margin: 0;
 }
+
+.govuk-table {
+  max-width: 100%;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  table-layout: fixed;
+}
