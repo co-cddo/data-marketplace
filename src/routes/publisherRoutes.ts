@@ -85,7 +85,6 @@ router.post(
       const data = response.data.data;
       const accessErrors = await checkPermissionToAdd(data, req.cookies.jwtToken)
       const allErrs = accessErrors.concat(errs)
-      console.log(allErrs)
       req.session.uploadData = data;
       req.session.uploadErrors = allErrs;
       return res.redirect("/publish/csv/upload-summary");
