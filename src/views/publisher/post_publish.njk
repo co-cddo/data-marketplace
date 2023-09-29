@@ -1,0 +1,28 @@
+{% extends "layouts/base.njk" %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  {% if hasError %}
+    <h2 class="govuk-heading-l govuk-!-font-weight-bold">Something went wrong</h2>
+    <p> {{ error }}
+  {% else %}
+  <div class="govuk-grid-column-two-thirds">
+    {{ govukPanel({
+      titleText: "CSV file uploaded"
+    }) }}
+    <p class="govuk-body">Your data asset descriptions have been uploaded to the data marketplace.</p>
+    <p class="govuk-body">They are now available to be found by other government organisations searching for a data asset. </p>
+    <form action="/publish/commit" method="POST">
+      {{ govukButton({
+        text: "Return to publisher dashboard",
+        href: "/publish/publish-dashboard"
+      }) }}
+    </form>
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}  

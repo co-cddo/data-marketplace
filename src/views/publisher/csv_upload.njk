@@ -1,0 +1,61 @@
+{% extends "page.njk" %}
+{% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+
+{% block content %}
+<div class="govuk-grid-row">
+ <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      Upload CSV file
+    </h1>
+    <p class="govuk-body">Upload the CSV file containing your data asset descriptions.</p>
+
+    <form action="/publish/csv/upload" method="POST" enctype="multipart/form-data">
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-half">
+          {{ govukFileUpload({
+            id: "datasetsCSV",
+            name: "datasetsCSV",
+            label: {
+              text: "Upload dataset CSV",
+              for: "datasetsCSV"
+            }
+          }) }}
+        </div>
+        <div class="govuk-grid-column-one-half">
+            {{ govukFileUpload({
+                id: "servicesCSV",
+                name: "servicesCSV",
+                label: {
+                    text: "Upload dataService CSV",
+                    for: "servicesCSV"
+                }
+            }) }}
+        </div>
+      </div>
+      {{ govukButton({
+          text: "Continue",
+          attributes: {
+              type: "submit"
+          }
+      }) }}
+    </form>
+</div>
+
+<div class="govuk-grid-column-one-third">
+    <aside class="app-related-items learn-aside" role="complementary">
+        <h2 class="govuk-heading-s govuk-!-margin-top-3 govuk-!-margin-bottom-3" id="subsection-title">
+          Learn
+        </h2>
+        <nav role="navigation" aria-labelledby="subsection-title">
+            <ul class="govuk-list govuk-!-font-size-16">
+                <li><a href="/learn/articles/metadata-model" class="govuk-link">Metadata sharing requirements</a></li>
+                <li><a href="/learn/articles/metadata-model" class="govuk-link">Adding a collection of metadata records as a CSV file</a></li>
+            </ul>
+        </nav>
+    </aside>
+</div>   
+</div>
+
+{% endblock %} 

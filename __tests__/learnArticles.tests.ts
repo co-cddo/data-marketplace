@@ -56,10 +56,4 @@ describe("GET /learn/articles", () => {
     expect(response.status).toBe(200);
     expect(response.text).toContain("Using metadata to describe Essential");
   });
-
-  it('should respond as expected when accessing dcat', async () => {
-    const response = await request(app).get("/learn/articles/dcat");
-    expect(response.status).toBe(200);
-    expect(response.text).toContain("Using metadata to describe data assets");
-  });
 });

@@ -1,0 +1,34 @@
+Mandatory,Recommended,Recommended,Mandatory,Optional,Recommended,Mandatory,Mandatory,Mandatory,Mandatory,Mandatory,Recommended,Mandatory,Optional,Mandatory,Mandatory,Mandatory,Mandatory,Recommended,Mandatory,Mandatory,Optional,Mandatory,Recommended
+title,alternativeTitle,summary,description,keyword,theme,contactPoint_contactName,contactPoint_email,publisher,creator,version,issued,modified,created,licence,accessRights,securityClassification,identifier,relatedResource,serviceType,serviceStatus,endpointURL,endpointDescription,servesData
+EA/BathingWatersMonitoringLocations (MapServer),,,"downloadFormats=SHP,FGDB,GeoJSON,GML,TAB,MID/MIF,KML;canExtractFull=True;canPublicDownload=True;batchThreshold=;offlineThreshold=;","Environment Agency,Bathing Waters Monitoring Locations,WMS,WFS",https://www.data.gov.uk/search?filters%5Btopic%5D=Environment,DSP Customer Forum,DSPcustomerforum@environment-agency.gov.uk,department-for-environment-food-rural-affairs,environment-agency,,,,,http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/,OPEN,OFFICIAL,c86c44ac5b494907a38e1f85df4dc2f9,https://environment.data.gov.uk/dataset/fb8da72f-4938-4100-ac91-d9b8438ffd4c,REST,LIVE,https://environment.data.gov.uk/arcgis/rest/services/EA/BathingWatersMonitoringLocations/MapServer/,https://environment.data.gov.uk/arcgis/sdk/rest/index.html#//02ss0000006v000000,https://environment.data.gov.uk/dataset/fb8da72f-4938-4100-ac91-d9b8438ffd4c
+Interest Restriction Return (IRR) API,,,"## Overview
+
+  The API in its current state supports the following functions:
+
+  - Revoke an existing Reporting Company from submitting Interest Restriction Returns
+  - Appoint a new Reporting Company for submitting Interest Restriction Returns
+  - Submit an Interest Restriction Return (full)
+  - Submit an Interest Restriction Return (abbreviated)
+
+  This API uses User Restricted Endpoints. Please find further details on the [Authorisation](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation) page.
+
+  For more information about how to develop your own client applications, including example clients for this API, see [Tutorials](https://developer.service.hmrc.gov.uk/api-documentation/docs/tutorials).
+
+  ## Errors
+
+  We use standard HTTP status codes to show whether an API request succeeded or not. They are usually in the range:
+
+  - 200 to 299 if it succeeded, including code 202 if it was accepted by an API that needs to wait for further action
+  - 400 to 499 if it failed because of a client error by your application
+  - 500 to 599 if it failed because of an error on our server
+
+  Errors specific to each API are shown in the Endpoints section, under Response. See our [reference guide](https://developer.service.hmrc.gov.uk/api-documentation/docs/reference-guide#errors) for more on errors.
+
+  ## Testing
+
+  You can use the [HMRC Developer Sandbox](https://developer.service.hmrc.gov.uk/api-documentation/docs/testing) to test the API. The Sandbox is an enhanced testing service that functions as a simulator of HMRC’s production environment.
+
+  ## Versioning
+
+  When an API changes in a way that is backwards-incompatible, we increase the version number of the API. See our [reference guide](/api-documentation/docs/reference-guide#versioning) for more on versioning.
+",,,Software Development Support Team (SDST),sdsteam@hmrc.gov.uk,hm-revenue-customs,hm-revenue-customs,v1.0 (Beta),,2023-08-03,,https://www.apache.org/licenses/LICENSE-2.0,INTERNAL,OFFICIAL,interest-restriction-return,,REST,BETA,https://api.service.hmrc.gov.uk/,https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/interest-restriction-return/1.0/oas/page,
