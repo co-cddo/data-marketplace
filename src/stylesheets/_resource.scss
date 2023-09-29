@@ -4,15 +4,12 @@
 }
 
 .resource-page {
-  overflow-wrap: break-word; 
-  table-layout: fixed;
-  width: 100%; 
+  overflow-wrap: break-word;
 }
 
-.resource-page td,
-.resource-page td a {
+.govuk-table {
   max-width: 100%;
-  overflow-wrap: break-word; 
-  word-wrap: break-word; 
-  white-space: normal;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  table-layout: fixed;
 }
