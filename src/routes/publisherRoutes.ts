@@ -32,6 +32,7 @@ router.get("/csv/upload", async (req: Request, res: Response) => {
 
 async function checkPermissionToAdd(assets: NestedJSON[], jwt: string) {
   const errs: UploadError[] = [];
+  const validAssets:  NestedJSON[] = [];
 
   await Promise.all(assets.map(async (asset) => {
     const org = asset.organisationID;
@@ -39,7 +40,10 @@ async function checkPermissionToAdd(assets: NestedJSON[], jwt: string) {
 
     try {
       const response = await axios.get(url, { headers: { Authorization: `Bearer ${jwt}` } });
-      if (response.data !== true) {
+      if (response.data === true) {
+          validAssets.push(asset);
+      }
+      else {
         const assetID = asset.externalIdentifier != null ? asset.externalIdentifier.toString() : 'identifier not found';
 
         const err: UploadError = {
@@ -57,7 +61,10 @@ async function checkPermissionToAdd(assets: NestedJSON[], jwt: string) {
       console.error('There was a problem with the Axios request:', error);
     }
   }));
-  return errs;
+    return {
+        errors: errs,
+        data: validAssets
+    };
 }
 
 router.post(
@@ -101,9 +108,9 @@ router.post(
 
       const errs = response.data.errors;
       const data = response.data.data;
-      const accessErrors = await checkPermissionToAdd(data, req.cookies.jwtToken)
-      const allErrs = accessErrors.concat(errs)
-      req.session.uploadData = data;
+      const accessControlResults = await checkPermissionToAdd(data, req.cookies.jwtToken);
+      const allErrs = accessControlResults.errors.concat(errs);
+      req.session.uploadData = accessControlResults.data;
       req.session.uploadErrors = allErrs;
       req.session.uploadFilename = req.file?.originalname;
       return res.redirect("/publish/csv/upload-summary");
