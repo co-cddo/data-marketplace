@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import multer from "multer";
-import { IFile, NestedJSON, UploadError } from "../types/express";
+import { NestedJSON, UploadError } from "../types/express";
 import axios from "axios";
 import FormData from "form-data";
 import * as XLSX from 'xlsx';
@@ -67,7 +67,7 @@ router.post(
     try {
       const xlsx = XLSX.read(req.file?.buffer)
 
-      let missingSheets = []
+      const missingSheets = []
       const sheets = xlsx.SheetNames;
       if (!sheets.includes("Dataset")) {
         missingSheets.push("Dataset")
