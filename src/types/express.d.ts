@@ -14,6 +14,7 @@ interface UserData {
   user_id: string | null;
   organisation: Organisation | null;
   jobTitle: string | null;
+  permission: string[];
 }
 
 interface FormData {

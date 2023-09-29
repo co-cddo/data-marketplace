@@ -3,7 +3,7 @@ import multer from "multer";
 import { NestedJSON, UploadError } from "../types/express";
 import axios from "axios";
 import FormData from "form-data";
-import * as XLSX from 'xlsx';
+import * as XLSX from "xlsx";
 import { createAbacMiddleware } from "../middleware/ABACMiddleware";
 
 const upload = multer();
@@ -13,10 +13,12 @@ const publishUrl = `${process.env.API_ENDPOINT}/publish`;
 const router = express.Router();
 
 const publishDataAbacMiddleware = createAbacMiddleware(
-  "organisation", "CREATE_ASSET", "publish data descriptions"
-)
+  "organisation",
+  "CREATE_ASSET",
+  "publish data descriptions",
+);
 
-router.use(publishDataAbacMiddleware)
+router.use(publishDataAbacMiddleware);
 
 router.get("/publish-dashboard", async (req: Request, res: Response) => {
   res.render("../views/publisher/publish-dashboard.njk");
@@ -32,39 +34,45 @@ router.get("/csv/upload", async (req: Request, res: Response) => {
 
 async function checkPermissionToAdd(assets: NestedJSON[], jwt: string) {
   const errs: UploadError[] = [];
-  const validAssets:  NestedJSON[] = [];
+  const validAssets: NestedJSON[] = [];
 
-  await Promise.all(assets.map(async (asset) => {
-    const org = asset.organisationID;
-    const url = `${process.env.API_ENDPOINT}/users/permission/organisation/${org}/CREATE_ASSET`;
+  await Promise.all(
+    assets.map(async (asset) => {
+      const org = asset.organisationID;
+      const url = `${process.env.API_ENDPOINT}/users/permission/organisation/${org}/CREATE_ASSET`;
 
-    try {
-      const response = await axios.get(url, { headers: { Authorization: `Bearer ${jwt}` } });
-      if (response.data === true) {
+      try {
+        const response = await axios.get(url, {
+          headers: { Authorization: `Bearer ${jwt}` },
+        });
+        if (response.data === true) {
           validAssets.push(asset);
-      }
-      else {
-        const assetID = asset.externalIdentifier != null ? asset.externalIdentifier.toString() : 'identifier not found';
+        } else {
+          const assetID =
+            asset.externalIdentifier != null
+              ? asset.externalIdentifier.toString()
+              : "identifier not found";
 
-        const err: UploadError = {
-          scope: 'ASSET',
-          message: `Not authorised to add asset for ${org}`,
-          location: assetID,
-          extras: { input_data: asset },
-          sub_errors: [],
-        };
+          const err: UploadError = {
+            scope: "ASSET",
+            message: `Not authorised to add asset for ${org}`,
+            location: assetID,
+            extras: { input_data: asset },
+            sub_errors: [],
+          };
 
-        errs.push(err);
+          errs.push(err);
+        }
+      } catch (error) {
+        // Handle errors
+        console.error("There was a problem with the Axios request:", error);
       }
-    } catch (error) {
-      // Handle errors
-      console.error('There was a problem with the Axios request:', error);
-    }
-  }));
-    return {
-        errors: errs,
-        data: validAssets
-    };
+    }),
+  );
+  return {
+    errors: errs,
+    data: validAssets,
+  };
 }
 
 router.post(
@@ -72,27 +80,32 @@ router.post(
   upload.single("spreadsheet"),
   async (req: Request, res: Response) => {
     try {
-      const xlsx = XLSX.read(req.file?.buffer)
+      const xlsx = XLSX.read(req.file?.buffer);
 
-      const missingSheets = []
+      const missingSheets = [];
       const sheets = xlsx.SheetNames;
       if (!sheets.includes("Dataset")) {
-        missingSheets.push("Dataset")
+        missingSheets.push("Dataset");
       }
       if (!sheets.includes("DataService")) {
-        missingSheets.push("DataService")
+        missingSheets.push("DataService");
       }
       if (missingSheets.length > 0) {
-        return res.render("../views/publisher/bad_spreadsheet.njk",
-          { missingSheets: missingSheets.join(", ") }
-        )
+        return res.render("../views/publisher/bad_spreadsheet.njk", {
+          missingSheets: missingSheets.join(", "),
+        });
       }
 
-      const datasetCSV = XLSX.utils.sheet_to_csv(xlsx.Sheets["Dataset"], { blankrows: false })
-      const datasetBuffer = Buffer.from(datasetCSV, 'utf8')
+      const datasetCSV = XLSX.utils.sheet_to_csv(xlsx.Sheets["Dataset"], {
+        blankrows: false,
+      });
+      const datasetBuffer = Buffer.from(datasetCSV, "utf8");
 
-      const dataserviceCSV = XLSX.utils.sheet_to_csv(xlsx.Sheets["DataService"], { blankrows: false })
-      const dataServiceBuffer = Buffer.from(dataserviceCSV, 'utf8')
+      const dataserviceCSV = XLSX.utils.sheet_to_csv(
+        xlsx.Sheets["DataService"],
+        { blankrows: false },
+      );
+      const dataServiceBuffer = Buffer.from(dataserviceCSV, "utf8");
 
       const fd = new FormData();
       fd.append("datasets", datasetBuffer, { filename: "datasets.csv" });
@@ -108,7 +121,10 @@ router.post(
 
       const errs = response.data.errors;
       const data = response.data.data;
-      const accessControlResults = await checkPermissionToAdd(data, req.cookies.jwtToken);
+      const accessControlResults = await checkPermissionToAdd(
+        data,
+        req.cookies.jwtToken,
+      );
       const allErrs = accessControlResults.errors.concat(errs);
       req.session.uploadData = accessControlResults.data;
       req.session.uploadErrors = allErrs;
@@ -122,7 +138,7 @@ router.post(
 
 router.get("/csv/upload/error", async (req: Request, res: Response) => {
   res.render("../views/publisher/total_error.njk");
-})
+});
 
 function errorSummaryMessage(err: UploadError): string {
   let msg: string = err.message;
@@ -148,13 +164,13 @@ router.get("/csv/upload-summary", async (req: Request, res: Response) => {
   });
   if (fileErrors.length > 0) {
     res.render("../views/publisher/file_error.njk", {
-      errors: fileErrors
+      errors: fileErrors,
     });
   } else {
     const uploadSummaries = data.map((dataset, index) => ({
       link: `/publish/csv/preview/${index}`,
       linkText: dataset.title,
-      assetType: dataset.type
+      assetType: dataset.type,
     }));
     const errorSummaries = rowErrors.map((err, index) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -163,7 +179,7 @@ router.get("/csv/upload-summary", async (req: Request, res: Response) => {
         link: `/publish/csv/error/${index}`,
         linkText: input_data.title || err.location,
         assetType: input_data.type || "Undefined",
-        msg: errorSummaryMessage(err)
+        msg: errorSummaryMessage(err),
       };
     });
     const hasErrors: boolean = errors.length > 0;
@@ -172,9 +188,9 @@ router.get("/csv/upload-summary", async (req: Request, res: Response) => {
       uploadSummaries,
       errorSummaries,
       hasErrors,
-      filename: req.session.uploadFilename
+      filename: req.session.uploadFilename,
     });
-  };
+  }
 });
 
 router.get("/csv/preview/:assetIndex", async (req: Request, res: Response) => {
@@ -186,13 +202,12 @@ router.get("/csv/preview/:assetIndex", async (req: Request, res: Response) => {
 
   const dataset = req.session.uploadData[assetIndex];
 
-  console.log("/publish/csv/preview specific asset", dataset)
   if (!dataset) {
     return res.status(404).send("Asset not found");
   }
 
   res.render("../views/publisher/preview.njk", {
-    dataset
+    dataset,
   });
 });
 
@@ -200,7 +215,9 @@ router.get("/csv/error/:errorIndex", async (req: Request, res: Response) => {
   const errorIndex = Number(req.params.errorIndex);
 
   if (!req.session.uploadErrors) {
-    return res.status(400).send("Data is not available - please return to home screen");
+    return res
+      .status(400)
+      .send("Data is not available - please return to home screen");
   }
 
   const assetErr = req.session.uploadErrors[errorIndex];
@@ -210,7 +227,7 @@ router.get("/csv/error/:errorIndex", async (req: Request, res: Response) => {
   }
 
   res.render("../views/publisher/asset-error.njk", {
-    assetErr
+    assetErr,
   });
 });
 

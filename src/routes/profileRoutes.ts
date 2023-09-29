@@ -3,6 +3,7 @@ import { ApiUser } from "../models/apiUser";
 import axios from "axios";
 import { Organisation } from "../models/dataModels";
 import { apiUser } from "../middleware/apiMiddleware";
+import { ShareRequestTable } from "../types/express";
 
 const router = express.Router();
 const API = `${process.env.API_ENDPOINT}`;
@@ -15,19 +16,35 @@ router.get(
       return res.redirect("/error");
     }
 
-    const profileTableRows = [
-      [{ text: "Name" }, { text: req.user.display_name }],
-      [{ text: "Email" }, { text: req.user.email }],
+    const profileTableRows: ShareRequestTable = [
+      [
+        { text: "Name", classes: "govuk-!-width-one-quarter" },
+        { text: req.user.display_name },
+      ],
+      [
+        { text: "Email", classes: "govuk-!-width-one-quarter" },
+        { text: req.user.email },
+      ],
     ];
 
     if (req.user.organisation) {
       profileTableRows.push([
-        { text: "Organisation" },
+        { text: "Organisation", classes: "govuk-!-width-one-quarter" },
         { text: req.user.organisation.title },
       ]);
       profileTableRows.push([
-        { text: "Primary skill" },
+        { text: "Primary skill", classes: "govuk-!-width-one-quarter" },
         { text: req.user.jobTitle! },
+      ]);
+
+      const permissions = req.user.permission.map(
+        (p) => `<span class=govuk-tag>${p}</span>`,
+      );
+      const permissionsRow =
+        permissions.length > 0 ? permissions.join(" ") : "None";
+      profileTableRows.push([
+        { text: "Permissions", classes: "govuk-!-width-one-quarter" },
+        { html: permissionsRow },
       ]);
     }
 
