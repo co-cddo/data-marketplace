@@ -212,7 +212,7 @@ router.get(
 const reviewRequestAbacMiddleware = createAbacMiddleware(
   "organisation",
   "REVIEW_SHARE_REQUESTS",
-  "review share requests",
+  "review data share requests",
 );
 
 router.get(
