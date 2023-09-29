@@ -36,7 +36,7 @@ router.get(
       );
       const permissionsRow =
         permissions.length > 0 ? permissions.join(" ") : "None";
-      profileTableRows.push([{ text: "Permission" }, { html: permissionsRow }]);
+      profileTableRows.push([{ text: "Permissions" }, { html: permissionsRow }]);
     }
 
     res.render("profile.njk", {
