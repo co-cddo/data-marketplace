@@ -22,7 +22,8 @@ jest.mock("../src/middleware/authMiddleware", () => ({
         email_verified: true,
         organisation: null,
         user_id: null,
-        jobTitle: null
+        jobTitle: null,
+        permission: []
       };
       next();
     },
