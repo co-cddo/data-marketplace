@@ -1,0 +1,26 @@
+{% extends "page.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">Sign in to the Data Marketplace</h1>
+    <p class="govuk-body">Access the Data Marketplace through your <a class="govuk-link" href="https://www.gov.uk/">gov.uk</a> email single sign on, backed by Microsoft or Google.</p>
+    <p class="govuk-body">You'll go through your standard multi-factor authentication process for signing in with your government email address.</p>
+    {{ govukCheckboxes({
+    name: "consent",
+    items: [
+        {
+        value: "consent",
+        text: "Do not show this message again"
+        }   
+    ]
+    }) }}
+    {{ govukButton({
+        text: "Save and continue"
+    }) }}
+</div>
+
+{% endblock %}
