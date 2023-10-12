@@ -21,7 +21,8 @@ const publishDataAbacMiddleware = createAbacMiddleware(
 router.use(publishDataAbacMiddleware);
 
 router.get("/publish-dashboard", async (req: Request, res: Response) => {
-  res.render("../views/publisher/publish-dashboard.njk");
+  res.render("../views/publisher/publish-dashboard.njk",
+    { organisation: req.user.organisation?.title });
 });
 
 router.get("/csv/start", async (req: Request, res: Response) => {
