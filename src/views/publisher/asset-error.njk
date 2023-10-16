@@ -1,8 +1,8 @@
 {% extends "page.njk" %}
 
 {% block content %}
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-full">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
       <h2 class="govuk-heading-xl">Asset error detail</h2>
       <dl class="govuk-summary-list">
         <div class="govuk-summary-list__row">
@@ -27,23 +27,27 @@
             </tr>
           </thead>
           <tbody class="govuk-table__body">
-              {% for suberr in assetErr.sub_errors %}
-                <tr class="govuk-table__row">
-                  <td class="govuk-table__cell">
-                      {{ suberr.location }}
-                  </td>
-                  <td class="govuk-table__cell">
-                      {{ suberr.value }}
-                  </td>
-                  <td class="govuk-table__cell">
-                      {{ suberr.message }}
+            {% for suberr in assetErr.sub_errors %}
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">
+                  {{ suberr.location }}
+                </td>
+                <td class="govuk-table__cell">
+                  {{ suberr.value }}
+                </td>
+                <td class="govuk-table__cell">
+                  {{ suberr.message | safe }}
+                  {% if suberr.extras["valid_options"] | length %}
+                    <br/>
+                    Valid options: {{suberr.extras["valid_options"]}}.
+                    {% endif%}
                   </td>
                 </tr>
               {% endfor %}
-          </tbody>
-        </table>
-      {% endif %}
-  </div>
-</div>
+            </tbody>
+          </table>
+        {% endif %}
+      </div>
+    </div>
 
-{% endblock %}
+  {% endblock %}
