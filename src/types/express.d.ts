@@ -229,7 +229,7 @@ declare module "express-serve-static-core" {
 }
 
 type NestedJSON = {
-  [key: string]: NestedJSON | string | number | boolean | null;
+  [key: string]: NestedJSON | string | string[] | number | boolean | null;
 };
 
 export type UploadError = {
@@ -240,12 +240,61 @@ export type UploadError = {
   sub_errors: UploadError[] | null;
 };
 
+export type UploadedAsset = {
+  title: string;
+  alternativeTitle: string;
+  description: string;
+  summary: string;
+  keyword: string[];
+  theme: string[];
+  contactPoint: {
+    name: string;
+    email: string;
+  };
+  organisationID: string;
+  creatorID: string;
+  version: string;
+  issued: string;
+  modified: string;
+  created: string;
+  licence: string;
+  accessRights: string;
+  securityClassification: string;
+  externalIdentifier: string;
+  relatedAssets: string[];
+  type: string;
+}
+
+export type UploadedDistribution = {
+  title: string;
+  mediaType: string;
+  licence: string;
+  modified: string;
+  accessService: string;
+  externalIdentifier: string;
+  issued: string;
+  byteSize: string;
+}
+
+export type UploadedDataset = UploadedAsset & {
+  updateFrequency: string;
+  distributions: UploadedDistribution[];
+}
+
+export type UploadedDataService = UploadedAsset & {
+  endpointDescription: string;
+  endpointURL: string
+  servesDataset: string[];
+  serviceStatus: string;
+  serviceType: string;
+}
+
 declare module "express-session" {
   interface SessionData {
     acquirerForms: Record<string, FormData>;
     backLink: string;
     formErrors: { [key: string]: { text: string } };
-    uploadData: NestedJSON[];
+    uploadData: Array<UploadedDataset | UploadedDataService>;
     uploadErrors: UploadError[];
     uploadFilename: string;
     profileErrors: { [key: string]: { text: string } };

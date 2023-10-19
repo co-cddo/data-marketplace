@@ -1,10 +1,12 @@
 import express, { Request, Response } from "express";
 import multer from "multer";
-import { NestedJSON, UploadError } from "../types/express";
+import { NestedJSON, UploadError, UploadedDataService, UploadedDataset, UploadedDistribution } from "../types/express";
 import axios from "axios";
 import FormData from "form-data";
 import * as XLSX from "xlsx";
 import { createAbacMiddleware } from "../middleware/ABACMiddleware";
+import * as _ from "lodash";
+import { formatDate } from "../helperFunctions/stringHelpers";
 
 const upload = multer();
 const verifyUrl = `${process.env.API_ENDPOINT}/publish/verify`;
@@ -33,9 +35,9 @@ router.get("/csv/upload", async (req: Request, res: Response) => {
   res.render("../views/publisher/csv_upload.njk");
 });
 
-async function checkPermissionToAdd(assets: NestedJSON[], jwt: string) {
+async function checkPermissionToAdd(assets: Array<UploadedDataset | UploadedDataService>, jwt: string) {
   const errs: UploadError[] = [];
-  const validAssets: NestedJSON[] = [];
+  const validAssets: Array<UploadedDataset | UploadedDataService> = [];
 
   await Promise.all(
     assets.map(async (asset) => {
@@ -168,7 +170,7 @@ router.get("/csv/upload-summary", async (req: Request, res: Response) => {
       errors: fileErrors,
     });
   } else {
-    const uploadSummaries = data.map((dataset, index) => ({
+    const uploadSummaries = (data as NestedJSON[]).map((dataset, index) => ({
       link: `/publish/csv/preview/${index}`,
       linkText: dataset.title,
       assetType: dataset.type,
@@ -194,6 +196,108 @@ router.get("/csv/upload-summary", async (req: Request, res: Response) => {
   }
 });
 
+type UploadDescriptionRow = {
+  key: {
+    text: string
+  },
+  value: {
+    text?: string;
+    html?: string
+  }
+}
+
+type rowSpecType = {
+  name: string;
+  op?: string;
+  nested?: Array<{ name: string; path: string }>
+  formatter?: Function;
+}
+const datasetRowSpec = new Map<keyof UploadedDataset, rowSpecType>()
+datasetRowSpec.set('title', { name: "Title" })
+datasetRowSpec.set('alternativeTitle', { name: "Alternative titles", op: "join" })
+datasetRowSpec.set('description', { name: "Description" })
+datasetRowSpec.set('summary', { name: "Summary" })
+datasetRowSpec.set('keyword', { name: "Keywords", op: "join" })
+datasetRowSpec.set('theme', { name: "Themes", op: "join" })
+datasetRowSpec.set('contactPoint', { name: "Point of contact", op: "nest", nested: [{ name: "Name: ", path: "contactPoint.name" }, { name: "Email: ", path: "contactPoint.email" }] })
+datasetRowSpec.set('organisationID', { name: "Publisher" })
+datasetRowSpec.set('creatorID', { name: "Creator" })
+datasetRowSpec.set('version', { name: "Version" })
+datasetRowSpec.set('issued', { name: "Date issued", op: "format", formatter: formatDate })
+datasetRowSpec.set('modified', { name: "Date modified", op: "format", formatter: formatDate })
+datasetRowSpec.set('created', { name: "Date created", op: "format", formatter: formatDate })
+datasetRowSpec.set('updateFrequency', { name: "Update frequency" })
+datasetRowSpec.set('licence', { name: "Licence" })
+datasetRowSpec.set('accessRights', { name: "Access rights" })
+datasetRowSpec.set('securityClassification', { name: "Security classification" })
+datasetRowSpec.set('externalIdentifier', { name: "Existing identifier" })
+datasetRowSpec.set('relatedAssets', { name: "Related data", op: "join" })
+
+const distributionRowSpec = new Map<keyof UploadedDistribution, rowSpecType>()
+distributionRowSpec.set('title', { name: "Title" })
+distributionRowSpec.set('accessService', { name: "Access service" })
+distributionRowSpec.set('externalIdentifier', { name: "Existing identifier" })
+distributionRowSpec.set('modified', { name: "Date modified", op: "format", formatter: formatDate })
+distributionRowSpec.set('issued', { name: "Date issued", op: "format", formatter: formatDate })
+distributionRowSpec.set('licence', { name: "Licence" })
+distributionRowSpec.set('byteSize', { name: "Size in bytes" })
+distributionRowSpec.set('mediaType', { name: "Media type" })
+
+const dataServiceRowSpec = new Map<keyof UploadedDataService, rowSpecType>()
+dataServiceRowSpec.set('title', { name: "Title" })
+dataServiceRowSpec.set('alternativeTitle', { name: "Alternative titles", op: "join" })
+dataServiceRowSpec.set('description', { name: "Description" })
+dataServiceRowSpec.set('summary', { name: "Summary" })
+dataServiceRowSpec.set('keyword', { name: "Keywords", op: "join" })
+dataServiceRowSpec.set('theme', { name: "Themes", op: "join" })
+dataServiceRowSpec.set('contactPoint', { name: "Point of contact", op: "nest", nested: [{ name: "Name: ", path: "contactPoint.name" }, { name: "Email: ", path: "contactPoint.email" }] })
+dataServiceRowSpec.set('organisationID', { name: "Publisher" })
+dataServiceRowSpec.set('creatorID', { name: "Creator" })
+dataServiceRowSpec.set('version', { name: "Version" })
+dataServiceRowSpec.set('issued', { name: "Date issued", op: "format", formatter: formatDate })
+dataServiceRowSpec.set('modified', { name: "Date modified", op: "format", formatter: formatDate })
+dataServiceRowSpec.set('created', { name: "Date created", op: "format", formatter: formatDate })
+dataServiceRowSpec.set('licence', { name: "Licence" })
+dataServiceRowSpec.set('accessRights', { name: "Access rights" })
+dataServiceRowSpec.set('securityClassification', { name: "Security classification" })
+dataServiceRowSpec.set('externalIdentifier', { name: "Existing identifier" })
+dataServiceRowSpec.set('relatedAssets', { name: "Related data", op: "join" })
+dataServiceRowSpec.set('serviceType', { name: "Service type" })
+dataServiceRowSpec.set('serviceStatus', { name: "Service status" })
+dataServiceRowSpec.set('endpointURL', { name: "Endpoint URL" })
+dataServiceRowSpec.set('endpointDescription', { name: "Endpoint description" })
+dataServiceRowSpec.set('servesDataset', { name: "Serves data", op: "join" })
+
+function rowValues<T>(rowSpec: Map<keyof T, rowSpecType>, dataset: T): UploadDescriptionRow[] {
+  const assetRows: UploadDescriptionRow[] = []
+
+  for (const [rowId, spec] of rowSpec) {
+    let value;
+    const data = dataset[rowId] || ""
+    if (spec["op"] === "join") {
+      const vals = data as string[]
+      value = { text: vals.join(", ") }
+    } else if (spec["op"] === "nest") {
+      let val = '<ul class="govuk-list">'
+      for (const nestedObj of spec["nested"]!) {
+        val += `<li><strong>${nestedObj["name"]}</strong>${_.get(dataset, nestedObj["path"])}</li>`
+      }
+      val += '<ul>'
+      value = { html: val }
+    } else if (spec["op"] === 'format') {
+      value = { text: spec["formatter"] ? spec["formatter"](data) : data }
+    } else {
+      value = { text: data }
+    }
+
+    assetRows.push({
+      key: { text: spec["name"] },
+      value: value
+    })
+  }
+  return assetRows
+}
+
 router.get("/csv/preview/:assetIndex", async (req: Request, res: Response) => {
   const assetIndex = Number(req.params.assetIndex);
 
@@ -201,14 +305,32 @@ router.get("/csv/preview/:assetIndex", async (req: Request, res: Response) => {
     return res.status(400).send("Invalid asset ID or data is not available");
   }
 
-  const dataset = req.session.uploadData[assetIndex];
-
+  let dataset = req.session.uploadData[assetIndex];
   if (!dataset) {
     return res.status(404).send("Asset not found");
   }
 
+  let assetRows: UploadDescriptionRow[] = []
+  let distributionRows: UploadDescriptionRow[][] = []
+  let title = "";
+
+  if (dataset.type === 'Dataset') {
+    title = "Dataset"
+    const d = dataset as UploadedDataset
+    assetRows = rowValues<UploadedDataset>(datasetRowSpec, d)
+    for (const distribution of d["distributions"]) {
+      distributionRows.push(rowValues<UploadedDistribution>(distributionRowSpec, distribution))
+    }
+  } else {
+    title = "Data Service"
+    const d = dataset as UploadedDataService
+    assetRows = rowValues<UploadedDataService>(dataServiceRowSpec, d)
+  }
+
   res.render("../views/publisher/preview.njk", {
-    dataset,
+    title,
+    assetRows,
+    distributionRows
   });
 });
 
