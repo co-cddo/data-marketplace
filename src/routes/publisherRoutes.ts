@@ -1,6 +1,12 @@
 import express, { Request, Response } from "express";
 import multer from "multer";
-import { NestedJSON, UploadError, UploadedDataService, UploadedDataset, UploadedDistribution } from "../types/express";
+import {
+  NestedJSON,
+  UploadError,
+  UploadedDataService,
+  UploadedDataset,
+  UploadedDistribution,
+} from "../types/express";
 import axios from "axios";
 import FormData from "form-data";
 import * as XLSX from "xlsx";
@@ -23,8 +29,9 @@ const publishDataAbacMiddleware = createAbacMiddleware(
 router.use(publishDataAbacMiddleware);
 
 router.get("/publish-dashboard", async (req: Request, res: Response) => {
-  res.render("../views/publisher/publish-dashboard.njk",
-    { organisation: req.user.organisation?.title });
+  res.render("../views/publisher/publish-dashboard.njk", {
+    organisation: req.user.organisation?.title,
+  });
 });
 
 router.get("/csv/start", async (req: Request, res: Response) => {
@@ -35,7 +42,10 @@ router.get("/csv/upload", async (req: Request, res: Response) => {
   res.render("../views/publisher/csv_upload.njk");
 });
 
-async function checkPermissionToAdd(assets: Array<UploadedDataset | UploadedDataService>, jwt: string) {
+async function checkPermissionToAdd(
+  assets: Array<UploadedDataset | UploadedDataService>,
+  jwt: string,
+) {
   const errs: UploadError[] = [];
   const validAssets: Array<UploadedDataset | UploadedDataService> = [];
 
@@ -198,104 +208,167 @@ router.get("/csv/upload-summary", async (req: Request, res: Response) => {
 
 type UploadDescriptionRow = {
   key: {
-    text: string
-  },
+    text: string;
+  };
   value: {
     text?: string;
-    html?: string
-  }
-}
+    html?: string;
+  };
+};
 
 type rowSpecType = {
   name: string;
   op?: string;
-  nested?: Array<{ name: string; path: string }>
+  nested?: Array<{ name: string; path: string }>;
+  // eslint-disable-next-line
   formatter?: Function;
-}
-const datasetRowSpec = new Map<keyof UploadedDataset, rowSpecType>()
-datasetRowSpec.set('title', { name: "Title" })
-datasetRowSpec.set('alternativeTitle', { name: "Alternative titles", op: "join" })
-datasetRowSpec.set('description', { name: "Description" })
-datasetRowSpec.set('summary', { name: "Summary" })
-datasetRowSpec.set('keyword', { name: "Keywords", op: "join" })
-datasetRowSpec.set('theme', { name: "Themes", op: "join" })
-datasetRowSpec.set('contactPoint', { name: "Point of contact", op: "nest", nested: [{ name: "Name: ", path: "contactPoint.name" }, { name: "Email: ", path: "contactPoint.email" }] })
-datasetRowSpec.set('organisationID', { name: "Publisher" })
-datasetRowSpec.set('creatorID', { name: "Creator" })
-datasetRowSpec.set('version', { name: "Version" })
-datasetRowSpec.set('issued', { name: "Date issued", op: "format", formatter: formatDate })
-datasetRowSpec.set('modified', { name: "Date modified", op: "format", formatter: formatDate })
-datasetRowSpec.set('created', { name: "Date created", op: "format", formatter: formatDate })
-datasetRowSpec.set('updateFrequency', { name: "Update frequency" })
-datasetRowSpec.set('licence', { name: "Licence" })
-datasetRowSpec.set('accessRights', { name: "Access rights" })
-datasetRowSpec.set('securityClassification', { name: "Security classification" })
-datasetRowSpec.set('externalIdentifier', { name: "Existing identifier" })
-datasetRowSpec.set('relatedAssets', { name: "Related data", op: "join" })
+};
+const datasetRowSpec = new Map<keyof UploadedDataset, rowSpecType>();
+datasetRowSpec.set("title", { name: "Title" });
+datasetRowSpec.set("alternativeTitle", {
+  name: "Alternative titles",
+  op: "join",
+});
+datasetRowSpec.set("description", { name: "Description" });
+datasetRowSpec.set("summary", { name: "Summary" });
+datasetRowSpec.set("keyword", { name: "Keywords", op: "join" });
+datasetRowSpec.set("theme", { name: "Themes", op: "join" });
+datasetRowSpec.set("contactPoint", {
+  name: "Point of contact",
+  op: "nest",
+  nested: [
+    { name: "Name: ", path: "contactPoint.name" },
+    { name: "Email: ", path: "contactPoint.email" },
+  ],
+});
+datasetRowSpec.set("organisationID", { name: "Publisher" });
+datasetRowSpec.set("creatorID", { name: "Creator" });
+datasetRowSpec.set("version", { name: "Version" });
+datasetRowSpec.set("issued", {
+  name: "Date issued",
+  op: "format",
+  formatter: formatDate,
+});
+datasetRowSpec.set("modified", {
+  name: "Date modified",
+  op: "format",
+  formatter: formatDate,
+});
+datasetRowSpec.set("created", {
+  name: "Date created",
+  op: "format",
+  formatter: formatDate,
+});
+datasetRowSpec.set("updateFrequency", { name: "Update frequency" });
+datasetRowSpec.set("licence", { name: "Licence" });
+datasetRowSpec.set("accessRights", { name: "Access rights" });
+datasetRowSpec.set("securityClassification", {
+  name: "Security classification",
+});
+datasetRowSpec.set("externalIdentifier", { name: "Existing identifier" });
+datasetRowSpec.set("relatedAssets", { name: "Related data", op: "join" });
 
-const distributionRowSpec = new Map<keyof UploadedDistribution, rowSpecType>()
-distributionRowSpec.set('title', { name: "Title" })
-distributionRowSpec.set('accessService', { name: "Access service" })
-distributionRowSpec.set('externalIdentifier', { name: "Existing identifier" })
-distributionRowSpec.set('modified', { name: "Date modified", op: "format", formatter: formatDate })
-distributionRowSpec.set('issued', { name: "Date issued", op: "format", formatter: formatDate })
-distributionRowSpec.set('licence', { name: "Licence" })
-distributionRowSpec.set('byteSize', { name: "Size in bytes" })
-distributionRowSpec.set('mediaType', { name: "Media type" })
+const distributionRowSpec = new Map<keyof UploadedDistribution, rowSpecType>();
+distributionRowSpec.set("title", { name: "Title" });
+distributionRowSpec.set("accessService", { name: "Access service" });
+distributionRowSpec.set("externalIdentifier", { name: "Existing identifier" });
+distributionRowSpec.set("modified", {
+  name: "Date modified",
+  op: "format",
+  formatter: formatDate,
+});
+distributionRowSpec.set("issued", {
+  name: "Date issued",
+  op: "format",
+  formatter: formatDate,
+});
+distributionRowSpec.set("licence", { name: "Licence" });
+distributionRowSpec.set("byteSize", { name: "Size in bytes" });
+distributionRowSpec.set("mediaType", { name: "Media type" });
 
-const dataServiceRowSpec = new Map<keyof UploadedDataService, rowSpecType>()
-dataServiceRowSpec.set('title', { name: "Title" })
-dataServiceRowSpec.set('alternativeTitle', { name: "Alternative titles", op: "join" })
-dataServiceRowSpec.set('description', { name: "Description" })
-dataServiceRowSpec.set('summary', { name: "Summary" })
-dataServiceRowSpec.set('keyword', { name: "Keywords", op: "join" })
-dataServiceRowSpec.set('theme', { name: "Themes", op: "join" })
-dataServiceRowSpec.set('contactPoint', { name: "Point of contact", op: "nest", nested: [{ name: "Name: ", path: "contactPoint.name" }, { name: "Email: ", path: "contactPoint.email" }] })
-dataServiceRowSpec.set('organisationID', { name: "Publisher" })
-dataServiceRowSpec.set('creatorID', { name: "Creator" })
-dataServiceRowSpec.set('version', { name: "Version" })
-dataServiceRowSpec.set('issued', { name: "Date issued", op: "format", formatter: formatDate })
-dataServiceRowSpec.set('modified', { name: "Date modified", op: "format", formatter: formatDate })
-dataServiceRowSpec.set('created', { name: "Date created", op: "format", formatter: formatDate })
-dataServiceRowSpec.set('licence', { name: "Licence" })
-dataServiceRowSpec.set('accessRights', { name: "Access rights" })
-dataServiceRowSpec.set('securityClassification', { name: "Security classification" })
-dataServiceRowSpec.set('externalIdentifier', { name: "Existing identifier" })
-dataServiceRowSpec.set('relatedAssets', { name: "Related data", op: "join" })
-dataServiceRowSpec.set('serviceType', { name: "Service type" })
-dataServiceRowSpec.set('serviceStatus', { name: "Service status" })
-dataServiceRowSpec.set('endpointURL', { name: "Endpoint URL" })
-dataServiceRowSpec.set('endpointDescription', { name: "Endpoint description" })
-dataServiceRowSpec.set('servesDataset', { name: "Serves data", op: "join" })
+const dataServiceRowSpec = new Map<keyof UploadedDataService, rowSpecType>();
+dataServiceRowSpec.set("title", { name: "Title" });
+dataServiceRowSpec.set("alternativeTitle", {
+  name: "Alternative titles",
+  op: "join",
+});
+dataServiceRowSpec.set("description", { name: "Description" });
+dataServiceRowSpec.set("summary", { name: "Summary" });
+dataServiceRowSpec.set("keyword", { name: "Keywords", op: "join" });
+dataServiceRowSpec.set("theme", { name: "Themes", op: "join" });
+dataServiceRowSpec.set("contactPoint", {
+  name: "Point of contact",
+  op: "nest",
+  nested: [
+    { name: "Name: ", path: "contactPoint.name" },
+    { name: "Email: ", path: "contactPoint.email" },
+  ],
+});
+dataServiceRowSpec.set("organisationID", { name: "Publisher" });
+dataServiceRowSpec.set("creatorID", { name: "Creator" });
+dataServiceRowSpec.set("version", { name: "Version" });
+dataServiceRowSpec.set("issued", {
+  name: "Date issued",
+  op: "format",
+  formatter: formatDate,
+});
+dataServiceRowSpec.set("modified", {
+  name: "Date modified",
+  op: "format",
+  formatter: formatDate,
+});
+dataServiceRowSpec.set("created", {
+  name: "Date created",
+  op: "format",
+  formatter: formatDate,
+});
+dataServiceRowSpec.set("licence", { name: "Licence" });
+dataServiceRowSpec.set("accessRights", { name: "Access rights" });
+dataServiceRowSpec.set("securityClassification", {
+  name: "Security classification",
+});
+dataServiceRowSpec.set("externalIdentifier", { name: "Existing identifier" });
+dataServiceRowSpec.set("relatedAssets", { name: "Related data", op: "join" });
+dataServiceRowSpec.set("serviceType", { name: "Service type" });
+dataServiceRowSpec.set("serviceStatus", { name: "Service status" });
+dataServiceRowSpec.set("endpointURL", { name: "Endpoint URL" });
+dataServiceRowSpec.set("endpointDescription", { name: "Endpoint description" });
+dataServiceRowSpec.set("servesDataset", { name: "Serves data", op: "join" });
 
-function rowValues<T>(rowSpec: Map<keyof T, rowSpecType>, dataset: T): UploadDescriptionRow[] {
-  const assetRows: UploadDescriptionRow[] = []
+function rowValues<T>(
+  rowSpec: Map<keyof T, rowSpecType>,
+  dataset: T,
+): UploadDescriptionRow[] {
+  const assetRows: UploadDescriptionRow[] = [];
 
   for (const [rowId, spec] of rowSpec) {
     let value;
-    const data = dataset[rowId] || ""
+    const data = dataset[rowId] || "";
     if (spec["op"] === "join") {
-      const vals = data as string[]
-      value = { text: vals.join(", ") }
+      const vals = data as string[];
+      value = { text: vals.join(", ") };
     } else if (spec["op"] === "nest") {
-      let val = '<ul class="govuk-list">'
+      let val = '<ul class="govuk-list">';
       for (const nestedObj of spec["nested"]!) {
-        val += `<li><strong>${nestedObj["name"]}</strong>${_.get(dataset, nestedObj["path"])}</li>`
+        val += `<li><strong>${nestedObj["name"]}</strong>${_.get(
+          dataset,
+          nestedObj["path"],
+        )}</li>`;
       }
-      val += '<ul>'
-      value = { html: val }
-    } else if (spec["op"] === 'format') {
-      value = { text: spec["formatter"] ? spec["formatter"](data) : data }
+      val += "<ul>";
+      value = { html: val };
+    } else if (spec["op"] === "format") {
+      value = { text: spec["formatter"] ? spec["formatter"](data) : data };
     } else {
-      value = { text: data }
+      value = { text: data };
     }
 
     assetRows.push({
       key: { text: spec["name"] },
-      value: value
-    })
+      value: value,
+    });
   }
-  return assetRows
+  return assetRows;
 }
 
 router.get("/csv/preview/:assetIndex", async (req: Request, res: Response) => {
@@ -305,32 +378,34 @@ router.get("/csv/preview/:assetIndex", async (req: Request, res: Response) => {
     return res.status(400).send("Invalid asset ID or data is not available");
   }
 
-  let dataset = req.session.uploadData[assetIndex];
+  const dataset = req.session.uploadData[assetIndex];
   if (!dataset) {
     return res.status(404).send("Asset not found");
   }
 
-  let assetRows: UploadDescriptionRow[] = []
-  let distributionRows: UploadDescriptionRow[][] = []
+  let assetRows: UploadDescriptionRow[] = [];
+  const distributionRows: UploadDescriptionRow[][] = [];
   let title = "";
 
-  if (dataset.type === 'Dataset') {
-    title = "Dataset"
-    const d = dataset as UploadedDataset
-    assetRows = rowValues<UploadedDataset>(datasetRowSpec, d)
+  if (dataset.type === "Dataset") {
+    title = "Dataset";
+    const d = dataset as UploadedDataset;
+    assetRows = rowValues<UploadedDataset>(datasetRowSpec, d);
     for (const distribution of d["distributions"]) {
-      distributionRows.push(rowValues<UploadedDistribution>(distributionRowSpec, distribution))
+      distributionRows.push(
+        rowValues<UploadedDistribution>(distributionRowSpec, distribution),
+      );
     }
   } else {
-    title = "Data Service"
-    const d = dataset as UploadedDataService
-    assetRows = rowValues<UploadedDataService>(dataServiceRowSpec, d)
+    title = "Data Service";
+    const d = dataset as UploadedDataService;
+    assetRows = rowValues<UploadedDataService>(dataServiceRowSpec, d);
   }
 
   res.render("../views/publisher/preview.njk", {
     title,
     assetRows,
-    distributionRows
+    distributionRows,
   });
 });
 

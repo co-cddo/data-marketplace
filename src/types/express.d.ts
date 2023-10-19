@@ -263,7 +263,7 @@ export type UploadedAsset = {
   externalIdentifier: string;
   relatedAssets: string[];
   type: string;
-}
+};
 
 export type UploadedDistribution = {
   title: string;
@@ -274,20 +274,20 @@ export type UploadedDistribution = {
   externalIdentifier: string;
   issued: string;
   byteSize: string;
-}
+};
 
 export type UploadedDataset = UploadedAsset & {
   updateFrequency: string;
   distributions: UploadedDistribution[];
-}
+};
 
 export type UploadedDataService = UploadedAsset & {
   endpointDescription: string;
-  endpointURL: string
+  endpointURL: string;
   servesDataset: string[];
   serviceStatus: string;
   serviceType: string;
-}
+};
 
 declare module "express-session" {
   interface SessionData {
