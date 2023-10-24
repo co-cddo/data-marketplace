@@ -148,7 +148,7 @@ router.get("/:resourceID", async (req: Request, res: Response) => {
   if (!resource) {
     return res.render("error.njk", {
       messageTitle: "Data asset error",
-      messageBody: `Data asset with ID ${resourceID} cannot be retrieved. Please contact the system administrator.`
+      messageBody: `Data asset with ID ${resourceID} cannot be retrieved.<br/><br/>Please <a href="https://forms.gle/MgZ5j7T6hXptEATJ7" class="govuk-link">use our feedback form</a> to let us know.`
     })
   }
 
