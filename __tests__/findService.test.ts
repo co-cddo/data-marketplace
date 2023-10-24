@@ -55,7 +55,7 @@ describe("fetchResources", () => {
     expect(axios.get).toHaveBeenCalledWith(
       expect.stringContaining(`/catalogue/${resourceId}`),
     );
-    expect(result.title).toBe("Resource 123");
+    expect(result?.title).toBe("Resource 123");
   });
 
   it("should throw an error when API_ENDPOINT is undefined", async () => {
