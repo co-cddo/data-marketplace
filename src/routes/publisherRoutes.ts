@@ -343,7 +343,15 @@ function rowValues<T>(
 
   for (const [rowId, spec] of rowSpec) {
     let value;
-    const data = dataset[rowId] || "";
+    const data = dataset[rowId];
+    if (!data) {
+      assetRows.push({
+        key: { text: spec["name"] },
+        value: { text: "" },
+      });
+      continue;
+    }
+
     if (spec["op"] === "join") {
       const vals = data as string[];
       value = { text: vals.join(", ") };
