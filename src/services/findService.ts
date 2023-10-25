@@ -36,7 +36,7 @@ export async function fetchResources(
 
 export async function fetchResourceById(
   resourceID: string,
-): Promise<CatalogueItem> {
+): Promise<CatalogueItem | null> {
   const apiUrl = `${process.env.API_ENDPOINT}/catalogue/${resourceID}`;
   if (!process.env.API_ENDPOINT) {
     throw new Error(
@@ -44,11 +44,26 @@ export async function fetchResourceById(
     );
   }
 
-  const response = await axios.get<SingleApiResponse>(apiUrl as string);
+  let response;
+  try {
+    response = await axios.get<SingleApiResponse>(apiUrl as string);
+    if (!response) {
+      return null;
+    }
+
+  } catch (error: unknown) {
+    console.error(`Error fetching resource: ${resourceID}`)
+    if (axios.isAxiosError(error)) {
+      console.error(`Error status: ${error.response?.status}`)
+      console.error("Please check the API logs for details")
+    }
+    return null;
+  }
   const resource = response.data.asset;
 
   if (!resource) {
-    throw new Error("Resource not found.");
+    console.error("Resource not found.");
+    return null;
   }
 
   if (resource.licence) {

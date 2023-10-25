@@ -55,7 +55,7 @@ describe("fetchResources", () => {
     expect(axios.get).toHaveBeenCalledWith(
       expect.stringContaining(`/catalogue/${resourceId}`),
     );
-    expect(result.title).toBe("Resource 123");
+    expect(result?.title).toBe("Resource 123");
   });
 
   it("should throw an error when API_ENDPOINT is undefined", async () => {
@@ -66,13 +66,11 @@ describe("fetchResources", () => {
     );
   });
 
-  it("should throw an error when resource is not found", async () => {
+  it("should return null when resource is not found", async () => {
     process.env.API_ENDPOINT = "https://example.com/my-example-api";
     const resourceId = "456";
     (axios.get as jest.Mock).mockResolvedValue({ data: { asset: null } });
 
-    await expect(fetchResourceById(resourceId)).rejects.toThrow(
-      "Resource not found.",
-    );
+    await expect(fetchResourceById(resourceId)).resolves.toBe(null);
   });
 });

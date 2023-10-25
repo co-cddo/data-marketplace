@@ -145,6 +145,13 @@ router.get("/:resourceID", async (req: Request, res: Response) => {
   const resourceID = req.params.resourceID;
   const resource = await fetchResourceById(resourceID);
 
+  if (!resource) {
+    return res.render("error.njk", {
+      messageTitle: "Data asset error",
+      messageBody: `Data asset with ID ${resourceID} cannot be retrieved.<br/><br/>Please <a href="https://forms.gle/MgZ5j7T6hXptEATJ7" class="govuk-link">use our feedback form</a> to let us know.`
+    })
+  }
+
   if (resource.distributions) {
     resource.distributions.forEach((distribution) => {
       if (distribution.mediaType === "OASIS") {
