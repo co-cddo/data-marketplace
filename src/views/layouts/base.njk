@@ -3,18 +3,18 @@
 {% block pageTitle %}Data Marketplace{% endblock %}
 
 {% block head %}
-    <link href="{{ assetPath }}/stycssles/style.css" rel="stylesheet" />
+  <link href="{{ assetPath }}/stycssles/style.css" rel="stylesheet"/>
 {% endblock %}
 
 {% block header %}
-{% include "../partials/cookieBanner.njk" %}
-{{ govukHeader({
+  {% include "../partials/cookieBanner.njk" %}
+  {{ govukHeader({
   homepageUrl: "https://www.gov.uk",
   serviceName: "Data Marketplace",
   serviceUrl: "/",
   containerClasses: "govuk-width-container"
 }) }}
-{% include "partials/navigation.njk" %}
+  {% include "partials/navigation.njk" %}
   {% if home %}
     <div class="x-govuk-masthead x-govuk-masthead--large">
       <div class="govuk-width-container">
@@ -25,42 +25,43 @@
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-two-thirds-from-desktop">
             <p class="x-govuk-masthead__description govuk-!-margin-bottom-3">
-              A place for people who work in government  organisations, agencies and public bodies to share data.
+              A place for people who work in government organisations, agencies and public bodies to share data.
             </p>
           </div>
         </div>
       </div>
     </div>
-{% else %}
-  <div class="govuk-width-container">
-    {% if not noBackLink %}
-      {% include "partials/phaseBanner.njk" %}
-      {% if pageHistory.length >= 2 %}
-        {% if '?' in pageHistory[pageHistory.length - 2] %}
-          {% set separator = '&' %}
-        {% else %}
-          {% set separator = '?' %}
+  {% else %}
+    <div class="govuk-width-container">
+      {% if not noBackLink %}
+        {% include "partials/phaseBanner.njk" %}
+        {% if pageHistory.length > 0 %}
+          {% set backLinkUrl = pageHistory[pageHistory.length - 1] %}
+          {% if '?' in backLinkUrl %}
+            {% set separator = '&' %}
+          {% else %}
+            {% set separator = '?' %}
+          {% endif %}
+          <a id="history-back-link" class="govuk-back-link" href="{{backLinkUrl}}{{ separator }}fromBack=true">Back</a>
         {% endif %}
-        <a id="history-back-link" class="govuk-back-link" href="{{ pageHistory[pageHistory.length - 2] }}{{ separator }}fromBack=true">Back</a>
-      {% elif pageHistory.length == 1 %}
-        <a id="history-back-link" class="govuk-back-link" href="{{ pageHistory[0] }}?fromBack=true">Back</a>
-      {% else %}
-        <a id="history-back-link" class="govuk-back-link" href="/?fromBack=true">Back</a>
       {% endif %}
-    {% endif %}
-  </div>
-{% endif %}
+    </div>
+  {% endif %}
 
 {% endblock %}
 
 {% block bodyEnd %}
-  {{ super() }}  
-    <script src="{{ assetPath }}/gov/all.js" type="text/javascript"></script>
-    <script src="{{ assetPath }}/javascripts/backLink.js" type="text/javascript"></script>
-    <script src="{{ assetPath }}/javascripts/cookies.js" defer></script>
-    <script>window.GOVUKFrontend.initAll()</script>
+  {{ super() }}
+  <script src="{{ assetPath }}/gov/all.js" type="text/javascript"></script>
+  {# <script src="{{ assetPath }}/javascripts/backLink.js" type="text/javascript"></script> #}
+  <script src="{{ assetPath }}/javascripts/cookies.js" defer></script>
+  <script>
+    window
+      .GOVUKFrontend
+      .initAll()
+  </script>
 {% endblock %}
 
 {% block footer %}
   {% include "../partials/footer.njk" %}
-{% endblock%}
+  {% endblock%}
