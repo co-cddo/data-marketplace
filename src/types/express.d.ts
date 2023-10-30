@@ -306,6 +306,7 @@ declare module "express-session" {
     decisionErrors: { [key: string]: { text: string } };
     decision: { status: string; notes: string };
     formValuesValidationError: RequestBody;
+    previousUrl: string;
     pageHistory: string[];
     returnTo: string;
   }

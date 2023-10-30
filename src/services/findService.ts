@@ -50,12 +50,11 @@ export async function fetchResourceById(
     if (!response) {
       return null;
     }
-
   } catch (error: unknown) {
-    console.error(`Error fetching resource: ${resourceID}`)
+    console.error(`Error fetching resource: ${resourceID}`);
     if (axios.isAxiosError(error)) {
-      console.error(`Error status: ${error.response?.status}`)
-      console.error("Please check the API logs for details")
+      console.error(`Error status: ${error.response?.status}`);
+      console.error("Please check the API logs for details");
     }
     return null;
   }
