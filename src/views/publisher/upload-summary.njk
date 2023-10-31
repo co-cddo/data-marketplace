@@ -4,119 +4,128 @@
 
 <table class="govuk-table">
 
- {% block content %}
-<div class="govuk-grid-row">
-  <h1 class="govuk-heading-xl">Upload summary</h1>
-
-   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-      <p class="govuk-body">File: <strong>{{filename}}</strong></p>
-    {% if hasErrors %}
-    <div class="govuk-error-summary" data-module="govuk-error-summary">
-      <div role="alert">
-        <p class="govuk-body">There are errors with some of your data asset descriptions, please review and upload an amended file</p>
-      </div>
-    </div>
-    {% else %}
-        <p class="govuk-body">All data asset descriptions passed validation. Review the records to ensure that they are correct. If you are happy then click Publish otherwise click on upload new CSV file.</p>
-    {% endif %}
-    </div>
-    <div class="govuk-grid-column-one-third">
-      <div class="gem-c-contextual-sidebar">
-        <div class="gem-c-related-navigation">
-          <h2 id="learnLinks" class="gem-c-related-navigation__main-heading">
+  {% block content %}
+    <div class="govuk-grid-row">
+      <h1 class="govuk-heading-xl">Upload summary</h1>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+          <p class="govuk-body">File: <strong>{{filename}}</strong>
+          </p>
+          {% if (uploadSummaries | length) 
+            or(errorSummaries | length) %}
+            {% if hasErrors %}
+              <div class="govuk-error-summary govuk-body" data-module="govuk-error-summary">
+                <div role="alert">
+                  There are errors with some of your data asset descriptions, please review and upload an amended file
+                </div>
+              </div>
+            {% else %}
+              <p class="govuk-body">All data descriptions passed validation. Review the records to ensure that they are correct. If you are happy then click Publish otherwise click on upload new CSV file.</p>
+            {% endif %}
+          {% else %}
+            <div class="govuk-error-summary govuk-body" data-module="govuk-error-summary">
+              <div role="alert">
+                The file you uploaded does not contain any data descriptions.<br/>Please try again.
+              </div>
+            </div>
+          {% endif %}
+        </div>
+        <div class="govuk-grid-column-one-third">
+          <div class="gem-c-contextual-sidebar">
+            <div class="gem-c-related-navigation">
+              <h2 id="learnLinks" class="gem-c-related-navigation__main-heading">
             Learn
           </h2>
-          <nav role="navigation" class="gem-c-related-navigation__nav-section" aria-labelledby="learnLinks">
-            <ul class="gem-c-related-navigation__link-list">
-              <li class="gem-c-related-navigation__link">
-                <a class="govuk-link govuk-link gem-c-related-navigation__section-link govuk-link gem-c-related-navigation__section-link--sidebar  govuk-link gem-c-related-navigation__section-link--other" href="/learn/articles/metadata-model">Metadata sharing requirements</a>
-              </li>
-              <li class="gem-c-related-navigation__link">
-                <a class="govuk-link govuk-link gem-c-related-navigation__section-link govuk-link gem-c-related-navigation__section-link--sidebar  govuk-link gem-c-related-navigation__section-link--other" href="/learn/articles/adding-a-CSV-file">Adding a collection of metadata records as a CSV file</a>
-              </li>
-            </ul>
-          </nav>
+              <nav role="navigation" class="gem-c-related-navigation__nav-section" aria-labelledby="learnLinks">
+                <ul class="gem-c-related-navigation__link-list">
+                  <li class="gem-c-related-navigation__link">
+                    <a class="govuk-link govuk-link gem-c-related-navigation__section-link govuk-link gem-c-related-navigation__section-link--sidebar  govuk-link gem-c-related-navigation__section-link--other" href="/learn/articles/metadata-model">Metadata sharing requirements</a>
+                  </li>
+                  <li class="gem-c-related-navigation__link">
+                    <a class="govuk-link govuk-link gem-c-related-navigation__section-link govuk-link gem-c-related-navigation__section-link--sidebar  govuk-link gem-c-related-navigation__section-link--other" href="/learn/articles/adding-a-CSV-file">Adding a collection of metadata records as a CSV file</a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-      <table class="govuk-table">
-        <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col"> Data Asset </th>
-            <th class="govuk-table__header" scope="col"> Asset Type </th>
-            <th class="govuk-table__header" scope="col"> Status </th>
-            <th class="govuk-table__header" scope="col"> Message </th>
-          </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-        {% for asset in uploadSummaries %}
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell">
-              <a class="govuk-link" href="{{ asset.link }}">{{asset.linkText}}</a>
-            </td>
-            <td class="govuk-table__cell">
-              {{ asset.assetType }}
-            </td>
-            <td class="govuk-table__cell">
-              {{govukTag({
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+          {% if (uploadSummaries | length) 
+            or(errorSummaries | length) %}
+            <table class="govuk-table">
+              <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                  <th class="govuk-table__header" scope="col"> Data Asset </th>
+                  <th class="govuk-table__header" scope="col"> Asset Type </th>
+                  <th class="govuk-table__header" scope="col"> Status </th>
+                  <th class="govuk-table__header" scope="col"> Message </th>
+                </tr>
+              </thead>
+              <tbody class="govuk-table__body">
+                {% for asset in uploadSummaries %}
+                  <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">
+                      <a class="govuk-link" href="{{ asset.link }}">{{asset.linkText}}</a>
+                    </td>
+                    <td class="govuk-table__cell">
+                      {{ asset.assetType }}
+                    </td>
+                    <td class="govuk-table__cell">
+                      {{govukTag({
                 text: "PASS",
                 classes: "govuk-tag--blue"
               })}}
-            </td>
-            <td class="govuk-table__cell">
-            </td>
-          </tr>
-        {% endfor %}
-        {% for err in errorSummaries %}
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell">
-              <a class="govuk-link" href="{{ err.link }}">{{err.linkText}}</a>
-            </td>
-            <td class="govuk-table__cell">
-              {{ err.assetType }}
-            </td>
-            <td class="govuk-table__cell">
-              {{govukTag({
+                    </td>
+                    <td class="govuk-table__cell"></td>
+                  </tr>
+                {% endfor %}
+                {% for err in errorSummaries %}
+                  <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">
+                      <a class="govuk-link" href="{{ err.link }}">{{err.linkText}}</a>
+                    </td>
+                    <td class="govuk-table__cell">
+                      {{ err.assetType }}
+                    </td>
+                    <td class="govuk-table__cell">
+                      {{govukTag({
                 text: "ERROR",
                 classes: "govuk-tag--red"
               })}}
-            <td class="govuk-table__cell">
-              {{ err.msg }}
-            <td>
-            </td>
-          </tr>
-        {% endfor %}
-        </tbody>
-      </table>
-
-      {% if hasErrors %}
-          {{ govukButton({
+                      <td class="govuk-table__cell">
+                        {{ err.msg }}
+                        <td></td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              {% endif %}
+              {% if (hasErrors) 
+                or(uploadSummaries.length == 0) %}
+                {{ govukButton({
             text: "Try again",
             href: "/publish/csv/upload",
             classes: "govuk-button--secondary"
           }) }}
-      {% else %}
-        <form action="/publish/commit" method="POST">
-          {{ govukButton({
+              {% else %}
+                <form action="/publish/commit" method="POST">
+                  {{ govukButton({
             text: "Publish data asset description",
             attributes: {
               type: "submit"
             }
           }) }}
-          {{ govukButton({
+                  {{ govukButton({
             text: "Re-upload CSV file",
             href: "/publish/csv/upload",
             classes: "govuk-button--secondary"
           }) }}
-        </form>
-      {% endif %}
-    </div>
-  </div>
-</div>
+                </form>
+              {% endif %}
+            </div>
+          </div>
+        </div>
 
-{% endblock %} 
-
+      {% endblock %}
