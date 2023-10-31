@@ -28,9 +28,34 @@ const publishDataAbacMiddleware = createAbacMiddleware(
 
 router.use(publishDataAbacMiddleware);
 
+type AssetCountsResponse = {
+  Dataset: number;
+  DataService: number;
+};
+
 router.get("/publish-dashboard", async (req: Request, res: Response) => {
+  const url = `${process.env.API_ENDPOINT}/asset-counts`;
+  let numDatasets = 0;
+  let numDataServices = 0;
+  try {
+    const response = await axios.get(url, {
+      headers: { Authorization: `Bearer ${req.cookies.jwtToken}` },
+    });
+    const assetCounts = response.data as AssetCountsResponse;
+    numDatasets = assetCounts["Dataset"];
+    numDataServices = assetCounts["DataService"];
+  } catch (error: unknown) {
+    console.error(error);
+    return res.render("../views/error.njk", {
+      messageTitle: "API Error",
+      messageBody:
+        "Failed to retrive the publish dashboard statistics. See the API logs for details.",
+    });
+  }
   res.render("../views/publisher/publish-dashboard.njk", {
     organisation: req.user.organisation?.title,
+    numDatasets,
+    numDataServices,
   });
 });
 

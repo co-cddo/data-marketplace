@@ -20,9 +20,7 @@ export function backLink(req: Request, res: Response, next: NextFunction) {
   }
 
   // If we've pressed the back link, remove the last element from the history
-  if (
-    fromBack
-  ) {
+  if (fromBack) {
     req.session.previousUrl = req.session.pageHistory.pop();
     res.locals.pageHistory = req.session.pageHistory;
     return next();
