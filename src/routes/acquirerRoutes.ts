@@ -105,6 +105,13 @@ router.get("/:resourceID/check", async (req: Request, res: Response) => {
   }
 
   const formdata = req.session.acquirerForms[resourceID];
+  const stepData = formdata.steps["check"];
+  if (
+    stepData.status === "NOT REQUIRED" ||
+    stepData.status === "CANNOT START YET"
+  ) {
+    return res.redirect(`/acquirer/${resourceID}/start`);
+  }
 
   let returnedNotes, returnedNotesTitle;
   try {
