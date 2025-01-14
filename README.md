@@ -1,5 +1,11 @@
 # CDDO Digital Marketplace
 
+> [!CAUTION]
+> This repository was originally named **data-marketplace** but has been renamed as it only represents the alpha stage of this work.
+>
+> Please note that any actions directed at co-cddo/data-marketplace will [redirect to this repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/renaming-a-repository).
+> Therefore, creating a new **data-marketplace** repository in the co-cddo space is likely to have unexpected consequences.
+
 The purpose of this service is to make sharing of data across UK Government, and access to it, easier and more consistent.
 
 This application is built using Express.js and Typescript.
